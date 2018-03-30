@@ -86,9 +86,9 @@ class Config extends Admin
     {
         $row = ConfigModel::where('id', $id)->field('id,group,title,name,value,type,options,tips,status,system')->find();
 
-//        if ($row['system'] == 1) {
-//            return $this->error('禁止编辑此配置！');
-//        }
+        if ($row['system'] == 1 and config('develop.app_debug') == 0) {
+            return $this->error('此项为系统配置且处于非开发模式,禁止编辑此配置！');
+        }
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证

@@ -6,7 +6,7 @@ class Index extends Admin
 {
     public function index()
     {
-        $welcome_html = config('module_cofco.cofco_welcome_info');
+        $welcome_html = "欢迎！";
 
         $this->assign('welcome_html',$welcome_html);
 

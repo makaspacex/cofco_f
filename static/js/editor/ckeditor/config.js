@@ -6,12 +6,13 @@
 CKEDITOR.editorConfig = function( config ) {
     config.toolbarGroups = [
             { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-            { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-            { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+            // { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+            { name: 'clipboard',   groups: [ 'clipboard' ] },
+            // { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
             { name: 'links' },
             { name: 'insert' },
             { name: 'tools' },
-            '/',
+            // '/',
             { name: 'styles' },
             { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
             { name: 'colors',      groups: [ 'TextColor', 'BGColor', 'templates' ] },

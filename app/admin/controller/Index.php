@@ -25,6 +25,9 @@ class Index extends Admin
      */
     public function index()
     {
+        $welcome_html = config('sys.sys_welcome_info');
+        $this->assign('welcome_html',$welcome_html);
+
         if (cookie('hisi_iframe')) {
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
@@ -38,9 +41,9 @@ class Index extends Admin
      * @author 橘子俊 <364666827@qq.com>
      * @return mixed
      */
-    public function welcome()
+    public function sysinfo()
     {
-        return $this->fetch('index');
+        return $this->fetch('sysinfo');
     }
 
     /**

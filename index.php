@@ -22,5 +22,10 @@ if(!is_file(APP_PATH.'install/install.lock')) {
     }
     define('BIND_MODULE', 'install');
 }
+// 默认进入admin模块
+if(is_file('admin.php')) {
+    // 定义入口为admin
+    define('ENTRANCE', 'admin');
+}
 // 加载框架引导文件
 require __DIR__ . '/thinkphp/start.php';
