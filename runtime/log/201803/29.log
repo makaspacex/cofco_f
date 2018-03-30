@@ -1,0 +1,32 @@
+---------------------------------------------------------------
+[ 2018-03-29T21:57:11+08:00 ] 0.0.0.0 GET /admin.php/admin/system/index/group/web.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/web.html [运行时间：0.189115s][吞吐率：5.29req/s] [内存消耗：3,889.91kb] [文件加载：86]
+[ error ] [0]语法解析错误: syntax error, unexpected 'id' (T_STRING), expecting ']'[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/runtime/temp/6b5f9cb49d07e16ef75f0e589caec5e0.php:149]
+---------------------------------------------------------------
+[ 2018-03-29T21:58:28+08:00 ] 0.0.0.0 GET /admin.php/admin/system/index/group/web.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/web.html [运行时间：0.438851s][吞吐率：2.28req/s] [内存消耗：3,889.92kb] [文件加载：86]
+[ error ] [0]语法解析错误: syntax error, unexpected '}', expecting ',' or ';'[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/runtime/temp/6b5f9cb49d07e16ef75f0e589caec5e0.php:146]
+---------------------------------------------------------------
+[ 2018-03-29T21:58:32+08:00 ] 0.0.0.0 GET /admin.php/admin/system/index/group/web.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/web.html [运行时间：0.295971s][吞吐率：3.38req/s] [内存消耗：3,889.92kb] [文件加载：86]
+[ error ] [0]语法解析错误: syntax error, unexpected '}', expecting ',' or ';'[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/runtime/temp/6b5f9cb49d07e16ef75f0e589caec5e0.php:146]
+---------------------------------------------------------------
+[ 2018-03-29T21:58:33+08:00 ] 0.0.0.0 GET /admin.php/admin/system/index/group/web.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/web.html [运行时间：0.128323s][吞吐率：7.79req/s] [内存消耗：3,635.71kb] [文件加载：84]
+[ error ] [0]语法解析错误: syntax error, unexpected '}', expecting ',' or ';'[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/runtime/temp/6b5f9cb49d07e16ef75f0e589caec5e0.php:146]
+---------------------------------------------------------------
+[ 2018-03-29T22:01:00+08:00 ] 0.0.0.0 GET /admin.php/admin/system/index/group/web.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/web.html [运行时间：0.148170s][吞吐率：6.75req/s] [内存消耗：3,914.95kb] [文件加载：88]
+[ error ] [2]A non-numeric value encountered[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/runtime/temp/6b5f9cb49d07e16ef75f0e589caec5e0.php:146]
+---------------------------------------------------------------
+[ 2018-03-29T22:08:19+08:00 ] 0.0.0.0 GET /admin.php/admin/config/edit/id/__ADMIN_CSS__/style.css
+[ info ] localhisi.com/admin.php/admin/config/edit/id/__ADMIN_CSS__/style.css [运行时间：0.114507s][吞吐率：8.73req/s] [内存消耗：3,568.84kb] [文件加载：84]
+[ error ] [8]未定义数组索引: value[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/app/admin/controller/Config.php:114]
+---------------------------------------------------------------
+[ 2018-03-29T23:18:50+08:00 ] 0.0.0.0 POST /admin.php/admin/system/index/group/spider.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/spider.html [运行时间：0.167060s][吞吐率：5.99req/s] [内存消耗：3,745.52kb] [文件加载：80]
+[ error ] [10501]SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'param' at row 1[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/thinkphp/library/think/db/Connection.php:456]
+---------------------------------------------------------------
+[ 2018-03-29T23:19:15+08:00 ] 0.0.0.0 POST /admin.php/admin/system/index/group/spider.html
+[ info ] localhisi.com/admin.php/admin/system/index/group/spider.html [运行时间：0.153931s][吞吐率：6.50req/s] [内存消耗：3,745.52kb] [文件加载：80]
+[ error ] [10501]SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'param' at row 1[/Users/izhangxm/Documents/WORKSTATION/WorkSpaces/PhpStorm/hisiphp-master/thinkphp/library/think/db/Connection.php:456]
