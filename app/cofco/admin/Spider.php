@@ -34,7 +34,7 @@ class Spider extends Admin
         $welcome_html = config('spider.spider_welcome_info');
         $this->assign('welcome_html',$welcome_html);
         return $this->afetch();
-    }
+}
 
     /**
      * 新建与编辑爬虫页面

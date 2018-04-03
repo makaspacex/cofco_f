@@ -16,7 +16,6 @@ use app\admin\controller\Admin;
     二、半自动输入页面
         方式1：输入URL->爬取结果显示[可编辑，包含文献基本信息]，选择标签[必填]，中文翻译[可选]->入库
         方式2：输入关键词->结果显示，可选择：进入待审核数据库或进入黑名单或点击其中一篇按照方式1编辑入库
-
  *
  *
  *
@@ -47,68 +46,7 @@ class LabelData extends Admin
         return $this->afetch();
     }
 
-    /**
-     * 新建爬虫页面
-     * @return string
-     */
-    public function spider_add()
-    {
-        return $this->afetch('spider_form');
-    }
 
-    /**
-     * 编辑爬虫页面
-     * @return string
-     */
-    public function spider_edit()
-    {
-        return $this->afetch('spider_form');
-    }
-
-    /**
-     * 爬虫状态查看页面，建议使用web_socket技术
-     * @return string
-     */
-    public function spider_status(){
-
-        return $this->afetch();
-    }
-
-    /**
-     * 爬虫关键词列表页面
-     * @return string
-     */
-    public function keywords_list(){
-
-        return $this->afetch();
-    }
-
-    /**
-     * 新建关键词词组
-     * @return string
-     */
-    public function keywords_add(){
-
-        return $this->afetch('keywords_form');
-    }
-
-    /**
-     * 编辑关键词词组
-     * @return string
-     */
-    public function keywords_edit(){
-
-        return $this->afetch('keywords_form');
-    }
-
-    /**
-     * 删除关键词词组
-     * @return string
-     */
-    public function keywords_del(){
-
-        return $this->afetch();
-    }
 
 
 }
