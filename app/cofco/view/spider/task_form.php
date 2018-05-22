@@ -6,9 +6,23 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">值</label>
+        <label class="layui-form-label">关键词ID</label>
+        <div class="layui-input-inline">
+            <select name="kw_id"  class="field-kw_id" type="select"lay-search multiple="multiple">
+                {$kw_option}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">更新频率</label>
         <div class="layui-input-inline w300">
-            <textarea rows="6"  class="layui-textarea field-value" name="value" lay-verify="" autocomplete="off" placeholder=""></textarea>
+            <input type="text" class="layui-input field-frq" name="frq" lay-verify="required" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">任务描述</label>
+        <div class="layui-input-inline w300">
+            <textarea rows="6"  class="layui-textarea field-des" name="des" lay-verify="" autocomplete="off" placeholder=""></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -22,7 +36,7 @@
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('label_list')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="{:url('task_list')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>

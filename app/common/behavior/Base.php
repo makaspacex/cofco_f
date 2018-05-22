@@ -171,6 +171,22 @@ class Base
             $member_level = $member_level;
         }
         config('hs_system.member_level', $member_level);
+
+        $label = cache('system_label');
+        if (!$label) {
+            $label = model('cofco/AdminLabel')->getAll();
+            cache('system_label', $label);
+            $label = $label;
+        }
+        config('hs_system.label', $label);
+
+        $tag = cache('system_tag');
+        if (!$tag) {
+            $tag = model('cofco/AdminTag')->getAll();
+            cache('system_tag', $tag);
+            $tag = $tag;
+        }
+        config('hs_system.tag', $tag);
     }
 
     private function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])

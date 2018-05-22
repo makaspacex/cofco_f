@@ -1,8 +1,8 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
+        <label class="layui-form-label">分组名称</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-title" name="title" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-title" name="name" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
