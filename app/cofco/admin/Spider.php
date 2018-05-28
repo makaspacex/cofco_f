@@ -4,9 +4,7 @@ namespace app\cofco\admin;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
 use app\admin\controller\Admin;
-
-
-
+use think\Exception;
 
 
 /**
@@ -169,17 +167,21 @@ class Spider extends Admin
     }
     public function task_list1()
     {
-        $cu = curl_init();
-        curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_url'));
-        curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-        $ret = curl_exec($cu);
-        curl_close($cu);
-        $row = json_decode($ret,true);
-        $data_list=$row['data'];
-//        $pages = $data_list->render();
+        try {
+            $cu = curl_init();
+            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_url'));
+            curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($cu, CURLINFO_CONNECT_TIME, 3);
+            curl_setopt($cu, CURLINFO_TOTAL_TIME, 3);
+            $ret = curl_exec($cu);
+            curl_close($cu);
+            $row = json_decode($ret,true);
+            $data_list=$row['data'];
+        }catch (Exception $exception){
+            $data_list = array();
+            var_dump($exception->getMessage());
+        }
         $this->assign('data_list', $data_list);
-//        $this->assign('pages', $pages);
-        var_dump($row);
         return $this->fetch();
     }
     public function keywords_pop($q = '') {

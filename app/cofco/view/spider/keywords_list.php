@@ -6,7 +6,11 @@
     <div class="layui-form">
         <table class="layui-table mt10" lay-even="" lay-skin="row">
             <colgroup>
-                <col width="50">
+                <col width="1">
+                <col width="1">
+                <col width="1">
+                <col width="7">
+                <col width="2">
             </colgroup>
             <thead>
 
