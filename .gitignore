@@ -2,3 +2,4 @@ runtime/*
 .idea/
 .DS_Store
 app/database.php
+.htaccess
