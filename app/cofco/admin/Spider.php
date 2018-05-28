@@ -170,7 +170,7 @@ class Spider extends Admin
     public function task_list1()
     {
         $cu = curl_init();
-        curl_setopt($cu, CURLOPT_URL, "http://10.2.145.166:8000/spider/all");
+        curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_url'));
         curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
         $ret = curl_exec($cu);
         curl_close($cu);

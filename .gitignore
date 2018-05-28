@@ -3,3 +3,4 @@ runtime/*
 .DS_Store
 app/database.php
 .htaccess
+app/config.php

@@ -12,7 +12,10 @@ php>=7.0
 ```
 RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
 ```
-3、新建数据库，将`cofco_f.sql`恢复到数据库
 
-4、配置服务器环境启动即可
+3、复制 `app/config.php.example` 为 `app/config.php`
+
+4、新建数据库，将`cofco_f.sql`恢复到数据库
+
+5、配置服务器环境启动即可
 
