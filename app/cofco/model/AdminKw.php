@@ -26,13 +26,13 @@ class AdminKw extends Model
     protected $autoWriteTimestamp = true;
     public static function getOption($id = 0)
     {
-        $rows = self::column('id,title');
+        $rows = self::column('id,keywords');
         $str = '';
         foreach ($rows as $k => $v) {
             if ($id == $k) {
-                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+                $str .= '<option value="'.$v.'" selected>'.$v.'</option>';
             } else {
-                $str .= '<option value="'.$k.'">'.$v.'</option>';
+                $str .= '<option value="'.$v.'">'.$v.'</option>';
             }
         }
         return $str;

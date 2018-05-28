@@ -30,7 +30,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章作者</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-author" name="author" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-authors" name="authors" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -42,7 +42,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">影响因子</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal_if" name="journal_if" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -60,7 +60,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章关键词</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-keyword" name="keyword" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-key_words" name="key_words" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -94,10 +94,18 @@
 <script>
     var formData = {:json_encode($data_info)};
     // <if $data_info.name==0 $('input[name="name"]').val('未标记')>
+    var text='';
     function func(data) {
         var $ = layui.jquery;
-        $('input[name="tag_id"]').val(data[0]['id']);
-        $('input[name="name"]').val(data[0]['name']);
+      //  for(var i=0;i<data.length;i++){
+         $('input[name="tag_id"]').val(data[0]['id']);
+         $('input[name="name"]').val(data[0]['name']);
+        //     if (i==0)
+        //        //    text= data[i]['id'];
+        //        //      else
+        //        //          text=text+'#'+data[i]['id']
+        //        // }
+        //$('input[name="tag_id"]').val(text);
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

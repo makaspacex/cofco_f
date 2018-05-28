@@ -36,6 +36,7 @@ class Admin extends Common
         }
         define('ADMIN_ID', $login['uid']);
         define('ADMIN_ROLE', $login['role_id']);
+
         
         $c_menu = MenuModel::getInfo();
         if (!$c_menu) {

@@ -39,23 +39,23 @@ class LabelData extends Admin
         $this->assign('welcome_html',$welcome_html);
         return $this->afetch();
     }
-//    public $tab_data = [];
-//    protected function _initialize()
-//    {
-//        parent::_initialize();
-//
-//        $tab_data['menu'] = [
-//            [
-//                'title' => '标签分组',
-//                'url' => 'cofco/labeldata/label_list',
-//            ],
-//            [
-//                'title' => '标签列表',
-//                'url' => 'cofco/labeldata/tag_list',
-//            ],
-//        ];
-//        $this->tab_data = $tab_data;
-//    }
+    public $tab_data = [];
+    protected function _initialize()
+    {
+        parent::_initialize();
+
+        $tab_data['menu'] = [
+            [
+                'title' => '标签分组',
+                'url' => 'cofco/labeldata/label_list',
+            ],
+            [
+                'title' => '标签列表',
+                'url' => 'cofco/labeldata/tag_list',
+            ],
+        ];
+        $this->tab_data = $tab_data;
+    }
 
     /**
      * 标签列表
@@ -67,6 +67,10 @@ class LabelData extends Admin
 
         // 分页
         $pages = $data_list->render();
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
         return $this->afetch();
@@ -122,13 +126,16 @@ class LabelData extends Admin
     public function tag_list()
     {
         $map = [];
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
         $data_list = TagModel::where($map)->paginate(10, false, ['query' => input('get.')]);
         // 分页
         $pages = $data_list->render();
-
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
-       
+
         //var_dump($data_list);
         return $this->fetch();
     }
@@ -290,17 +297,36 @@ class LabelData extends Admin
         return $this->fetch();
     }
 
-    public function wxcallback($a){
-//        if($_REQUEST){
-//            var_dump($_REQUEST);
-//        }
-        vendor('jsonrpcclient');
-        $jsonRpcClient = new \Vendor\JsonRpcClient("http://localhost/yiika_tp/index.php/JsonRpc");
-        $jsonRpcClient->rpcBind($a)->index("1","33");//调用服务端JsonRpc控制器下的index方法，传入两个参数 "1","33",将返回的结果绑定到$a变量上。
- //       var_dump($result); // 结果：Hello, JsonRPC!
-//        $result = $client->test('deeka');
-//        var_dump($result); // 结果：Hello, deeka!
-        $this->assign('data_info', $a);
+    public function crawurl(){
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $row=$data;
+            //$row=$data;
+            //var_dump($row);
+            //$url = "http://39.108.188.10:9001/spider/add";
+            //$url = "http://10.2.148.107:8000/spider/add";
+            $url = "http://10.2.145.166:8000/spider/crawurl";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if($output = curl_exec($ch)){
+                curl_close($ch);
+                $data_list = json_decode($output,true);
+                if($data_list['status']==0)
+                    return $this->error($data_list['msg']);
+                else{
+                    return $this->success($data_list['msg']);
+                    //$info=json_encode($data_list['data']);
+//                    if (!PendingModel::create($info)) {
+//                        return $this->error('添加失败！');
+//                    }
+//                    return $this->success('添加成功。','pending_list');
+                }
+            }
+            return $this->error('提交失败');
+        }
         return $this->afetch('pending_fform');
     }
 //$ids   = input('param.ids/a');

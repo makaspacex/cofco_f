@@ -134,7 +134,6 @@ class Spider extends Admin
             return $this->success('修改成功。','keywords_list');
         }
         $row = KwModel::where('id', $id)->find()->toArray();
-
         $this->assign('data_info', $row);
         return $this->afetch('keywords_form');
     }
@@ -143,9 +142,10 @@ class Spider extends Admin
      * 删除关键词词组
      * @return string
      */
-    public function keywords_del()
+    public function keywords_del($id=0)
     {
         $ids   = input('param.ids/a');
+        $map['id'] = ['in', $ids];
         $map = [];
         $map['id'] = ['in', $ids];
         $res = KwModel::where($map)->delete();
@@ -167,53 +167,218 @@ class Spider extends Admin
 //        var_dump($data_list);
         return $this->fetch();
     }
+    public function task_list1()
+    {
+        $cu = curl_init();
+        curl_setopt($cu, CURLOPT_URL, "http://10.2.145.166:8000/spider/all");
+        curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
+        $ret = curl_exec($cu);
+        curl_close($cu);
+        $row = json_decode($ret,true);
+        $data_list=$row['data'];
+//        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+//        $this->assign('pages', $pages);
+        var_dump($row);
+        return $this->fetch();
+    }
+    public function keywords_pop($q = '') {
+        $q = input('param.q/s');
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
+        $map = [];
+        if ($q) {
+            $map['keywords'] = ['like', '%'.$q.'%'];
+        }
+        $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        return $this->fetch();
+    }
 
+//    public function task_add()
+//    {
+//        if ($this->request->isPost()) {
+//            $data = $this->request->post();
+//            // 验证
+//            $result = $this->validate($data, 'AdminMember');
+//            if($result !== true) {
+//                return $this->error($result);
+//            }
+//            unset($data['id']);
+//            if (!SpiderTaskModel::create($data)) {
+//                return $this->error('添加失败！');
+//            }
+//            return $this->success('添加成功。');
+//        }
+//        $this->assign('kw_option', KwModel::getOption());
+//        return $this->afetch('task_form');
+//    }
     public function task_add()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AdminMember');
-            if($result !== true) {
-                return $this->error($result);
+            $row=$data;
+            //$row=$data;
+            //var_dump($row);
+            //$url = "http://39.108.188.10:9001/spider/add";
+            //$url = "http://10.2.148.107:8000/spider/add";
+            $url = "http://10.2.145.166:8000/spider/add";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if($output = curl_exec($ch)){
+                curl_close($ch);
+                $data_list = json_decode($output,true);
+                if($data_list['status']==0)
+                    return $this->error($data_list['msg']);
+                else
+                    return $this->success('添加成功！','task_list1');
             }
-            unset($data['id']);
-            if (!SpiderTaskModel::create($data)) {
-                return $this->error('添加失败！');
-            }
-            return $this->success('添加成功。','task_list');
+             return $this->error('添加失败');
         }
-        $this->assign('kw_option', KwModel::getOption());
         return $this->afetch('task_form');
     }
 
-    public function task_edit($id = 0)
+//    public function task_edit($id = 0)
+//    {
+//        if ($this->request->isPost()) {
+//            $data = $this->request->post();
+//            if (!SpiderTaskModel::update($data)) {
+//                return $this->error('修改失败！');
+//            }
+//            // 更新缓存
+//            //cache('system_member_level', KwModel::getAll());
+//            return $this->success('修改成功。','task_list');
+//        }
+//        $row = SpiderTaskModel::where('id', $id)->find()->toArray();
+//        $this->assign('kw_option', KwModel::getOption());
+//        $this->assign('data_info', $row);
+//        return $this->afetch('task_form');
+//    }
+    public function setfreq($id = 0)
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if (!SpiderTaskModel::update($data)) {
-                return $this->error('修改失败！');
+            $row=$data;
+            //$row=$data;
+            //var_dump($row);
+            //$url = "http://39.108.188.10:9001/spider/add";
+            //$url = "http://10.2.148.107:8000/spider/add";
+            $url = "http://10.2.145.166:8000/spider/add";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if($output = curl_exec($ch)){
+                curl_close($ch);
+                $data_list = json_decode($output,true);
+                if($data_list['status']==0)
+                    return $this->error($data_list['msg']);
+                else
+                    return $this->success('添加成功！','task_list1');
             }
-            // 更新缓存
-            //cache('system_member_level', KwModel::getAll());
-            return $this->success('修改成功。','task_list');
+            return $this->error('添加失败');
         }
-        $row = SpiderTaskModel::where('id', $id)->find()->toArray();
-        $this->assign('kw_option', KwModel::getOption());
-        $this->assign('data_info', $row);
+        //$this->assign('data_info', $row);
         return $this->afetch('task_form');
     }
 
-    public function task_del()
+//    public function task_del()
+//    {
+//        $ids   = input('param.ids/a');
+//        $map = [];
+//        $map['id'] = ['in', $ids];
+//        $res = SpiderTaskModel::where($map)->delete();
+//        if ($res === false) {
+//            return $this->error('操作失败！');
+//        }
+//        return $this->success('操作成功！');
+//    }
+    public function task_stop($id=0)
     {
-        $ids   = input('param.ids/a');
-        $map = [];
-        $map['id'] = ['in', $ids];
-        $res = SpiderTaskModel::where($map)->delete();
-        if ($res === false) {
-            return $this->error('操作失败！');
+        if($id==0)
+        { return $this->error('此爬虫未运行，禁止操作');}
+        else
+        {
+        $ret=array('pid');
+        $row=array_fill_keys($ret,$id);
+        $url = "http://10.2.145.166:8000/spider/stop";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+        if($output = curl_exec($ch)){
+            curl_close($ch);
+            $data_list = json_decode($output,true);
+            if($data_list['status']==0)
+                return $this->error($data_list['msg']);
+            else
+                return $this->success($data_list['msg'],'task_list1');
         }
-        return $this->success('操作成功！');
+        return $this->error('停止失败');
+        }
+    }
+    public function task_pause($id=0)
+    {
+        if($id==0)
+        { return $this->error('此爬虫未运行，禁止操作');}
+        else {
+            $ret = array('pid');
+            $row = array_fill_keys($ret, $id);
+            $url = "http://10.2.145.166:8000/spider/pause";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if ($output = curl_exec($ch)) {
+                curl_close($ch);
+                $data_list = json_decode($output, true);
+                if ($data_list['status'] == 0)
+                    return $this->error($data_list['msg']);
+                else
+                    return $this->success($data_list['msg']);
+            }
+            return $this->error('添加失败');
+        }
+    }
+
+    public function task_continue($id=0)
+    {
+        if($id==0)
+        { return $this->error('此爬虫未运行，禁止操作');}
+        else
+            {
+            $ret = array('pid');
+            $row = array_fill_keys($ret, $id);
+            $url = "http://10.2.145.166:8000/spider/continue";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if ($output = curl_exec($ch)) {
+                curl_close($ch);
+                $data_list = json_decode($output, true);
+                if ($data_list['status'] == 0)
+                    return $this->error($data_list['msg']);
+                else
+                    return $this->success($data_list['msg']);
+            }
+            return $this->error('添加失败');
+        }
     }
 
 

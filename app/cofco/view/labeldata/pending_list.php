@@ -27,9 +27,9 @@
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
                 <td>{$v['doi']}</td>
                 <td>{$v['title']}</td>
-                <td>{$v['author']}</td>
+                <td>{$v['authors']}</td>
                 <td>{$v['journal']}</td>
-                <td>{$v['impact_factor']}</td>
+                <td>{$v['journal_if']}</td>
 
                 <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1"}checked=""{/if} value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_pending&ids='.$v['id'])}"></td>
                 <td>

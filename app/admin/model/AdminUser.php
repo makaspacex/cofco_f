@@ -227,6 +227,10 @@ class AdminUser extends Model
         $sign = sha1($code);
         return $sign;
     }
+    public static function getAll()
+    {
+        return self::column('id,username');
+    }
 
     // /**
     //  * 用户状态设置

@@ -187,6 +187,14 @@ class Base
             $tag = $tag;
         }
         config('hs_system.tag', $tag);
+
+        $user = cache('system_user');
+        if (!$user) {
+            $user = model('admin/AdminUser')->getAll();
+            cache('system_user', $user);
+            $user = $user;
+        }
+        config('hs_system.user', $user);
     }
 
     private function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])

@@ -29,7 +29,7 @@
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
                 <td>{$v['name']}</td>
                 <td>{$label[$v['label_id']]}</td>
-                <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1"}checked=""{/if} value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_label&ids='.$v['id'])}"></td>
+                <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1"}checked=""{/if} value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_tag&ids='.$v['id'])}"></td>
                 <td>{$v.value}</td>
                 <td>
                     <div class="layui-btn-group">
