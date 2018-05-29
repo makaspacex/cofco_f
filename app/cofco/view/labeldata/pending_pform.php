@@ -1,11 +1,5 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">文章标识</label>
-        <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-doi" name="doi" lay-verify="required" autocomplete="off" placeholder="">
-        </div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">来源网站</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-source" name="source" lay-verify="required" autocomplete="off" placeholder="">
@@ -51,6 +45,12 @@
         <label class="layui-form-label">文章摘要</label>
         <div class="layui-input-inline w300">
             <textarea rows="6"  class="layui-textarea field-abstract" name="abstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">摘要翻译</label>
+        <div class="layui-input-inline w300">
+            <textarea rows="6"  class="layui-textarea field-tabstract" name="tabstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
         </div>
     </div>
     <div class="layui-form-item">

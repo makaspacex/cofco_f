@@ -29,5 +29,77 @@ class AdminPending extends Model
         return self::column('doi,tag_id,source,title,author,journal,impact_factor,journal_zone,issue,abstract,keyword,institue,country,status');
     }
 
+      public static function strFilter($str){
+        //特殊字符的过滤方法
+        $str = str_replace('`', '', $str);
+        $str = str_replace('·', '', $str);
+        $str = str_replace('~', '', $str);
+        $str = str_replace('!', '', $str);
+        $str = str_replace('！', '', $str);
+        $str = str_replace('@', '', $str);
+        $str = str_replace('#', '', $str);
+        $str = str_replace('$', '', $str);
+        $str = str_replace('￥', '', $str);
+        $str = str_replace('%', '', $str);
+        $str = str_replace('^', '', $str);
+        $str = str_replace('……', '', $str);
+        $str = str_replace('&', '', $str);
+        $str = str_replace('*', '', $str);
+        $str = str_replace('(', '', $str);
+        $str = str_replace(')', '', $str);
+        $str = str_replace('（', '', $str);
+        $str = str_replace('）', '', $str);
+        $str = str_replace('-', '', $str);
+        $str = str_replace('_', '', $str);
+        $str = str_replace('——', '', $str);
+        $str = str_replace('+', '', $str);
+        $str = str_replace('=', '', $str);
+        $str = str_replace('|', '', $str);
+        $str = str_replace('\\', '', $str);
+        $str = str_replace('[', '', $str);
+        $str = str_replace(']', '', $str);
+        $str = str_replace('【', '', $str);
+        $str = str_replace('】', '', $str);
+        $str = str_replace('{', '', $str);
+        $str = str_replace('}', '', $str);
+        $str = str_replace(';', '', $str);
+        $str = str_replace('；', '', $str);
+        $str = str_replace(':', '', $str);
+        $str = str_replace('：', '', $str);
+        $str = str_replace('\'', '', $str);
+        $str = str_replace('"', '', $str);
+        $str = str_replace('“', '', $str);
+        $str = str_replace('”', '', $str);
+        //$str = str_replace(',', '', $str);
+        //$str = str_replace('，', '', $str);
+        $str = str_replace('<', '', $str);
+        $str = str_replace('>', '', $str);
+        $str = str_replace('《', '', $str);
+        $str = str_replace('》', '', $str);
+        $str = str_replace('.', '', $str);
+        $str = str_replace('。', '', $str);
+        $str = str_replace('/', '', $str);
+        $str = str_replace('、', '', $str);
+        $str = str_replace('?', '', $str);
+        $str = str_replace('？', '', $str);
+        //防sql防注入代码的过滤方法
+        $str = str_replace('and','',$str);
+        $str = str_replace('execute','',$str);
+        $str = str_replace('update','',$str);
+        $str = str_replace('count','',$str);
+        $str = str_replace('chr','',$str);
+        $str = str_replace('mid','',$str);
+        $str = str_replace('master','',$str);
+        $str = str_replace('truncate','',$str);
+        $str = str_replace('char','',$str);
+        $str = str_replace('declare','',$str);
+        $str = str_replace('select','',$str);
+        $str = str_replace('create','',$str);
+        $str = str_replace('delete','',$str);
+        $str = str_replace('insert','',$str);
+        $str = str_replace('or','',$str);
+        return trim($str);
+    }
+
 
 }

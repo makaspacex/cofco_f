@@ -40,6 +40,7 @@ class LabelData extends Admin
         return $this->afetch();
     }
     public $tab_data = [];
+    public $tab_data1 = [];
     protected function _initialize()
     {
         parent::_initialize();
@@ -54,7 +55,18 @@ class LabelData extends Admin
                 'url' => 'cofco/labeldata/tag_list',
             ],
         ];
+        $tab_data1['menu'] = [
+            [
+                'title' => '人工输入',
+                'url' => 'cofco/labeldata/pending_padd',
+            ],
+            [
+                'title' => '辅助输入',
+                'url' => 'cofco/labeldata/crawurl',
+            ],
+        ];
         $this->tab_data = $tab_data;
+        $this->tab_data1 = $tab_data1;
     }
 
     /**
@@ -213,11 +225,6 @@ class LabelData extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AdminMember');
-            if($result !== true) {
-                return $this->error($result);
-            }
             unset($data['id']);
             if (!PendingModel::create($data)) {
                 return $this->error('添加失败！');
@@ -271,6 +278,10 @@ class LabelData extends Admin
         //var_dump($row2);
         $row=array_merge($row1,$row2);
         //var_dump($row);
+        $row['authors']=PendingModel::strFilter($row['authors']);
+        $row['key_words']=PendingModel::strFilter($row['key_words']);
+        $row['countries']=PendingModel::strFilter($row['countries']);
+        $row['institue']=PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
        // $this->assign('data_info1', $row1);
         return $this->afetch('pending_dform');
@@ -300,35 +311,52 @@ class LabelData extends Admin
     public function crawurl(){
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            $row=$data;
-            //$row=$data;
-            //var_dump($row);
-            //$url = "http://39.108.188.10:9001/spider/add";
-            //$url = "http://10.2.148.107:8000/spider/add";
             $url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else{
-                    return $this->success($data_list['msg']);
-                    //$info=json_encode($data_list['data']);
-//                    if (!PendingModel::create($info)) {
-//                        return $this->error('添加失败！');
-//                    }
-//                    return $this->success('添加成功。','pending_list');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+             $output = curl_exec($ch);
+                $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if ($http != 200) {
+                    throw  new Exception('链接失败');
                 }
-            }
-            return $this->error('提交失败');
+                else {
+                    curl_close($ch);
+                    $data_list = json_decode($output, true);
+
+                    //return $this->success($data_list['msg']);
+                    $info = $data_list['data'];
+                    $this->assign('data_info', $info);
+                    return $this->afetch('pending_pform');
+                }
         }
         return $this->afetch('pending_fform');
     }
+//    public function crawurl(){
+//        $info=array();
+//        if ($this->request->isPost()) {
+//                $info= array("title"=>"XC90");
+//        }
+//        $this->crawurl1($info);
+//        return $this->afetch('pending_fform');
+//    }
+//    public function crawurl1()
+//    {
+//        $info=$this->crawurl();
+//        if ($this->request->isPost()) {
+//            $data = $this->request->post();
+//            if (!PendingModel::update($data)) {
+//                return $this->error('修改失败！');
+//            }
+//            // 更新缓存
+//            //cache('system_member_level', KwModel::getAll());
+//            return $this->success('修改成功。','pending_list');
+//        }
+//        $this->assign('data_info', $info);
+//        return $this->afetch('pending_fform');
+//    }
 //$ids   = input('param.ids/a');
 //$map = [];
 //$map['id'] = ['in', $ids];

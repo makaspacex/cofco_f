@@ -17,10 +17,18 @@ $name=$user[ADMIN_ID];
         <a href="{:url('keywords_pop?callback=func')}" title="选择关键词" class="layui-btn layui-btn-primary j-iframe-pop fl">选择关键词</a>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">爬虫选择</label>
+        <div class="layui-input-inline">
+            <select name="spider_id"  class="field-spider_id" type="select"lay-search multiple="multiple">
+                {$spider_option}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">更新频率</label>
         <div class="layui-input-inline">
             <select name="frequen_d"  class="field-frequen_d" type="select" >
-                <option value ="0"selected>按天更新（请选择）</option>
+                <option value ="-1"selected>按天更新（请选择）</option>
                 <option value ="0"> 只更新一次</option>
                 <option value ="1">一天更新一次</option>
                 <option value="2">两天更新一次</option>
@@ -45,17 +53,26 @@ $name=$user[ADMIN_ID];
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    var text='';
+    // var text='';
+    // function func(data) {
+    //     var $ = layui.jquery;
+    //       for(var i=0;i<data.length;i++){
+    //
+    //          if (i==0)
+    //                 text= data[i]['keywords'];
+    //                   else
+    //                       text=text+'#'+data[i]['keywords']
+    //              }
+    //     $('input[name="keywords"]').val(text);
+    // }
+    var str='';
     function func(data) {
         var $ = layui.jquery;
-          for(var i=0;i<data.length;i++){
-
-             if (i==0)
-                    text= data[i]['keywords'];
-                      else
-                          text=text+'#'+data[i]['keywords']
-                 }
-        $('input[name="keywords"]').val(text);
+        str=data[0]['value'];
+        str= str.replace(/\r\n/g,"#");
+        //$('input[name="keywords"]').val(obj[3]);
+        //$('input[name="keywords"]').val(data[0]['value']);
+            $('input[name="keywords"]').val(str);
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

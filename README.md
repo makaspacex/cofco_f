@@ -12,7 +12,7 @@ php>=7.0
 
 2、复制 `.htaccess.example` 为 `.htaccess`。如果是windowns平台的apache，需要将第7行改为
 ```
-RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
 ```
 
 3、复制 `app/config.php.example` 为 `app/config.php`

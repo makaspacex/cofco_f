@@ -1,6 +1,6 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">来源网站</label>
+        <label class="layui-form-label">文献网站</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-url" name="url" lay-verify="required" autocomplete="off" placeholder="">
         </div>

@@ -28,7 +28,17 @@ class AdminSpiderTask extends Model
     {
         return self::column('id,title');
     }
+    public static function getOption()
+    {
 
+        $str = '';
+        foreach (config('spider.spider_list') as $k => $v) {
+
+                $str .= '<option value="'.$k.'" selected>'.$v.'</option>';
+
+        }
+        return $str;
+    }
 
 
 }

@@ -1,19 +1,13 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">文章标识</label>
-        <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-doi" name="doi" lay-verify="required" autocomplete="off" placeholder="">
-        </div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">标签标注</label>
         <div class="layui-input-inline">
-            <input type="text" class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
+            <input type="hidden"disabled="true"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
+        </div>
+        <div class="layui-input-inline">
+            <input type="label" class="layui-input field-name" disabled="true" name="name" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
         <a href="{:url('tag_pop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input field-name" disabled="true" name="name" lay-verify="" autocomplete="off" placeholder="未标记">
-        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">来源网站</label>
@@ -58,6 +52,12 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">摘要翻译</label>
+        <div class="layui-input-inline w300">
+            <textarea rows="6"  class="layui-textarea field-tabstract" name="tabstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">文章关键词</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-key_words" name="key_words" lay-verify="required" autocomplete="off" placeholder="">
@@ -72,7 +72,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">机构国家</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-country" name="country" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-countries" name="countries" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

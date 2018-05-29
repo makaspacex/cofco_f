@@ -154,28 +154,34 @@ class Spider extends Admin
     }
 
 
-    public function task_list()
-    {
-        $data_list = SpiderTaskModel::paginate();
-
-        // 分页
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-//        var_dump($data_list);
-        return $this->fetch();
-    }
+//    public function task_list()
+//    {
+//        $data_list = SpiderTaskModel::paginate();
+//
+//        // 分页
+//        $pages = $data_list->render();
+//        $this->assign('data_list', $data_list);
+//        $this->assign('pages', $pages);
+////        var_dump($data_list);
+//        return $this->fetch();
+//    }
     public function task_list1()
     {
         try {
             $cu = curl_init();
-            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_url'));
+            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
             curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($cu, CURLINFO_CONNECT_TIME, 3);
             curl_setopt($cu, CURLINFO_TOTAL_TIME, 3);
+            curl_setopt($cu, CURLINFO_NAMELOOKUP_TIME, 3);
             $ret = curl_exec($cu);
+            $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
+            if ($http != 200) {
+                throw  new Exception('链接失败');
+            }
             curl_close($cu);
             $row = json_decode($ret,true);
+            var_dump($row);
             $data_list=$row['data'];
         }catch (Exception $exception){
             $data_list = array();
@@ -232,9 +238,8 @@ class Spider extends Admin
             //var_dump($row);
             //$url = "http://39.108.188.10:9001/spider/add";
             //$url = "http://10.2.148.107:8000/spider/add";
-            $url = "http://10.2.145.166:8000/spider/add";
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_add'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -248,6 +253,7 @@ class Spider extends Admin
             }
              return $this->error('添加失败');
         }
+        $this->assign('spider_option', SpiderTaskModel::getOption());
         return $this->afetch('task_form');
     }
 
@@ -267,34 +273,34 @@ class Spider extends Admin
 //        $this->assign('data_info', $row);
 //        return $this->afetch('task_form');
 //    }
-    public function setfreq($id = 0)
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $row=$data;
-            //$row=$data;
-            //var_dump($row);
-            //$url = "http://39.108.188.10:9001/spider/add";
-            //$url = "http://10.2.148.107:8000/spider/add";
-            $url = "http://10.2.145.166:8000/spider/add";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('添加成功！','task_list1');
-            }
-            return $this->error('添加失败');
-        }
-        //$this->assign('data_info', $row);
-        return $this->afetch('task_form');
-    }
+////    public function setfreq($id = 0)
+////    {
+////        if ($this->request->isPost()) {
+////            $data = $this->request->post();
+////            $row=$data;
+////            //$row=$data;
+////            //var_dump($row);
+////            //$url = "http://39.108.188.10:9001/spider/add";
+////            //$url = "http://10.2.148.107:8000/spider/add";
+////            $url = "http://10.2.145.166:8000/spider/add";
+////            $ch = curl_init();
+////            curl_setopt($ch, CURLOPT_URL, $url);
+////            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+////            curl_setopt($ch, CURLOPT_POST, 1);
+////            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+////            if($output = curl_exec($ch)){
+////                curl_close($ch);
+////                $data_list = json_decode($output,true);
+////                if($data_list['status']==0)
+////                    return $this->error($data_list['msg']);
+////                else
+////                    return $this->success('添加成功！','task_list1');
+////            }
+////            return $this->error('添加失败');
+////        }
+//        //$this->assign('data_info', $row);
+//        return $this->afetch('task_form');
+//    }
 
 //    public function task_del()
 //    {

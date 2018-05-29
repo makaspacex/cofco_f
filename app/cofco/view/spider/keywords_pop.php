@@ -26,7 +26,7 @@
             </colgroup>
             <thead>
             <tr>
-                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+                <th><input type="radio"  name="" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>关键词</th>
                 <th>状态</th>
                 <th>值</th>
@@ -35,7 +35,7 @@
             <tbody>
             {volist name="data_list" id="v"}
             <tr>
-                <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"data-json='{:json_encode($v, 1)}'></td>
+                <td><input type="radio" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"data-json='{:json_encode($v, 1)}'></td>
                 <td>{$v['keywords']}</td>
                 <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1"}checked=""{/if} value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_kw&ids='.$v['id'])}"></td>
                 <td>{$v.value}</td>
