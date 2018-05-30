@@ -1,5 +1,10 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-doi" name="doi" lay-verify="required" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">标签标注</label>
         <div class="layui-input-inline">
             <input type="hidden"disabled="true"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">

@@ -1,24 +1,26 @@
 <?php
+
 namespace app\cofco\admin;
+
 use app\cofco\model\AdminLabel as LabelModel;
 use app\cofco\model\AdminTag as TagModel;
 use app\cofco\model\AdminPending as PendingModel;
 use app\admin\controller\Admin;
-
+use think\Exception;
 
 /**
  * Class Spider
-
- 该文件要实现人工输入功能如下：
-    一、手动输入页面
-        1、标题[必填]
-        2、DOI[必填]
-        3、摘要[必填]
-        4、中文翻译[可选]
-        5、标签选择[必填]
-    二、半自动输入页面
-        方式1：输入URL->爬取结果显示[可编辑，包含文献基本信息]，选择标签[必填]，中文翻译[可选]->入库
-        方式2：输入关键词->结果显示，可选择：进入待审核数据库或进入黑名单或点击其中一篇按照方式1编辑入库
+ *
+ * 该文件要实现人工输入功能如下：
+ * 一、手动输入页面
+ * 1、标题[必填]
+ * 2、DOI[必填]
+ * 3、摘要[必填]
+ * 4、中文翻译[可选]
+ * 5、标签选择[必填]
+ * 二、半自动输入页面
+ * 方式1：输入URL->爬取结果显示[可编辑，包含文献基本信息]，选择标签[必填]，中文翻译[可选]->入库
+ * 方式2：输入关键词->结果显示，可选择：进入待审核数据库或进入黑名单或点击其中一篇按照方式1编辑入库
  *
  *
  *
@@ -27,7 +29,6 @@ use app\admin\controller\Admin;
  *
  * @package app\COFCO\admin
  */
-
 class LabelData extends Admin
 {
     /*
@@ -36,11 +37,13 @@ class LabelData extends Admin
     public function index()
     {
         $welcome_html = config('labeldata.label_welcome_info');
-        $this->assign('welcome_html',$welcome_html);
+        $this->assign('welcome_html', $welcome_html);
         return $this->afetch();
     }
+
     public $tab_data = [];
     public $tab_data1 = [];
+
     protected function _initialize()
     {
         parent::_initialize();
@@ -94,7 +97,7 @@ class LabelData extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'AdminMember');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             unset($data['id']);
@@ -102,7 +105,7 @@ class LabelData extends Admin
                 return $this->error('添加失败！');
             }
             cache('system_label', LabelModel::getAll());
-            return $this->success('添加成功。','label_list');
+            return $this->success('添加成功。', 'label_list');
         }
         return $this->afetch('label_form');
     }
@@ -116,7 +119,7 @@ class LabelData extends Admin
             }
             // 更新缓存
             cache('system_label', LabelModel::getAll());
-            return $this->success('修改成功。','label_list');
+            return $this->success('修改成功。', 'label_list');
         }
         $row = LabelModel::where('id', $id)->find()->toArray();
 
@@ -158,18 +161,19 @@ class LabelData extends Admin
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'AdminMember');
-            if($result !== true) {
+            if ($result !== true) {
                 return $this->error($result);
             }
             unset($data['id']);
             if (!TagModel::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。','tag_list');
+            return $this->success('添加成功。', 'tag_list');
         }
         $this->assign('label_option', LabelModel::getOption());
         return $this->afetch('tag_form');
     }
+
     public function tag_edit($id = 0)
     {
         if ($this->request->isPost()) {
@@ -179,7 +183,7 @@ class LabelData extends Admin
             }
             // 更新缓存
             //cache('system_member_level', KwModel::getAll());
-            return $this->success('修改成功。','tag_list');
+            return $this->success('修改成功。', 'tag_list');
         }
         $row = TagModel::where('id', $id)->find()->toArray();
         $this->assign('label_option', LabelModel::getOption());
@@ -189,7 +193,7 @@ class LabelData extends Admin
 
     public function tag_del()
     {
-        $ids   = input('param.ids/a');
+        $ids = input('param.ids/a');
         $map = [];
         $map['id'] = ['in', $ids];
         $res = TagModel::where($map)->delete();
@@ -199,7 +203,8 @@ class LabelData extends Admin
         return $this->success('操作成功！');
     }
 
-    public function tag_pop($q = '') {
+    public function tag_pop($q = '')
+    {
         $q = input('param.q/s');
         $callback = input('param.callback/s');
         if (!$callback) {
@@ -208,10 +213,10 @@ class LabelData extends Admin
         }
         $map = [];
         if ($q) {
-                $map['title'] = ['like', '%'.$q.'%'];
-            }
+            $map['title'] = ['like', '%' . $q . '%'];
+        }
 
-        $data_list = TagModel::where($map)->paginate(10, false,['query' => input('get.')]);
+        $data_list = TagModel::where($map)->paginate(10, false, ['query' => input('get.')]);
         // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
@@ -248,7 +253,7 @@ class LabelData extends Admin
 
     public function pending_del()
     {
-        $ids   = input('param.ids/a');
+        $ids = input('param.ids/a');
         $map = [];
         $map['id'] = ['in', $ids];
         $res = PendingModel::where($map)->delete();
@@ -267,28 +272,29 @@ class LabelData extends Admin
             }
             // 更新缓存
             //cache('system_member_level', KwModel::getAll());
-            return $this->success('修改成功。','pending_list');
+            return $this->success('修改成功。', 'pending_list');
         }
         $row1 = PendingModel::where('id', $id)->find()->toArray();
-        $tag_id=$row1['tag_id'];
-        if ($tag_id!=null)
+        $tag_id = $row1['tag_id'];
+        if ($tag_id != null)
             $row2 = TagModel::where('id', $tag_id)->field('id,name')->find()->toArray();
         else
             $row2 = array();
         //var_dump($row2);
-        $row=array_merge($row1,$row2);
+        $row = array_merge($row1, $row2);
         //var_dump($row);
-        $row['authors']=PendingModel::strFilter($row['authors']);
-        $row['key_words']=PendingModel::strFilter($row['key_words']);
-        $row['countries']=PendingModel::strFilter($row['countries']);
-        $row['institue']=PendingModel::strFilter($row['institue']);
+        $row['authors'] = PendingModel::strFilter($row['authors']);
+        $row['key_words'] = PendingModel::strFilter($row['key_words']);
+        $row['countries'] = PendingModel::strFilter($row['countries']);
+        $row['institue'] = PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
-       // $this->assign('data_info1', $row1);
+        // $this->assign('data_info1', $row1);
         return $this->afetch('pending_dform');
     }
 
-    public function pop($id) {
-       // $q = input('param.q/s');
+    public function pop($id)
+    {
+        // $q = input('param.q/s');
         $callback = input('param.callback/s');
         if (!$callback) {
             echo '<br><br>callback为必传参数！';
@@ -299,7 +305,7 @@ class LabelData extends Admin
         $map['id'] = ['in', $id];
         $data_list = PendingModel::where($map)->paginate(10, false);
         // 分页
-       // var_dump($data_list);
+        // var_dump($data_list);
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
@@ -308,29 +314,45 @@ class LabelData extends Admin
         return $this->fetch();
     }
 
-    public function crawurl(){
+    public function crawurl()
+    {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if(count($data)>2){
+                unset($data['id']);
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success('添加成功。');
+                return $this->afetch('pending_pform');
+            }
+
             $url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-             $output = curl_exec($ch);
+            curl_setopt($ch, CURLINFO_CONNECT_TIME, 3);
+            curl_setopt($ch, CURLINFO_TOTAL_TIME, 3);
+            curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
+            try{
+                $output = curl_exec($ch);
                 $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 if ($http != 200) {
+                    curl_close($ch);
                     throw  new Exception('链接失败');
                 }
-                else {
-                    curl_close($ch);
-                    $data_list = json_decode($output, true);
+                $data_list = json_decode($output, true);
+                //return $this->success($data_list['msg']);
+                $info = $data_list['data'];
+                $this->assign('data_info', $info);
+                return $this->afetch('pending_pform');
+            }catch (Exception $exception){
+                echo $exception->getMessage();
+                return $this->afetch('pending_pform');
+            }
 
-                    //return $this->success($data_list['msg']);
-                    $info = $data_list['data'];
-                    $this->assign('data_info', $info);
-                    return $this->afetch('pending_pform');
-                }
         }
         return $this->afetch('pending_fform');
     }

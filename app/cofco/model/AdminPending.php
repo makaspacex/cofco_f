@@ -26,7 +26,7 @@ class AdminPending extends Model
     protected $autoWriteTimestamp = true;
     public static function getAll()
     {
-        return self::column('doi,tag_id,source,title,author,journal,impact_factor,journal_zone,issue,abstract,keyword,institue,country,status');
+        return self::column('doi,tag_id,source,title,authors,journal,impact_factor,journal_zone,issue,abstract,key_words,institue,countries,status');
     }
 
       public static function strFilter($str){

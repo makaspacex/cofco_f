@@ -1,8 +1,17 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">来源网站</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-source" name="source" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="hidden" class="layui-input field-pmid" name="pmid" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-doi" name="doi" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-source" name="source" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -24,6 +33,11 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-ojournal" name="ojournal" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">影响因子</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-journal_if" name="journal_if" lay-verify="required" autocomplete="off" placeholder="">
@@ -38,7 +52,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">发表时间</label>
         <div class="layui-input-inline w300">
-            <input type="date" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -62,13 +76,18 @@
     <div class="layui-form-item">
         <label class="layui-form-label">发表机构</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-institue" name="institue" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-institue" name="institue" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">机构国家</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-country" name="country" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-countries" name="countries" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-flinks" name="flinks" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

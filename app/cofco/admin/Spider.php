@@ -175,13 +175,14 @@ class Spider extends Admin
             curl_setopt($cu, CURLINFO_TOTAL_TIME, 3);
             curl_setopt($cu, CURLINFO_NAMELOOKUP_TIME, 3);
             $ret = curl_exec($cu);
+            //var_dump(json_decode($ret,true));
             $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
             if ($http != 200) {
                 throw  new Exception('链接失败');
             }
             curl_close($cu);
             $row = json_decode($ret,true);
-            var_dump($row);
+            //var_dump($row);
             $data_list=$row['data'];
         }catch (Exception $exception){
             $data_list = array();
