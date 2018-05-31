@@ -327,7 +327,7 @@ class LabelData extends Admin
                 return $this->afetch('pending_pform');
             }
 
-            $url = "http://10.2.145.166:8000/spider/crawurl";
+            $url = "http://10.2.175.106:9001/spider/crawurl";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -349,8 +349,9 @@ class LabelData extends Admin
                 $this->assign('data_info', $info);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
-                echo $exception->getMessage();
-                return $this->afetch('pending_pform');
+                $msg=$exception->getMessage();
+                return $this->error($msg);
+                return $this->afetch('pending_fform');
             }
 
         }

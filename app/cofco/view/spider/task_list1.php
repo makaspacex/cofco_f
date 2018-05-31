@@ -1,7 +1,7 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
         <a href="{:url('task_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-        <a data-href="{:url('task_del')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
+        <a data-href="{:url('task_stop')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
 
     </div>
     <div class="layui-form">
@@ -34,6 +34,8 @@
             $v['status']="已完成";
             if($v['pid']==null)
             $v['pid']="未运行";
+            if($v['create_time']==null)
+            $v['create_time']="---";
             {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['pid']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
@@ -50,7 +52,7 @@
 <!--                            <a href="{:url('task_edit?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
                             <a data-href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                             <a data-href="{:url('task_pause?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe651;</i></a>
-                            <a data-href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe652;</i></a>
+                            <a data-href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-con"><i class="layui-icon">&#xe652;</i></a>
                         </div>
                     </div>
                 </td>

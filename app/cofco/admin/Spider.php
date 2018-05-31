@@ -170,6 +170,7 @@ class Spider extends Admin
         try {
             $cu = curl_init();
             curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
+            //echo config('spider.spider_api_all');
             curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($cu, CURLINFO_CONNECT_TIME, 3);
             curl_setopt($cu, CURLINFO_TOTAL_TIME, 3);
@@ -204,6 +205,7 @@ class Spider extends Admin
         }
         $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
         // 分页
+        //var_dump($data_list);
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
@@ -322,7 +324,7 @@ class Spider extends Admin
         {
         $ret=array('pid');
         $row=array_fill_keys($ret,$id);
-        $url = "http://10.2.145.166:8000/spider/stop";
+        $url = "http://10.2.175.106:9001/spider/stop";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -346,7 +348,7 @@ class Spider extends Admin
         else {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.145.166:8000/spider/pause";
+            $url = "http://10.2.175.106:9001/spider/pause";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -372,7 +374,7 @@ class Spider extends Admin
             {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.145.166:8000/spider/continue";
+            $url = "http://10.2.175.106:9001/spider/continue";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
