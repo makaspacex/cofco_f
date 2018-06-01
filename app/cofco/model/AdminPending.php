@@ -20,14 +20,12 @@ use think\Model;
 class AdminPending extends Model
 {
     // 定义时间戳字段名
+    protected $table = 'SpiderApp_content';
     protected $createTime = 'ctime';
     protected $updateTime = false;
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
-    public static function getAll()
-    {
-        return self::column('doi,tag_id,source,title,authors,journal,impact_factor,journal_zone,issue,abstract,key_words,institue,countries,status');
-    }
+
 
       public static function strFilter($str){
         //特殊字符的过滤方法

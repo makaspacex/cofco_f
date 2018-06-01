@@ -33,6 +33,7 @@
                         <div class="layui-btn-group">
                             <a href="{:url('task_edit?id='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
                             <a data-href="{:url('task_stop?ids='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a data-href="{:url('task_remove?ids='.$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
                 </td>

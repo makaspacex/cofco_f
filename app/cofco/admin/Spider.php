@@ -185,10 +185,18 @@ class Spider extends Admin
             $row = json_decode($ret,true);
             //var_dump($row);
             $data_list=$row['data'];
+            //var_dump($data_list);
         }catch (Exception $exception){
             $data_list = array();
             var_dump($exception->getMessage());
         }
+//        if(!isset($data_list['create_time']))
+//        {
+//            $ret = array('create_time');
+//            $row = array_fill_keys($ret,0);
+//            $data_list = array_merge($data_list, $row);
+//        }
+        //var_dump($data_list);
         $this->assign('data_list', $data_list);
         return $this->fetch();
     }
@@ -324,7 +332,7 @@ class Spider extends Admin
         {
         $ret=array('pid');
         $row=array_fill_keys($ret,$id);
-        $url = "http://10.2.175.106:9001/spider/stop";
+        $url = "http://10.2.145.166:8000/spider/stop";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -348,7 +356,7 @@ class Spider extends Admin
         else {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.175.106:9001/spider/pause";
+            $url = "http://10.2.145.166:8000/spider/pause";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -374,7 +382,7 @@ class Spider extends Admin
             {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.175.106:9001/spider/continue";
+            $url = "http://10.2.145.166:8000/spider/continue";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -390,6 +398,50 @@ class Spider extends Admin
             }
             return $this->error('添加失败');
         }
+    }
+
+    public function task_remove($id='')
+    {
+            $ret = array('sstr');
+            $row = array_fill_keys($ret, $id);
+            $url = "http://10.2.145.166:8000/spider/remove";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+            if ($output = curl_exec($ch)) {
+                curl_close($ch);
+                $data_list = json_decode($output, true);
+                if ($data_list['status'] == 0)
+                    return $this->error($data_list['msg']);
+                else
+                    return $this->success($data_list['msg']);
+            }
+            return $this->error('删除失败');
+
+    }
+
+    public function task_startforce($id='')
+    {
+        $ret = array('sstr');
+        $row = array_fill_keys($ret, $id);
+        $url = "http://10.2.145.166:8000/spider/startforce";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
+        if ($output = curl_exec($ch)) {
+            curl_close($ch);
+            $data_list = json_decode($output, true);
+            if ($data_list['status'] == 0)
+                return $this->error($data_list['msg']);
+            else
+                return $this->success('重启成功');
+        }
+        return $this->error('删除失败');
+
     }
 
 

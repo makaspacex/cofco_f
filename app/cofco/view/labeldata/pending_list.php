@@ -21,14 +21,23 @@
             </thead>
             <tbody>
                 {volist name="data_list" id="v"}
+                {php}
+                if($v['status']==1)
+                $v['status']="未爬取";
+                if($v['status']==2)
+                $v['status']="未审核";
+                if($v['status']==3)
+                $v['status']="已审核";
+                {/php}
                 <tr>
                     <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
                                lay-skin="primary"></td>
                     <td>{$v['title']}</td>
-                    <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1" } checked="" {/if}
-                        value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"
-                        data-href="{:url('status?table=admin_pending&ids='.$v['id'])}">
-                    </td>
+<!--                    <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1" } checked="" {/if}-->
+<!--                        value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"-->
+<!--                        data-href="{:url('status?table=admin_pending&ids='.$v['id'])}">-->
+<!--                    </td>-->
+                    <td>{$v['status']}</td>
                     <td>
                         <div class="layui-btn-group">
                             <div class="layui-btn-group">

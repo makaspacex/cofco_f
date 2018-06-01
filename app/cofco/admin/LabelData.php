@@ -5,6 +5,7 @@ namespace app\cofco\admin;
 use app\cofco\model\AdminLabel as LabelModel;
 use app\cofco\model\AdminTag as TagModel;
 use app\cofco\model\AdminPending as PendingModel;
+use app\cofco\model\AdminFinaly as FinalyModel;
 use app\admin\controller\Admin;
 use think\Exception;
 
@@ -239,9 +240,9 @@ class LabelData extends Admin
         return $this->afetch('pending_pform');
     }
 
-    public function pending_list()
+    public function pending_list($temp=2)
     {
-        $data_list = PendingModel::paginate();
+        $data_list = PendingModel::where('status',$temp)->paginate();
 
         // 分页
         $pages = $data_list->render();
@@ -266,26 +267,41 @@ class LabelData extends Admin
     public function pending_edit($id = 0)
     {
         if ($this->request->isPost()) {
+            
             $data = $this->request->post();
-            if (!PendingModel::update($data)) {
-                return $this->error('修改失败！');
+            if($data['status']==2) {
+                if (!PendingModel::update($data)) {
+                    return $this->error('修改失败！');
+                }
+                return $this->success('修改成功。', 'pending_list');
             }
-            // 更新缓存
-            //cache('system_member_level', KwModel::getAll());
-            return $this->success('修改成功。', 'pending_list');
+            if($data['status']==3) {
+                if (!PendingModel::update($data)) {
+                    return $this->error('修改失败！');
+                }
+                else
+                    {
+                       unset($data['id']);
+                       if (!FinalyModel::create($data)) {
+                           return $this->error('添加失败！');
+                       }
+                       return $this->success('添加成功。','pending_list');
+                    }
+            }
+
         }
         $row1 = PendingModel::where('id', $id)->find()->toArray();
         $tag_id = $row1['tag_id'];
         if ($tag_id != null)
-            $row2 = TagModel::where('id', $tag_id)->field('id,name')->find()->toArray();
+            $row2 = TagModel::where('id', $tag_id)->field('name')->find()->toArray();
         else
             $row2 = array();
         //var_dump($row2);
         $row = array_merge($row1, $row2);
         //var_dump($row);
-        $row['authors'] = PendingModel::strFilter($row['authors']);
-        $row['key_words'] = PendingModel::strFilter($row['key_words']);
-        $row['countries'] = PendingModel::strFilter($row['countries']);
+        $row['author'] = PendingModel::strFilter($row['author']);
+        $row['keyword'] = PendingModel::strFilter($row['keyword']);
+        $row['country'] = PendingModel::strFilter($row['country']);
         $row['institue'] = PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
         // $this->assign('data_info1', $row1);
@@ -327,7 +343,7 @@ class LabelData extends Admin
                 return $this->afetch('pending_pform');
             }
 
-            $url = "http://10.2.175.106:9001/spider/crawurl";
+            $url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -338,15 +354,16 @@ class LabelData extends Admin
             curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
             try{
                 $output = curl_exec($ch);
-                $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($http != 200) {
-                    curl_close($ch);
-                    throw  new Exception('链接失败');
-                }
+//                $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//                if ($http != 200) {
+//                    curl_close($ch);
+//                    throw  new Exception('链接失败');
+//                }
                 $data_list = json_decode($output, true);
-                //return $this->success($data_list['msg']);
-                $info = $data_list['data'];
-                $this->assign('data_info', $info);
+                $row = $data_list['data'];
+                if ($data_list['status'] == 0)
+                    return $this->error($data_list['msg']);
+                $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
                 $msg=$exception->getMessage();
@@ -384,4 +401,15 @@ class LabelData extends Admin
 //$map = [];
 //$map['id'] = ['in', $ids];
 //$res = PendingModel::where($map)->delete();
+    public function finaly_list()
+    {
+        $data_list = FinalyModel::paginate();
+
+        // 分页
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+//        var_dump($data_list);
+        return $this->fetch();
+    }
 }

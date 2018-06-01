@@ -32,10 +32,8 @@
             $v['status']="停止";
             if($v['status']==4)
             $v['status']="已完成";
-            if($v['pid']==null)
+            if($v['pid']=='')
             $v['pid']="未运行";
-            if($v['create_time']==null)
-            $v['create_time']="---";
             {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['pid']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
@@ -50,9 +48,11 @@
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
 <!--                            <a href="{:url('task_edit?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-                            <a data-href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
-                            <a data-href="{:url('task_pause?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe651;</i></a>
-                            <a data-href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-con"><i class="layui-icon">&#xe652;</i></a>
+                            <a href="{:url('task_pause?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe651;</i></a>
+                            <a href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe652;</i></a>
+                            <a data-href="{:url('task_remove?id='.$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#x1006;</i></a>
+                            <a href="{:url('task_startforce?id='.$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe623;</i></a>
                         </div>
                     </div>
                 </td>
