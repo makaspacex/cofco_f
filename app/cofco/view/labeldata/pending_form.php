@@ -107,7 +107,7 @@
             <input type="radio" class="field-status" name="status" value="3" title="已审核" >
             <input type="radio" class="field-status" name="status" value="2" title="未审核"checked>
         </div>
-        <div class="layui-form-mid layui-word-aux">审核完毕则直接存入最终表，否则存入待审表</div>
+        <div class="layui-form-mid layui-word-aux" >审核完毕则直接存入最终表，否则存入待审表</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">

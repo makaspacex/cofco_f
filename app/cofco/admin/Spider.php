@@ -188,7 +188,10 @@ class Spider extends Admin
             //var_dump($data_list);
         }catch (Exception $exception){
             $data_list = array();
-            var_dump($exception->getMessage());
+            $msg=$exception->getMessage();
+            echo "<script>alert('$msg')</script>";
+
+            //var_dump($data_list) ;
         }
 //        if(!isset($data_list['create_time']))
 //        {
@@ -197,6 +200,8 @@ class Spider extends Admin
 //            $data_list = array_merge($data_list, $row);
 //        }
         //var_dump($data_list);
+//          if($data_list==null)
+//              $this->success($msg);
         $this->assign('data_list', $data_list);
         return $this->fetch();
     }

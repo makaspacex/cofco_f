@@ -396,12 +396,13 @@ class LabelData extends Admin
                 $row = $data_list['data'];
                 $row['issue']=date("Y-m-d H:i:s", $row['issue']);
                 if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
+                   // return $this->error($data_list['msg']);
+                    throw  new Exception($data_list['msg']);
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
                 $msg=$exception->getMessage();
-                return $this->error($msg);
+                echo "<script>alert('$msg')</script>";
                 //return $this->afetch('pending_fform');
             }
 

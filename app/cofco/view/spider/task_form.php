@@ -41,6 +41,7 @@ $name=$user[ADMIN_ID];
                 <option value="2">两月更新一次</option>
             </select>
         </div>
+        <div class="layui-form-mid layui-word-aux">注意：频率二选一，否则以按月频率为准</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -74,5 +75,7 @@ $name=$user[ADMIN_ID];
         //$('input[name="keywords"]').val(data[0]['value']);
             $('input[name="keywords"]').val(str);
     }
+
+
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

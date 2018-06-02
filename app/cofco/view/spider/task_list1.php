@@ -1,6 +1,6 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
-        <a href="{:url('task_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
+        <a href="{:url('task_add')}" id="btn" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
         <a data-href="{:url('task_stop')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
 
     </div>
@@ -48,7 +48,7 @@
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
 <!--                            <a href="{:url('task_edit?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-                            <a href="{:url('task_pause?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe651;</i></a>
+                            <a href="{:url('task_pause?id='.$v['pid'])}" id="id1" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe651;</i></a>
                             <a href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe652;</i></a>
                             <a data-href="{:url('task_remove?id='.$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                             <a href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#x1006;</i></a>
@@ -65,3 +65,21 @@
     </div>
 </form>
 {include file="admin@block/layui" /}
+<script>
+    $("#btn").click(function(){
+        //询问框
+        layer.confirm('你怎么看待学校让我们搬宿舍的举动？', {
+            btn: ['太麻烦了','我觉得可以'] //按钮
+        }, function(){
+            layer.msg('我也觉得麻烦', {icon: 1});
+        }, function(){
+            layer.msg('搬来搬去的好玩吗？',{icon: 3});
+            //注释的是嵌套使用的，简单演示我们就不嵌套了，直接使用上面那句代替
+            // layer.msg('也可以这样', {
+            //   time: 20000, //20s后自动关闭
+            //   btn: ['明白了', '知道了']
+            // });
+        });
+
+    });
+</script>
