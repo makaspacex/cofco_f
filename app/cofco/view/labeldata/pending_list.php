@@ -1,6 +1,6 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
-        <a href="{:url('pending_padd')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
+        <a href="{:url('pending_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
         <a data-href="{:url('pending_del')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
     </div>
     <div class="layui-form">

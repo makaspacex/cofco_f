@@ -59,18 +59,7 @@ class LabelData extends Admin
                 'url' => 'cofco/labeldata/tag_list',
             ],
         ];
-        $tab_data1['menu'] = [
-            [
-                'title' => '人工输入',
-                'url' => 'cofco/labeldata/pending_padd',
-            ],
-            [
-                'title' => '辅助输入',
-                'url' => 'cofco/labeldata/crawurl',
-            ],
-        ];
         $this->tab_data = $tab_data;
-        $this->tab_data1 = $tab_data1;
     }
 
     /**
@@ -214,7 +203,7 @@ class LabelData extends Admin
         }
         $map = [];
         if ($q) {
-            $map['title'] = ['like', '%' . $q . '%'];
+            $map['name'] = ['like', '%' . $q . '%'];
         }
 
         $data_list = TagModel::where($map)->paginate(10, false, ['query' => input('get.')]);
@@ -231,13 +220,56 @@ class LabelData extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            unset($data['id']);
-            if (!PendingModel::create($data)) {
-                return $this->error('添加失败！');
+            if($data['status']==2) {
+                unset($data['id']);
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success('添加成功。', 'pending_list');
             }
-            return $this->success('添加成功。');
+            if($data['status']==3) {
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
+                }
+                else
+                {
+                    unset($data['id']);
+                    if (!FinalyModel::create($data)) {
+                        return $this->error('添加失败！');
+                    }
+                    return $this->success('添加成功。','pending_list');
+                }
+            }
         }
-        return $this->afetch('pending_pform');
+        return $this->afetch('pending_form');
+    }
+
+    public function pending_add()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if($data['status']==2) {
+                unset($data['id']);
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
+                }
+                return $this->success('添加成功。', 'pending_list');
+            }
+            if($data['status']==3) {
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
+                }
+                else
+                {
+                    unset($data['id']);
+                    if (!FinalyModel::create($data)) {
+                        return $this->error('添加失败！');
+                    }
+                    return $this->success('添加成功。','pending_list');
+                }
+            }
+        }
+        return $this->afetch('pending_form');
     }
 
     public function pending_list($temp=2)
@@ -353,14 +385,16 @@ class LabelData extends Admin
             curl_setopt($ch, CURLINFO_TOTAL_TIME, 3);
             curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
             try{
-                $output = curl_exec($ch);
-//                $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-//                if ($http != 200) {
-//                    curl_close($ch);
-//                    throw  new Exception('链接失败');
-//                }
+                 $output = curl_exec($ch);
+                 $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                 //return $this->error($http);
+                if ($http != 200) {
+                    curl_close($ch);
+                    throw  new Exception('链接失败');
+                }
                 $data_list = json_decode($output, true);
                 $row = $data_list['data'];
+                $row['issue']=date("Y-m-d H:i:s", $row['issue']);
                 if ($data_list['status'] == 0)
                     return $this->error($data_list['msg']);
                 $this->assign('data_info', $row);
@@ -368,7 +402,7 @@ class LabelData extends Admin
             }catch (Exception $exception){
                 $msg=$exception->getMessage();
                 return $this->error($msg);
-                return $this->afetch('pending_fform');
+                //return $this->afetch('pending_fform');
             }
 
         }

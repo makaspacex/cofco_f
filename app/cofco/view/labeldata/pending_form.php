@@ -25,9 +25,14 @@
         <a href="{:url('tag_pop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
-<!--        <label class="layui-form-label">来源网站</label>-->
+        <!--        <label class="layui-form-label">来源网站</label>-->
         <div class="layui-input-inline w300">
             <input type="hidden" class="layui-input field-source" name="source" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-ojournal" name="ojournal" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -81,7 +86,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">发表时间</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="date" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -99,8 +104,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w300">
-            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
-            <input type="radio" class="field-status" name="status" value="2" title="未审核">
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" >
+            <input type="radio" class="field-status" name="status" value="2" title="未审核"checked>
         </div>
         <div class="layui-form-mid layui-word-aux">审核完毕则直接存入最终表，否则存入待审表</div>
     </div>
@@ -119,9 +124,9 @@
     var text='';
     function func(data) {
         var $ = layui.jquery;
-      //  for(var i=0;i<data.length;i++){
-         $('input[name="tag_id"]').val(data[0]['id']);
-         $('input[name="name"]').val(data[0]['name']);
+        //  for(var i=0;i<data.length;i++){
+        $('input[name="tag_id"]').val(data[0]['id']);
+        $('input[name="name"]').val(data[0]['name']);
         //     if (i==0)
         //        //    text= data[i]['id'];
         //        //      else
