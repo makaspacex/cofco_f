@@ -66,20 +66,4 @@
 </form>
 {include file="admin@block/layui" /}
 <script>
-    $("#btn").click(function(){
-        //询问框
-        layer.confirm('你怎么看待学校让我们搬宿舍的举动？', {
-            btn: ['太麻烦了','我觉得可以'] //按钮
-        }, function(){
-            layer.msg('我也觉得麻烦', {icon: 1});
-        }, function(){
-            layer.msg('搬来搬去的好玩吗？',{icon: 3});
-            //注释的是嵌套使用的，简单演示我们就不嵌套了，直接使用上面那句代替
-            // layer.msg('也可以这样', {
-            //   time: 20000, //20s后自动关闭
-            //   btn: ['明白了', '知道了']
-            // });
-        });
-
-    });
 </script>

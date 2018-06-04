@@ -332,6 +332,7 @@ class LabelData extends Admin
             $row2 = array();
         //var_dump($row2);
         $row = array_merge($row1, $row2);
+        $row['issue']=date("Y-m-d", $row['issue']);
         //var_dump($row);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
@@ -377,9 +378,9 @@ class LabelData extends Admin
                 return $this->afetch('pending_pform');
             }
 
-            $url = "http://10.2.145.166:8000/spider/crawurl";
+            //$url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);

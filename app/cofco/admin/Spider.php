@@ -337,9 +337,9 @@ class Spider extends Admin
         {
         $ret=array('pid');
         $row=array_fill_keys($ret,$id);
-        $url = "http://10.2.145.166:8000/spider/stop";
+        //$url = "http://http://10.2.175.30:9001/spider/stop";
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_stop'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -361,9 +361,9 @@ class Spider extends Admin
         else {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.145.166:8000/spider/pause";
+            //$url = "http://10.2.145.166:8000/spider/pause";
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_pause'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -387,9 +387,9 @@ class Spider extends Admin
             {
             $ret = array('pid');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.145.166:8000/spider/continue";
+            //$url = "http://10.2.145.166:8000/spider/continue";
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_continue'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -401,7 +401,7 @@ class Spider extends Admin
                 else
                     return $this->success($data_list['msg']);
             }
-            return $this->error('添加失败');
+            return $this->error('继续失败');
         }
     }
 
@@ -409,9 +409,9 @@ class Spider extends Admin
     {
             $ret = array('sstr');
             $row = array_fill_keys($ret, $id);
-            $url = "http://10.2.145.166:8000/spider/remove";
+            //$url = "http://10.2.145.166:8000/spider/remove";
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_remove'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -430,10 +430,12 @@ class Spider extends Admin
     public function task_startforce($id='')
     {
         $ret = array('sstr');
+        $id = str_replace('*', ' ', $id);
         $row = array_fill_keys($ret, $id);
-        $url = "http://10.2.145.166:8000/spider/startforce";
+        //return $this->error($id);
+        //$url = "http://10.2.145.166:8000/spider/startforce";
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_startforce'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
@@ -445,7 +447,7 @@ class Spider extends Admin
             else
                 return $this->success('重启成功');
         }
-        return $this->error('删除失败');
+        return $this->error('重启失败');
 
     }
 
