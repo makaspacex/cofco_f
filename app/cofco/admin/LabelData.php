@@ -324,8 +324,10 @@ class LabelData extends Admin
         }
         $row1 = PendingModel::where('id', $id)->find()->toArray();
         $tag_id = $row1['tag_id'];
-        if ($tag_id != null)
-            $row2 = TagModel::where('id', $tag_id)->field('name')->find()->toArray();
+        if ($tag_id != null) {
+            $row2 = TagModel::where('id', $tag_id)->field('value')->find()->toArray();
+            $row2 = str_replace(PHP_EOL, '#', $row2);
+        }
         else
             $row2 = array();
         //var_dump($row2);

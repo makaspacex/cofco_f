@@ -20,7 +20,7 @@
             <input type="hidden"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
         </div>
         <div class="layui-input-inline">
-            <input type="label" class="layui-input field-name" disabled="true" name="name" lay-verify="" autocomplete="off" placeholder="未标记">
+            <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
         <a href="{:url('tag_pop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
@@ -115,19 +115,19 @@
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    // <if $data_info.name==0 $('input[name="name"]').val('未标记')>
-    var text='';
+    // var text='';
+    // function func(data) {
+    //     var $ = layui.jquery;
+    //      $('input[name="tag_id"]').val(data[0]['id']);
+    //      $('input[name="name"]').val(data[0]['name']);
+    // }
+    var str='';
     function func(data) {
         var $ = layui.jquery;
-      //  for(var i=0;i<data.length;i++){
-         $('input[name="tag_id"]').val(data[0]['id']);
-         $('input[name="name"]').val(data[0]['name']);
-        //     if (i==0)
-        //        //    text= data[i]['id'];
-        //        //      else
-        //        //          text=text+'#'+data[i]['id']
-        //        // }
-        //$('input[name="tag_id"]').val(text);
+        $('input[name="tag_id"]').val(data[0]['id']);
+        str=data[0]['value'];
+        str= str.replace(/\r\n/g,"#");
+        $('input[name="value"]').val(str);
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>
