@@ -430,7 +430,6 @@ class Spider extends Admin
     public function task_startforce($id='')
     {
         $ret = array('sstr');
-        $id = str_replace('*', ' ', $id);
         $row = array_fill_keys($ret, $id);
         //return $this->error($id);
         //$url = "http://10.2.145.166:8000/spider/startforce";
