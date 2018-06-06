@@ -332,7 +332,10 @@ class LabelData extends Admin
             $row2 = array();
         //var_dump($row2);
         $row = array_merge($row1, $row2);
+        if(mb_strlen($row['issue'],'utf8')>2)
         $row['issue']=date("Y-m-d", $row['issue']);
+        else
+            $row['issue']=null;
         //var_dump($row);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
