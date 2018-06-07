@@ -44,31 +44,31 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章标题</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-title" name="title" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">文章作者</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-author" name="author" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-author" name="author" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属期刊</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal" name="journal" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal" name="journal" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">影响因子</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所在分区</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

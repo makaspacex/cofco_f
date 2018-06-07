@@ -272,9 +272,17 @@ class LabelData extends Admin
         return $this->afetch('pending_form');
     }
 
-    public function pending_list($temp=2)
+    public function pending_list($q='')
     {
-        $data_list = PendingModel::where('status',$temp)->paginate();
+        $q = input('param.q/s');
+        $map = [];
+        if ($q) {
+            $map['title'] = ['like', '%' . $q . '%'];
+        }
+        if($q=='')
+        $data_list = PendingModel::where('status',2)->paginate();
+        else
+            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
 
         // 分页
         $pages = $data_list->render();
@@ -372,7 +380,10 @@ class LabelData extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            //$t = strtotime('2015-6-16 12:04:05');
+            //$data['issue']=strtotime($data['issue']);
             if(count($data)>2){
+                $data['issue']=strtotime($data['issue']);
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');

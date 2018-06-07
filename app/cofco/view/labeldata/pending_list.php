@@ -1,7 +1,19 @@
 <form class="page-list-form">
+    <div class="page-toolbar">
+        <div class="page-filter fr">
+            <form class="layui-form layui-form-pane" action="{:url()}" method="get">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">搜索</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
     <div class="layui-btn-group">
         <a href="{:url('pending_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
         <a data-href="{:url('pending_del')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
+    </div>
     </div>
     <div class="layui-form">
         <table class="layui-table mt10" lay-even="" lay-skin="row">

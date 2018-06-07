@@ -28,13 +28,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章作者</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-author" name="author" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-author" name="author" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属期刊</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal" name="journal" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal" name="journal" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -45,19 +45,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label">影响因子</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所在分区</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">发表时间</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-issue" name="issue" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -75,7 +75,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章关键词</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-keyword" name="keyword" lay-verify="required" autocomplete="off" placeholder="逗号分隔，如 China,America,English">
+            <input type="text" class="layui-input field-keyword" name="keyword" lay-verify="" autocomplete="off" placeholder="逗号分隔，如 China,America,English">
         </div>
     </div>
     <div class="layui-form-item">

@@ -66,7 +66,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">影响因子</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
