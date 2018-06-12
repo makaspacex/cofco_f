@@ -220,6 +220,8 @@ class Spider extends Admin
         if ($q) {
             $map['keywords'] = ['like', '%'.$q.'%'];
         }
+        else
+            $map['status']=1;
         $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
         // 分页
         //var_dump($data_list);

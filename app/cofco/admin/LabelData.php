@@ -205,6 +205,8 @@ class LabelData extends Admin
         if ($q) {
             $map['name'] = ['like', '%' . $q . '%'];
         }
+        else
+            $map['status']=1;
 
         $data_list = TagModel::where($map)->paginate(10, false, ['query' => input('get.')]);
         // 分页
@@ -220,6 +222,7 @@ class LabelData extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
@@ -354,7 +357,7 @@ class LabelData extends Admin
         }
         else
             $array = array();
-        var_dump($array);
+        //var_dump($array);
         $row = array_merge($row1, $array);
         if(mb_strlen($row['issue'],'utf8')>2)
         $row['issue']=date("Y-m-d", $row['issue']);
