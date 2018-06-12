@@ -24,6 +24,12 @@
             </thead>
             <tbody>
             {volist name="data_list" id="v"}
+            {php}
+            if($v['value']!=null)
+            {
+            $v['value']= str_replace(PHP_EOL, ';', $v['value']);
+            }
+            {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
                 <td>{$v['keywords']}</td>

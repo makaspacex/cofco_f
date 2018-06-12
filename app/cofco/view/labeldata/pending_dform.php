@@ -28,7 +28,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">标签标注</label>
         <div class="layui-input-inline">
-            <input type="hidden"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
+            <input type="label"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
         </div>
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
@@ -126,19 +126,29 @@
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    // var text='';
-    // function func(data) {
-    //     var $ = layui.jquery;
-    //      $('input[name="tag_id"]').val(data[0]['id']);
-    //      $('input[name="name"]').val(data[0]['name']);
-    // }
-    var str='';
+    var text1='';var text2='';
     function func(data) {
         var $ = layui.jquery;
-        $('input[name="tag_id"]').val(data[0]['id']);
-        str=data[0]['value'];
-        str= str.replace(/\r\n/g,"#");
-        $('input[name="value"]').val(str);
+          for(var i=0;i<data.length;i++){
+             if (i==0){
+                 text1= data[i]['id'];
+                 text2= data[i]['value'];
+             }
+                      else{
+                 text1=text1+'#'+data[i]['id']
+                 text2=text2+'#'+data[i]['value']
+             }
+                 }
+        $('input[name="tag_id"]').val(text1);
+        $('input[name="value"]').val(text2);
     }
+    // var str='';
+    // function func(data) {
+    //     var $ = layui.jquery;
+    //     $('input[name="tag_id"]').val(data[0]['id']);
+    //     str=data[0]['value'];
+    //     str= str.replace(/\r\n/g,"#");
+    //     $('input[name="value"]').val(str);
+    // }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

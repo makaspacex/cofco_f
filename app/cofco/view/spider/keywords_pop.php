@@ -34,6 +34,13 @@
             </thead>
             <tbody>
             {volist name="data_list" id="v"}
+            {php}
+            if($v['value']!=null)
+            {
+            $v['value']= str_replace(PHP_EOL, ';', $v['value']);
+            $v['value']= str_replace('\'', '‘', $v['value']);
+            }
+            {/php}
             <tr>
                 <td><input type="radio" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids" lay-skin="primary"data-json='{:json_encode($v, 1)}'></td>
                 <td>{$v['keywords']}</td>
@@ -63,13 +70,16 @@
                 layui.layer.msg('请选择数据！');
                 return false;
             }
+            var A=new Array();
             $('input[name="ids[]"]:checked').each(function(i) {
-                json = eval('(' + $(this).attr('data-json') + ')');
+                A=$(this).attr('data-json');
+                A=A.replace("'","*");
+                json = eval("(" + A + ")");
                 data[i] = json;
             });
+            //alert(JSON.stringify(data));
             // 触发父级页面函数
             parent.{$callback}(data);
-            //alert(JSON.stringify(data));
             parent.layer.closeAll();
         });
     });

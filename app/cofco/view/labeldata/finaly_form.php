@@ -15,8 +15,9 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">爬虫关键词</label>
         <div class="layui-input-inline w300">
-            <input type="hidden" class="layui-input field-sstr" name="sstr" lay-verify="" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-sstr" name="sstr" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -35,32 +36,27 @@
         <a href="{:url('tag_pop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
-        <!--        <label class="layui-form-label">来源网站</label>-->
+<!--        <label class="layui-form-label">来源网站</label>-->
         <div class="layui-input-inline w300">
             <input type="hidden" class="layui-input field-source" name="source" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
-        <div class="layui-input-inline w300">
-            <input type="hidden" class="layui-input field-ojournal" name="ojournal" lay-verify="" autocomplete="off" placeholder="">
-        </div>
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">文章标题</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-title" name="title" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">文章作者</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-author" name="author" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-author" name="author" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属期刊</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal" name="journal" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal" name="journal" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -72,7 +68,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">所在分区</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-journal_zone" name="journal_zone" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -96,7 +92,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">发表时间</label>
         <div class="layui-input-inline w300">
-            <input type="date" class="layui-input field-issue" name="issue" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-issue" name="issue" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -114,10 +110,10 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w300">
-            <input type="radio" class="field-status" name="status" value="3" title="已审核" >
-            <input type="radio" class="field-status" name="status" value="2" title="未审核"checked>
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
+            <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
-        <div class="layui-form-mid layui-word-aux" >审核完毕则直接存入最终表，否则存入待审表</div>
+        <div class="layui-form-mid layui-word-aux">审核完毕则直接存入最终表，否则存入待审表</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -130,35 +126,19 @@
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    var text1='';var text2='';
-    function func(data) {
-        var $ = layui.jquery;
-        for(var i=0;i<data.length;i++){
-            if (i==0){
-                text1= data[i]['id'];
-                text2= data[i]['value'];
-            }
-            else{
-                text1=text1+'#'+data[i]['id']
-                text2=text2+'#'+data[i]['value']
-            }
-        }
-        $('input[name="tag_id"]').val(text1);
-        $('input[name="value"]').val(text2);
-    }
     // var text='';
     // function func(data) {
     //     var $ = layui.jquery;
-    //     //  for(var i=0;i<data.length;i++){
-    //     $('input[name="tag_id"]').val(data[0]['id']);
-    //     $('input[name="name"]').val(data[0]['name']);
-    // var str='';
-    // function func(data) {
-    //     var $ = layui.jquery;
-    //     $('input[name="tag_id"]').val(data[0]['id']);
-    //     str=data[0]['value'];
-    //     str= str.replace(/\r\n/g,"#");
-    //     $('input[name="value"]').val(str);
+    //      $('input[name="tag_id"]').val(data[0]['id']);
+    //      $('input[name="name"]').val(data[0]['name']);
     // }
+    var str='';
+    function func(data) {
+        var $ = layui.jquery;
+        $('input[name="tag_id"]').val(data[0]['id']);
+        str=data[0]['value'];
+        str= str.replace(/\r\n/g,"#");
+        $('input[name="value"]').val(str);
+    }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

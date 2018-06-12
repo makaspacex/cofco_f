@@ -16,7 +16,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">值</label>
         <div class="layui-input-inline w300">
-            <textarea rows="6"  class="layui-textarea field-value" name="value" lay-verify="" autocomplete="off" placeholder=""></textarea>
+            <input type="text" class="layui-input field-value" name="value" lay-verify="required" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

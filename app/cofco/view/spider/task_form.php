@@ -27,21 +27,15 @@ $name=$user[ADMIN_ID];
     <div class="layui-form-item">
         <label class="layui-form-label">更新频率</label>
         <div class="layui-input-inline">
-            <select name="frequen_d"  class="field-frequen_d" type="select" >
+            <select name="frequen"  class="field-frequen" type="select" >
                 <option value ="00"selected>按天更新（请选择）</option>
                 <option value ="0"> 只更新一次</option>
                 <option value ="1">一天更新一次</option>
                 <option value="2">两天更新一次</option>
+                <option value ="3">一月更新一次</option>
+                <option value="4">两月更新一次</option>
             </select>
         </div>
-        <div class="layui-input-inline">
-            <select name="frequen_m"  class="field-frequen_m" type="select" >
-                <option value ="0"selected>按月更新（请选择）</option>
-                <option value ="1">一月更新一次</option>
-                <option value="2">两月更新一次</option>
-            </select>
-        </div>
-        <div class="layui-form-mid layui-word-aux">注意：频率二选一，否则以按月频率为准</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -70,7 +64,7 @@ $name=$user[ADMIN_ID];
     function func(data) {
         var $ = layui.jquery;
         str=data[0]['value'];
-        str= str.replace(/\r\n/g,"#");
+        str= str.replace(";","#");
         //$('input[name="keywords"]').val(obj[3]);
         //$('input[name="keywords"]').val(data[0]['value']);
             $('input[name="keywords"]').val(str);

@@ -16,6 +16,7 @@
                 <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>文章标题</th>
                 <th>状态</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -33,14 +34,14 @@
                            lay-skin="primary"></td>
                 <td>{$v['title']}</td>
                 <td>{$v['status']}</td>
-<!--                <td>-->
-<!--                    <div class="layui-btn-group">-->
-<!--                        <div class="layui-btn-group">-->
-<!--                            <a href="{:url('pending_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
+                <td>
+                    <div class="layui-btn-group">
+                        <div class="layui-btn-group">
+                            <a href="{:url('finaly_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
 <!--                            <a data-href="{:url('pending_del?ids='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </td>-->
+                        </div>
+                    </div>
+                </td>
 
             </tr>
             {/volist}

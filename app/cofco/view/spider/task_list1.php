@@ -34,6 +34,15 @@
             $v['status']="已完成";
             if($v['pid']=='')
             $v['pid']="未运行";
+            if($v['progress']!=null)
+            {
+             $v['progress']=$v['progress']*100;
+             $v['progress'].="%";
+            }
+            if($v['sstr']!=null)
+            {
+            $v['sstr']= str_replace('*', ' ', $v['sstr']);
+            }
             {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['pid']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>

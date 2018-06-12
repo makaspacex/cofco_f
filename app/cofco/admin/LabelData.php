@@ -248,6 +248,7 @@ class LabelData extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
@@ -309,6 +310,7 @@ class LabelData extends Admin
         if ($this->request->isPost()) {
             
             $data = $this->request->post();
+            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
@@ -331,15 +333,29 @@ class LabelData extends Admin
 
         }
         $row1 = PendingModel::where('id', $id)->find()->toArray();
+        $row1 = str_replace('?', ' ', $row1);
         $tag_id = $row1['tag_id'];
         if ($tag_id != null) {
-            $row2 = TagModel::where('id', $tag_id)->field('value')->find()->toArray();
-            $row2 = str_replace(PHP_EOL, '#', $row2);
+            $var=explode("#",$tag_id);
+            $array = array("value"=>"");
+            for($x=0;$x<count($var);$x++)
+            {
+                $row2 = TagModel::where('id', $var[$x])->field('value')->find()->toArray();
+                //$row2 = str_replace(PHP_EOL, '#', $row2);
+                if($x==0)
+                {
+                    $array['value']=$row2['value'];
+                }
+                else
+                {
+                    $array['value']=$array['value'].'#'.$row2['value'];
+                }
+            }
         }
         else
-            $row2 = array();
-        //var_dump($row2);
-        $row = array_merge($row1, $row2);
+            $array = array();
+        var_dump($array);
+        $row = array_merge($row1, $array);
         if(mb_strlen($row['issue'],'utf8')>2)
         $row['issue']=date("Y-m-d", $row['issue']);
         else
@@ -463,5 +479,23 @@ class LabelData extends Admin
         $this->assign('pages', $pages);
 //        var_dump($data_list);
         return $this->fetch();
+    }
+
+    public function finaly_edit($id = 0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if (!FinalyModel::update($data)) {
+                return $this->error('修改失败！');
+            }
+            // 更新缓存
+            //cache('system_member_level', KwModel::getAll());
+            return $this->success('修改成功。','finaly_list');
+        }
+        $row = FinalyModel::where('id', $id)->find()->toArray();
+        $row = str_replace('?', ' ', $row);
+        $row = str_replace(PHP_EOL, '#', $row);
+        $this->assign('data_info', $row);
+        return $this->afetch('finaly_form');
     }
 }
