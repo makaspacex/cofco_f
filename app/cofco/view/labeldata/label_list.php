@@ -13,7 +13,7 @@
                 <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>分组名称</th>
                 <th>状态</th>
-                <th>值</th>
+                <th>分组描述</th>
                 <th>操作</th>
             </tr>
             </thead>

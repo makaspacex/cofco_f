@@ -38,7 +38,7 @@
             if($v['value']!=null)
             {
             $v['value']= str_replace(PHP_EOL, ';', $v['value']);
-            $v['value']= str_replace('\'', '‘', $v['value']);
+            $v['value']= str_replace('\'', '’', $v['value']);
             }
             {/php}
             <tr>

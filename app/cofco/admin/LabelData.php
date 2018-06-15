@@ -203,7 +203,7 @@ class LabelData extends Admin
         }
         $map = [];
         if ($q) {
-            $map['name'] = ['like', '%' . $q . '%'];
+            $map['value'] = ['like', '%' . $q . '%'];
         }
         else
             $map['status']=1;
@@ -498,6 +498,10 @@ class LabelData extends Admin
         $row = FinalyModel::where('id', $id)->find()->toArray();
         $row = str_replace('?', ' ', $row);
         $row = str_replace(PHP_EOL, '#', $row);
+        if(mb_strlen($row['issue'],'utf8')>2)
+            $row['issue']=date("Y-m-d", $row['issue']);
+        else
+            $row['issue']=null;
         $this->assign('data_info', $row);
         return $this->afetch('finaly_form');
     }

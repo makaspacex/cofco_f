@@ -355,7 +355,7 @@ class Spider extends Admin
             if($data_list['status']==0)
                 return $this->error($data_list['msg']);
             else
-                return $this->success($data_list['msg'],'task_list1');
+                return $this->success('停止成功','task_list1');
         }
         return $this->error('停止失败');
         }
@@ -379,7 +379,7 @@ class Spider extends Admin
                 if ($data_list['status'] == 0)
                     return $this->error($data_list['msg']);
                 else
-                    return $this->success($data_list['msg']);
+                    return $this->success('暂停成功');
             }
             return $this->error('添加失败');
         }
@@ -405,7 +405,7 @@ class Spider extends Admin
                 if ($data_list['status'] == 0)
                     return $this->error($data_list['msg']);
                 else
-                    return $this->success($data_list['msg']);
+                    return $this->success('继续成功');
             }
             return $this->error('继续失败');
         }
@@ -427,7 +427,7 @@ class Spider extends Admin
                 if ($data_list['status'] == 0)
                     return $this->error($data_list['msg']);
                 else
-                    return $this->success($data_list['msg']);
+                    return $this->success('删除成功');
             }
             return $this->error('删除失败');
 

@@ -1,10 +1,10 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-    <div class="layui-form-item">
-        <label class="layui-form-label">标签名称</label>
-        <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="">
-        </div>
-    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">标签名称</label>-->
+<!--        <div class="layui-input-inline w300">-->
+<!--            <input type="text" class="layui-input field-name" name="name" lay-verify="required" autocomplete="off" placeholder="">-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">所在分组</label>
         <div class="layui-input-inline">
@@ -18,6 +18,7 @@
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-value" name="value" lay-verify="required" autocomplete="off" placeholder="">
         </div>
+        <div class="layui-form-mid layui-word-aux">请只添加一个值</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>

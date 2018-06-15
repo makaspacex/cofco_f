@@ -43,7 +43,6 @@
             if($v['sstr']!=null)
             {
             $v['sstr']= str_replace('*', ' ', $v['sstr']);
-            $v['sstr']= str_replace('#', ';', $v['sstr']);
             }
             {/php}
             <tr>
@@ -56,6 +55,7 @@
                 <td>{$v['creator']}</td>
 <!--                <td><input type="" name="status" {if condition="$v['status'] eq 3"} value="运行中" {/if}></td>-->
                 <td>{$v['status']}</td>
+<!--                <td>{$v['sstr']}</td>-->
                 <td>
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
