@@ -228,7 +228,7 @@ class LabelData extends Admin
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');
                 }
-                return $this->success('添加成功。', 'pending_list');
+                return $this->success('添加成功。');
             }
             if($data['status']==3) {
                 if (!PendingModel::create($data)) {
@@ -240,11 +240,11 @@ class LabelData extends Admin
                     if (!FinalyModel::create($data)) {
                         return $this->error('添加失败！');
                     }
-                    return $this->success('添加成功。','pending_list');
+                    return $this->success('添加成功。');
                 }
             }
         }
-        return $this->afetch('pending_form');
+        return $this->afetch('pending_form1');
     }
 
     public function pending_add()
