@@ -180,7 +180,7 @@ class LabelData extends Admin
         $this->assign('data_info', $row);
         return $this->afetch('tag_form');
     }
-
+//
     public function tag_del()
     {
         $ids = input('param.ids/a');
