@@ -22,7 +22,7 @@ use app\admin\controller\Admin;
  * @package app\COFCO\admin
  */
 
-class DataAnalyse extends Admin
+class Dataanalyse extends Admin
 {
     /*
      * 数据标注说明

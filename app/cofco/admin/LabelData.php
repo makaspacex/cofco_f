@@ -30,7 +30,7 @@ use think\Exception;
  *
  * @package app\COFCO\admin
  */
-class LabelData extends Admin
+class Labeldata extends Admin
 {
     /*
      * 人工输入说明
