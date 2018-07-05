@@ -4,10 +4,13 @@ namespace app\cofco\admin;
 
 use app\cofco\model\AdminLabel as LabelModel;
 use app\cofco\model\AdminTag as TagModel;
+use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
 use app\cofco\model\AdminFinaly as FinalyModel;
+use app\cofco\model\AdminId as IdModel;
 use app\admin\controller\Admin;
 use think\Exception;
+use think\Db;
 
 /**
  * Class Spider
@@ -60,6 +63,89 @@ class Labeldata extends Admin
             ],
         ];
         $this->tab_data = $tab_data;
+    }
+
+//    public function levellabel()
+//    {
+//        $map = [];
+//        $data_list = LevellabelModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+//        // 分页
+//        $pages = $data_list->render();
+//        $this->assign('data_list', $data_list);
+//        $this->assign('pages', $pages);
+//
+//        //var_dump($data_list);
+//        return $this->fetch();
+//    }
+
+    public function levellabel()
+    {
+        $menu_list = LevellabelModel::getAllChild(0, 0);
+        $this->assign('menu_list', $menu_list);
+        return $this->fetch();
+    }
+
+    public function levellabel_add($cid='')
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            unset($data['id']);
+            if (!LevellabelModel::create($data)) {
+                return $this->error('添加失败！');
+            }
+            return $this->success('添加成功。', 'levellabel');
+        }
+        $this->assign('levellabel_option', LevellabelModel::getOption());
+        $row['cid']=$cid;
+        $this->assign('data_info', $row);
+        return $this->afetch('levellabel_form');
+    }
+
+    public function levellabel_edit($id = 0)
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            if (!LevellabelModel::update($data)) {
+                return $this->error('修改失败！');
+            }
+            return $this->success('修改成功。', 'levellabel');
+        }
+        $row = LevellabelModel::where('id', $id)->find()->toArray();
+        $this->assign('levellabel_option', LevellabelModel::getOption());
+        $this->assign('data_info', $row);
+        return $this->afetch('levellabel_form1');
+    }
+
+    public function levellabel_del()
+    {
+        $ids = input('param.ids/a');
+        $model = new LevellabelModel;
+        if (!$model->del($ids)) {
+            return $this->error($model->getError());
+        }
+        return $this->success('删除成功');
+    }
+
+    public function levelpop($q = '')
+    {
+        $q = input('param.q/s');
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
+//        $map = [];
+//        if ($q) {
+//            $map['value'] = ['like', '%' . $q . '%'];
+//        }
+//        else
+//            $map['status']=1;
+
+        $menu_list = LevellabelModel::getAllChild(0, 0);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        $this->assign('menu_list', $menu_list);
+        return $this->fetch();
     }
 
     /**
@@ -221,8 +307,30 @@ class Labeldata extends Admin
     public function pending_padd()
     {
         if ($this->request->isPost()) {
+            $temp=1;
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
+
+            $var=explode("#",$data['tag_id']);
+            for($x=0;$x<count($var);$x++)
+            {
+                while ($temp>-1)
+                {
+                    $array = array("id"=>"","tid"=>"");
+                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+                    $array['id']=$data['id'];$array['tid']=$var[$x];
+                    if (!(IdModel::where('id', $array['id'])->find()))
+                    {
+                        if (IdModel::create($array)) {
+                            $temp=$row2['cid'];
+                            $var[$x]=$temp;
+                        }
+                    }
+                    if ($var[$x]==0)
+                        break;
+                }
+            }
+
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
@@ -252,6 +360,26 @@ class Labeldata extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
+            $temp=1;
+            $var=explode("#",$data['tag_id']);
+            for($x=0;$x<count($var);$x++)
+            {
+                while ($temp>-1)
+                {
+                    $array = array("id"=>"","tid"=>"");
+                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+                    $array['id']=$data['id'];$array['tid']=$var[$x];
+                    if (!(IdModel::where('id', $array['id'])->find()))
+                    {
+                        if (IdModel::create($array)) {
+                            $temp=$row2['cid'];
+                            $var[$x]=$temp;
+                        }
+                    }
+                    if ($var[$x]==0)
+                        break;
+                }
+            }
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
@@ -275,23 +403,64 @@ class Labeldata extends Admin
         }
         return $this->afetch('pending_form');
     }
+//    public function pending_list($q='')
+//    {
+//        $q = input('param.q/s');
+//        $map = [];
+//        if ($q) {
+//            $map['title'] = ['like', '%' . $q . '%'];
+//
+//        }
+//        if($q=='')
+//            $data_list = PendingModel::where('status',2)->paginate();
+//        else {
+//            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+//
+//        }
+//
+//        // 分页
+//        $pages = $data_list->render();
+//        $this->assign('data_list', $data_list);
+//        $this->assign('pages', $pages);
+////        var_dump($data_list);
+//        return $this->fetch();
+//    }
 
     public function pending_list($q='')
     {
-        $q = input('param.q/s');
+        //$q = input('param.q/s');
+        $var=explode("#",$q);
         $map = [];
         if ($q) {
-            $map['title'] = ['like', '%' . $q . '%'];
+            //$map['title'] = ['like', '%' . $q . '%'];
+            $map = str_replace('#', ',', $q);
+            $count=count($var);
+            //$map['tid'] = ['in', $var];
         }
         if($q=='')
-        $data_list = PendingModel::where('status',2)->paginate();
-        else
-            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+        {$data_list = PendingModel::where('status',2)->paginate();
+            $pages = $data_list->render();
+            $this->assign('data_list', $data_list);
+            $this->assign('pages', $pages);
+        }
+        else {
+            //$data = IdModel::where($map)->field('pid,tid')->paginate(10, false, ['query' => input('get.')]);
+            //$data=IdModel::distinct('pid')->where($map)->field('pid')->paginate(10, false, ['query' => input('get.')]);
+            //$tem=IdModel::distinct('pid')->where($map)->field('pid')->group('pid')->paginate(10, false);
+            //$map1['id']=['in',$tem];
+            //$data_list = PendingModel::where('status',2)->paginate();
+            //$data_list=PendingModel::join('LEFT JOIN work ON hisi_admin_id.pid = spiderapp_content.id')->where($tem)->paginate(10, false);
+            //$data_list=PendingModel::
+            //$data_list=$data;
+            //var_dump($data_list);
+            $data_list = Db::query('SELECT * FROM spiderapp_content LEFT JOIN hisi_admin_id ON hisi_admin_id.pid = spiderapp_content.id WHERE hisi_admin_id.tid IN ('.$map.') GROUP BY hisi_admin_id.pid HAVING COUNT(DISTINCT spiderapp_content.id,hisi_admin_id.tid) = '.$count.' LIMIT 15');
 
+        }
+        //echo Db::table('spiderapp_content')->getLastSql();
         // 分页
-        $pages = $data_list->render();
+        //$pages = $data_list->render();
         $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
+        //$this->assign('pages', $pages);
 //        var_dump($data_list);
         return $this->fetch();
     }
@@ -311,14 +480,34 @@ class Labeldata extends Admin
     public function pending_edit($id = 0)
     {
         if ($this->request->isPost()) {
-            
+            $map = [];
+            $map['pid'] = $id;
+            IdModel::where($map)->delete();
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
                 }
-                return $this->success('修改成功。', 'pending_list');
+                else {
+                    $var1=explode("#",$data['tag_id']);
+                    for ($x=0;$x<count($var1);$x++) {
+                        $temp = $var1[$x];
+                        while ($temp != 0) {
+                            $array = array("pid" => "", "tid" => "");
+                            $row2 = LevellabelModel::where('id', $temp)->field('cid')->find()->toArray();
+                            $array['pid'] = $data['id'];
+                            $array['tid'] = $temp;
+                            $temp = $row2['cid'];
+                            if (!(IdModel::where('pid', $array['pid'])->where('tid',$array['tid'])->find())) {
+                                IdModel::create($array);
+                            }
+                        }
+                    }
+                            return $this->success('修改成功。', 'pending_list');
+
+
+                }
             }
             if($data['status']==3) {
                 if (!PendingModel::update($data)) {
@@ -326,11 +515,28 @@ class Labeldata extends Admin
                 }
                 else
                     {
+                        $var1=explode("#",$data['tag_id']);
+                        for ($x=0;$x<count($var1);$x++) {
+                            $temp = $var1[$x];
+                            while ($temp != 0) {
+                                $array = array("pid" => "", "tid" => "");
+                                $row2 = LevellabelModel::where('id', $temp)->field('cid')->find()->toArray();
+                                $array['pid'] = $data['id'];
+                                $array['tid'] = $temp;
+                                $temp = $row2['cid'];
+                                if (!(IdModel::where('pid', $array['pid'])->where('tid',$array['tid'])->find())) {
+
+                                    IdModel::create($array);
+                                }
+                            }
+                        }
                        unset($data['id']);
                        if (!FinalyModel::create($data)) {
                            return $this->error('添加失败！');
                        }
-                       return $this->success('添加成功。','pending_list');
+                       else {
+                           return $this->success('添加成功。', 'pending_list');
+                       }
                     }
             }
 
@@ -343,7 +549,7 @@ class Labeldata extends Admin
             $array = array("value"=>"");
             for($x=0;$x<count($var);$x++)
             {
-                $row2 = TagModel::where('id', $var[$x])->field('value')->find()->toArray();
+                $row2 = LevellabelModel::where('id', $var[$x])->field('value')->find()->toArray();
                 //$row2 = str_replace(PHP_EOL, '#', $row2);
                 if($x==0)
                 {
@@ -369,7 +575,7 @@ class Labeldata extends Admin
         $row['country'] = PendingModel::strFilter($row['country']);
         $row['institue'] = PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
-        // $this->assign('data_info1', $row1);
+
         return $this->afetch('pending_dform');
     }
 
@@ -401,9 +607,11 @@ class Labeldata extends Admin
             $data = $this->request->post();
             //$t = strtotime('2015-6-16 12:04:05');
             //$data['issue']=strtotime($data['issue']);
+
             if(count($data)>2){
                 $data['issue']=strtotime($data['issue']);
                 unset($data['id']);
+
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');
                 }
@@ -472,11 +680,30 @@ class Labeldata extends Admin
 //$map = [];
 //$map['id'] = ['in', $ids];
 //$res = PendingModel::where($map)->delete();
-    public function finaly_list()
+//    public function pending_list($q='')
+//    {
+//        $q = input('param.q/s');
+//        $map = [];
+//        if ($q) {
+//            $map['title'] = ['like', '%' . $q . '%'];
+//        }
+//        if($q=='')
+//            $data_list = PendingModel::where('status',2)->paginate();
+//        else
+//            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+//
+//        // 分页
+//        $pages = $data_list->render();
+//        $this->assign('data_list', $data_list);
+//        $this->assign('pages', $pages);
+////        var_dump($data_list);
+//        return $this->fetch();
+//    }
+    public function finaly_list($q='')
     {
+//        $var=explode("#",$q);
+//        $map['tid'] = ['in', $var];
         $data_list = FinalyModel::paginate();
-
-        // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
@@ -504,5 +731,17 @@ class Labeldata extends Admin
             $row['issue']=null;
         $this->assign('data_info', $row);
         return $this->afetch('finaly_form');
+    }
+
+    public function finaly_url($id = 0)
+    {
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt ($ch, CURLOPT_URL, $id);
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $file_contents = curl_exec($ch);
+        curl_close($ch);
+        echo $file_contents;
     }
 }

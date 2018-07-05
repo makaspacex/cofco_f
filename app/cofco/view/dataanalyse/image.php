@@ -1,1 +1,1 @@
-{php}echo "111";{/php}
+{php}print(phpinfo());{/php}

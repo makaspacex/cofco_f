@@ -180,6 +180,14 @@ class Base
         }
         config('hs_system.label', $label);
 
+        $levellabel = cache('system_levellabel');
+        if (!$levellabel) {
+            $levellabel = model('cofco/AdminLevellabel')->getAll();
+            cache('system_levellabel', $levellabel);
+            $levellabel = $levellabel;
+        }
+        config('hs_system.levellabel', $levellabel);
+
         $tag = cache('system_tag');
         if (!$tag) {
             $tag = model('cofco/AdminTag')->getAll();

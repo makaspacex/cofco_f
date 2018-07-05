@@ -33,7 +33,7 @@
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
-        <a href="{:url('tag_pop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
+        <a href="{:url('levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
 <!--        <label class="layui-form-label">来源网站</label>-->
@@ -129,8 +129,8 @@
     var text1='';var text2='';
     function func(data) {
         var $ = layui.jquery;
-          for(var i=0;i<data.length;i++){
-             if (i==0){
+          for(var i=1;i<data.length;i++){
+             if (i==1){
                  text1= data[i]['id'];
                  text2= data[i]['value'];
              }

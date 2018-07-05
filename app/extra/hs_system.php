@@ -32,6 +32,7 @@ return [
     'member_level'      => [],
     'label'      => [],
     'tag'      => [],
+    'levellabel'      => [],
     // 系统设置分组
     'config_group'      => [
         'base'      => '基础',

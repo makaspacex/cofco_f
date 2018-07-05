@@ -5,8 +5,12 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">搜索</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
+                        <input type="hidden" name="q"  lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
                     </div>
+                    <div class="layui-input-inline">
+                        <input type="label" class="layui-input field-value"  name="value" lay-verify="" autocomplete="off" placeholder="标签">
+                    </div>
+                    <a href="{:url('levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
                 </div>
             </form>
         </div>
@@ -68,3 +72,31 @@
     </div>
 </form>
 {include file="admin@block/layui" /}
+<script>
+    var formData = {:json_encode($data_info)};
+    var text1='';var text2='';
+    function func(data) {
+        var $ = layui.jquery;
+        for(var i=0;i<data.length;i++){
+            if (i==0){
+                text1= data[i]['id'];
+                text2= data[i]['value'];
+            }
+            else{
+                text1=text1+'#'+data[i]['id']
+                text2=text2+'#'+data[i]['value']
+            }
+        }
+        $('input[name="q"]').val(text1);
+        $('input[name="value"]').val(text2);
+    }
+    // var str='';
+    // function func(data) {
+    //     var $ = layui.jquery;
+    //     $('input[name="tag_id"]').val(data[0]['id']);
+    //     str=data[0]['value'];
+    //     str= str.replace(/\r\n/g,"#");
+    //     $('input[name="value"]').val(str);
+    // }
+</script>
+<script src="__ADMIN_JS__/footer.js"></script>
