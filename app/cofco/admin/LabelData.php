@@ -148,6 +148,7 @@ class Labeldata extends Admin
         return $this->fetch();
     }
 
+
     /**
      * 标签列表
      * @return string
@@ -492,17 +493,10 @@ class Labeldata extends Admin
                 else {
                     $var1=explode("#",$data['tag_id']);
                     for ($x=0;$x<count($var1);$x++) {
-                        $temp = $var1[$x];
-                        while ($temp != 0) {
-                            $array = array("pid" => "", "tid" => "");
-                            $row2 = LevellabelModel::where('id', $temp)->field('cid')->find()->toArray();
-                            $array['pid'] = $data['id'];
-                            $array['tid'] = $temp;
-                            $temp = $row2['cid'];
-                            if (!(IdModel::where('pid', $array['pid'])->where('tid',$array['tid'])->find())) {
-                                IdModel::create($array);
+                            $array = array("pid" =>$data['id'] , "tid" =>$var1[$x]);
+                            if (!(IdModel::create($array))) {
+                                return $this->error('修改失败。');
                             }
-                        }
                     }
                             return $this->success('修改成功。', 'pending_list');
 
@@ -517,17 +511,9 @@ class Labeldata extends Admin
                     {
                         $var1=explode("#",$data['tag_id']);
                         for ($x=0;$x<count($var1);$x++) {
-                            $temp = $var1[$x];
-                            while ($temp != 0) {
-                                $array = array("pid" => "", "tid" => "");
-                                $row2 = LevellabelModel::where('id', $temp)->field('cid')->find()->toArray();
-                                $array['pid'] = $data['id'];
-                                $array['tid'] = $temp;
-                                $temp = $row2['cid'];
-                                if (!(IdModel::where('pid', $array['pid'])->where('tid',$array['tid'])->find())) {
-
-                                    IdModel::create($array);
-                                }
+                            $array = array("pid" =>$data['id'] , "tid" => "");
+                            if (!(IdModel::create($array))) {
+                                return $this->error('修改失败。');
                             }
                         }
                        unset($data['id']);
@@ -733,15 +719,15 @@ class Labeldata extends Admin
         return $this->afetch('finaly_form');
     }
 
-    public function finaly_url($id = 0)
+    public function finaly_url($id=0)
     {
-        $ch = curl_init();
-        $timeout = 5;
-        curl_setopt ($ch, CURLOPT_URL, $id);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $file_contents = curl_exec($ch);
-        curl_close($ch);
-        echo $file_contents;
+        $row = FinalyModel::where('id', $id)->find()->toArray();
+//        return $this->error($row['url']);
+        if ($row['source']=='pm'){
+            header("location:https://www.ncbi.nlm.nih.gov/pubmed/".$row['pmid']);
+        }
+        else
+            header("location:https://www.sciencedirect.com/science/article/pii/".$row['pmid']);
+        //header("location:".$row['url']);
     }
 }

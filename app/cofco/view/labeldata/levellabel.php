@@ -27,7 +27,9 @@
             <div class="menu-btns">
                 <a href="{:url('levellabel_edit?id='.$vv['id'])}" title="编辑"><i class="layui-icon">&#xe642;</i></a>
                 <a href="{:url('levellabel_add?cid='.$vv['id'])}" title="添加子菜单"><i class="layui-icon">&#xe654;</i></a>
+                {if condition="$v['id'] > 4"}
                 <a href="{:url('levellabel_del?ids='.$vv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
+                {/if}
             </div>
         </dt>
         <dd>

@@ -4,6 +4,7 @@
         <a data-href="{:url('task_stop')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
 
     </div>
+
     <div class="layui-form">
         <table class="layui-table mt10" lay-even="" lay-skin="row">
             <colgroup>
@@ -22,7 +23,6 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <tbody>
             {volist name="data_list" id="v"}
             {php}
             if($v['status']==1)
@@ -78,5 +78,10 @@
     </div>
 </form>
 {include file="admin@block/layui" /}
-<script>
+<script >
+    var t = {:json_encode($data_list)};
+    if (t=='')
+    {
+       alert("无爬虫信息");
+    }
 </script>

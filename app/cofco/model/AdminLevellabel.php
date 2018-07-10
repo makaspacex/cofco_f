@@ -47,6 +47,7 @@ class AdminLevellabel extends Model
 
             foreach ($data as $k => $v) {
                 if ($v['cid'] == $cid) {
+
                     $v['childs'] = self::getAllChild($v['id'], $status, $field, $level+1, $data);
                     $trees[] = $v;
                 }
@@ -56,6 +57,8 @@ class AdminLevellabel extends Model
 
         return $trees;
     }
+
+
     public function del($id = 0)
     {
         if (is_array($id)) {

@@ -28,7 +28,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">标签标注</label>
         <div class="layui-input-inline">
-            <input type="hidden"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
+            <input type="label"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
         </div>
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
@@ -129,14 +129,14 @@
     var text1='';var text2='';
     function func(data) {
         var $ = layui.jquery;
-          for(var i=1;i<data.length;i++){
-             if (i==1){
-                 text1= data[i]['id'];
-                 text2= data[i]['value'];
+          for(var i=0;i<data.length;i++){
+             if (i==0){
+                 text1= data[i]['name'];
+                 text2= data[i]['title'];
              }
                       else{
-                 text1=text1+'#'+data[i]['id']
-                 text2=text2+'#'+data[i]['value']
+                 text1=text1+'#'+data[i]['name']
+                 text2=text2+'#'+data[i]['title']
              }
                  }
         $('input[name="tag_id"]').val(text1);

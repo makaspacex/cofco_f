@@ -27,7 +27,6 @@
             <dt>标签名称</dt>
             <dd>
                 <span class="hd">标签分值</span>
-
             </dd>
         </dl>
         {volist name="v['childs']" id="vv" key="kk"}
@@ -36,7 +35,6 @@
                 <input type="checkbox"   name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"data-json='{:json_encode($v, 1)}'>
                 <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
                 <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
-
 
             </dt>
             <dd>
@@ -88,27 +86,6 @@
 </div>
 {include file="admin@block/layui" /}
 <script>
-    layui.use(['form'], function(){
-        var form = layui.form;
-        var $ = layui.form;
-        form.on('checkbox', function (data) {
-            //alert("哈哈哈");
-            //layer.tips('开关checked：' + (this.checked ? 'true' : 'false'), data.othis);
-            //layer.tips('开关checked：' + (this.checked ? 'true' : 'false'), data.othis)
-            //$('111').attr('checked', true);
-            while (data.value!=1) {
-                var boxes = document.getElementsByClassName("checkbox-ids");
-                for (i = 0; i < boxes.length; i++) {
-                    if (boxes[i].name == data.value) {
-                        boxes[i].checked = true;
-                        data.value=boxes[i].value;
-                        break
-                    }
-                }
-                form.render('checkbox');
-            }
-        });
-    });
 
 
     layui.use(['jquery'], function(){

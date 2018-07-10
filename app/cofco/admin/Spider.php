@@ -206,6 +206,7 @@ class Spider extends Admin
 //        {
 //            $data_list['sstr'] = str_replace('`', '', $data_list['sstr']);
 //        }
+
         $this->assign('data_list', $data_list);
         return $this->fetch();
     }
