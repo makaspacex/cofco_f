@@ -1,98 +1,288 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
-    <div class="page-filter left">
-        <form class="layui-form layui-form-pane" action="{:url()}" method="get">
-            <div class="layui-form-item">
-                <label class="layui-form-label">搜索</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="q"  lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-input-inline">
-                    <input type="label" class="layui-input field-value"  name="value" lay-verify="" autocomplete="off" placeholder="标签">
-                </div>
-                <a href="{:url('levelpop1?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
-            </div>
-        </form>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原料类型</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="yuanliaotype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value"
+                   name="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
+        </div>
+        <a href="{:url('levelpop1?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择原料类型</a>
+
     </div>
-    <div class="layui-form">
-        <table class="layui-table mt10" lay-even="" lay-skin="row">
-            <colgroup>
-                <col width="1">
-                <col width="9">
-                <col width="2">
-                <col width="2">
-            </colgroup>
-            <thead>
-            <tr>
-                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>文章标题</th>
-                <th>状态</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            {volist name="data_list" id="v"}
-            {php}
-            if($v['status']==1)
-            $v['status']="未爬取";
-            if($v['status']==2)
-            $v['status']="未审核";
-            if($v['status']==3)
-            $v['status']="已审核";
-            {/php}
-            <tr>
-                <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
-                           lay-skin="primary"></td>
-                <td>{$v['title']}</td>
-                <!--                    <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1" } checked="" {/if}-->
-                <!--                        value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"-->
-                <!--                        data-href="{:url('status?table=admin_pending&ids='.$v['id'])}">-->
-                <!--                    </td>-->
-                <td>{$v['status']}</td>
-                <td>
-                    <div class="layui-btn-group">
-                        <div class="layui-btn-group">
-                            <a href="{:url('pending_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                        </div>
-                    </div>
-                </td>
 
-            </tr>
-            {/volist}
+    <div class="layui-form-item">
+        <label class="layui-form-label">疾病类型</label>
+        <div class="layui-input-inline" >
+            <input type="hidden" name="jibingtype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['jibingtype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value" name="jibingname" lay-verify="" autocomplete="off" value="{$user_input?$user_input['jibingname']:''}"
+                   placeholder="空表示不限制">
+        </div>
+        <a href="{:url('levelpop1?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择疾病类型</a>
 
-            </tbody>
-        </table>
-        {$pages}
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" class="field-id" name="id" value="63">
+            <button type="submit" class="layui-btn" lay-filter="formSubmit">统计</button>
+            <button type="reset" class="layui-btn layui-btn-primary ml10">清空</button>
+        </div>
     </div>
 </form>
-{include file="admin@block/layui" /}
 <script>
-    var formData = {:json_encode($data_info)};
-    var A={:json_encode($data_list1)};
-    if(A!=null)
-        alert(JSON.stringify(A))
-    var text1='';var text2='';
-    function func(data) {
+
+    function yuanliao(data) {
+        var text1 = '';
+        var text2 = '';
         var $ = layui.jquery;
-        for(var i=0;i<data.length;i++){
-            if (i==0){
-                text1= data[i]['name'];
-                text2= data[i]['title'];
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
             }
-            else{
-                text1=text1+'#'+data[i]['name']
-                text2=text2+'#'+data[i]['title']
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
             }
         }
-        $('input[name="q"]').val(text1);
-        $('input[name="value"]').val(text2);
+        $('input[name="yuanliaotype"]').val(text1);
+        $('input[name="yuanliaoname"]').val(text2);
     }
-    // var str='';
-    // function func(data) {
-    //     var $ = layui.jquery;
-    //     $('input[name="tag_id"]').val(data[0]['id']);
-    //     str=data[0]['value'];
-    //     str= str.replace(/\r\n/g,"#");
-    //     $('input[name="value"]').val(str);
-    // }
+
+    function jibing(data) {
+        var text1 = '';
+        var text2 = '';
+        var $ = layui.jquery;
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
+            }
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
+            }
+        }
+        $('input[name="jibingtype"]').val(text1);
+        $('input[name="jibingname"]').val(text2);
+    }
+
+
 </script>
+
+
+
+
+{if condition="$dispaly_statistic==1"}
+<div class="container" id="data_result">
+    <div id="main" style="width: 95%;height:400px;"></div>
+</div>
+<div class="layui-tab-content page-tab-content">
+    <div class="layui-tab-item layui-show">
+        <div class="fl" style="width:99%">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="160">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th colspan="1">实验类型</th>
+                    <th colspan="1">分数</th>
+                    <th colspan="1">数量</th>
+                    <th colspan="1">占比</th>
+                    <th colspan="1">得分</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name='level_info' id='v'}
+                <tr>
+                    <td>{$key}</td>
+                    <td>{$v['score']}</td>
+                    <td>{$v['p_total_number']}</td>
+                    <td>{$v['percent']}%</td>
+                    <td>{$v['score']*$v['p_total_number']}</td>
+                </tr>
+
+                {/volist}
+
+                </tbody>
+                <thead>
+                <tr>
+                    <th colspan="5">统计信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="color: red;font-weight: bold">文章数目</td>
+                    <td colspan="4">{$statistic_info['total_p']}</td>
+                </tr>
+
+                <tr>
+                    <td style="color: red;font-weight: bold">分值最大实验类型</td>
+                    <td colspan="4">{$statistic_info['max_name']}，总得分为{$statistic_info['max_score']}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var posList = [
+        'left', 'right', 'top', 'bottom',
+        'inside',
+        'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+        'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+        rotate: {
+            min: -90,
+            max: 90
+        },
+        align: {
+            options: {
+                left: 'left',
+                center: 'center',
+                right: 'right'
+            }
+        },
+        verticalAlign: {
+            options: {
+                top: 'top',
+                middle: 'middle',
+                bottom: 'bottom'
+            }
+        },
+        position: {
+            options: echarts.util.reduce(posList, function (map, pos) {
+                map[pos] = pos;
+                return map;
+            }, {})
+        },
+        distance: {
+            min: 0,
+            max: 100
+        }
+    };
+
+    app.config = {
+        rotate: 90,
+        align: 'left',
+        verticalAlign: 'middle',
+        position: 'insideBottom',
+        distance: 5,
+        onChange: function () {
+            var labelOption = {
+                normal: {
+                    rotate: app.config.rotate,
+                    align: app.config.align,
+                    verticalAlign: app.config.verticalAlign,
+                    position: app.config.position,
+                    distance: app.config.distance
+                }
+            };
+            myChart.setOption({
+                series: [{
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }]
+            });
+        }
+    };
+
+
+    var labelOption = {
+        normal: {
+            show: true,
+            position: app.config.position,
+            distance: app.config.distance,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            rotate: app.config.rotate,
+            formatter: '{c}  {name|{a}}',
+            fontSize: 18,
+            rich: {
+                name: {
+                    textBorderColor: '#fff'
+                }
+            }
+        }
+    };
+
+    option = {
+        color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: [<?php foreach ($mingcheng as $v){ echo "'$v',";} ?>]
+        },
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            left: 'right',
+            top: 'center',
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                axisTick: {show: false},
+                data: [<?php foreach ($mingcheng as $v){ echo "'$v',";} ?>]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+        {volist name='shiyanfenzu'  id='v'}
+            {
+                name: '{$key}',
+                type: 'bar',
+                barGap: 0,
+                label: labelOption,
+                data: [{:join(',', $v['inner_percent'])}]
+            },
+        {/volist}
+        ]
+    };;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+{/if}
+{include file="admin@block/layui" /}
+<script>  var formData = null</script>
 <script src="__ADMIN_JS__/footer.js"></script>

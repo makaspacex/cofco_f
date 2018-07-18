@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
 </head>
 <body>
 <div style="padding:0 10px;" class="mcolor">{:runhook('system_admin_tips')}</div>
@@ -21,6 +22,7 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
 </head>
 <body>
 {php}
