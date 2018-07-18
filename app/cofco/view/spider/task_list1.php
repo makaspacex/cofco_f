@@ -80,8 +80,24 @@
 {include file="admin@block/layui" /}
 <script >
     var t = {:json_encode($data_list)};
-    if (t=='')
+    var tt = {:json_encode($msg)};
+    if (tt!='')
     {
-       alert("无爬虫信息");
+        layui.use('layer', function(){
+            var $ = layui.layer;
+            if (tt=='链接爬虫失败')
+            {
+                layer.alert(tt,{icon: 2, title:'服务'});
+            }
+            else {
+                if (t == '') {
+                    layer.msg('爬虫任务列表为空');
+                }
+            }
+        });
+
+
+
     }
+
 </script>

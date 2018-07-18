@@ -267,16 +267,16 @@
             }
         ],
         series: [
-        {volist name='shiyanfenzu'  id='v'}
+            {volist name='shiyanfenzu'  id='v'}
             {
                 name: '{$key}',
                 type: 'bar',
                 barGap: 0,
                 label: labelOption,
                 data: [{:join(',', $v['inner_percent'])}]
-            },
-        {/volist}
-        ]
+    },
+    {/volist}
+    ]
     };;
     if (option && typeof option === "object") {
         myChart.setOption(option, true);

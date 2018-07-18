@@ -28,7 +28,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">标签标注</label>
         <div class="layui-input-inline">
-            <input type="label"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
+            <input type="hidden"  class="layui-input field-tag_id" name="tag_id" lay-verify="" autocomplete="off" placeholder="标签选择">
         </div>
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">

@@ -4,3 +4,4 @@ runtime/*
 app/database.php
 .htaccess
 app/config.php
+DataAnalyse.php

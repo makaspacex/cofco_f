@@ -179,17 +179,20 @@ class Spider extends Admin
             //var_dump(json_decode($ret,true));
             $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
             if ($http != 200) {
-                throw  new Exception('链接失败');
+                throw  new Exception('链接爬虫失败');
             }
             curl_close($cu);
             $row = json_decode($ret,true);
             //var_dump($row);
             $data_list=$row['data'];
+            $msg=$row['msg'];
+            $this->assign('msg', $msg);
             //var_dump($data_list);
         }catch (Exception $exception){
             $data_list = array();
             $msg=$exception->getMessage();
-            echo "<script>alert('$msg')</script>";
+            //echo "<script>alert('$msg')</script>";
+            $this->assign('msg', $msg);
 
             //var_dump($data_list) ;
         }
