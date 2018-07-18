@@ -15,6 +15,25 @@
 </form>
 {include file="admin@block/layui" /}
 <script>
+
     var formData = {:json_encode($data_info)};
+    var t={:json_encode($msg)};
+    if (t!='')
+    {
+        layui.use('layer', function(){
+            var $ = layui.layer;
+            layer.msg(t);
+        });
+    }
+
+    var res = $.ajax({
+        url:'pending_fform.php',
+        timeout : 10, //超时时间设置，单位毫秒
+        complete : function(xhr,status){
+            if(status=='timeout'){
+                // 超时处理
+            }
+        }
+    });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

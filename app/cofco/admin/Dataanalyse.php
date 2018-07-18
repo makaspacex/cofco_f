@@ -89,9 +89,9 @@ class Dataanalyse extends Admin
         }
 
         //var_dump($D);
-        $temp[0]=324532;
-        $temp[1]=324534;
-        $temp[2]=324533;
+ //       $temp[0]=156353;
+//        $temp[1]=324534;
+//        $temp[2]=324533;
         for ($x=0;$x<count($temp);$x++){
             $E=array();
             $T=Db::query('SELECT * FROM hisi_admin_id where pid='.$temp[$x].'');
@@ -122,7 +122,6 @@ class Dataanalyse extends Admin
                         }
                         $g=$g+1;
                     }
-
                 }
                 $i++;
             }
@@ -131,7 +130,7 @@ class Dataanalyse extends Admin
         //var_dump($c);
        if(count($temp)!=0){
            for($x=0;$x<count($B);$x++){
-               $B[$x]=$B[$x]/count($temp);
+               $B[$x]=round($B[$x]/count($temp),2);
            }
            $c = array_combine($A,$B);
        }
@@ -139,8 +138,31 @@ class Dataanalyse extends Admin
            $c=null;
 
         //var_dump($c);
+        $tt=0;$kk='';
+        if (count($c)>0){
+            foreach ($c as $key=>$value){
+                if ($value>$tt){
+                    $tt=$value;
+                    $kk=$key;
+                }
+            }
+        }
+        $vv=$tt.'分(为最高实验类型得分)';
+       # $cc=array_combine($kk,$vv);
+        $data_info1=array();
+        foreach ($dd[0]['childs'] as $k1 => $v4){
+            if ($v4['value']=='原料类型'){
+                foreach ($v4['childs'] as $k2 => $t2){
+                    array_push($data_info1,$t2['value']);
+                }
+            }
+        }
         $this->assign('data_list', $data_list);
         $this->assign('data_list1', $c);
+        $this->assign('data_list2', $kk);
+        $this->assign('data_list3', $vv);
+        $this->assign('data_info1', $data_info1);
+        $this->assign('data_info2', $A);
         //$this->assign('pages', $pages);
         return $this->fetch();
     }
@@ -164,6 +186,22 @@ class Dataanalyse extends Admin
         $this->assign('callback', $callback);
         $this->view->engine->layout(false);
         $this->assign('menu_list', $menu_list);
+        return $this->fetch();
+    }
+
+
+    public function tongjipop($q = '')
+    {
+//        $q = input('param.q/s');
+//        $callback = input('param.callback/s');
+//        if (!$callback) {
+//            echo '<br><br>callback为必传参数！';
+//            exit;
+//        }
+//        $menu_list=array();
+//        $this->assign('callback', $callback);
+//        $this->view->engine->layout(false);
+//        $this->assign('menu_list', $menu_list);
         return $this->fetch();
     }
     /**

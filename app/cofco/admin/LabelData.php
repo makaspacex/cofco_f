@@ -404,67 +404,67 @@ class Labeldata extends Admin
         }
         return $this->afetch('pending_form');
     }
-//    public function pending_list($q='')
-//    {
-//        $q = input('param.q/s');
-//        $map = [];
-//        if ($q) {
-//            $map['title'] = ['like', '%' . $q . '%'];
-//
-//        }
-//        if($q=='')
-//            $data_list = PendingModel::where('status',2)->paginate();
-//        else {
-//            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-//
-//        }
-//
-//        // 分页
-//        $pages = $data_list->render();
-//        $this->assign('data_list', $data_list);
-//        $this->assign('pages', $pages);
-////        var_dump($data_list);
-//        return $this->fetch();
-//    }
-
     public function pending_list($q='')
     {
-        //$q = input('param.q/s');
-        $var=explode("#",$q);
+        $q = input('param.q/s');
         $map = [];
         if ($q) {
-            //$map['title'] = ['like', '%' . $q . '%'];
-            $map = str_replace('#', ',', $q);
-            $count=count($var);
-            //$map['tid'] = ['in', $var];
-        }
-        if($q=='')
-        {$data_list = PendingModel::where('status',2)->paginate();
-            $pages = $data_list->render();
-            $this->assign('data_list', $data_list);
-            $this->assign('pages', $pages);
-        }
-        else {
-            //$data = IdModel::where($map)->field('pid,tid')->paginate(10, false, ['query' => input('get.')]);
-            //$data=IdModel::distinct('pid')->where($map)->field('pid')->paginate(10, false, ['query' => input('get.')]);
-            //$tem=IdModel::distinct('pid')->where($map)->field('pid')->group('pid')->paginate(10, false);
-            //$map1['id']=['in',$tem];
-            //$data_list = PendingModel::where('status',2)->paginate();
-            //$data_list=PendingModel::join('LEFT JOIN work ON hisi_admin_id.pid = spiderapp_content.id')->where($tem)->paginate(10, false);
-            //$data_list=PendingModel::
-            //$data_list=$data;
-            //var_dump($data_list);
-            $data_list = Db::query('SELECT * FROM spiderapp_content LEFT JOIN hisi_admin_id ON hisi_admin_id.pid = spiderapp_content.id WHERE hisi_admin_id.tid IN ('.$map.') GROUP BY hisi_admin_id.pid HAVING COUNT(DISTINCT spiderapp_content.id,hisi_admin_id.tid) = '.$count.' LIMIT 15');
+            $map['title'] = ['like', '%' . $q . '%'];
 
         }
-        //echo Db::table('spiderapp_content')->getLastSql();
+        if($q=='')
+            $data_list = PendingModel::where('status',2)->paginate();
+        else {
+            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+
+        }
+
         // 分页
-        //$pages = $data_list->render();
+        $pages = $data_list->render();
         $this->assign('data_list', $data_list);
-        //$this->assign('pages', $pages);
+        $this->assign('pages', $pages);
 //        var_dump($data_list);
         return $this->fetch();
     }
+
+//    public function pending_list($q='')
+//    {
+//        //$q = input('param.q/s');
+//        $var=explode("#",$q);
+//        $map = [];
+//        if ($q) {
+//            //$map['title'] = ['like', '%' . $q . '%'];
+//            $map = str_replace('#', ',', $q);
+//            $count=count($var);
+//            //$map['tid'] = ['in', $var];
+//        }
+//        if($q=='')
+//        {$data_list = PendingModel::where('status',2)->paginate();
+//            $pages = $data_list->render();
+//            $this->assign('data_list', $data_list);
+//            $this->assign('pages', $pages);
+//        }
+//        else {
+//            //$data = IdModel::where($map)->field('pid,tid')->paginate(10, false, ['query' => input('get.')]);
+//            //$data=IdModel::distinct('pid')->where($map)->field('pid')->paginate(10, false, ['query' => input('get.')]);
+//            //$tem=IdModel::distinct('pid')->where($map)->field('pid')->group('pid')->paginate(10, false);
+//            //$map1['id']=['in',$tem];
+//            //$data_list = PendingModel::where('status',2)->paginate();
+//            //$data_list=PendingModel::join('LEFT JOIN work ON hisi_admin_id.pid = spiderapp_content.id')->where($tem)->paginate(10, false);
+//            //$data_list=PendingModel::
+//            //$data_list=$data;
+//            //var_dump($data_list);
+//            $data_list = Db::query('SELECT * FROM spiderapp_content LEFT JOIN hisi_admin_id ON hisi_admin_id.pid = spiderapp_content.id WHERE hisi_admin_id.tid IN ('.$map.') GROUP BY hisi_admin_id.pid HAVING COUNT(DISTINCT spiderapp_content.id,hisi_admin_id.tid) = '.$count.' LIMIT 15');
+//
+//        }
+//        //echo Db::table('spiderapp_content')->getLastSql();
+//        // 分页
+//        //$pages = $data_list->render();
+//        $this->assign('data_list', $data_list);
+//        //$this->assign('pages', $pages);
+////        var_dump($data_list);
+//        return $this->fetch();
+//    }
 
     public function pending_del()
     {
@@ -589,6 +589,8 @@ class Labeldata extends Admin
 
     public function crawurl()
     {
+        ini_set('max_execution_time', '50');
+        $msg='';
         if ($this->request->isPost()) {
             $data = $this->request->post();
             //$t = strtotime('2015-6-16 12:04:05');
@@ -613,30 +615,45 @@ class Labeldata extends Admin
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLINFO_CONNECT_TIME, 3);
             curl_setopt($ch, CURLINFO_TOTAL_TIME, 3);
+
             curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
+
             try{
                  $output = curl_exec($ch);
                  $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                  //return $this->error($http);
                 if ($http != 200) {
                     curl_close($ch);
-                    throw  new Exception('链接失败');
+                    throw  new Exception('链接爬虫失败');
                 }
                 $data_list = json_decode($output, true);
+                //var_dump($data_list);
+                if ($data_list['status'] == 0) {
+                    //return $this->error($data_list['msg']);
+                    curl_close($ch);
+                    $msg=$data_list['msg'];
+                    throw  new Exception($msg);
+//                    $msg=$data_list['msg'];
+//                    $this->assign('msg', $msg);
+//                    return $this->afetch('pending_fform');
+                }
+                //var_dump($data_list);
                 $row = $data_list['data'];
-                $row['issue']=date("Y-m-d H:i:s", $row['issue']);
-                if ($data_list['status'] == 0)
-                   // return $this->error($data_list['msg']);
-                    throw  new Exception($data_list['msg']);
+                if (count($row['issue'])>0)
+                {$row['issue']=date("Y-m-d H:i:s", $row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
                 $msg=$exception->getMessage();
-                echo "<script>alert('$msg')</script>";
+                //echo "<script>alert('$msg')</script>";
+                $this->assign('msg', $msg);
+
                 //return $this->afetch('pending_fform');
             }
 
         }
+
+        $this->assign('msg', $msg);
         return $this->afetch('pending_fform');
     }
 //    public function crawurl(){
