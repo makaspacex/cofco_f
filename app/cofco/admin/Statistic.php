@@ -137,6 +137,7 @@ class Statistic extends Admin
         # 统计总数量
         $statistic_info = [];
         $statistic_info['total_p'] = 0;
+        $statistic_info['total_score'] = 0;
         $statistic_info['max_score'] = -1;
         $statistic_info['max_name'] = '出错了';
         foreach ($level_info as $name=>$value){
@@ -146,6 +147,7 @@ class Statistic extends Admin
                 $statistic_info['max_name'] = $name;
             }
             $statistic_info['total_p'] += $value['p_total_number'];
+            $statistic_info['total_score'] += $ss;
         }
 
         #处理表格百分比

@@ -100,14 +100,13 @@
                 </thead>
                 <tbody>
                 {volist name='level_info' id='v'}
-                <tr>
+                <tr {$statistic_info['max_name']==$key?"style='font-weight:bold;'":''}>
                     <td>{$key}</td>
                     <td>{$v['score']}</td>
                     <td>{$v['p_total_number']}</td>
                     <td>{$v['percent']}%</td>
                     <td>{$v['score']*$v['p_total_number']}</td>
                 </tr>
-
                 {/volist}
 
                 </tbody>
@@ -118,13 +117,21 @@
                 </thead>
                 <tbody>
                 <tr>
+                    <td style="color: red;font-weight: bold">分值最大实验类型</td>
+                    <td colspan="4">{$statistic_info['max_name']}，得分为{$statistic_info['max_score']}</td>
+                </tr>
+                <tr>
                     <td style="color: red;font-weight: bold">文章数目</td>
                     <td colspan="4">{$statistic_info['total_p']}</td>
                 </tr>
+                <tr>
+                    <td style="color: red;font-weight: bold">总分数</td>
+                    <td colspan="4">{$statistic_info['total_score']}</td>
+                </tr>
 
                 <tr>
-                    <td style="color: red;font-weight: bold">分值最大实验类型</td>
-                    <td colspan="4">{$statistic_info['max_name']}，总得分为{$statistic_info['max_score']}</td>
+                    <td style="color: red;font-weight: bold">加权得分</td>
+                    <td colspan="4">{$statistic_info['total_score']/$statistic_info['total_p']} (说明：设筛选出的文章数目为N，每个标签的分值和数量分别为a和n1，b和n2，c和n3。分数计算公式为：S = (a*n1 + b*n2 + c*n3)/N)</td>
                 </tr>
 
                 </tbody>
