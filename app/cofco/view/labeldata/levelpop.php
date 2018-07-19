@@ -88,26 +88,34 @@
 </div>
 {include file="admin@block/layui" /}
 <script>
+    layui.use(['jquery'], function(){
+        var $ = layui.jquery;
     layui.use(['form'], function(){
         var form = layui.form;
-        var $ = layui.form;
-        form.on('checkbox', function (data) {
-            //alert("哈哈哈");
+
+
+        form.on(('checkbox'), function (data) {
+            //alert(JSON.stringify(data));
             //layer.tips('开关checked：' + (this.checked ? 'true' : 'false'), data.othis);
             //layer.tips('开关checked：' + (this.checked ? 'true' : 'false'), data.othis)
             //$('111').attr('checked', true);
-            while (data.value!=1) {
-                var boxes = document.getElementsByClassName("checkbox-ids");
-                for (i = 0; i < boxes.length; i++) {
-                    if (boxes[i].name == data.value) {
-                        boxes[i].checked = true;
-                        data.value=boxes[i].value;
-                        break
+            //alert('111');
+            // alert($(this).attr('checked'));
+            if ($(this).prop("checked")==true) {
+                while (data.value != 1) {
+                    var boxes = document.getElementsByClassName("checkbox-ids");
+                    for (i = 0; i < boxes.length; i++) {
+                        if (boxes[i].name == data.value) {
+                            boxes[i].checked = true;
+                            data.value = boxes[i].value;
+                            break
+                        }
                     }
+                    form.render('checkbox');
                 }
-                form.render('checkbox');
             }
         });
+    });
     });
 
 
