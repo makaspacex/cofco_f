@@ -20,7 +20,7 @@
     {volist name="v['childs']" id="vv" key="kk"}
     <dl class="menu-dl1">
         <dt>
-            <input type="checkbox"   name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
+            <input type="checkbox" disabled="disabled"  name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
             <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
             <input type="checkbox" name="status" value="{$vv['status']}" {if condition="$vv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
 
