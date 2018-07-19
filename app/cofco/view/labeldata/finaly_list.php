@@ -32,7 +32,7 @@
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
                            lay-skin="primary"></td>
-                <td>{$v['title']}</td>
+                <td><a href="{:url('finaly_url?id='.$v['id'])}">{$v['title']}</a></td>
                 <td>{$v['status']}</td>
                 <td>
                     <div class="layui-btn-group">
