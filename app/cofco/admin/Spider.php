@@ -172,9 +172,8 @@ class Spider extends Admin
             curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
             //echo config('spider.spider_api_all');
             curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($cu, CURLINFO_CONNECT_TIME, 3);
-            curl_setopt($cu, CURLINFO_TOTAL_TIME, 3);
-            curl_setopt($cu, CURLINFO_NAMELOOKUP_TIME, 3);
+            curl_setopt($cu, CURLOPT_CONNECTTIMEOUT_MS, 300);
+            curl_setopt($cu, CURLOPT_TIMEOUT, 3);
             $ret = curl_exec($cu);
             //var_dump(json_decode($ret,true));
             $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
