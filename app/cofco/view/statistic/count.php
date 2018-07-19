@@ -79,7 +79,7 @@
 
 {if condition="$dispaly_statistic==1"}
 <div class="container" id="data_result">
-    <div id="main" style="width: 95%;height:400px;"></div>
+    <div id="main" style="width: 100%;height:500px;"></div>
 </div>
 <div class="layui-tab-content page-tab-content">
     <div class="layui-tab-item layui-show">
@@ -230,7 +230,8 @@
             fontSize: 18,
             rich: {
                 name: {
-                    textBorderColor: '#fff'
+                    color:'#ffffff',
+                    // textBorderColor: '#fff'
                 }
             }
         }
@@ -245,10 +246,10 @@
             }
         },
         legend: {
-            data: [<?php foreach ($mingcheng as $v){ echo "'$v',";} ?>]
+            data: [<?php foreach ($shiyan_names as $v){ echo "'$v',";} ?>]
         },
         toolbox: {
-            show: true,
+            show: false,
             orient: 'vertical',
             left: 'right',
             top: 'center',
@@ -264,14 +265,23 @@
         xAxis: [
             {
                 type: 'category',
+                name: '原料分类',
                 axisTick: {show: false},
                 data: [<?php foreach ($mingcheng as $v){ echo "'$v',";} ?>]
             }
         ],
         yAxis: [
             {
-                type: 'value'
-            }
+                type: 'value',
+                name: '实验类型百分比',
+                max: 100,
+                min:0,
+                splitNumber:10,
+                axisLabel:{
+                    formatter:'{value}%'
+                }
+            },
+
         ],
         series: [
             {volist name='shiyanfenzu'  id='v'}

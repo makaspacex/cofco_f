@@ -40,7 +40,7 @@ class Statistic extends Admin
         $jibing_idstr = $this->request->post('jibingtype');
         if(empty($jibing_idstr)){
             # 疾病所有的ID
-            $jibing_all_ids = Db::table('hisi_admin_levellabel')->where('id',3)->whereOr('cid','IN',function($query){
+            $jibing_all_ids = Db::table('hisi_admin_levellabel')->where('cid','IN',function($query){
                 $query->table('hisi_admin_levellabel')->where('id',3)->field('id');
             })->whereOr('cid','IN',function ($query){
                 $query->table('hisi_admin_levellabel')->where('id',3)->whereOr('cid','IN',function($query){
@@ -52,7 +52,7 @@ class Statistic extends Admin
 
         $yuanliao_idstr = $this->request->post('yuanliaotype');
         if(empty($yuanliao_idstr)){
-            $yuanliao_all_ids = Db::table('hisi_admin_levellabel')->where('id',4)->whereOr('cid','IN',function($query){
+            $yuanliao_all_ids = Db::table('hisi_admin_levellabel')->where('cid','IN',function($query){
                 $query->table('hisi_admin_levellabel')->where('id',4)->field('id');
             })->whereOr('cid','IN',function ($query){
                 $query->table('hisi_admin_levellabel')->where('id',4)->whereOr('cid','IN',function($query){
@@ -63,7 +63,7 @@ class Statistic extends Admin
         }
 
         # 实验类型标签的下方的所有ID
-        $shiyan_all_ids = Db::table('hisi_admin_levellabel')->where('id',2)->whereOr('cid','IN',function($query){
+        $shiyan_all_ids = Db::table('hisi_admin_levellabel')->where('cid','IN',function($query){
             $query->table('hisi_admin_levellabel')->where('id',2)->field('id');
         })->whereOr('cid','IN',function ($query){
             $query->table('hisi_admin_levellabel')->where('id',2)->whereOr('cid','IN',function($query){
@@ -177,6 +177,7 @@ class Statistic extends Admin
         }
 
         $this->assign('user_input',$this->request->post());
+        $this->assign('shiyan_names',$shiyan_names);
         $this->assign('shiyanfenzu',$shiyanfenzu);
         $this->assign('yuanliao_statistic_info',$yuanliao_statistic_info);
         $this->assign('statistic_info',$statistic_info);
