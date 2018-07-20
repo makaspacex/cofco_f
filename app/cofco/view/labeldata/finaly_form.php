@@ -108,18 +108,13 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w600">
-            <input type="hidden" class="layui-input field-status" name="status" lay-verify="" autocomplete="off" placeholder="">
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
+            <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
+        <div class="layui-form-mid layui-word-aux">选择未审核则删除并打回待审列表</div>
     </div>
-<!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>-->
-<!--        <div class="layui-input-inline w600">-->
-<!--            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>-->
-<!--            <input type="radio" class="field-status" name="status" value="2" title="未审核">-->
-<!--        </div>-->
-<!--        <div class="layui-form-mid layui-word-aux">审核完毕则直接存入最终表，否则存入待审表</div>-->
-<!--    </div>-->
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">

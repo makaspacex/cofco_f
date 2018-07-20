@@ -719,7 +719,19 @@ class Labeldata extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
-            if (!FinalyModel::update($data)) {
+            if ($data['status']==3) {
+                if (!FinalyModel::update($data)) {
+                    return $this->error('修改失败！');
+                }
+            }
+            else{
+                $re = PendingModel::where('pmid',$data['pmid'])->setField('status',2);
+                if ($re == true) {
+                    if (!FinalyModel::where('id', $id)->delete()) {
+                        return $this->error('修改失败！');
+                    }
+                    return $this->success('修改成功。','finaly_list');
+                }
                 return $this->error('修改失败！');
             }
             // 更新缓存
@@ -763,6 +775,18 @@ class Labeldata extends Admin
         $this->assign('data_info', $row);
         //var_dump($row);
         return $this->afetch('finaly_form');
+    }
+
+    public function finaly_del()
+    {
+        $ids = input('param.ids/a');
+        $map = [];
+        $map['id'] = ['in', $ids];
+        $res = FinalyModel::where($map)->delete();
+        if ($res === false) {
+            return $this->error('操作失败！');
+        }
+        return $this->success('操作成功！');
     }
 
     public function finaly_url($id=0)
