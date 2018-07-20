@@ -60,12 +60,12 @@
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
 <!--                            <a href="{:url('task_edit?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>-->
-                            <a href="{:url('task_pause?id='.$v['pid'])}" id="id1" class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#xe651;</i></a>
-                            <a href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#xe652;</i></a>
-                            <a data-href="{:url('task_remove',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
-                            <a href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#x1006;</i></a>
+                            <a href="{:url('task_pause?id='.$v['pid'])}" id="id1" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">暂停</a>
+                            <a href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">继续</a>
+                            <a data-href="{:url('task_remove',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del">删除</a>
+                            <a href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">停止</a>
 <!--                            <a href="{:url('task_startforce?id='.$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe623;</i></a>-->
-                            <a href="{:url('task_startforce',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#xe623;</i></a>
+                            <a href="{:url('task_startforce',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">重启</a>
                         </div>
                     </div>
                 </td>
