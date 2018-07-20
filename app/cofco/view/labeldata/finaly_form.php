@@ -131,19 +131,21 @@
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-    // var text='';
-    // function func(data) {
-    //     var $ = layui.jquery;
-    //      $('input[name="tag_id"]').val(data[0]['id']);
-    //      $('input[name="name"]').val(data[0]['name']);
-    // }
-    var str='';
+    var text1='';var text2='';
     function func(data) {
         var $ = layui.jquery;
-        $('input[name="tag_id"]').val(data[0]['id']);
-        str=data[0]['value'];
-        str= str.replace(/\r\n/g,"#");
-        $('input[name="value"]').val(str);
+        for(var i=0;i<data.length;i++){
+            if (i==0){
+                text1= data[i]['name'];
+                text2= data[i]['title'];
+            }
+            else{
+                text1=text1+'#'+data[i]['name']
+                text2=text2+'#'+data[i]['title']
+            }
+        }
+        $('input[name="tag_id"]').val(text1);
+        $('input[name="value"]').val(text2);
     }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

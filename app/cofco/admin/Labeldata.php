@@ -718,6 +718,7 @@ class Labeldata extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['issue']=strtotime($data['issue']);
             if (!FinalyModel::update($data)) {
                 return $this->error('修改失败！');
             }
@@ -728,11 +729,39 @@ class Labeldata extends Admin
         $row = FinalyModel::where('id', $id)->find()->toArray();
         $row = str_replace('?', ' ', $row);
         $row = str_replace(PHP_EOL, '#', $row);
+        $tag_id = $row['tag_id'];
+        if ($tag_id != null) {
+            $var=explode("#",$tag_id);
+            $array = array("value"=>"");
+            for($x=0;$x<count($var);$x++)
+            {
+                $row2 = LevellabelModel::where('id', $var[$x])->field('value')->find()->toArray();
+                //$row2 = str_replace(PHP_EOL, '#', $row2);
+                if($x==0)
+                {
+                    $array['value']=$row2['value'];
+                }
+                else
+                {
+                    $array['value']=$array['value'].'#'.$row2['value'];
+                }
+            }
+        }
+        else
+            $array = array();
+        //var_dump($array);
+        $row = array_merge($row, $array);
         if(mb_strlen($row['issue'],'utf8')>2)
             $row['issue']=date("Y-m-d", $row['issue']);
         else
             $row['issue']=null;
+        //var_dump($row);
+        $row['author'] = PendingModel::strFilter($row['author']);
+        $row['keyword'] = PendingModel::strFilter($row['keyword']);
+        $row['country'] = PendingModel::strFilter($row['country']);
+        $row['institue'] = PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
+        //var_dump($row);
         return $this->afetch('finaly_form');
     }
 
