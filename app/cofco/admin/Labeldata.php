@@ -704,9 +704,18 @@ class Labeldata extends Admin
 //    }
     public function finaly_list($q='')
     {
-//        $var=explode("#",$q);
-//        $map['tid'] = ['in', $var];
-        $data_list = FinalyModel::paginate();
+        $q = input('param.q/s');
+        $map = [];
+        if ($q) {
+            $map['title'] = ['like', '%' . $q . '%'];
+
+        }
+        if($q=='')
+            $data_list = FinalyModel::where('status',3)->paginate();
+        else {
+            $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+
+        }
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
