@@ -80,7 +80,7 @@ class Labeldata extends Admin
 
     public function levellabel()
     {
-        $menu_list = LevellabelModel::getAllChild(0, 0);
+        $menu_list = LevellabelModel::getAllC(0, 0);
         $this->assign('menu_list', $menu_list);
         return $this->fetch();
     }
@@ -126,9 +126,9 @@ class Labeldata extends Admin
         return $this->success('删除成功');
     }
 
-    public function levelpop($q = '')
+    public function levelpop()
     {
-        $q = input('param.q/s');
+
         $callback = input('param.callback/s');
         if (!$callback) {
             echo '<br><br>callback为必传参数！';

@@ -47,7 +47,11 @@ class AdminLevellabel extends Model
 
             foreach ($data as $k => $v) {
                 if ($v['cid'] == $cid) {
-
+                    // 过滤没访问权限的节点
+                    if ($v['status']!=1) {
+                        unset($data[$k]);
+                        continue;
+                    }
                     $v['childs'] = self::getAllChild($v['id'], $status, $field, $level+1, $data);
                     $trees[] = $v;
                 }
@@ -57,6 +61,37 @@ class AdminLevellabel extends Model
 
         return $trees;
     }
+    public static function getAllC($cid = 0, $status = 1, $field = 'id,cid,value,score,status', $level = 0, $data = [])
+    {
+        $trees1 = [];
+        if (empty($trees1)) {
+            if (empty($data)) {
+                $map = [];
+                //$map['uid'] = 0;
+                if ($status == 1) {
+                    $map['status'] = 1;
+                }
+                $data = self::where($map)->order('score asc')->column($field);
+                $data = array_values($data);
+            }
+
+            foreach ($data as $k => $v) {
+                if ($v['cid'] == $cid) {
+//                    // 过滤没访问权限的节点
+//                    if ($v['status']!=1) {
+//                        unset($data[$k]);
+//                        continue;
+//                    }
+                    $v['childs'] = self::getAllC($v['id'], $status, $field, $level+1, $data);
+                    $trees1[] = $v;
+                }
+            }
+
+        }
+
+        return $trees1;
+    }
+
 
 
     public function del($id = 0)
