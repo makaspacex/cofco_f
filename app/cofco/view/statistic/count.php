@@ -21,7 +21,7 @@
             <input type="label" class="layui-input field-value" name="jibingname" lay-verify="" autocomplete="off" value="{$user_input?$user_input['jibingname']:''}"
                    placeholder="空表示不限制">
         </div>
-        <a href="{:url('levelpop1?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择疾病类型</a>
+        <a href="{:url('levelpop2?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择疾病类型</a>
 
     </div>
 

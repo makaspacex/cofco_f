@@ -93,6 +93,68 @@ class AdminLevellabel extends Model
     }
 
 
+    public static function getAllChildtj1($cid = 0, $status = 1, $field = 'id,cid,value,score,status', $level = 0, $data = [])
+    {
+        $trees2 = [];
+        if (empty($trees2)) {
+            if (empty($data)) {
+                $map = [];
+                //$map['uid'] = 0;
+                if ($status == 1) {
+                    $map['status'] = 1;
+                }
+                $data = self::where($map)->order('score asc')->column($field);
+                $data = array_values($data);
+            }
+
+            foreach ($data as $k => $v) {
+                if ($v['cid'] == $cid) {
+                    // 过滤没访问权限的节点
+                    if ($v['id']==2 || $v['id']==3) {
+                        unset($data[$k]);
+                        continue;
+                    }
+                    $v['childs'] = self::getAllChildtj1($v['id'], $status, $field, $level+1, $data);
+                    $trees2[] = $v;
+                }
+            }
+
+        }
+
+        return $trees2;
+    }
+
+    public static function getAllChildtj2($cid = 0, $status = 1, $field = 'id,cid,value,score,status', $level = 0, $data = [])
+    {
+        $trees3 = [];
+        if (empty($trees3)) {
+            if (empty($data)) {
+                $map = [];
+                //$map['uid'] = 0;
+                if ($status == 1) {
+                    $map['status'] = 1;
+                }
+                $data = self::where($map)->order('score asc')->column($field);
+                $data = array_values($data);
+            }
+
+            foreach ($data as $k => $v) {
+                if ($v['cid'] == $cid) {
+                    // 过滤没访问权限的节点
+                    if ($v['id']==2 || $v['id']==4) {
+                        unset($data[$k]);
+                        continue;
+                    }
+                    $v['childs'] = self::getAllChildtj2($v['id'], $status, $field, $level+1, $data);
+                    $trees3[] = $v;
+                }
+            }
+
+        }
+        return $trees3;
+    }
+
+
 
     public function del($id = 0)
     {

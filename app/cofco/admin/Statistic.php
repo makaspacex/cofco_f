@@ -201,7 +201,32 @@ class Statistic extends Admin
         else
             $map['status']=1;
 
-        $menu_list = LevellabelModel::getAllChild(0, 0);
+        $menu_list = LevellabelModel::getAllChildtj1(0, 0);
+        //var_dump($menu_list[0]['childs']['1']);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        $this->assign('menu_list', $menu_list);
+
+        $this->assign('dispaly_statistic','1');
+        return $this->fetch();
+    }
+
+    public function levelpop2($q = '')
+    {
+        $q = input('param.q/s');
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
+        $map = [];
+        if ($q) {
+            $map['value'] = ['like', '%' . $q . '%'];
+        }
+        else
+            $map['status']=1;
+
+        $menu_list = LevellabelModel::getAllChildtj2(0, 0);
         //var_dump($menu_list[0]['childs']['1']);
         $this->assign('callback', $callback);
         $this->view->engine->layout(false);
