@@ -641,7 +641,7 @@ class Labeldata extends Admin
                 //var_dump($data_list);
                 $row = $data_list['data'];
                 #$AAA=isset($row['issue']);
-                if (strlen((string)$row['issue'])>2)
+                if (strlen((string)(int)$row['issue'])>2)
                 {$row['issue']=date("Y-m-d H:i:s", (int)$row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
