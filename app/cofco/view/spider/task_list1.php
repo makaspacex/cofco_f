@@ -16,7 +16,7 @@
                 <th>进程号</th>
                 <th>关键词</th>
                 <th>进度</th>
-                <th>未爬取/总数</th>
+                <th>已爬取/总数</th>
                 <th>创建时间</th>
                 <th>创建人</th>
                 <th>状态</th>
@@ -50,7 +50,7 @@
                 <td>{$v['pid']}</td>
                 <td>{$v.sstr}</td>
                 <td>{$v.progress}</td>
-                <td>{$v.remainnum}/{$v.totalnum}</td>
+                <td>{$v.totalnum-$v.remainnum}/{$v.totalnum}</td>
                 <td>{:date('Y-m-d H:i:s', $v['create_time'])}</td>
                 <td>{$v['creator']}</td>
 <!--                <td><input type="" name="status" {if condition="$v['status'] eq 3"} value="运行中" {/if}></td>-->
