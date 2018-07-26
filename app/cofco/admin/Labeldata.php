@@ -597,9 +597,10 @@ class Labeldata extends Admin
             //$data['issue']=strtotime($data['issue']);
 
             if(count($data)>2){
-                $data['issue']=strtotime($data['issue']);
+                if(strlen((string)$data['issue'])>2)
+                {$data['issue']=strtotime($data['issue']);}
+                else{$data['issue']==null;}
                 unset($data['id']);
-
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');
                 }
@@ -640,8 +641,8 @@ class Labeldata extends Admin
                 //var_dump($data_list);
                 $row = $data_list['data'];
                 #$AAA=isset($row['issue']);
-                if (isset($row['issue']))
-                {$row['issue']=date("Y-m-d H:i:s", $row['issue']);}
+                if (strlen((string)$row['issue'])>2)
+                {$row['issue']=date("Y-m-d H:i:s", (int)$row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
