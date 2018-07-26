@@ -94,7 +94,7 @@
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w300">
             <input type="radio" class="field-status" name="status" value="2" title="未审核" checked>
-            <input type="radio" class="field-status" name="status" value="3" title="已审核">
+<!--            <input type="radio" class="field-status" name="status" value="3" title="已审核">-->
         </div>
     </div>
     <div class="layui-form-item">
