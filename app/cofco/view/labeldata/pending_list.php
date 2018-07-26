@@ -11,8 +11,8 @@
             </form>
         </div>
         <div class="layui-btn-group">
-            <a href="{:url('pending_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-            <a data-href="{:url('pending_del')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>
+            <a href="{:url('pending_add')}" class="layui-btn layui-btn-primary j-ajax"><i class="aicon ai-tianjia"></i>添加</a>
+            <a data-href="{:url('pending_del')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
         </div>
     </div>
     <div class="layui-form">
@@ -53,7 +53,7 @@
                 <td>
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
-                            <a href="{:url('pending_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
+                            <a href="{:url('pending_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#xe642;</i></a>
                             <a data-href="{:url('pending_del?ids='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
