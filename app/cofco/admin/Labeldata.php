@@ -589,7 +589,7 @@ class Labeldata extends Admin
 
     public function crawurl()
     {
-        ini_set('max_execution_time', '50');
+        ini_set('max_execution_time', '60');
         $msg='';
         if ($this->request->isPost()) {
             $data = $this->request->post();
