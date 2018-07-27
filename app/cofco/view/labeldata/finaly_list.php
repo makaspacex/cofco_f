@@ -45,8 +45,8 @@
                 <td>
                     <div class="layui-btn-group">
                         <div class="layui-btn-group">
-                            <a href="{:url('finaly_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm j-ajax"><i class="layui-icon">&#xe642;</i></a>
-                            <a href="{:url('finaly_url?id='.$v['id'])}"target="blank" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">来源</a>
+                            <a href="{:url('finaly_edit?id='.$v['id'])}"class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
+                            <a href="{:url('finaly_url?id='.$v['id'])}"target="blank" class="layui-btn layui-btn-primary layui-btn-sm">来源</a>
                             <a data-href="{:url('finaly_del?ids='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 <form class="page-list-form">
     <div class="page-toolbar">
         <div class="layui-btn-group fl">
-            <a href="{:url('levellabel_add')}" class="layui-btn layui-btn-primary j-ajax"><i class="aicon ai-tianjia"></i>添加</a>
+            <a href="{:url('levellabel_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
             <a data-href="{:url('status?table=admin_levellabel&val=1')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
             <a data-href="{:url('status?table=admin_levellabel&val=0')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
             <a data-href="{:url('levellabel_del')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
@@ -25,8 +25,8 @@
             <input type="checkbox" name="status" value="{$vv['status']}" {if condition="$vv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
 
             <div class="menu-btns">
-                <a href="{:url('levellabel_edit?id='.$vv['id'])}" title="编辑" class="j-ajax"><i class="layui-icon">&#xe642;</i></a>
-                <a href="{:url('levellabel_add?cid='.$vv['id'])}" title="添加子菜单" class="j-ajax"><i class="layui-icon">&#xe654;</i></a>
+                <a href="{:url('levellabel_edit?id='.$vv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
+                <a href="{:url('levellabel_add?cid='.$vv['id'])}" title="添加子菜单""><i class="layui-icon">&#xe654;</i></a>
                 {if condition="$v['id'] > 4"}
                 <a href="{:url('levellabel_del?ids='.$vv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
                 {/if}
@@ -44,8 +44,8 @@
                     <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvv['score']}" data-value="{$vvv['score']}" data-href="{:url('sort?table=admin_levellabel&ids='.$vvv['id'])}">
                     <input type="checkbox" name="status" value="{$vvv['status']}" {if condition="$vvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                     <div class="menu-btns">
-                        <a href="{:url('levellabel_edit?id='.$vvv['id'])}" title="编辑" class="j-ajax"><i class="layui-icon">&#xe642;</i></a>
-                        <a href="{:url('levellabel_add?cid='.$vvv['id'])}" title="添加子菜单" class="j-ajax"><i class="layui-icon">&#xe654;</i></a>
+                        <a href="{:url('levellabel_edit?id='.$vvv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
+                        <a href="{:url('levellabel_add?cid='.$vvv['id'])}" title="添加子菜单""><i class="layui-icon">&#xe654;</i></a>
                         <a href="{:url('levellabel_del?ids='.$vvv['id'])}"title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
                     </div>
                 </dt>
@@ -61,8 +61,8 @@
                     <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvvv['score']}" data-value="{$vvvv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vvvv['id'])}">
                     <input type="checkbox" name="status" value="{$vvvv['status']}" {if condition="$vvvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vvvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                     <div class="menu-btns">
-                        <a href="{:url('levellabel_edit?id='.$vvvv['id'])}" title="编辑" class="j-ajax"><i class="layui-icon">&#xe642;</i></a>
-                        <a href="{:url('levellabel_add?cid='.$vvvv['id'])}" title="添加子菜单" class="j-ajax"><i class="layui-icon">&#xe654;</i></a>
+                        <a href="{:url('levellabel_edit?id='.$vvvv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
+                        <a href="{:url('levellabel_add?cid='.$vvvv['id'])}" title="添加子菜单""><i class="layui-icon">&#xe654;</i></a>
                         <a href="{:url('levellabel_del?ids='.$vvvv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
                     </div>
                 </dd>

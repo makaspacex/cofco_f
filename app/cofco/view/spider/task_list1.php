@@ -1,7 +1,7 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
-        <a href="{:url('task_add')}" id="btn" class="layui-btn layui-btn-primary j-ajax"><i class="aicon ai-tianjia"></i>添加</a>
-        <a data-href="{:url('task_stop')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
+        <a href="{:url('task_add')}" id="btn" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
+<!--        <a data-href="{:url('task_remove')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>-->
 
     </div>
 
