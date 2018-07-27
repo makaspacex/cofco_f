@@ -8,7 +8,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">值</label>
         <div class="layui-input-inline w300">
-            <textarea rows="6"  class="layui-textarea field-value" name="value" lay-verify="" autocomplete="off" placeholder=""></textarea>
+            <textarea rows="6"  class="layui-textarea field-value" name="value" lay-verify="" autocomplete="off" placeholder="每个关键词占一行以作区分"></textarea>
         </div>
     </div>
     <div class="layui-form-item">

@@ -64,7 +64,7 @@ $name=$user[ADMIN_ID];
     function func(data) {
         var $ = layui.jquery;
         str=data[0]['value'];
-        str= str.replace(";","#");
+        str= str.replace(/;/g,"#");
         //$('input[name="keywords"]').val(obj[3]);
         //$('input[name="keywords"]').val(data[0]['value']);
             $('input[name="keywords"]').val(str);
