@@ -47,7 +47,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <a href="javascript:void(0);">{$admin_user['nick']}&nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
                     <dd><a href="{:url('admin/user/info')}">个人设置</a></dd>
-                    <dd><a href="{:url('admin/user/iframe?val=1')}" class="j-ajax" refresh="yes">框架布局</a></dd>
+<!--                    <dd><a href="{:url('admin/user/iframe?val=1')}" class="j-ajax" refresh="yes">框架布局</a></dd>-->
                     <dd><a href="{:url('admin/publics/logout')}">退出登陆</a></dd>
                 </dl>
             </li>
