@@ -28,7 +28,7 @@ $name=$user[ADMIN_ID];
         <label class="layui-form-label">更新频率</label>
         <div class="layui-input-inline">
             <select name="frequen"  class="field-frequen" type="select" >
-                <option value ="00"selected>按天更新（请选择）</option>
+                <option value ="00"selected>更新频率（请选择）</option>
                 <option value ="0"> 只更新一次</option>
                 <option value ="1">一天更新一次</option>
                 <option value="2">两天更新一次</option>
