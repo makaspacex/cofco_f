@@ -1,12 +1,14 @@
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
+        <label class="layui-form-label">PMID</label>
         <div class="layui-input-inline w300">
-            <input type="hidden" class="layui-input field-pmid" name="pmid" lay-verify="" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-pmid" name="pmid" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">DOI</label>
         <div class="layui-input-inline w300">
-            <input type="hidden" class="layui-input field-doi" name="doi" lay-verify="" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-doi" name="doi" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

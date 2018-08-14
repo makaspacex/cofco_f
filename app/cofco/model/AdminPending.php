@@ -98,6 +98,19 @@ class AdminPending extends Model
         $str = str_replace('or','',$str);
         return trim($str);
     }
+    public static function strFilter1($str){
+        //特殊字符的过滤方法
+        $str = str_replace('`', '', $str);
+
+        $str = str_replace('[', '', $str);
+        $str = str_replace(']', '', $str);
+        $str = str_replace('【', '', $str);
+        $str = str_replace('】', '', $str);
+        $str = str_replace('{', '', $str);
+        $str = str_replace('}', '', $str);
+        $str = str_replace("'", '', $str);
+        return trim($str);
+    }
 
 
 }

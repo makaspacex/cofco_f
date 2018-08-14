@@ -165,76 +165,8 @@ class Spider extends Admin
 ////        var_dump($data_list);
 //        return $this->fetch();
 //    }
-    public function task_list1()
-    {
-        try {
-            $cu = curl_init();
-            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
-            //echo config('spider.spider_api_all');
-            curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($cu, CURLOPT_CONNECTTIMEOUT_MS, 300);
-            curl_setopt($cu, CURLOPT_TIMEOUT, 3);
-            $ret = curl_exec($cu);
-            //var_dump(json_decode($ret,true));
-            $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
-            if ($http != 200) {
-                throw  new Exception('链接爬虫失败');
-            }
-            curl_close($cu);
-            $row = json_decode($ret,true);
-            //var_dump($row);
-            $data_list=$row['data'];
-            $msg=$row['msg'];
-            $this->assign('msg', $msg);
-            //var_dump($data_list);
-        }catch (Exception $exception){
-            $data_list = array();
-            $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
-            $this->assign('msg', $msg);
 
-            //var_dump($data_list) ;
-        }
-//        if(!isset($data_list['create_time']))
-//        {
-//            $ret = array('create_time');
-//            $row = array_fill_keys($ret,0);
-//            $data_list = array_merge($data_list, $row);
-//        }
-        //var_dump($data_list);
-//          if($data_list==null)
-//              $this->success($msg);
-//        if(isset($data_list['sstr']))
-//        {
-//            $data_list['sstr'] = str_replace('`', '', $data_list['sstr']);
-//        }
 
-        $this->assign('data_list', $data_list);
-        return $this->fetch();
-    }
-    public function keywords_pop($q = '') {
-        $q = input('param.q/s');
-        $callback = input('param.callback/s');
-        if (!$callback) {
-            echo '<br><br>callback为必传参数！';
-            exit;
-        }
-        $map = [];
-        if ($q) {
-            $map['keywords'] = ['like', '%'.$q.'%'];
-        }
-        else
-            $map['status']=1;
-        $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
-        // 分页
-        //var_dump($data_list);
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-        $this->assign('callback', $callback);
-        $this->view->engine->layout(false);
-        return $this->fetch();
-    }
 
 //    public function task_add()
 //    {
@@ -254,33 +186,7 @@ class Spider extends Admin
 //        $this->assign('kw_option', KwModel::getOption());
 //        return $this->afetch('task_form');
 //    }
-    public function task_add()
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $row=$data;
-            //$row=$data;
-            //var_dump($row);
-            //$url = "http://39.108.188.10:9001/spider/add";
-            //$url = "http://10.2.148.107:8000/spider/add";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_add'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('添加成功！','task_list1');
-            }
-             return $this->error('添加失败');
-        }
-        $this->assign('spider_option', SpiderTaskModel::getOption());
-        return $this->afetch('task_form');
-    }
+
 
 //    public function task_edit($id = 0)
 //    {
@@ -338,126 +244,7 @@ class Spider extends Admin
 //        }
 //        return $this->success('操作成功！');
 //    }
-    public function task_stop($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else
-        {
-        $ret=array('pid');
-        $row=array_fill_keys($ret,$id);
-        //$url = "http://http://10.2.175.30:9001/spider/stop";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_stop'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if($output = curl_exec($ch)){
-            curl_close($ch);
-            $data_list = json_decode($output,true);
-            if($data_list['status']==0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('停止成功','task_list1');
-        }
-        return $this->error('停止失败');
-        }
-    }
-    public function task_pause($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/pause";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_pause'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('暂停成功');
-            }
-            return $this->error('添加失败');
-        }
-    }
 
-    public function task_continue($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else
-            {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/continue";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_continue'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('继续成功');
-            }
-            return $this->error('继续失败');
-        }
-    }
-
-    public function task_remove($id='')
-    {
-            $ret = array('sstr');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/remove";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_remove'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('删除成功');
-            }
-            return $this->error('删除失败');
-
-    }
-
-    public function task_startforce($id='')
-    {
-        $ret = array('sstr');
-        $row = array_fill_keys($ret, $id);
-        //return $this->error($id);
-        //$url = "http://10.2.145.166:8000/spider/startforce";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_startforce'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if ($output = curl_exec($ch)) {
-            curl_close($ch);
-            $data_list = json_decode($output, true);
-            if ($data_list['status'] == 0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('重启成功');
-        }
-        return $this->error('重启失败');
-
-    }
 
 
 }
