@@ -318,25 +318,25 @@ class Labeldata extends Admin
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
 
-            $var=explode("#",$data['tag_id']);
-            for($x=0;$x<count($var);$x++)
-            {
-                while ($temp>-1)
-                {
-                    $array = array("id"=>"","tid"=>"");
-                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
-                    $array['id']=$data['id'];$array['tid']=$var[$x];
-                    if (!(IdModel::where('id', $array['id'])->find()))
-                    {
-                        if (IdModel::create($array)) {
-                            $temp=$row2['cid'];
-                            $var[$x]=$temp;
-                        }
-                    }
-                    if ($var[$x]==0)
-                        break;
-                }
-            }
+//            $var=explode("#",$data['tag_id']);
+//            for($x=0;$x<count($var);$x++)
+//            {
+//                while ($temp>-1)
+//                {
+//                    $array = array("id"=>"","tid"=>"");
+//                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+//                    $array['id']=$data['id'];$array['tid']=$var[$x];
+//                    if (!(IdModel::where('id', $array['id'])->find()))
+//                    {
+//                        if (IdModel::create($array)) {
+//                            $temp=$row2['cid'];
+//                            $var[$x]=$temp;
+//                        }
+//                    }
+//                    if ($var[$x]==0)
+//                        break;
+//                }
+//            }
 
             if($data['status']==2) {
                 unset($data['id']);
@@ -371,26 +371,26 @@ class Labeldata extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
-            $temp=1;
-            $var=explode("#",$data['tag_id']);
-            for($x=0;$x<count($var);$x++)
-            {
-                while ($temp>-1)
-                {
-                    $array = array("id"=>"","tid"=>"");
-                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
-                    $array['id']=$data['id'];$array['tid']=$var[$x];
-                    if (!(IdModel::where('id', $array['id'])->find()))
-                    {
-                        if (IdModel::create($array)) {
-                            $temp=$row2['cid'];
-                            $var[$x]=$temp;
-                        }
-                    }
-                    if ($var[$x]==0)
-                        break;
-                }
-            }
+//            $temp=1;
+//            $var=explode("#",$data['tag_id']);
+//            for($x=0;$x<count($var);$x++)
+//            {
+//                while ($temp>-1)
+//                {
+//                    $array = array("id"=>"","tid"=>"");
+//                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+//                    $array['id']=$data['id'];$array['tid']=$var[$x];
+//                    if (!(IdModel::where('id', $array['id'])->find()))
+//                    {
+//                        if (IdModel::create($array)) {
+//                            $temp=$row2['cid'];
+//                            $var[$x]=$temp;
+//                        }
+//                    }
+//                    if ($var[$x]==0)
+//                        break;
+//                }
+//            }
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
