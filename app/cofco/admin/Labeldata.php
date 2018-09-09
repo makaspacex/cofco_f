@@ -623,8 +623,8 @@ class Labeldata extends Admin
 
             //$url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
-            if ($data['doi']!=null)
-               $data['doi']='/'.$data['doi'];//把doi处理成爬虫接受的字符
+//            if ($data['doi']!=null)
+//            {$data['doi']='/'.$data['doi'];}//把doi处理成爬虫接受的字符
             curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
