@@ -571,6 +571,8 @@ class Labeldata extends Admin
         $row['country'] = PendingModel::strFilter($row['country']);
         $row['institue'] = PendingModel::strFilter($row['institue']);
         $row['doi'] = PendingModel::strFilter1($row['doi']);
+        if (substr($row['doi'] , 0 , 2)=='//')
+            $row['doi']=substr($row['doi'], 10);
         $this->assign('data_info', $row);
 
         return $this->afetch('pending_dform');
@@ -607,7 +609,7 @@ class Labeldata extends Admin
             //$t = strtotime('2015-6-16 12:04:05');
             //$data['issue']=strtotime($data['issue']);
 
-            if(count($data)>2){
+            if(count($data)>4){
                 if(strlen((string)$data['issue'])>2)
                 {$data['issue']=strtotime($data['issue']);}
                 else{$data['issue']==null;}
@@ -621,6 +623,8 @@ class Labeldata extends Admin
 
             //$url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
+            if ($data['doi']!=null)
+               $data['doi']='/'.$data['doi'];//把doi处理成爬虫接受的字符
             curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
