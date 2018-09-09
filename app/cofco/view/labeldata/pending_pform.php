@@ -18,6 +18,11 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-inline w300">
+            <input type="hidden" class="layui-input field-project" name="project" lay-verify="" autocomplete="off" placeholder="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline w300">
             <input type="hidden" class="layui-input field-flink" name="flink" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
