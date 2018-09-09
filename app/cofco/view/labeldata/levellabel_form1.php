@@ -21,7 +21,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">分值</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-score" name="score" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-score" name="score" lay-verify="" autocomplete="off" placeholder="">
         </div>
     </div>
     <div class="layui-form-item">

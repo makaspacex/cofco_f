@@ -5,7 +5,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">搜索</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
+                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题或爬虫关键词" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </form>
@@ -22,11 +22,13 @@
                 <col width="9">
                 <col width="2">
                 <col width="2">
+                <col width="2">
             </colgroup>
             <thead>
             <tr>
                 <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>文章标题</th>
+                <th>爬虫关键词</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -40,6 +42,7 @@
             $v['status']="未审核";
             if($v['status']==3)
             $v['status']="已审核";
+            $v['sstr'] = str_replace('?', ' ', $v['sstr']);
             {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
@@ -49,6 +52,7 @@
                 <!--                        value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"-->
                 <!--                        data-href="{:url('status?table=admin_pending&ids='.$v['id'])}">-->
                 <!--                    </td>-->
+                <td>{$v['sstr']}</td>
                 <td>{$v['status']}</td>
                 <td>
                     <div class="layui-btn-group">

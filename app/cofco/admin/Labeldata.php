@@ -420,12 +420,12 @@ class Labeldata extends Admin
         $map = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
-
+            $map1['sstr'] = ['like', '%' . $q . '%'];
         }
         if($q=='')
             $data_list = PendingModel::where('status',2)->paginate();
         else {
-            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+            $data_list = PendingModel::where($map)->whereOr($map1)->paginate(10, false, ['query' => input('get.')]);
 
         }
 
@@ -609,16 +609,25 @@ class Labeldata extends Admin
             //$t = strtotime('2015-6-16 12:04:05');
             //$data['issue']=strtotime($data['issue']);
 
-            if(count($data)>4){
-                if(strlen((string)$data['issue'])>2)
-                {$data['issue']=strtotime($data['issue']);}
-                else{$data['issue']==null;}
-                unset($data['id']);
-                if (!PendingModel::create($data)) {
-                    return $this->error('添加失败！');
+
+                if (count($data) > 4) {
+                    if(!(PendingModel::where('pmid', $data['pmid'])->count())) {
+                    if (strlen((string)$data['issue']) > 2) {
+                        $data['issue'] = strtotime($data['issue']);
+                    } else {
+                        $data['issue'] == null;
+                    }
+                    unset($data['id']);
+                    if (!PendingModel::create($data)) {
+                        return $this->error('添加失败！');
+                    }
+                    return $this->success('添加成功。');
+                    return $this->afetch('pending_pform');
                 }
-                return $this->success('添加成功。');
-                return $this->afetch('pending_pform');
+                    else{
+                        return $this->error('文献信息已存在！');
+                        return $this->afetch('pending_fform');
+                    }
             }
 
             //$url = "http://10.2.145.166:8000/spider/crawurl";
@@ -636,6 +645,7 @@ class Labeldata extends Admin
 
             try{
                  $output = curl_exec($ch);
+
                  $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                  //return $this->error($http);
                 if ($http != 200) {
@@ -656,6 +666,7 @@ class Labeldata extends Admin
                 //var_dump($data_list);
                 $row = $data_list['data'];
                 #$AAA=isset($row['issue']);
+               // var_dump($row);
                 if (strlen((string)(int)$row['issue'])>2)
                 {$row['issue']=date("Y-m-d H:i:s", (int)$row['issue']);}
                 $this->assign('data_info', $row);
