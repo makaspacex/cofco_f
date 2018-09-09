@@ -611,7 +611,9 @@ class Labeldata extends Admin
 
 
                 if (count($data) > 4) {
-                    if(!(PendingModel::where('pmid', $data['pmid'])->count())) {
+                    if(PendingModel::where('pmid', $data['pmid'])->count()) {
+                        return $this->error('文献信息已存在！');
+                }
                     if (strlen((string)$data['issue']) > 2) {
                         $data['issue'] = strtotime($data['issue']);
                     } else {
@@ -623,11 +625,6 @@ class Labeldata extends Admin
                     }
                     return $this->success('添加成功。');
                     return $this->afetch('pending_pform');
-                }
-                    else{
-                        return $this->error('文献信息已存在！');
-                        return $this->afetch('pending_fform');
-                    }
             }
 
             //$url = "http://10.2.145.166:8000/spider/crawurl";
