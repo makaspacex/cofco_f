@@ -95,7 +95,7 @@
                     <th colspan="1">分数</th>
                     <th colspan="1">数量</th>
                     <th colspan="1">占比</th>
-                    <th colspan="1">得分</th>
+<!--                    <th colspan="1">得分</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -105,7 +105,7 @@
                     <td>{$v['score']}</td>
                     <td>{$v['p_total_number']}</td>
                     <td>{$v['percent']}%</td>
-                    <td>{$v['score']*$v['p_total_number']}</td>
+<!--                    <td>{$v['score']*$v['p_total_number']}</td>-->
                 </tr>
                 {/volist}
 
@@ -117,17 +117,18 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td style="color: red;font-weight: bold">分值最大实验类型</td>
-                    <td colspan="4">{$statistic_info['max_name']}，得分为{$statistic_info['max_score']}</td>
+                    <td style="color: red;font-weight: bold">最高等级实验类型</td>
+<!--                    <td colspan="4">{$statistic_info['max_name']}，得分为{$statistic_info['max_score']}</td>-->
+                    <td colspan="4">{$statistic_info['max_name']}</td>
                 </tr>
-                <tr>
-                    <td style="color: red;font-weight: bold">文章数目</td>
-                    <td colspan="4">{$statistic_info['total_p']}</td>
-                </tr>
-                <tr>
-                    <td style="color: red;font-weight: bold">总分数</td>
-                    <td colspan="4">{$statistic_info['total_score']}</td>
-                </tr>
+<!--                <tr>-->
+<!--                    <td style="color: red;font-weight: bold">文章数目</td>-->
+<!--                    <td colspan="4">{$statistic_info['total_p']}</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td style="color: red;font-weight: bold">总分数</td>-->
+<!--                    <td colspan="4">{$statistic_info['total_score']}</td>-->
+<!--                </tr>-->
 
                 <tr>
                     <td style="color: red;font-weight: bold">加权得分</td>
