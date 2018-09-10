@@ -131,7 +131,7 @@
 
                 <tr>
                     <td style="color: red;font-weight: bold">加权得分</td>
-                    <td colspan="4">{$statistic_info['total_score']/$statistic_info['total_p']} (说明：设筛选出的文章数目为N，每个标签的分值和数量分别为a和n1，b和n2，c和n3。分数计算公式为：S = (a*n1 + b*n2 + c*n3)/N)</td>
+                    <td colspan="4">{$statistic_info['total_p']?$statistic_info['total_score']/$statistic_info['total_p']:0} (说明：设筛选出的文章数目为N，每个标签的分值和数量分别为a和n1，b和n2，c和n3。分数计算公式为：S = (a*n1 + b*n2 + c*n3)/N)</td>
                 </tr>
 
                 </tbody>
