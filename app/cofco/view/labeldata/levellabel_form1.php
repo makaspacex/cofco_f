@@ -14,15 +14,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label">标签值</label>
         <div class="layui-input-inline w300">
-            <input type="text" class="layui-input field-value" name="value" lay-verify="required" autocomplete="off" placeholder="">
+            <input type="text" class="layui-input field-value" name="value" lay-verify="required" autocomplete="off" placeholder="请只添加一个值">
         </div>
-        <div class="layui-form-mid layui-word-aux">请只添加一个值</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">分值</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-score" name="score" lay-verify="" autocomplete="off" placeholder="">
         </div>
+        <div class="layui-form-mid layui-word-aux"><a href="javascript:void(-1);" id="reset_expire">点我不设置分值</a></div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
@@ -42,6 +42,11 @@
 {include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
-
+    layui.use(['jquery', 'laydate'], function() {
+        var $ = layui.jquery;
+        $('#reset_expire').on('click', function(){
+            $('input[name="score"]').val(-1);
+        });
+    });
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

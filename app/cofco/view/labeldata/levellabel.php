@@ -18,6 +18,10 @@
         </dd>
     </dl>
     {volist name="v['childs']" id="vv" key="kk"}
+    {php}
+    if($vv['score']==-1)
+    $vv['score']='';
+    {/php}
     <dl class="menu-dl1">
         <dt>
             <input type="checkbox" disabled="disabled"  name="ids[{$kk}]" value="{$vv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
@@ -37,7 +41,10 @@
             $kk++;
             {/php}
             {volist name="vv['childs']" id="vvv" key="kkk"}
-
+            {php}
+            if($vvv['score']==-1)
+            $vvv['score']='';
+            {/php}
             <dl class="menu-dl2">
                 <dt>
                     <input type="checkbox" name="ids[{$kk}]"  value="{$vvv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vvv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvv['value']}</span><i class="layui-icon">&#xe626;</i></div>
@@ -53,6 +60,10 @@
                 $kk++;
                 {/php}
                 {volist name="vvv['childs']" id="vvvv" key="kkkk"}
+                {php}
+                if($vvvv['score']==-1)
+                $vvvv['score']='';
+                {/php}
                 {php}
                 $kk++;
                 {/php}
