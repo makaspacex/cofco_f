@@ -76,7 +76,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章摘要</label>
         <div class="layui-input-inline w600">
-            <textarea rows="6"  class="layui-textarea field-abstract" name="abstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
+            <textarea rows="10"  class="layui-textarea field-abstract" name="abstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
         </div>
     </div>
     <div class="layui-form-item">
