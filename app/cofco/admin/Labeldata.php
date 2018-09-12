@@ -604,7 +604,7 @@ class Labeldata extends Admin
     }
     public function pending_find($id='')
     {
-        $data_list = PendingModel::where('sstr',$id)->paginate();
+        $data_list = PendingModel::where('sstr',$id)->where('status',2)->paginate();
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
