@@ -1,11 +1,27 @@
 <form class="page-list-form">
     <div class="page-toolbar">
-        <div class="page-filter fr">
+        <div class="page-filter">
             <form class="layui-form layui-form-pane" action="{:url()}" method="get">
+<!--                <div class="layui-form-item">-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text"  name="p" value="{:input('get.p')}" lay-verify="required" placeholder="爬虫关键词" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">搜索</button>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="layui-form-item">
-                    <label class="layui-form-label">搜索</label>
                     <div class="layui-input-inline">
                         <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="p" value="{:input('get.p')}" lay-verify="required" placeholder="爬虫关键词" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button type="submit" class="layui-btn">搜索</button>
                     </div>
                 </div>
             </form>
@@ -18,11 +34,13 @@
                 <col width="9">
                 <col width="2">
                 <col width="2">
+                <col width="2">
             </colgroup>
             <thead>
             <tr>
                 <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>文章标题</th>
+                <th>爬虫关键词</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -36,11 +54,13 @@
             $v['status']="未审核";
             if($v['status']==3)
             $v['status']="已审核";
+            $v['sstr'] = str_replace('?', ' ', $v['sstr']);
             {/php}
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
                            lay-skin="primary"></td>
-                <td><a href="{:url('finaly_url?id='.$v['id'])}" target="blank">{$v['title']}</a></td>
+                <td><a href="{:url('finaly_browse?id='.$v['id'])}">{$v['title']}</a></td>
+                <td><a href="{:url('finaly_find?id='.$v['sstr'])}">{$v['sstr']}</td>
                 <td>{$v['status']}</td>
                 <td>
                     <div class="layui-btn-group">

@@ -2,10 +2,21 @@
     <div class="page-toolbar">
         <div class="page-filter fr">
             <form class="layui-form layui-form-pane" action="{:url()}" method="get">
+<!--                <div class="layui-form-item">-->
+<!--                    <label class="layui-form-label">搜索</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题或爬虫关键词" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="layui-form-item">
-                    <label class="layui-form-label">搜索</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题或爬虫关键词" autocomplete="off" class="layui-input">
+                        <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="文章标题" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="p" value="{:input('get.p')}" lay-verify="required" placeholder="爬虫关键词" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button type="submit" class="layui-btn">搜索</button>
                     </div>
                 </div>
             </form>
@@ -47,12 +58,8 @@
             <tr>
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
                            lay-skin="primary"></td>
-                <td>{$v['title']}</td>
-                <!--                    <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1" } checked="" {/if}-->
-                <!--                        value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"-->
-                <!--                        data-href="{:url('status?table=admin_pending&ids='.$v['id'])}">-->
-                <!--                    </td>-->
-                <td>{$v['sstr']}</td>
+                <td><a href="{:url('pending_browse?id='.$v['id'])}">{$v['title']}</a></td>
+                <td><a href="{:url('pending_find?id='.$v['sstr'])}">{$v['sstr']}</td>
                 <td>{$v['status']}</td>
                 <td>
                     <div class="layui-btn-group">

@@ -416,17 +416,31 @@ class Labeldata extends Admin
     }
     public function pending_list($q='')
     {
-        $q = input('param.q/s');
+        $q =input('param.q/s');
+        $p = input('param.p/s');
         $map = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
-            $map1['sstr'] = ['like', '%' . $q . '%'];
         }
-        if($q=='')
-            $data_list = PendingModel::where('status',2)->paginate();
-        else {
-            $data_list = PendingModel::where($map)->whereOr($map1)->paginate(10, false, ['query' => input('get.')]);
+        if($p){
+            $map1['sstr'] = ['like', '%' . $p . '%'];
+        }
+        try {
+            $data_list = PendingModel::where('status', 2)->paginate();
+            //return $this->error($q);
+            if ($q and $p == '')
+                $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+            if ($q == '' and $p)
+                $data_list = PendingModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
+            if ($q and $p)
+                $data_list = PendingModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
+        }catch (Exception $exception){
+            $data_list = array();
+            $msg=$exception->getMessage();
+            //echo "<script>alert('$msg')</script>";
+            $this->assign('msg', $msg);
 
+            //var_dump($data_list) ;
         }
 
         // 分页
@@ -577,7 +591,26 @@ class Labeldata extends Admin
 
         return $this->afetch('pending_dform');
     }
-
+    public function pending_browse($id = 0)
+    {
+        $row = PendingModel::where('id', $id)->find()->toArray();
+        $row['author'] = PendingModel::strFilter($row['author']);
+        $row['keyword'] = PendingModel::strFilter($row['keyword']);
+        $row['country'] = PendingModel::strFilter($row['country']);
+        $row['institue'] = PendingModel::strFilter($row['institue']);
+        $row['doi'] = PendingModel::strFilter1($row['doi']);
+        $this->assign('data_info', $row);
+        return $this->afetch('pending_browse');
+    }
+    public function pending_find($id='')
+    {
+        $data_list = PendingModel::where('sstr',$id)->paginate();
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+//        var_dump($data_list);
+        return $this->afetch('pending_list');
+    }
     public function pop($id)
     {
         // $q = input('param.q/s');
@@ -730,24 +763,49 @@ class Labeldata extends Admin
 ////        var_dump($data_list);
 //        return $this->fetch();
 //    }
-    public function finaly_list($q='')
+    public function finaly_list($q='',$p='')
     {
-        $q = input('param.q/s');
+        $q =input('param.q/s');
+        $p = input('param.p/s');
         $map = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
-
         }
-        if($q=='')
-            $data_list = FinalyModel::where('status',3)->paginate();
-        else {
-            $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-
+        if($p){
+            $map1['sstr'] = ['like', '%' . $p . '%'];
         }
+
+//        if($q==''&&$p=='')
+//            $data_list = FinalyModel::where('status',3)->paginate();
+//        else {
+//            if($q && $p=='')
+//                $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+//            if($q=''&&$q)
+//                $data_list = FinalyModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
+//            if($q && $p)
+//                $data_list=FinalyModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
+//        }
+        try {
+            $data_list = FinalyModel::where('status', 3)->paginate();
+            //return $this->error($q);
+            if ($q and $p == '')
+                $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+            if ($q == '' and $p)
+                $data_list = FinalyModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
+            if ($q and $p)
+                $data_list = FinalyModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
+        }catch (Exception $exception){
+            $data_list = array();
+            $msg=$exception->getMessage();
+            //echo "<script>alert('$msg')</script>";
+            $this->assign('msg', $msg);
+
+            //var_dump($data_list) ;
+        }
+        // 分页
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
-//        var_dump($data_list);
         return $this->fetch();
     }
 
@@ -813,7 +871,21 @@ class Labeldata extends Admin
         //var_dump($row);
         return $this->afetch('finaly_form');
     }
-
+    public function finaly_browse($id = 0)
+    {
+        $row = FinalyModel::where('id', $id)->find()->toArray();
+        $this->assign('data_info', $row);
+        return $this->afetch('finaly_browse');
+    }
+    public function finaly_find($id='')
+    {
+        $data_list = FinalyModel::where('sstr',$id)->paginate();
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+//        var_dump($data_list);
+        return $this->afetch('finaly_list');
+    }
     public function finaly_del()
     {
         $ids = input('param.ids/a');
