@@ -317,7 +317,7 @@ class Labeldata extends Admin
             $temp=1;
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
-
+            $data['issue']=date("Y-m", $data['issue']);
 //            $var=explode("#",$data['tag_id']);
 //            for($x=0;$x<count($var);$x++)
 //            {
@@ -371,6 +371,7 @@ class Labeldata extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
+            $data['issue']=date("Y-m", $data['issue']);
 //            $temp=1;
 //            $var=explode("#",$data['tag_id']);
 //            for($x=0;$x<count($var);$x++)
@@ -509,7 +510,7 @@ class Labeldata extends Admin
             $map['pid'] = $id;
             IdModel::where($map)->delete();
             $data = $this->request->post();
-            $data['issue']=strtotime($data['issue']);
+//            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
@@ -575,10 +576,10 @@ class Labeldata extends Admin
             $array = array();
         //var_dump($array);
         $row = array_merge($row1, $array);
-        if(mb_strlen($row['issue'],'utf8')>2)
-        $row['issue']=date("Y-m-d", $row['issue']);
-        else
-            $row['issue']=null;
+//        if(mb_strlen($row['issue'],'utf8')>2)
+//           $row['issue']=date("Y-m", $row['issue']);
+//        else
+//            $row['issue']=null;
         //var_dump($row);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
@@ -594,6 +595,8 @@ class Labeldata extends Admin
     public function pending_browse($id = 0)
     {
         $row = PendingModel::where('id', $id)->find()->toArray();
+//        if(mb_strlen($row['issue'],'utf8')>2)
+//            $row['issue']=date("Y-m", $row['issue']);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
         $row['country'] = PendingModel::strFilter($row['country']);
@@ -647,11 +650,11 @@ class Labeldata extends Admin
                     if(PendingModel::where('pmid', $data['pmid'])->count()) {
                         return $this->error('文献信息已存在！');
                 }
-                    if (strlen((string)$data['issue']) > 2) {
-                        $data['issue'] = strtotime($data['issue']);
-                    } else {
-                        $data['issue'] == null;
-                    }
+//                    if (strlen((string)$data['issue']) > 2) {
+//                        $data['issue'] = strtotime($data['issue']);
+//                    } else {
+//                        $data['issue'] == null;
+//                    }
                     unset($data['id']);
                     if (!PendingModel::create($data)) {
                         return $this->error('添加失败！');
@@ -697,8 +700,8 @@ class Labeldata extends Admin
                 $row = $data_list['data'];
                 #$AAA=isset($row['issue']);
                // var_dump($row);
-                if (strlen((string)(int)$row['issue'])>2)
-                {$row['issue']=date("Y-m-d H:i:s", (int)$row['issue']);}
+//                if (strlen((string)(int)$row['issue'])>2)
+//                {$row['issue']=date("Y-m", (int)$row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
@@ -858,10 +861,10 @@ class Labeldata extends Admin
             $array = array();
         //var_dump($array);
         $row = array_merge($row, $array);
-        if(mb_strlen($row['issue'],'utf8')>2)
-            $row['issue']=date("Y-m-d", $row['issue']);
-        else
-            $row['issue']=null;
+//        if(mb_strlen($row['issue'],'utf8')>2)
+//            $row['issue']=date("Y-m", $row['issue']);
+//        else
+//            $row['issue']=null;
         //var_dump($row);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
@@ -874,6 +877,8 @@ class Labeldata extends Admin
     public function finaly_browse($id = 0)
     {
         $row = FinalyModel::where('id', $id)->find()->toArray();
+//        if(mb_strlen($row['issue'],'utf8')>2)
+//            $row['issue']=date("Y-m", $row['issue']);
         $this->assign('data_info', $row);
         return $this->afetch('finaly_browse');
     }
