@@ -427,13 +427,16 @@ class Labeldata extends Admin
         if($p){
             $map1['sstr'] = ['like', '%' . $p . '%'];
         }
+        if ($id){
+            $id = str_replace('+', ' ', $id);
+            $id1= str_replace(' ', '?', $id);
+            $map2['sstr']=array(['=',$id],['=',$id1],'or');
+        }
         try {
             $data_list = PendingModel::where('status', 2)->paginate();
             //return $this->error($q);
             if ($id){
-                $id = str_replace('+', ' ', $id);
-                $id1= str_replace(' ', '?', $id);
-                $data_list = PendingModel::where('sstr', $id)->whereOr('sstr',$id1)->where('status',2)->paginate();
+                $data_list = PendingModel::where($map2)->where('status',2)->paginate();
             }
             if ($q and $p == '')
                 $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
