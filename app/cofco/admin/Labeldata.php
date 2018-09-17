@@ -433,7 +433,7 @@ class Labeldata extends Admin
             if ($id){
                 $id = str_replace('+', ' ', $id);
                 $id1= str_replace(' ', '?', $id);
-                $data_list = PendingModel::where('sstr', $id)->whereOr('sstr',$id1)->paginate();
+                $data_list = PendingModel::where('sstr', $id)->whereOr('sstr',$id1)->where('status',2)->paginate();
             }
             if ($q and $p == '')
                 $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
