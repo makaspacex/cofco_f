@@ -415,11 +415,12 @@ class Labeldata extends Admin
         }
         return $this->afetch('pending_form');
     }
-    public function pending_list($q='')
+    public function pending_list($q='',$p='',$id='')
     {
         $q =input('param.q/s');
         $p = input('param.p/s');
         $map = [];
+        $map1 = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
         }
@@ -429,6 +430,11 @@ class Labeldata extends Admin
         try {
             $data_list = PendingModel::where('status', 2)->paginate();
             //return $this->error($q);
+            if ($id){
+                $id = str_replace('+', ' ', $id);
+                $id1= str_replace(' ', '?', $id);
+                $data_list = PendingModel::where('sstr', $id)->whereOr('sstr',$id1)->paginate();
+            }
             if ($q and $p == '')
                 $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
             if ($q == '' and $p)
@@ -766,18 +772,18 @@ class Labeldata extends Admin
 ////        var_dump($data_list);
 //        return $this->fetch();
 //    }
-    public function finaly_list($q='',$p='')
+    public function finaly_list($q='',$p='',$id='')
     {
         $q =input('param.q/s');
         $p = input('param.p/s');
         $map = [];
+        $map1 = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
         }
         if($p){
             $map1['sstr'] = ['like', '%' . $p . '%'];
         }
-
 //        if($q==''&&$p=='')
 //            $data_list = FinalyModel::where('status',3)->paginate();
 //        else {
@@ -791,6 +797,11 @@ class Labeldata extends Admin
         try {
             $data_list = FinalyModel::where('status', 3)->paginate();
             //return $this->error($q);
+            if ($id)
+            {
+                $id = str_replace('+', ' ', $id);
+                $data_list = FinalyModel::where('sstr', $id)->paginate();
+            }
             if ($q and $p == '')
                 $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
             if ($q == '' and $p)

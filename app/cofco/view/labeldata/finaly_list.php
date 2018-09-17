@@ -60,7 +60,7 @@
                 <td><input type="checkbox" name="ids[]" value="{$v['id']}" class="layui-checkbox checkbox-ids"
                            lay-skin="primary"></td>
                 <td><a href="{:url('finaly_browse?id='.$v['id'])}">{$v['title']}</a></td>
-                <td><a href="{:url('finaly_find?id='.$v['sstr'])}">{$v['sstr']}</td>
+                <td><a href="{:url('finaly_list?id='.$v['sstr'])}">{$v['sstr']}</td>
                 <td>{$v['status']}</td>
                 <td>
                     <div class="layui-btn-group">
