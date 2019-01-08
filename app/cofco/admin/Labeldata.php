@@ -9,8 +9,6 @@ use app\cofco\model\AdminPending as PendingModel;
 use app\cofco\model\AdminFinaly as FinalyModel;
 use app\cofco\model\AdminId as IdModel;
 use app\admin\controller\Admin;
-use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
-use app\cofco\model\AdminKw as KwModel;
 use think\Exception;
 use think\Db;
 
@@ -56,16 +54,12 @@ class Labeldata extends Admin
 
         $tab_data['menu'] = [
             [
-                'title' => '辅助输入',
-                'url' => 'cofco/labeldata/crawurl',
+                'title' => '标签分组',
+                'url' => 'cofco/labeldata/label_list',
             ],
             [
-                'title' => '人工输入',
-                'url' => 'cofco/labeldata/pending_padd',
-            ],
-            [
-                'title' => '爬虫任务',
-                'url' => 'cofco/labeldata/task_list1',
+                'title' => '标签列表',
+                'url' => 'cofco/labeldata/tag_list',
             ],
         ];
         $this->tab_data = $tab_data;
@@ -86,7 +80,7 @@ class Labeldata extends Admin
 
     public function levellabel()
     {
-        $menu_list = LevellabelModel::getAllC(0, 0);
+        $menu_list = LevellabelModel::getAllChild(0, 0);
         $this->assign('menu_list', $menu_list);
         return $this->fetch();
     }
@@ -132,9 +126,9 @@ class Labeldata extends Admin
         return $this->success('删除成功');
     }
 
-    public function levelpop()
+    public function levelpop($q = '')
     {
-
+        $q = input('param.q/s');
         $callback = input('param.callback/s');
         if (!$callback) {
             echo '<br><br>callback为必传参数！';
@@ -317,26 +311,26 @@ class Labeldata extends Admin
             $temp=1;
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
-            $data['issue']=date("Y-m", $data['issue']);
-//            $var=explode("#",$data['tag_id']);
-//            for($x=0;$x<count($var);$x++)
-//            {
-//                while ($temp>-1)
-//                {
-//                    $array = array("id"=>"","tid"=>"");
-//                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
-//                    $array['id']=$data['id'];$array['tid']=$var[$x];
-//                    if (!(IdModel::where('id', $array['id'])->find()))
-//                    {
-//                        if (IdModel::create($array)) {
-//                            $temp=$row2['cid'];
-//                            $var[$x]=$temp;
-//                        }
-//                    }
-//                    if ($var[$x]==0)
-//                        break;
-//                }
-//            }
+
+            $var=explode("#",$data['tag_id']);
+            for($x=0;$x<count($var);$x++)
+            {
+                while ($temp>-1)
+                {
+                    $array = array("id"=>"","tid"=>"");
+                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+                    $array['id']=$data['id'];$array['tid']=$var[$x];
+                    if (!(IdModel::where('id', $array['id'])->find()))
+                    {
+                        if (IdModel::create($array)) {
+                            $temp=$row2['cid'];
+                            $var[$x]=$temp;
+                        }
+                    }
+                    if ($var[$x]==0)
+                        break;
+                }
+            }
 
             if($data['status']==2) {
                 unset($data['id']);
@@ -359,10 +353,6 @@ class Labeldata extends Admin
                 }
             }
         }
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
         return $this->afetch('pending_form1');
     }
 
@@ -371,27 +361,26 @@ class Labeldata extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             $data['issue']=strtotime($data['issue']);
-            $data['issue']=date("Y-m", $data['issue']);
-//            $temp=1;
-//            $var=explode("#",$data['tag_id']);
-//            for($x=0;$x<count($var);$x++)
-//            {
-//                while ($temp>-1)
-//                {
-//                    $array = array("id"=>"","tid"=>"");
-//                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
-//                    $array['id']=$data['id'];$array['tid']=$var[$x];
-//                    if (!(IdModel::where('id', $array['id'])->find()))
-//                    {
-//                        if (IdModel::create($array)) {
-//                            $temp=$row2['cid'];
-//                            $var[$x]=$temp;
-//                        }
-//                    }
-//                    if ($var[$x]==0)
-//                        break;
-//                }
-//            }
+            $temp=1;
+            $var=explode("#",$data['tag_id']);
+            for($x=0;$x<count($var);$x++)
+            {
+                while ($temp>-1)
+                {
+                    $array = array("id"=>"","tid"=>"");
+                    $row2 = LevellabelModel::where('id', $var[$x])->field('cid')->find()->toArray();
+                    $array['id']=$data['id'];$array['tid']=$var[$x];
+                    if (!(IdModel::where('id', $array['id'])->find()))
+                    {
+                        if (IdModel::create($array)) {
+                            $temp=$row2['cid'];
+                            $var[$x]=$temp;
+                        }
+                    }
+                    if ($var[$x]==0)
+                        break;
+                }
+            }
             if($data['status']==2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
@@ -415,42 +404,19 @@ class Labeldata extends Admin
         }
         return $this->afetch('pending_form');
     }
-    public function pending_list($q='',$p='',$id='')
+    public function pending_list($q='')
     {
-        $q =input('param.q/s');
-        $p = input('param.p/s');
+        $q = input('param.q/s');
         $map = [];
-        $map1 = [];
         if ($q) {
             $map['title'] = ['like', '%' . $q . '%'];
-        }
-        if($p){
-            $map1['sstr'] = ['like', '%' . $p . '%'];
-        }
-        if ($id){
-            $id = str_replace('+', ' ', $id);
-            $id1= str_replace(' ', '?', $id);
-            $map2['sstr']=array(['=',$id],['=',$id1],'or');
-        }
-        try {
-            $data_list = PendingModel::where('status', 2)->paginate();
-            //return $this->error($q);
-            if ($id){
-                $data_list = PendingModel::where($map2)->where('status',2)->paginate();
-            }
-            if ($q and $p == '')
-                $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-            if ($q == '' and $p)
-                $data_list = PendingModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
-            if ($q and $p)
-                $data_list = PendingModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
-        }catch (Exception $exception){
-            $data_list = array();
-            $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
-            $this->assign('msg', $msg);
 
-            //var_dump($data_list) ;
+        }
+        if($q=='')
+            $data_list = PendingModel::where('status',2)->paginate();
+        else {
+            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
+
         }
 
         // 分页
@@ -519,7 +485,7 @@ class Labeldata extends Admin
             $map['pid'] = $id;
             IdModel::where($map)->delete();
             $data = $this->request->post();
-//            $data['issue']=strtotime($data['issue']);
+            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
@@ -585,44 +551,20 @@ class Labeldata extends Admin
             $array = array();
         //var_dump($array);
         $row = array_merge($row1, $array);
-//        if(mb_strlen($row['issue'],'utf8')>2)
-//           $row['issue']=date("Y-m", $row['issue']);
-//        else
-//            $row['issue']=null;
+        if(mb_strlen($row['issue'],'utf8')>2)
+        $row['issue']=date("Y-m-d", $row['issue']);
+        else
+            $row['issue']=null;
         //var_dump($row);
         $row['author'] = PendingModel::strFilter($row['author']);
         $row['keyword'] = PendingModel::strFilter($row['keyword']);
         $row['country'] = PendingModel::strFilter($row['country']);
         $row['institue'] = PendingModel::strFilter($row['institue']);
-        $row['doi'] = PendingModel::strFilter1($row['doi']);
-        if (substr($row['doi'] , 0 , 2)=='//')
-            $row['doi']=substr($row['doi'], 10);
         $this->assign('data_info', $row);
 
         return $this->afetch('pending_dform');
     }
-    public function pending_browse($id = 0)
-    {
-        $row = PendingModel::where('id', $id)->find()->toArray();
-//        if(mb_strlen($row['issue'],'utf8')>2)
-//            $row['issue']=date("Y-m", $row['issue']);
-        $row['author'] = PendingModel::strFilter($row['author']);
-        $row['keyword'] = PendingModel::strFilter($row['keyword']);
-        $row['country'] = PendingModel::strFilter($row['country']);
-        $row['institue'] = PendingModel::strFilter($row['institue']);
-        $row['doi'] = PendingModel::strFilter1($row['doi']);
-        $this->assign('data_info', $row);
-        return $this->afetch('pending_browse');
-    }
-    public function pending_find($id='')
-    {
-        $data_list = PendingModel::where('sstr',$id)->where('status',2)->paginate();
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-//        var_dump($data_list);
-        return $this->afetch('pending_list');
-    }
+
     public function pop($id)
     {
         // $q = input('param.q/s');
@@ -647,35 +589,26 @@ class Labeldata extends Admin
 
     public function crawurl()
     {
-        ini_set('max_execution_time', '60');
+        ini_set('max_execution_time', '50');
         $msg='';
         if ($this->request->isPost()) {
             $data = $this->request->post();
             //$t = strtotime('2015-6-16 12:04:05');
             //$data['issue']=strtotime($data['issue']);
 
+            if(count($data)>2){
+                $data['issue']=strtotime($data['issue']);
+                unset($data['id']);
 
-                if (count($data) > 4) {
-                    if(PendingModel::where('pmid', $data['pmid'])->count()) {
-                        return $this->error('文献信息已存在！');
+                if (!PendingModel::create($data)) {
+                    return $this->error('添加失败！');
                 }
-//                    if (strlen((string)$data['issue']) > 2) {
-//                        $data['issue'] = strtotime($data['issue']);
-//                    } else {
-//                        $data['issue'] == null;
-//                    }
-                    unset($data['id']);
-                    if (!PendingModel::create($data)) {
-                        return $this->error('添加失败！');
-                    }
-                    return $this->success('添加成功。');
-                    return $this->afetch('pending_pform');
+                return $this->success('添加成功。');
+                return $this->afetch('pending_pform');
             }
 
             //$url = "http://10.2.145.166:8000/spider/crawurl";
             $ch = curl_init();
-            if ($data['doi']!=null)
-            {$data['doi']='/'.$data['doi'];}//把doi处理成爬虫接受的字符
             curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -687,7 +620,6 @@ class Labeldata extends Admin
 
             try{
                  $output = curl_exec($ch);
-
                  $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                  //return $this->error($http);
                 if ($http != 200) {
@@ -707,10 +639,8 @@ class Labeldata extends Admin
                 }
                 //var_dump($data_list);
                 $row = $data_list['data'];
-                #$AAA=isset($row['issue']);
-               // var_dump($row);
-//                if (strlen((string)(int)$row['issue'])>2)
-//                {$row['issue']=date("Y-m", (int)$row['issue']);}
+                if (count($row['issue'])>0)
+                {$row['issue']=date("Y-m-d H:i:s", $row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
             }catch (Exception $exception){
@@ -722,10 +652,7 @@ class Labeldata extends Admin
             }
 
         }
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
+
         $this->assign('msg', $msg);
         return $this->afetch('pending_fform');
     }
@@ -775,54 +702,15 @@ class Labeldata extends Admin
 ////        var_dump($data_list);
 //        return $this->fetch();
 //    }
-    public function finaly_list($q='',$p='',$id='')
+    public function finaly_list($q='')
     {
-        $q =input('param.q/s');
-        $p = input('param.p/s');
-        $map = [];
-        $map1 = [];
-        if ($q) {
-            $map['title'] = ['like', '%' . $q . '%'];
-        }
-        if($p){
-            $map1['sstr'] = ['like', '%' . $p . '%'];
-        }
-//        if($q==''&&$p=='')
-//            $data_list = FinalyModel::where('status',3)->paginate();
-//        else {
-//            if($q && $p=='')
-//                $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-//            if($q=''&&$q)
-//                $data_list = FinalyModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
-//            if($q && $p)
-//                $data_list=FinalyModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
-//        }
-        try {
-            $data_list = FinalyModel::where('status', 3)->paginate();
-            //return $this->error($q);
-            if ($id)
-            {
-                $id = str_replace('+', ' ', $id);
-                $data_list = FinalyModel::where('sstr', $id)->paginate();
-            }
-            if ($q and $p == '')
-                $data_list = FinalyModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-            if ($q == '' and $p)
-                $data_list = FinalyModel::where($map1)->paginate(10, false, ['query' => input('get.')]);
-            if ($q and $p)
-                $data_list = FinalyModel::Where($map)->where($map1)->paginate(10, false, ['query' => input('get.')]);
-        }catch (Exception $exception){
-            $data_list = array();
-            $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
-            $this->assign('msg', $msg);
-
-            //var_dump($data_list) ;
-        }
-        // 分页
+//        $var=explode("#",$q);
+//        $map['tid'] = ['in', $var];
+        $data_list = FinalyModel::paginate();
         $pages = $data_list->render();
         $this->assign('data_list', $data_list);
         $this->assign('pages', $pages);
+//        var_dump($data_list);
         return $this->fetch();
     }
 
@@ -830,20 +718,7 @@ class Labeldata extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            $data['issue']=strtotime($data['issue']);
-            if ($data['status']==3) {
-                if (!FinalyModel::update($data)) {
-                    return $this->error('修改失败！');
-                }
-            }
-            else{
-                $re = PendingModel::where('pmid',$data['pmid'])->setField('status',2);
-                if ($re == true) {
-                    if (!FinalyModel::where('id', $id)->delete()) {
-                        return $this->error('修改失败！');
-                    }
-                    return $this->success('修改成功。','finaly_list');
-                }
+            if (!FinalyModel::update($data)) {
                 return $this->error('修改失败！');
             }
             // 更新缓存
@@ -853,68 +728,12 @@ class Labeldata extends Admin
         $row = FinalyModel::where('id', $id)->find()->toArray();
         $row = str_replace('?', ' ', $row);
         $row = str_replace(PHP_EOL, '#', $row);
-        $tag_id = $row['tag_id'];
-        if ($tag_id != null) {
-            $var=explode("#",$tag_id);
-            $array = array("value"=>"");
-            for($x=0;$x<count($var);$x++)
-            {
-                $row2 = LevellabelModel::where('id', $var[$x])->field('value')->find()->toArray();
-                //$row2 = str_replace(PHP_EOL, '#', $row2);
-                if($x==0)
-                {
-                    $array['value']=$row2['value'];
-                }
-                else
-                {
-                    $array['value']=$array['value'].'#'.$row2['value'];
-                }
-            }
-        }
+        if(mb_strlen($row['issue'],'utf8')>2)
+            $row['issue']=date("Y-m-d", $row['issue']);
         else
-            $array = array();
-        //var_dump($array);
-        $row = array_merge($row, $array);
-//        if(mb_strlen($row['issue'],'utf8')>2)
-//            $row['issue']=date("Y-m", $row['issue']);
-//        else
-//            $row['issue']=null;
-        //var_dump($row);
-        $row['author'] = PendingModel::strFilter($row['author']);
-        $row['keyword'] = PendingModel::strFilter($row['keyword']);
-        $row['country'] = PendingModel::strFilter($row['country']);
-        $row['institue'] = PendingModel::strFilter($row['institue']);
+            $row['issue']=null;
         $this->assign('data_info', $row);
-        //var_dump($row);
         return $this->afetch('finaly_form');
-    }
-    public function finaly_browse($id = 0)
-    {
-        $row = FinalyModel::where('id', $id)->find()->toArray();
-//        if(mb_strlen($row['issue'],'utf8')>2)
-//            $row['issue']=date("Y-m", $row['issue']);
-        $this->assign('data_info', $row);
-        return $this->afetch('finaly_browse');
-    }
-    public function finaly_find($id='')
-    {
-        $data_list = FinalyModel::where('sstr',$id)->paginate();
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-//        var_dump($data_list);
-        return $this->afetch('finaly_list');
-    }
-    public function finaly_del()
-    {
-        $ids = input('param.ids/a');
-        $map = [];
-        $map['id'] = ['in', $ids];
-        $res = FinalyModel::where($map)->delete();
-        if ($res === false) {
-            return $this->error('操作失败！');
-        }
-        return $this->success('操作成功！');
     }
 
     public function finaly_url($id=0)
@@ -927,225 +746,5 @@ class Labeldata extends Admin
         else
             header("location:https://www.sciencedirect.com/science/article/pii/".$row['pmid']);
         //header("location:".$row['url']);
-    }
-    public function task_list1()
-    {
-        try {
-            $cu = curl_init();
-            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
-            //echo config('spider.spider_api_all');
-            curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($cu, CURLOPT_CONNECTTIMEOUT_MS, 300);
-            curl_setopt($cu, CURLOPT_TIMEOUT, 3);
-            $ret = curl_exec($cu);
-            //var_dump(json_decode($ret,true));
-            $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
-            if ($http != 200) {
-                throw  new Exception('链接爬虫失败');
-            }
-            curl_close($cu);
-            $row = json_decode($ret,true);
-            //var_dump($row);
-            $data_list=$row['data'];
-            $msg=$row['msg'];
-            $this->assign('msg', $msg);
-            //var_dump($data_list);
-        }catch (Exception $exception){
-            $data_list = array();
-            $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
-            $this->assign('msg', $msg);
-
-            //var_dump($data_list) ;
-        }
-//        if(!isset($data_list['create_time']))
-//        {
-//            $ret = array('create_time');
-//            $row = array_fill_keys($ret,0);
-//            $data_list = array_merge($data_list, $row);
-//        }
-        //var_dump($data_list);
-//          if($data_list==null)
-//              $this->success($msg);
-//        if(isset($data_list['sstr']))
-//        {
-//            $data_list['sstr'] = str_replace('`', '', $data_list['sstr']);
-//        }
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
-        $this->assign('data_list', $data_list);
-        return $this->fetch();
-    }
-    public function task_add()
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $row=$data;
-            //$row=$data;
-            //var_dump($row);
-            //$url = "http://39.108.188.10:9001/spider/add";
-            //$url = "http://10.2.148.107:8000/spider/add";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_add'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('添加成功！','task_list1');
-            }
-            return $this->error('添加失败');
-        }
-        $this->assign('spider_option', SpiderTaskModel::getOption());
-        return $this->afetch('task_form');
-    }
-    public function task_stop($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else
-        {
-            $ret=array('pid');
-            $row=array_fill_keys($ret,$id);
-            //$url = "http://http://10.2.175.30:9001/spider/stop";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_stop'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('停止成功','task_list1');
-            }
-            return $this->error('停止失败');
-        }
-    }
-    public function task_pause($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/pause";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_pause'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('暂停成功');
-            }
-            return $this->error('暂停失败');
-        }
-    }
-
-    public function task_continue($id=0)
-    {
-        if($id==0)
-        { return $this->error('此爬虫未运行，禁止操作');}
-        else
-        {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/continue";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_continue'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('继续成功');
-            }
-            return $this->error('继续失败');
-        }
-    }
-
-    public function task_remove($id='')
-    {
-        $ret = array('sstr');
-        $row = array_fill_keys($ret, $id);
-        //$url = "http://10.2.145.166:8000/spider/remove";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_remove'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if ($output = curl_exec($ch)) {
-            curl_close($ch);
-            $data_list = json_decode($output, true);
-            if ($data_list['status'] == 0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('删除成功');
-        }
-        return $this->error('删除失败');
-
-    }
-
-    public function task_startforce($id='')
-    {
-        $ret = array('sstr');
-        $row = array_fill_keys($ret, $id);
-        //return $this->error($id);
-        //$url = "http://10.2.145.166:8000/spider/startforce";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_startforce'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if ($output = curl_exec($ch)) {
-            curl_close($ch);
-            $data_list = json_decode($output, true);
-            if ($data_list['status'] == 0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('重启成功');
-        }
-        return $this->error('重启失败');
-
-    }
-    public function keywords_pop($q = '') {
-        $q = input('param.q/s');
-        $callback = input('param.callback/s');
-        if (!$callback) {
-            echo '<br><br>callback为必传参数！';
-            exit;
-        }
-        $map = [];
-        if ($q) {
-            $map['keywords'] = ['like', '%'.$q.'%'];
-        }
-        else
-            $map['status']=1;
-        $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
-        // 分页
-        //var_dump($data_list);
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-        $this->assign('callback', $callback);
-        $this->view->engine->layout(false);
-        return $this->fetch();
     }
 }
