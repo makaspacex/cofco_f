@@ -1,0 +1,7 @@
+runtime/*
+.idea/
+.DS_Store
+app/database.php
+.htaccess
+app/config.php
+DataAnalyse.php
