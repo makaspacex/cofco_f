@@ -394,7 +394,8 @@ class Labeldata extends Admin
             $map['journal_zone']= $journal_zone;
         }
         $map['status']= '2';
-        $data_list = PendingModel::where($map)->paginate(10,false);
+        $listRows = input('param.limit/s');
+        $data_list = PendingModel::where($map)->paginate($listRows,false);
         return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
     }
     public function pending_list($q='',$p='',$id='')
@@ -480,7 +481,8 @@ class Labeldata extends Admin
                 $map['journal_zone']= $journal_zone;
             }
             $map['status']= '4';
-            $data_list = PendingModel::where($map)->paginate();
+            $listRows = input('param.limit/s');
+            $data_list = PendingModel::where($map)->paginate($listRows,false);
             return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
     }
     public function pre_pending_list($q='',$p='',$id='')
@@ -915,7 +917,8 @@ public function crawurl()
                 $map['journal_zone']= $journal_zone;
             }
             $map['status']= '3';
-            $data_list = FinalyModel::where($map)->paginate(10,false);
+            $listRows = input('param.limit/s');
+            $data_list = FinalyModel::where($map)->paginate($listRows,false);
             return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
        }
 
