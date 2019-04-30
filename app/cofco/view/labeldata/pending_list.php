@@ -11,10 +11,10 @@
         <div class="layui-inline">
             <label class="layui-form-label">爬虫关键词</label>
             <div class="layui-input-inline">
-                <select name="sstr" lay-verify="required" lay-search="">
+                <select name="sstr" id="sstr"  lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
                     {volist name="keyword_list" id="v"}
-                    <option>{$v['keywords']}</option>
+                    <option value={$v['keywords']}>{$v['keywords']}</option>
                     {/volist}
                 </select>
             </div>
@@ -23,7 +23,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">期刊分区</label>
             <div class="layui-input-inline" style="width: 90px">
-                <select name="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
+                <select name="journal_zone" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                     <option value=""></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -68,7 +68,6 @@
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
-
     <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
 {include file="cofco@block/layui" /}
@@ -81,6 +80,7 @@
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="pending_add">添加</button>
         <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除选中行数据</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除所有数据</button>
     </div>
 </script>
 <script type="text/html" id="statusTpl">
@@ -104,10 +104,29 @@
 </script>
 <script>
     layui.use(['table'], function () {
+        var url = window.location.href;
+        var pending_list_url = url.replace(/list/,"list_data");
+        console.log(pending_list_url);
         var table = layui.table;
+        var $ = layui.jquery;
+        layui.use('form', function(){
+            try {
+                $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
+            }
+            catch (e) {
+                console.log(e);
+            }
+            try {
+                $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
+            }catch (e) {
+                console.log(e);
+            }
+            var form = layui.form;
+            form.render('select');
+        });
         table.render({
             elem: '#demo'
-            , url: "pending_list_data"
+            , url: pending_list_url
             , toolbar: true
             , toolbar: '#toolbarDemo'
             , cellMinWidth: 80
@@ -136,7 +155,8 @@
             ]]
             , page: true
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
-                console.log(res);
+                // console.log(res);
+                tableContent = res;
                 return {
                     "code": res.code, //解析接口状态
                     "msg": res.message, //解析提示文本
@@ -158,18 +178,44 @@
                     window.event.returnValue=false; //禁止表单提交
                     var data = checkStatus.data;
                     var ids = new Array();
+                    var content =  '<table class="layui-table">' +
+                        '<colgroup>' +
+                        '<col width="50">' +
+                        '<col width="800">' +
+                        '</colgroup>'+
+                        '<thead> ' +
+                        '<th>ID</th> ' +
+                        '<th>文章标题</th> ' +
+                        '</tr> ' +
+                        '</thead>'+'<tbody>';
                     for (var i = 0; i < data.length; i++) {
                         ids.push(data[i].id);
+                        content += '<tr><td>'+data[i].id+'</td><td>'+data[i].title+'<td></tr>';
+                        console.log(data[i]);
                     }
+                    content+= '</tbody></table>'
                     console.log(ids);
-                    layer.msg('确定要删除' + ids + '吗？', {
-                        time: 0 //不自动关闭
+                    layer.open({
+                        type: 1 //Page层类型
+                        ,skin: 'layer-ext-moon'
+                        ,area: ['800px', '500px']
+                        ,title: '确认删除以下内容吗'
+                        ,shade: 0.5 //遮罩透明度
+                        // ,maxmin: true //允许全屏最小化
+                        ,anim: 1 //0-6的动画形式，-1不开启
+                        ,content: content
                         , btn: ['确定', '取消']
                         , yes: function (index) {
                             layer.close(index);
                             window.location.href = "pending_del?ids="+ids;
                         }
                     });
+
+                break;
+                case 'pending_del_all':
+                    window.event.returnValue=false; //禁止表单提交
+                    console.log(tableContent);
+                    console.log("111");
                 break;
             }
             ;

@@ -373,52 +373,29 @@ class Labeldata extends Admin
         return $this->afetch('pending_form');
     }
     public function pending_list_data(){
-            $title = input('param.title/s'); 
-            $sstr = input('param.sstr/s');
-            $date_start = input('param.date_start/s');
-            $date_end = input('param.date_end/s');
-            $impact_factor_start = input('param.impact_factor_start/s');
-            $impact_factor_end = input('param.impact_factor_end/s');
-            $journal_zone = input('param.journal_zone/s');
-            $map = array();
-            //$map['title']= $q[0];
-            // $map['sstr']= ':'.$p;
-            // $map['title']= ':'.$q;
-            if($title)
-            {
-                $map['title'] = ['like', '%' . $title . '%'];
-            }
-            if($sstr)
-            {
-                $map['sstr']= ['like', '%' . $sstr . '%'];
-            }
-            if($impact_factor_end)
-            {
-
-                $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
-            }
-            if($date_start)
-            {
-                $date_start = strtotime($date_start);
-                var_dump($date_start);
-                $date_end = strtotime($date_end);
-                $map['ctime']=['between',[$date_start,$date_end]];
-            }
-           
-            if($journal_zone)
-            {
-                $map['journal_zone']= $journal_zone;
-            }
-            
-            $map['status']= '2';
-            //print_r($map);
-            
-            
-            $data_list = PendingModel::where($map)->paginate();
-            //print_r($data_list);
-            //print_r($data_list['data']['total']);
-            //$data_list = FinalyModel::where('status', 3)->paginate();
-           return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
+        $title = input('param.title/s');
+        $sstr = input('param.sstr/s');
+        $date_start = input('param.date_start/s');
+        $date_end = input('param.date_end/s');
+        $impact_factor_start = input('param.impact_factor_start/s');
+        $impact_factor_end = input('param.impact_factor_end/s');
+        $journal_zone = input('param.journal_zone/s');
+        $map = array();
+        if($title) {
+            $map['title'] = ['like', '%' . $title . '%'];
+        }
+        if($sstr) {
+            $map['sstr']= ['like', '%' . $sstr . '%'];
+        }
+        if($impact_factor_end) {
+            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
+        }
+        if($journal_zone) {
+            $map['journal_zone']= $journal_zone;
+        }
+        $map['status']= '2';
+        $data_list = PendingModel::where($map)->paginate(10,false);
+        return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
     }
     public function pending_list($q='',$p='',$id='')
     {
@@ -478,9 +455,6 @@ class Labeldata extends Admin
             $impact_factor_end = input('param.impact_factor_end/s');
             $journal_zone = input('param.journal_zone/s');
             $map = array();
-            //$map['title']= $q[0];
-            // $map['sstr']= ':'.$p;
-            // $map['title']= ':'.$q;
             if($title)
             {
                 $map['title'] = ['like', '%' . $title . '%'];
@@ -501,21 +475,13 @@ class Labeldata extends Admin
                 $date_end = strtotime($date_end);
                 $map['ctime']=['between',[$date_start,$date_end]];
             }
-           
             if($journal_zone)
             {
                 $map['journal_zone']= $journal_zone;
             }
-            
             $map['status']= '4';
-            //print_r($map);
-            
-            
             $data_list = PendingModel::where($map)->paginate();
-            //print_r($data_list);
-            //print_r($data_list['data']['total']);
-            //$data_list = FinalyModel::where('status', 3)->paginate();
-           return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
+            return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
     }
     public function pre_pending_list($q='',$p='',$id='')
     {
@@ -913,64 +879,17 @@ public function crawurl()
         $msg=$exception->getMessage();
                 //echo "<script>alert('$msg')</script>";
         $this->assign('msg', $msg);
-
                 //return $this->afetch('pending_fform');
     }
 
 }
-$tab_data = $this->tab_data;
-$tab_data['current'] = url('');
-$this->assign('tab_data', $tab_data);
-$this->assign('tab_type', 1);
-$this->assign('msg', $msg);
-return $this->afetch('pending_fform');
+        $tab_data = $this->tab_data;
+        $tab_data['current'] = url('');
+        $this->assign('tab_data', $tab_data);
+        $this->assign('tab_type', 1);
+        $this->assign('msg', $msg);
+        return $this->afetch('pending_fform');
 }
-//    public function crawurl(){
-//        $info=array();
-//        if ($this->request->isPost()) {
-//                $info= array("title"=>"XC90");
-//        }
-//        $this->crawurl1($info);
-//        return $this->afetch('pending_fform');
-//    }
-//    public function crawurl1()
-//    {
-//        $info=$this->crawurl();
-//        if ($this->request->isPost()) {
-//            $data = $this->request->post();
-//            if (!PendingModel::update($data)) {
-//                return $this->error('修改失败！');
-//            }
-//            // 更新缓存
-//            //cache('system_member_level', KwModel::getAll());
-//            return $this->success('修改成功。','pending_list');
-//        }
-//        $this->assign('data_info', $info);
-//        return $this->afetch('pending_fform');
-//    }
-//$ids   = input('param.ids/a');
-//$map = [];
-//$map['id'] = ['in', $ids];
-//$res = PendingModel::where($map)->delete();
-//    public function pending_list($q='')
-//    {
-//        $q = input('param.q/s');
-//        $map = [];
-//        if ($q) {
-//            $map['title'] = ['like', '%' . $q . '%'];
-//        }
-//        if($q=='')
-//            $data_list = PendingModel::where('status',2)->paginate();
-//        else
-//            $data_list = PendingModel::where($map)->paginate(10, false, ['query' => input('get.')]);
-//
-//        // 分页
-//        $pages = $data_list->render();
-//        $this->assign('data_list', $data_list);
-//        $this->assign('pages', $pages);
-////        var_dump($data_list);
-//        return $this->fetch();
-//    }
 
 
         public function finaly_list_data()
@@ -983,27 +902,21 @@ return $this->afetch('pending_fform');
             $impact_factor_end = input('param.impact_factor_end/s');
             $journal_zone = input('param.journal_zone/s');
             $map = array();
-            if($title)
-            {
+            if($title) {
                 $map['title'] = ['like', '%' . $title . '%'];
             }
-            if($sstr)
-            {
+            if($sstr) {
                 $map['sstr']= ['like', '%' . $sstr . '%'];
             }
-            if($impact_factor_end)
-            {
-
+            if($impact_factor_end) {
                 $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
             }
-            if($journal_zone)
-            {
+            if($journal_zone) {
                 $map['journal_zone']= $journal_zone;
             }
-            
             $map['status']= '3';
-            $data_list = FinalyModel::where($map)->paginate();
-           return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
+            $data_list = FinalyModel::where($map)->paginate(10,false);
+            return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
        }
 
        public function finaly_list($q='',$p='',$id='')

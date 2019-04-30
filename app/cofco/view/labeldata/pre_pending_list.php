@@ -11,10 +11,10 @@
         <div class="layui-inline">
             <label class="layui-form-label">爬虫关键词</label>
             <div class="layui-input-inline">
-                <select name="sstr" lay-verify="required" lay-search="">
+                <select name="sstr" id="sstr" lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
                     {volist name="keyword_list" id="v"}
-                    <option>{$v['keywords']}</option>
+                    <option value={$v['keywords']}>{$v['keywords']}</option>
                     {/volist}
                 </select>
             </div>
@@ -23,7 +23,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">期刊分区</label>
             <div class="layui-input-inline" style="width: 90px">
-                <select name="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
+                <select name="journal_zone" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                     <option value=""></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -108,6 +108,22 @@
 </script>
 <script>
   layui.use(['table'], function(){
+      var $ = layui.jquery;
+      layui.use('form', function(){
+          try {
+              $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
+          }
+          catch (e) {
+              console.log(e);
+          }
+          try {
+              $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
+          }catch (e) {
+              console.log(e);
+          }
+          var form = layui.form;
+          form.render('select');
+      });
     var url = window.location.href;
     pending_list_url = url.replace(/list/,"list_data");
     var table = layui.table;
