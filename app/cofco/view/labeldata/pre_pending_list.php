@@ -140,6 +140,9 @@
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
       ,{field: 'title', title: '文章标题', width:500, fixed: 'left'}
       ,{field: 'sstr', title: '爬虫关键词', width:200}
+      , {field: 'creater', title: '创建人', width: 100}
+      , {field: 'auditor', title: '审核人', width: 100}
+      // , {field: 'final_auditor', title: '终审核', width: 100}
       ,{field: 'special_version', title: '特别说明', width:90}
       ,{field: 'document_type', title: '文献类型', width:90} 
       ,{field: 'urgency', title: '紧要程度', width: 90}
@@ -201,7 +204,7 @@
     var data = obj.data //获得当前行数据
     ,layEvent = obj.event; //获得 lay-event 对应的值
   if(layEvent === 'del'){
-    url = url.replace(/list/,"del?id="+data.id);
+    url = url.replace(/list/,"del?ids="+data.id);
     window.location.href=url;
   } else if(layEvent === 'edit'){
     url = url.replace(/pending_list/,"pre_pending_edit?id="+data.id);

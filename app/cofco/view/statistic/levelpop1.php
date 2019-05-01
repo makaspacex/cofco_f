@@ -86,8 +86,6 @@
 </div>
 {include file="admin@block/layui" /}
 <script>
-
-
     layui.use(['jquery'], function(){
         var $ = layui.jquery;
         $('#popConfirm').click(function() {

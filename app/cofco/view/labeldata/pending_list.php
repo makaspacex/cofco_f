@@ -69,6 +69,7 @@
         </div>
     </div>
     <table class="layui-hide" id="demo" lay-filter="test"></table>
+    <div id="myDiv"></div>
 </form>
 {include file="cofco@block/layui" /}
 <script type="text/html" id="barDemo">
@@ -137,6 +138,9 @@
                 , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
                 , {field: 'title', title: '文章标题', width: 500, fixed: 'left'}
                 , {field: 'sstr', title: '爬虫关键词', width: 200}
+                , {field: 'creater', title: '创建人', width: 90}
+                // , {field: 'auditor', title: '审核人', width: 90}
+                // , {field: 'final_auditor', title: '终审核', width: 90}
                 , {field: 'special_version', title: '特别说明', width: 90}
                 , {field: 'document_type', title: '文献类型', width: 90}
                 , {field: 'urgency', title: '紧要程度', width: 90}
@@ -181,9 +185,9 @@
                     var content =  '<table class="layui-table">' +
                         '<colgroup>' +
                         '<col width="50">' +
-                        '<col width="800">' +
+                        '<col width="700">' +
                         '</colgroup>'+
-                        '<thead> ' +
+                        '<thead><tr> ' +
                         '<th>ID</th> ' +
                         '<th>文章标题</th> ' +
                         '</tr> ' +
@@ -197,8 +201,9 @@
                     console.log(ids);
                     layer.open({
                         type: 1 //Page层类型
+                        ,offset: 'auto'
                         ,skin: 'layer-ext-moon'
-                        ,area: ['800px', '500px']
+                        ,area: ['750px', '500px']
                         ,title: '确认删除以下内容吗'
                         ,shade: 0.5 //遮罩透明度
                         // ,maxmin: true //允许全屏最小化
@@ -213,9 +218,42 @@
 
                 break;
                 case 'pending_del_all':
+                    var getAllIdByCondition_url = url.replace(/pending_list/,"getAllIdByCondition");
+                    var $ = layui.jquery;
                     window.event.returnValue=false; //禁止表单提交
-                    console.log(tableContent);
-                    console.log("111");
+                    $.ajax({
+                        url: getAllIdByCondition_url,
+                        data: "",
+                        type: "get",
+                        dataType: "json",
+                        success: function(res) {
+                            res = $.parseJSON(res);  //dataType指明了返回数据为json类型，故不需要再反序列化
+                            var ids = res["data"];
+                            var count = res["count"];
+                            var content = '<table class="layui-table"><tr>';
+                            for (var i =0;i<count;i++){
+                                content+='<td> '+ids[i]+' </td>';
+                                if((i+1)%10==0){
+                                    content+='</tr><tr>';
+                                }
+                            }
+                            content+="</tr></table>";
+                            layer.open({
+                                type: 1 //Page层类型
+                                ,area: ['800px', '500px']
+                                ,title: '确认删除以下'+count+'条数据吗?'
+                                ,shade: 0.5 //遮罩透明度
+                                // ,maxmin: true //允许全屏最小化
+                                ,anim: 1 //0-6的动画形式，-1不开启
+                                ,content: content
+                                , btn: ['确定', '取消']
+                                , yes: function (index) {
+                                    layer.close(index);
+                                    window.location.href = "pending_del?ids="+ids;
+                                }
+                            });
+                        }
+                    });
                 break;
             }
             ;
@@ -233,8 +271,21 @@
                 //标注选中样式
                 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             } else if (layEvent === 'del') {
-                window.location.href = "pending_del?id=" + data.id;
+                window.location.href = "pending_del?ids=" + data.id;
             } else if (layEvent === 'edit') {
+                // layer.open({
+                //     type: 2//Page层类型
+                //     ,area: ['800px', '100%']
+                //     ,title: '编辑'
+                //     ,shade: 0.5 //遮罩透明度
+                //     // ,maxmin: true //允许全屏最小化
+                //     ,anim: 1 //0-6的动画形式，-1不开启
+                //     ,content: "pending_edit?id=" + data.id
+                //     , btn: ['确定', '取消']
+                //     , yes: function (index) {
+                //         layer.close(index);
+                //     }
+                // });
                 window.location.href = "pending_edit?id=" + data.id;
             }
         });

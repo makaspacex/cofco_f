@@ -137,6 +137,9 @@
             {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
             ,{field: 'title', title: '文章标题', width:500, fixed: 'left'}
             ,{field: 'sstr', title: '爬虫关键词', width:200}
+            , {field: 'creater', title: '创建人', width: 90}
+            , {field: 'auditor', title: '审核人', width: 90}
+            , {field: 'final_auditor', title: '终审核', width: 90}
             ,{field: 'journal_zone', title: '期刊分区', width: 100}
             ,{field: 'impact_factor', title: '影响因子', width: 100}
             ,{field: 'special_version', title: '特别说明', width:90}
@@ -180,7 +183,7 @@
 //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
 // } else 
     if(layEvent === 'del'){
-        del_url = url.replace(/list/,"del?id="+data.id);
+        del_url = url.replace(/list/,"del?ids="+data.id);
         window.location.href=del_url;
     } else if(layEvent === 'edit'){
         edit_url = url.replace(/list/,"edit?id="+data.id);
