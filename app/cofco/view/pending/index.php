@@ -106,8 +106,7 @@
 <script>
     layui.use(['table'], function () {
         var url = window.location.href;
-        var pending_list_url = url.replace(/list/,"list_data");
-        console.log(pending_list_url);
+        var data_url = url.replace(/index/,"data");
         var table = layui.table;
         var $ = layui.jquery;
         layui.use('form', function(){
@@ -127,7 +126,7 @@
         });
         table.render({
             elem: '#demo'
-            , url: pending_list_url
+            , url: data_url
             , toolbar: true
             , toolbar: '#toolbarDemo'
             , cellMinWidth: 80
@@ -176,8 +175,7 @@
             switch (obj.event) {
                 case 'pending_add':
                     window.event.returnValue=false;
-                    window.location.href = "pending_add";
-                    console.log(window.location.href);
+                    window.location.href = "add";
                 break;
                 case 'pending_del':
                     window.event.returnValue=false; //禁止表单提交
@@ -213,13 +211,13 @@
                         , btn: ['确定', '取消']
                         , yes: function (index) {
                             layer.close(index);
-                            window.location.href = "pending_del?ids="+ids;
+                            window.location.href = "del?ids="+ids;
                         }
                     });
 
                 break;
                 case 'pending_del_all':
-                    var getAllIdByCondition_url = url.replace(/pending_list/,"getAllIdByCondition");
+                    var getAllIdByCondition_url = url.replace(/index/,"getAllIdByCondition");
                     var $ = layui.jquery;
                     window.event.returnValue=false; //禁止表单提交
                     $.ajax({
@@ -250,7 +248,7 @@
                                 , btn: ['确定', '取消']
                                 , yes: function (index) {
                                     layer.close(index);
-                                    window.location.href = "pending_del?ids="+ids;
+                                    window.location.href = "del?ids="+ids;
                                 }
                             });
                         }
@@ -272,7 +270,7 @@
                 //标注选中样式
                 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             } else if (layEvent === 'del') {
-                window.location.href = "pending_del?ids=" + data.id;
+                window.location.href = "del?ids=" + data.id;
             } else if (layEvent === 'edit') {
                 // layer.open({
                 //     type: 2//Page层类型
@@ -287,7 +285,7 @@
                 //         layer.close(index);
                 //     }
                 // });
-                window.location.href = "pending_edit?id=" + data.id;
+                window.location.href = "edit?id=" + data.id;
             }
         });
     });
