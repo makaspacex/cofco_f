@@ -11,56 +11,22 @@ use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
 
+include("app\cofco\common\getMap.php");
 /** 预审核页面
  * Class Prepending
  * @package app\cofco\admin
  */
-class Prepending extends Admin
+class Output extends Admin
 {
     public function index()
     {
-        $keyword_list = KwModel::paginate();
-        // 分页
-        $keyword_pages = $keyword_list->render();
+        $keyword_list = KwModel::select();
         $this->assign('keyword_list', $keyword_list);
-        $this->assign('keyword_pages', $keyword_pages);
         return $this->fetch();
     }
 
     public function data(){
-        $title = input('param.title/s');
-        $sstr = input('param.sstr/s');
-        $date_start = input('param.date_start/s');
-        $date_end = input('param.date_end/s');
-        $impact_factor_start = input('param.impact_factor_start/s');
-        $impact_factor_end = input('param.impact_factor_end/s');
-        $journal_zone = input('param.journal_zone/s');
-        $map = array();
-        if($title)
-        {
-            $map['title'] = ['like', '%' . $title . '%'];
-        }
-        if($sstr)
-        {
-            $map['sstr']= ['like', '%' . $sstr . '%'];
-        }
-        if($impact_factor_end)
-        {
-
-            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
-        }
-        if($date_start)
-        {
-            $date_start = strtotime($date_start);
-            var_dump($date_start);
-            $date_end = strtotime($date_end);
-            $map['ctime']=['between',[$date_start,$date_end]];
-        }
-        if($journal_zone)
-        {
-            $map['journal_zone']= $journal_zone;
-        }
-        $map['status']= '4';
+        $map = getDataMap(4);
         $listRows = input('param.limit/s');
         $data_list = PendingModel::where($map)->paginate($listRows,false);
         return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
@@ -93,16 +59,9 @@ class Prepending extends Admin
                 }
             }
             if($data['status']==4) {
-                // 进入预审核
-                $sqlmap = [];
-                $sqlmap['type'] = 2;
-                $sqlmap['uID'] = $_SESSION['hisiphp_']['admin_user']['uid'];  //用户ID
-                $sqlmap['tID'] = $id;  //文章ID
-                $sqlmap['ctime'] = time();
-                $sqlmap['year'] = date('Y');
-                $sqlmap['month'] = date('m');
-                $sqlmap['day'] = date('d');
-                $result = LogModel::insert($sqlmap);
+                // 进入终审核
+                $logmap = getLogMap(2,$id);
+                $result = LogModel::insert($logmap);
                 if (!$result) {
                     return $this->error('修改失败！');
                 }
@@ -118,15 +77,8 @@ class Prepending extends Admin
             }
             if($data['status']==3) {
                 // 进入终审
-                $sqlmap = [];
-                $sqlmap['type'] = 3;
-                $sqlmap['uID'] = $_SESSION['hisiphp_']['admin_user']['uid'];  //用户ID
-                $sqlmap['tID'] = $id;  //文章ID
-                $sqlmap['ctime'] = time();
-                $sqlmap['year'] = date('Y');
-                $sqlmap['month'] = date('m');
-                $sqlmap['day'] = date('d');
-                $result = LogModel::insert($sqlmap);
+                $logmap = getLogMap(3,$id);
+                $result = LogModel::insert($logmap);
                 if (!$result) {
                     $this->error = '错误';
                     return false;
@@ -181,7 +133,6 @@ class Prepending extends Admin
         if (substr($row['doi'] , 0 , 2)=='//')
             $row['doi']=substr($row['doi'], 10);
         $this->assign('data_info', $row);
-
         return $this->afetch('form');
     }
 
@@ -190,7 +141,6 @@ class Prepending extends Admin
         $ids = input('param.ids/s');
         $map = [];
         $map['id'] = ['in', $ids];
-        var_dump($map);
         $res = PendingModel::where($map)->delete();
         if ($res === false) {
             return $this->error('操作失败！');

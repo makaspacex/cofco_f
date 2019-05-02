@@ -97,6 +97,11 @@ class Base
             '__WAP_CSS__'      => ROOT_DIR.'theme/'.$module.'/'.$theme.'/wap/static/css',
             '__WAP_JS__'      => ROOT_DIR.'theme/'.$module.'/'.$theme.'/wap/static/js',
             '__WAP_IMG__'      => ROOT_DIR.'theme/'.$module.'/'.$theme.'/wap/static/image',
+            // cofco模块静态目录
+            '__COFCO_CSS__'      => ROOT_DIR.'static/COFCO/css',
+            '__COFCO_JS__'      => ROOT_DIR.'static/COFCO/js',
+            '__COFCO_IMG__'      => ROOT_DIR.'static/COFCO/image',
+
         ];
         if (defined('PLUGIN_ENTRANCE')) {
             $plugins_name = isset($_GET['_p']) ? $_GET['_p'] : $dispatch['module'][2];

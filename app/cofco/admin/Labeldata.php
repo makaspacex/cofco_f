@@ -53,25 +53,7 @@ class Labeldata extends Admin
     public $tab_data = [];
     public $tab_data1 = [];
 
-    protected function _initialize()
-    {
-        parent::_initialize();
-        $tab_data['menu'] = [
-            [
-                'title' => '辅助输入',
-                'url' => 'cofco/labeldata/crawurl',
-            ],
-            [
-                'title' => '人工输入',
-                'url' => 'cofco/labeldata/pending_padd',
-            ],
-            [
-                'title' => '爬虫任务',
-                'url' => 'cofco/labeldata/task_list1',
-            ],
-        ];
-        $this->tab_data = $tab_data;
-    }
+
 
 
 
@@ -367,89 +349,7 @@ public function pop($id)
     return $this->fetch();
 }
 
-public function crawurl()
-{
-    ini_set('max_execution_time', '60');
-    $msg='';
-    if ($this->request->isPost()) {
-        $data = $this->request->post();
-        if (count($data) > 4) {
-            $data['creater'] = $_SESSION['hisiphp_']['admin_user']['nick'];
-            unset($data['id']);
-            if (!PendingModel::create($data)) {
-                return $this->error('添加失败！');
-            }
 
-            // 添加日志
-            $sqlmap = [];
-            $sqlmap['uID'] = $_SESSION['hisiphp_']['admin_user']['uid']; 
-            $sqlmap['tID'] = 0; 
-            $sqlmap['type']=1;
-            $sqlmap['ctime'] = time();
-            $sqlmap['year'] = date('Y');
-            $sqlmap['month'] = date('m');
-            $sqlmap['day'] = date('d');
-            LogModel::insert($sqlmap);
-
-            return $this->success('添加成功。');
-            return $this->afetch('pending_pform');
-        }
-
-        $ch = curl_init();
-        if ($data['doi']!=null)
-            {$data['doi']='/'.$data['doi'];}//把doi处理成爬虫接受的字符
-        curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLINFO_CONNECT_TIME, 3);
-        curl_setopt($ch, CURLINFO_TOTAL_TIME, 3);
-
-        curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
-
-        try{
-         $output = curl_exec($ch);
-
-         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                 //return $this->error($http);
-         if ($http != 200) {
-            curl_close($ch);
-            throw  new Exception('链接爬虫失败');
-        }
-        $data_list = json_decode($output, true);
-                //var_dump($data_list);
-        if ($data_list['status'] == 0) {
-                    //return $this->error($data_list['msg']);
-            curl_close($ch);
-            $msg=$data_list['msg'];
-            throw  new Exception($msg);
-//                    $msg=$data_list['msg'];
-//                    $this->assign('msg', $msg);
-//                    return $this->afetch('pending_fform');
-        }
-                //var_dump($data_list);
-        $row = $data_list['data'];
-                #$AAA=isset($row['issue']);
-               // var_dump($row);
-//                if (strlen((string)(int)$row['issue'])>2)
-//                {$row['issue']=date("Y-m", (int)$row['issue']);}
-        $this->assign('data_info', $row);
-        return $this->afetch('pending_pform');
-    }catch (Exception $exception){
-        $msg=$exception->getMessage();
-                //echo "<script>alert('$msg')</script>";
-        $this->assign('msg', $msg);
-                //return $this->afetch('pending_fform');
-    }
-
-}
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
-        $this->assign('msg', $msg);
-        return $this->afetch('pending_fform');
-}
 
 
 
@@ -466,56 +366,7 @@ public function crawurl()
             header("location:https://www.sciencedirect.com/science/article/pii/".$row['pmid']);
         //header("location:".$row['url']);
     }
-    public function task_list1()
-    {
-        try {
-            $cu = curl_init();
-            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
-            //echo config('spider.spider_api_all');
-            curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($cu, CURLOPT_CONNECTTIMEOUT_MS, 300);
-            curl_setopt($cu, CURLOPT_TIMEOUT, 3);
-            $ret = curl_exec($cu);
-            //var_dump(json_decode($ret,true));
-            $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
-            if ($http != 200) {
-                throw  new Exception('链接爬虫失败');
-            }
-            curl_close($cu);
-            $row = json_decode($ret,true);
-            //var_dump($row);
-            $data_list=$row['data'];
-            $msg=$row['msg'];
-            $this->assign('msg', $msg);
-            //var_dump($data_list);
-        }catch (Exception $exception){
-            $data_list = array();
-            $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
-            $this->assign('msg', $msg);
 
-            //var_dump($data_list) ;
-        }
-//        if(!isset($data_list['create_time']))
-//        {
-//            $ret = array('create_time');
-//            $row = array_fill_keys($ret,0);
-//            $data_list = array_merge($data_list, $row);
-//        }
-        //var_dump($data_list);
-//          if($data_list==null)
-//              $this->success($msg);
-//        if(isset($data_list['sstr']))
-//        {
-//            $data_list['sstr'] = str_replace('`', '', $data_list['sstr']);
-//        }
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
-        $this->assign('data_list', $data_list);
-        return $this->fetch();
-    }
     public function task_add()
     {
         if ($this->request->isPost()) {

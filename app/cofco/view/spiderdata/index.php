@@ -67,6 +67,8 @@
             <button type="submit" class="layui-btn">搜索</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
+
+
     </div>
     <table class="layui-hide" id="demo" lay-filter="test"></table>
     <div id="myDiv"></div>
@@ -74,15 +76,20 @@
 {include file="cofco@block/layui" /}
 <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="pass">审核通过</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+
 </script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="pending_add">添加</button>
-        <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除选中行数据</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除所有数据</button>
+<!--        <button class="layui-btn layui-btn-sm" lay-event="pending_add">添加</button>-->
+        <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除（选中行数据）</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除（所有数据）</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">审核通过（选中行数据）</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_all_data">审核通过（所有数据）</button>
     </div>
+
 </script>
 <script type="text/html" id="statusTpl">
     {{#  if(d.status == 1){ }}
@@ -95,4 +102,4 @@
     <a>待输出</a>
     {{# } }}
 </script>
-<script src="__COFCO_JS__/pending_table.js"></script>
+<script src="__COFCO_JS__/spider_table.js"></script>

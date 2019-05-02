@@ -2,6 +2,7 @@
 
 namespace app\cofco\admin;
 use app\cofco\model\AdminKw as KwModel;
+use app\cofco\model\AdminPending as PendingModel;
 use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
 use app\admin\controller\Admin;
 use think\Exception;
@@ -33,11 +34,54 @@ class Spider extends Admin
     /*
      * 该方法要返回
      * */
+
+    /**主页
+     * @return mixed
+     * @throws \think\exception\DbException
+     */
     public function index()
     {
-        $welcome_html = config('spider.spider_welcome_info');
-        $this->assign('welcome_html', $welcome_html);
-        return $this->afetch();
+        $keyword_list = KwModel::paginate();
+        $this->assign('keyword_list', $keyword_list);
+        return $this->fetch();
+    }
+
+    /**数据API
+     * @return \think\response\Json
+     * @throws \think\exception\DbException
+     */
+    public function data(){
+        $title = input('param.title/s');
+        $sstr = input('param.sstr/s');
+        $date_start = input('param.date_start/s');
+        $date_end = input('param.date_end/s');
+        $impact_factor_start = input('param.impact_factor_start/s');
+        $impact_factor_end = input('param.impact_factor_end/s');
+        $journal_zone = input('param.journal_zone/s');
+        $map = array();
+        if($title) {
+            $map['title'] = ['like', '%' . $title . '%'];
+        }
+        if($sstr) {
+            $map['sstr']= ['like', '%' . $sstr . '%'];
+        }
+        if($date_start) {
+            $date_start = strtotime($date_start);
+            //var_dump($date_start);
+            $date_end = strtotime($date_end);
+            //var_dump($date_end);
+            $map['ctime']=['between',[$date_start,$date_end]];
+        }
+        if($impact_factor_end) {
+            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
+        }
+        if($journal_zone) {
+            $map['journal_zone']= $journal_zone;
+        }
+        $map['status']= '1';
+        $listRows = input('param.limit/s');
+        $data_list = PendingModel::where($map)->paginate($listRows,false);
+        return json(['code'=>0,'message'=>'操作完成','data'=>$data_list]);
     }
 
     /**

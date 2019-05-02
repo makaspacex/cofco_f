@@ -130,6 +130,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w600">
+            <input type="radio" class="field-status" name="status" value="4" title="输出">
             <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
             <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
@@ -139,7 +140,7 @@
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('finaly_list')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>

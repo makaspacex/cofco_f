@@ -9,6 +9,7 @@ use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
 
+include("app\cofco\common\getMap.php");
 /**审核及标注页面
  * Class pending
  * @package app\cofco\admin
@@ -32,38 +33,12 @@ class pending extends Admin
      * @throws \think\exception\DbException
      */
     public function data(){
-        $title = input('param.title/s');
-        $sstr = input('param.sstr/s');
-        $date_start = input('param.date_start/s');
-        $date_end = input('param.date_end/s');
-        $impact_factor_start = input('param.impact_factor_start/s');
-        $impact_factor_end = input('param.impact_factor_end/s');
-        $journal_zone = input('param.journal_zone/s');
-        $map = array();
-        if($title) {
-            $map['title'] = ['like', '%' . $title . '%'];
-        }
-        if($sstr) {
-            $map['sstr']= ['like', '%' . $sstr . '%'];
-        }
-        if($date_start) {
-            $date_start = strtotime($date_start);
-            //var_dump($date_start);
-            $date_end = strtotime($date_end);
-            //var_dump($date_end);
-            $map['ctime']=['between',[$date_start,$date_end]];
-        }
-        if($impact_factor_end) {
-            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
-        }
-        if($journal_zone) {
-            $map['journal_zone']= $journal_zone;
-        }
-        $map['status']= '2';
+        $map = getDataMap(2);
         $listRows = input('param.limit/s');
         $data_list = PendingModel::where($map)->paginate($listRows,false);
         return json(['code'=>0,'message'=>'操作完成','data'=>$data_list]);
     }
+
     public function edit($id = 0)
     {
         if ($this->request->isPost()) {
@@ -71,6 +46,7 @@ class pending extends Admin
             $map['pid'] = $id;
             IdModel::where($map)->delete();
             $data = $this->request->post();
+            $data['auditor'] = $_SESSION['hisiphp_']['admin_user']['nick']; //审核人
 //            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
@@ -89,29 +65,15 @@ class pending extends Admin
 
                 }
             }
-            if($data['status']==4) {
-                // 进入预审核
-                $sqlmap = [];
-                $sqlmap['type'] = 2;
-                $sqlmap['uID'] = $_SESSION['hisiphp_']['admin_user']['uid'];  //用户ID
-                $sqlmap['tID'] = $id;  //文章ID
-                $sqlmap['ctime'] = time();
-                $sqlmap['year'] = date('Y');
-                $sqlmap['month'] = date('m');
-                $sqlmap['day'] = date('d');
-                $result = LogModel::insert($sqlmap);
-                if (!$result) {
-                    return $this->error('修改失败！');
-                }
+            if($data['status']==3) {
+                // 进入已审核
+
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
                 }
-                else
-                {
-                    return $this->success('添加成功。', 'index');
-
-                }
-
+                $logmap = getLogMap(2,$id);
+                $res = LogModel::insert($logmap);
+                return $this->success('添加成功。', 'index');
             }
 
         }
@@ -165,53 +127,22 @@ class pending extends Admin
     }
 
     public function getAllIdByCondition(){
-        $title = input('param.title/s');
-        $sstr = input('param.sstr/s');
-        $date_start = input('param.date_start/s');
-        $date_end = input('param.date_end/s');
-        $impact_factor_start = input('param.impact_factor_start/s');
-        $impact_factor_end = input('param.impact_factor_end/s');
-        $journal_zone = input('param.journal_zone/s');
-        $map = array();
-        if($title)
-        {
-            $map['title'] = ['like', '%' . $title . '%'];
-        }
-        if($sstr)
-        {
-            $map['sstr']= ['like', '%' . $sstr . '%'];
-        }
-        if($impact_factor_end)
-        {
 
-            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
-        }
-        if($date_start)
-        {
-            $date_start = strtotime($date_start);
-            var_dump($date_start);
-            $date_end = strtotime($date_end);
-            $map['ctime']=['between',[$date_start,$date_end]];
-        }
-        if($journal_zone)
-        {
-            $map['journal_zone']= $journal_zone;
-        }
-        $map['status']= '2';
+        $map = getDataMap(2);
         $ids = PendingModel::where($map)->field('id')->select();
         $count = sizeof($ids);
         $ids_arr = Array();
         foreach($ids as $id){
             array_push($ids_arr,$id['id']);
         }
-
-        return json_encode(['code'=>'sucess','count' => $count,'data' => $ids_arr]);
+        return json_encode(['code'=>'0','message'=>"操作成功",'count' => $count,'data' => $ids_arr]);
     }
 
     public function add()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            $data['creater'] = $_SESSION['hisiphp_']['admin_user']['nick']; //审核人
             $data['issue']=strtotime($data['issue']);
             $data['issue']=date("Y-m", $data['issue']);
             if($data['status']==2) {
@@ -237,5 +168,6 @@ class pending extends Admin
         }
         return $this->afetch('pending_form');
     }
+
 
 }

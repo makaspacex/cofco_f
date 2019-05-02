@@ -131,10 +131,10 @@
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w600" >
             <!-- <input type="radio" class="field-status" name="status" value="3" title="已审核" checked> -->
-            <input type="radio" class="field-status" name="status" value="4" title="预审核" checked>
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
             <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
-        <div class="layui-form-mid layui-word-aux">预审核存入预审表，已审核直接存入已审表</div>
+        <div class="layui-form-mid layui-word-aux">已审核直接存入已审表</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
