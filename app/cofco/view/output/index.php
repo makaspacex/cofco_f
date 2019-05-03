@@ -94,4 +94,24 @@
   <a>待输出</a>
   {{# } }}
 </script>
-<script src="__COFCO_JS__/output_table"></script>
+<script>
+    layui.use(['table'], function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        layui.use('form', function(){
+            try {
+                $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
+            }
+            catch (e) {}
+            try {
+                $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
+            }catch (e) {}
+            var form = layui.form;
+            form.render('select');
+        });
+        table.render(getTable('4'));
+        addToolBarEvent(table);
+        addBarEvent(table);
+    });
+</script>
+<script src="__COFCO_JS__/common.js"></script>

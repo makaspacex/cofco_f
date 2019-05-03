@@ -1,120 +1,66 @@
-<form class="page-list-form">
-    <div class="layui-btn-group">
-        <a href="{:url('task_add')}" id="btn" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-<!--        <a data-href="{:url('task_remove')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>-->
-
+{include file="cofco@block/layui" /}
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <div style="width: 300px;height: 80px">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">暂停爬虫</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">恢复爬虫</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">终止爬虫</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">删除爬虫</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">暂停IDS</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">恢复IDS</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">终止IDS</a>
+        <br>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">暂停Content</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">恢复Content</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">终止Content</a>
     </div>
+</script>
+<style type="text/css">
+    .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+</style>
+<script>
+    layui.use(['jquery','table'], function(){
+        var url = 'http://192.168.69.165:9001/api/v1/getthreadstatus/';
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            ,url:url
+            ,toolbar: true
+            ,title: '用户数据表'
+            ,totalRow: true
+            , cellMinWidth: 100
+            ,cols: [[
+                {field:'uid', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计行'}
+                ,{field:'uname', title:'用户名', width:120}
+                ,{field:'kw_id', title:'关键词ID', width:100}
+                ,{field:'sp_t', title:'爬虫', width:150}
+                ,{field:'w_num', title:'爬虫数目'}
+                ,{field:'pN', title:'页数'}
+                ,{field:'f_pN', title:'完成页数'}
+                ,{field:'fail_pN', title:'失败页数'}
+                ,{field:'fail_num', title:'失败文章'}
+                ,{field:'total_num', title:'总文章'}
+                ,{field:'idsP_status', title:'翻页进程'}
+                ,{field:'cP_status', title:'文章获取进程',width:120}
+                ,{field:'c_time', title:'创建时间', width:180}
+                ,{field:'s_time', title:'最后启动时间', width:180}
+                ,{field:'status', title:'总状态'}
+                ,{field:'operation', title:'操作'}
+                ,{fixed: 'right', width: 300, align:'center', toolbar: '#barDemo'}
 
-    <div class="layui-form">
-        <table class="layui-table" lay-even="" lay-skin="line row">
-            <colgroup>
-                <col width="50">
-                <col width="80">
-                <col width="200">
-                <col width="180">
-            </colgroup>
-            <thead>
-            <tr>
-                <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
-                <th>进程号</th>
-                <th>关键词</th>
-                <th>进度</th>
-                <th>已爬取/总数</th>
-                <th>创建时间</th>
-                <th>创建人</th>
-                <th>状态</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            {volist name="data_list" id="v"}
-            {php}
-            if($v['status']==1)
-            $v['status']="运行中";
-            if($v['status']==2)
-            $v['status']="暂停";
-            if($v['status']==3)
-            $v['status']="停止";
-            if($v['status']==4)
-            $v['status']="已完成";
-            if($v['pid']=='')
-            $v['pid']="未运行";
-            if($v['progress']!=null)
-            {
-             $v['progress']=$v['progress']*100;
-             $v['progress'].="%";
-            }
-            if($v['sstr']!=null)
-            {
-            $v['sstr']= str_replace('*', ' ', $v['sstr']);
-            }
-
-            if($v['progress']< 100){
-                $color = "orange";
-            }
-            else{
-                $color = "" ;
-            }
-
-
-            {/php}
-            <tbody>
-            <tr>
-                <td><input type="checkbox" name="ids[]" value="{$v['pid']}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
-                <td>{$v['pid']}</td>
-                <td>{$v.sstr}</td>
-                <!-- <td>{$v.progress}</td> -->
-                <td>
-                    <div class="layui-progress " lay-showPercent="yes">
-                        <div class="layui-progress-bar layui-bg-{$color}" lay-percent={$v.progress}></div>
-                    </div>    
-                </td>
-                
-                <td>{$v.totalnum-$v.remainnum}/{$v.totalnum}</td>
-                <td>{:date('Y-m-d H:i:s', $v['create_time'])}</td>
-                <td>{$v['creator']}</td>
-<!--                <td><input type="" name="status" {if condition="$v['status'] eq 3"} value="运行中" {/if}></td>-->
-                <td>{$v['status']}</td>
-<!--                <td>{$v['sstr']}</td>-->
-                <td>
-                    <div class="layui-btn-group">
-                        <div class="layui-btn-group">
-                            <a href="{:url('task_pause?id='.$v['pid'])}" id="id1" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">暂停</a>
-                            <a href="{:url('task_continue?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax ">继续</a>
-                            <a data-href="{:url('task_remove',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del">删除</a>
-                            <a href="{:url('task_stop?id='.$v['pid'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">停止</a>
-                            <a href="{:url('task_startforce',"id=".$v['sstr'])}" class="layui-btn layui-btn-primary layui-btn-sm j-ajax">重启</a>
-                        </div>
-                    </div>
-                </td>
-
-            </tr>
-            {/volist}
-            </tbody>
-        </table>
-        {$pages}
-    </div>
-</form>
-{include file="admin@block/layui" /}
-<script >
-    var t = {:json_encode($data_list)};
-    var tt = {:json_encode($msg)};
-    if (tt!='')
-    {
-        layui.use('layer', function(){
-            var $ = layui.layer;
-            if (tt=='链接爬虫失败')
-            {
-                layer.alert(tt,{icon: 2, title:'服务'});
-            }
-            else {
-                if (t == '') {
-                    layer.msg('爬虫任务列表为空');
-                }
+            ]]
+            ,page: false
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data.threadlist, //解析数据列表
+                };
             }
         });
-
-
-
-    }
-
+    });
 </script>

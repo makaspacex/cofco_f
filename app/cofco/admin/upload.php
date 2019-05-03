@@ -48,11 +48,13 @@ class upload extends Admin
                     return $this->error('添加失败！');
                 }
 
-                // 添加日志
-                $logmap = getLogMap(1,0);//先设为0，以后有需要再改
-                LogModel::insert($logmap);
+                $ids = PendingModel::field('id')->select();
+                $tid = max($ids);
 
-                return $this->success('添加成功。');
+                // 插入日志 1代表人工输入
+                $logmap = getLogMap(1,$tid);
+                // 添加日志
+                LogModel::insert($logmap);
                 return $this->afetch('pending_pform');
             }
 
@@ -122,15 +124,15 @@ class upload extends Admin
             $data['issue']=strtotime($data['issue']);
             $data['issue']=date("Y-m", $data['issue']);
             $data['creater'] = $_SESSION['hisiphp_']['admin_user']['nick'];
-
             if($data['status']==2) {
-
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');
                 }
-
-                $logmap = getLogMap(1,0);//先设为0，以后有需要再改
+                $ids = PendingModel::field('id')->select();
+                $tid = max($ids);
+                // 插入日志 1代表人工输入
+                $logmap = getLogMap(1,$tid);
                 LogModel::insert($logmap);
                 return $this->success('添加成功。');
             }
@@ -170,24 +172,10 @@ class upload extends Admin
         }catch (Exception $exception){
             $data_list = array();
             $msg=$exception->getMessage();
-            //echo "<script>alert('$msg')</script>";
             $this->assign('msg', $msg);
 
-            //var_dump($data_list) ;
         }
-//        if(!isset($data_list['create_time']))
-//        {
-//            $ret = array('create_time');
-//            $row = array_fill_keys($ret,0);
-//            $data_list = array_merge($data_list, $row);
-//        }
-        //var_dump($data_list);
-//          if($data_list==null)
-//              $this->success($msg);
-//        if(isset($data_list['sstr']))
-//        {
-//            $data_list['sstr'] = str_replace('`', '', $data_list['sstr']);
-//        }
+
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);

@@ -110,7 +110,7 @@ class pending extends Admin
             $row['doi']=substr($row['doi'], 10);
         $this->assign('data_info', $row);
 
-        return $this->afetch('pending_dform');
+        return $this->afetch('form');
     }
 
     public function del()

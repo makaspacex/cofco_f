@@ -1,17 +1,14 @@
 layui.use(['table'], function(){
     var $ = layui.jquery;
+
+    console.log(url);
     layui.use('form', function(){
         try {
             $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
-        }
-        catch (e) {
-            console.log(e);
-        }
+        } catch (e) {}
         try {
             $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
-        }catch (e) {
-            console.log(e);
-        }
+        }catch (e) {}
         var form = layui.form;
         form.render('select');
     });
@@ -24,8 +21,10 @@ layui.use(['table'], function(){
         ,toolbar: true
         ,toolbar: '#toolbarDemo'
         ,cellMinWidth: 80
-        ,title: '预审核数据表'
+        ,title: '输出数据表'
         ,totalRow: true
+        ,height: 500
+        ,limit:30
         ,cols: [[
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
@@ -62,7 +61,6 @@ layui.use(['table'], function(){
         }
 
     });
-    url = url.replace(/pre_/,"");
     table.on('toolbar(test)', function(obj){
         var checkStatus = table.checkStatus(obj.config.id);
         switch(obj.event){

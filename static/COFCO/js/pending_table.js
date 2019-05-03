@@ -65,131 +65,21 @@ layui.use(['table'], function () {
 
     });
     table.on('toolbar(test)', function (obj) {
-        var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
             case 'pending_add':
                 window.event.returnValue=false;
                 window.location.href = "add";
                 break;
             case 'pending_del':
-                window.event.returnValue=false; //禁止表单提交
-                var data = checkStatus.data;
-                var ids = new Array();
-                var content =  '<table class="layui-table">' +
-                    '<colgroup>' +
-                    '<col width="50">' +
-                    '<col width="700">' +
-                    '</colgroup>'+
-                    '<thead><tr> ' +
-                    '<th>ID</th> ' +
-                    '<th>文章标题</th> ' +
-                    '</tr> ' +
-                    '</thead>'+'<tbody>';
-                for (var i = 0; i < data.length; i++) {
-                    ids.push(data[i].id);
-                    content += '<tr><td>'+data[i].id+'</td><td>'+data[i].title+'<td></tr>';
-                    console.log(data[i]);
-                }
-                content+= '</tbody></table>'
-                console.log(ids);
-                layer.open({
-                    type: 1 //Page层类型
-                    ,offset: 'auto'
-                    ,skin: 'layer-ext-moon'
-                    ,area: ['750px', '500px']
-                    ,title: '确认删除以下内容吗'
-                    ,shade: 0.5 //遮罩透明度
-                    // ,maxmin: true //允许全屏最小化
-                    ,anim: 1 //0-6的动画形式，-1不开启
-                    ,content: content
-                    , btn: ['确定', '取消']
-                    , yes: function (index) {
-                        layer.close(index);
-                        window.location.href = "del?ids="+ids;
-                    }
-                });
-
+                var checkStatus = table.checkStatus(obj.config.id);
+                pending_del(checkStatus);
                 break;
             case 'pending_del_all':
-                var getAllIdByCondition_url = url.replace(/index/,"getAllIdByCondition");
-                var $ = layui.jquery;
-                window.event.returnValue=false; //禁止表单提交
-                $.ajax({
-                    url: getAllIdByCondition_url,
-                    data: "",
-                    type: "get",
-                    dataType: "json",
-                    success: function(res) {
-                        res = $.parseJSON(res);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                        var ids = res["data"];
-                        var count = res["count"];
-                        var content = '<table class="layui-table"><tr>';
-                        for (var i =0;i<count;i++){
-                            content+='<td> '+ids[i]+' </td>';
-                            if((i+1)%10==0){
-                                content+='</tr><tr>';
-                            }
-                        }
-                        content+="</tr></table>";
-                        layer.open({
-                            type: 1 //Page层类型
-                            ,area: ['800px', '500px']
-                            ,title: '确认删除以下'+count+'条数据吗?'
-                            ,shade: 0.5 //遮罩透明度
-                            // ,maxmin: true //允许全屏最小化
-                            ,anim: 1 //0-6的动画形式，-1不开启
-                            ,content: content
-                            , btn: ['确定', '取消']
-                            , yes: function (index) {
-                                layer.close(index);
-                                window.location.href = "del?ids="+ids;
-                            }
-                        });
-                    }
-                });
+                pending_del_all();
                 break;
         }
         ;
     });
 
-    //监听行工具事件
-    table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-        var data = obj.data //获得当前行数据
-            , layEvent = obj.event; //获得 lay-event 对应的值
-        if (layEvent === 'detail') {
-            var content = '<table class="layui-table">';
-            for(var o in data){
-                content+= '<tr><td>'+o+'</td><td>' + data[o] +'</td></tr>';
-            }
-            content+="</table>";
-            layer.open({
-                type: 1 //Page层类型
-                ,offset: 'auto'
-                ,skin: 'layer-ext-moon'
-                ,area: ['750px', "100%"]
-                ,title: '当前行数据'
-                ,shade: 0.5 //遮罩透明度
-                // ,maxmin: true //允许全屏最小化
-                ,anim: 1 //0-6的动画形式，-1不开启
-                ,content: content
-            });
-        } else if (layEvent === 'del') {
-            window.location.href = "del?ids=" + data.id;
-        } else if (layEvent === 'edit') {
-            // layer.open({
-            //     type: 2//Page层类型
-            //     ,area: ['800px', '100%']
-            //     ,title: '编辑'
-            //     ,shade: 0.5 //遮罩透明度
-            //     // ,maxmin: true //允许全屏最小化
-            //     ,anim: 1 //0-6的动画形式，-1不开启
-            //     ,content: "pending_edit?id=" + data.id
-            //     , btn: ['确定', '取消']
-            //     , yes: function (index) {
-            //         layer.close(index);
-            //     }
-            // });
-            window.location.href = "edit?id=" + data.id;
-        }
-    });
+
 });

@@ -72,11 +72,19 @@
 </form>
 {include file="cofco@block/layui" /}
 <script type="text/html" id="barDemo">
-   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="pass">输出</a>
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除（选中行数据）</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">输出（选中行数据）</button>
+        <!--        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_all_data">审核通过（所有数据）</button>-->
+    </div>
 
+</script>
 <script type="text/html" id="statusTpl">
     {{#  if(d.status == 1){ }}
     <a>爬虫数据</a>
@@ -89,4 +97,24 @@
     {{# } }}
 </script>
 
-<script src="__COFCO_JS__/finaly_table.js"></script>
+<script>
+    layui.use(['table'], function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        layui.use('form', function(){
+            try {
+                $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
+            }
+            catch (e) {}
+            try {
+                $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
+            }catch (e) {}
+            var form = layui.form;
+            form.render('select');
+        });
+        table.render(getTable('3'));
+        addToolBarEvent(table);
+        addBarEvent(table);
+    });
+</script>
+<script src="__COFCO_JS__/common.js"></script>

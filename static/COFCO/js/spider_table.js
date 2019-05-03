@@ -107,42 +107,7 @@ layui.use(['table'], function () {
 
                 break;
             case 'pending_del_all':
-                var getAllIdByCondition_url = url.replace(/index/,"getAllIdByCondition");
-                var $ = layui.jquery;
-                window.event.returnValue=false; //禁止表单提交
-                $.ajax({
-                    url: getAllIdByCondition_url,
-                    data: "",
-                    type: "get",
-                    dataType: "json",
-                    success: function(res) {
-                        res = $.parseJSON(res);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                        var ids = res["data"];
-                        var count = res["count"];
-                        var content = '<table class="layui-table"><tr>';
-                        for (var i =0;i<count;i++){
-                            content+='<td> '+ids[i]+' </td>';
-                            if((i+1)%10==0){
-                                content+='</tr><tr>';
-                            }
-                        }
-                        content+="</tr></table>";
-                        layer.open({
-                            type: 1 //Page层类型
-                            ,area: ['800px', '500px']
-                            ,title: '确认删除以下'+count+'条数据吗?'
-                            ,shade: 0.5 //遮罩透明度
-                            // ,maxmin: true //允许全屏最小化
-                            ,anim: 1 //0-6的动画形式，-1不开启
-                            ,content: content
-                            , btn: ['确定', '取消']
-                            , yes: function (index) {
-                                layer.close(index);
-                                window.location.href = "del?ids="+ids;
-                            }
-                        });
-                    }
-                });
+
                 break;
             case 'pass_check_data':
                 window.event.returnValue=false; //禁止表单提交

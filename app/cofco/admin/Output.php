@@ -10,9 +10,11 @@ use app\cofco\model\AdminId as IdModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
+use think\Config;
 
 include("app\cofco\common\getMap.php");
-/** 预审核页面
+include ("app\config.php");
+/** 输出页面
  * Class Prepending
  * @package app\cofco\admin
  */
@@ -22,6 +24,7 @@ class Output extends Admin
     {
         $keyword_list = KwModel::select();
         $this->assign('keyword_list', $keyword_list);
+        $this->assign('spider_url',Config::get('spider_url'));
         return $this->fetch();
     }
 
@@ -32,6 +35,19 @@ class Output extends Admin
         return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
     }
 
+
+    public function del()
+    {
+        $ids = input('param.ids/s');
+        $map = [];
+        $map['id'] = ['in', $ids];
+        $res = PendingModel::where($map)->delete();
+        if ($res === false) {
+            return $this->error('操作失败！');
+        }
+        return $this->success('操作成功！');
+    }
+
     public function edit($id = 0)
     {
         if ($this->request->isPost()) {
@@ -39,7 +55,7 @@ class Output extends Admin
             $map['pid'] = $id;
             IdModel::where($map)->delete();
             $data = $this->request->post();
-            $data['final_auditor'] = $_SESSION['hisiphp_']['admin_user']['nick'];
+            $data['auditor'] = $_SESSION['hisiphp_']['admin_user']['nick']; //审核人
 //            $data['issue']=strtotime($data['issue']);
             if($data['status']==2) {
                 if (!PendingModel::update($data)) {
@@ -58,46 +74,15 @@ class Output extends Admin
 
                 }
             }
-            if($data['status']==4) {
-                // 进入终审核
-                $logmap = getLogMap(2,$id);
-                $result = LogModel::insert($logmap);
-                if (!$result) {
-                    return $this->error('修改失败！');
-                }
-                if (!PendingModel::update($data)) {
-                    return $this->error('修改失败！');
-                }
-                else
-                {
-                    return $this->success('添加成功。', 'index');
-
-                }
-
-            }
             if($data['status']==3) {
-                // 进入终审
-                $logmap = getLogMap(3,$id);
-                $result = LogModel::insert($logmap);
-                if (!$result) {
-                    $this->error = '错误';
-                    return false;
-                }
+                // 进入已审核
+
                 if (!PendingModel::update($data)) {
                     return $this->error('修改失败！');
                 }
-                else
-                {
-                    $var1=explode("#",$data['tag_id']);
-                    for ($x=0;$x<count($var1);$x++) {
-                        $array = array("pid" =>$data['id'] , "tid" => "");
-                        if (!(IdModel::create($array))) {
-                            return $this->error('修改失败。');
-                        }
-                    }
-                    return $this->success('添加成功。', 'index');
-                }
-
+                $logmap = getLogMap(2,$id);
+                $res = LogModel::insert($logmap);
+                return $this->success('添加成功。', 'index');
             }
 
         }
@@ -133,18 +118,8 @@ class Output extends Admin
         if (substr($row['doi'] , 0 , 2)=='//')
             $row['doi']=substr($row['doi'], 10);
         $this->assign('data_info', $row);
+
         return $this->afetch('form');
     }
 
-    public function del()
-    {
-        $ids = input('param.ids/s');
-        $map = [];
-        $map['id'] = ['in', $ids];
-        $res = PendingModel::where($map)->delete();
-        if ($res === false) {
-            return $this->error('操作失败！');
-        }
-        return $this->success('操作成功！');
-    }
 }

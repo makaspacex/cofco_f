@@ -27,15 +27,17 @@ layui.use(['table'], function(){
         ,toolbar: true
         ,title: '已审核数据表'
         ,totalRow: true
+        ,limit:20
         ,id:'testReload'
         ,cols: [[
-            {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+            {type: 'checkbox', fixed: 'left'}
+            ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
             ,{field: 'title', title: '文章标题', width:500, fixed: 'left'}
             ,{field: 'sstr', title: '爬虫关键词', width:200}
             , {field: 'creater', title: '创建人', width: 90}
             , {field: 'auditor', title: '审核人', width: 90}
-            , {field: 'final_auditor', title: '终审核', width: 90}
-            ,{field: 'journal_zone', title: '期刊分区', width: 100}
+            // , {field: 'final_auditor', title: '终审核', width: 90}
+            ,{field: 'journal_zone', title: '期刊分区', width: 100,sort: true}
             ,{field: 'impact_factor', title: '影响因子', width: 100}
             ,{field: 'special_version', title: '特别说明', width:90}
             ,{field: 'document_type', title: '文献类型', width:90}
@@ -49,7 +51,7 @@ layui.use(['table'], function(){
             ,{field: 'issue', title: '文章发表时间', width: 100,templet:'#timeTpl'}
             ,{field: 'keyword', title: '关键词', width: 100}
             ,{field: 'institue', title: '发表机构', width: 100}
-            ,{fixed: 'right', width: 120, align:'center', toolbar: '#barDemo'}
+            ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
         ]]
         ,page: true
         ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
@@ -60,7 +62,6 @@ layui.use(['table'], function(){
                 "data": res.data.data //解析数据列表
             };
         }
-
     });
 
 

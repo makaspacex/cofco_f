@@ -116,7 +116,6 @@ class Labeldata extends Admin
             echo '<br><br>callback为必传参数！';
             exit;
         }
-
         $menu_list = LevellabelModel::getAllChild(0, 0);
         $this->assign('callback', $callback);
         $this->view->engine->layout(false);
@@ -281,50 +280,6 @@ class Labeldata extends Admin
         return $this->fetch();
     }
 
-    public function pending_padd()
-    {
-        if ($this->request->isPost()) {
-            $temp=1;
-            $data = $this->request->post();
-            $data['issue']=strtotime($data['issue']);
-            $data['issue']=date("Y-m", $data['issue']);
-            $data['creater'] = $_SESSION['hisiphp_']['admin_user']['username'];
-            if($data['status']==2) {
-                unset($data['id']);
-                if (!PendingModel::create($data)) {
-                    return $this->error('添加失败！');
-                }
-                $sqlmap = [];
-                $sqlmap['uID'] = $_SESSION['hisiphp_']['admin_user']['uid']; 
-                $sqlmap['type']=1;
-                $sqlmap['ctime'] = time();
-                $sqlmap['year'] = date('Y');
-                $sqlmap['month'] = date('m');
-                $sqlmap['day'] = date('d');
-                LogModel::create($sqlmap);
-                return $this->success('添加成功。');
-            }
-            if($data['status']==3) {
-                if (!PendingModel::create($data)) {
-                    return $this->error('添加失败！');
-                }
-                else
-                {
-//                    unset($data['id']);
-//                    if (!FinalyModel::create($data)) {
-//                        return $this->error('添加失败！');
-//                    }
-                    return $this->success('添加成功。');
-                }
-            }
-        }
-
-        $tab_data = $this->tab_data;
-        $tab_data['current'] = url('');
-        $this->assign('tab_data', $tab_data);
-        $this->assign('tab_type', 1);
-        return $this->afetch('pending_form1');
-    }
 
 
 public function pop($id)
@@ -348,11 +303,6 @@ public function pop($id)
     $this->view->engine->layout(false);
     return $this->fetch();
 }
-
-
-
-
-
 
 
     public function finaly_url($id=0)

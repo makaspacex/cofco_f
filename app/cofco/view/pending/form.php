@@ -35,7 +35,7 @@
         <div class="layui-input-inline" style="width: 400px">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
-        <a href="{:url('levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
+        <a href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
 <!--        <label class="layui-form-label">来源网站</label>-->
@@ -140,7 +140,6 @@
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">提交</button>
-
         </div>
     </div>
 </form>

@@ -68,38 +68,50 @@
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
 
-
     </div>
     <table class="layui-hide" id="demo" lay-filter="test"></table>
-    <div id="myDiv"></div>
 </form>
 {include file="cofco@block/layui" /}
 <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="pass">审核通过</a>
+    <a class="layui-btn layui-btn-xs" lay-event="pass">通过审核</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-
 
 </script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
 <!--        <button class="layui-btn layui-btn-sm" lay-event="pending_add">添加</button>-->
         <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除（选中行数据）</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除（所有数据）</button>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">审核通过（选中行数据）</button>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_all_data">审核通过（所有数据）</button>
+<!--        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除（所有数据）</button>-->
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">通过审核（选中行数据）</button>
+<!--        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_all_data">审核通过（所有数据）</button>-->
     </div>
 
 </script>
-<script type="text/html" id="statusTpl">
-    {{#  if(d.status == 1){ }}
-    <a>爬虫数据</a>
-    {{#  } else if (d.status == 2) { }}
-    <a>未审核</a>
-    {{#  } else if (d.status == 3) { }}
-    <a>已审核</a>
-    {{#  } else{ }}
-    <a>待输出</a>
-    {{# } }}
+<style type="text/css">
+    .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+</style>
+<script>
+    layui.use(['table'], function () {
+        var $ = layui.jquery;
+        layui.use('form', function(){
+            try {
+                $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
+            }
+            catch (e) {}
+            try {
+                $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
+            }catch (e) {}
+            var form = layui.form;
+            form.render('select');
+        });
+        var table = layui.table;
+        table.render(getTable('1'));
+        addToolBarEvent(table);
+        addBarEvent(table);
+    });
 </script>
-<script src="__COFCO_JS__/spider_table.js"></script>
+<script src="__COFCO_JS__/common.js"></script>

@@ -5,10 +5,11 @@ namespace app\cofco\admin;
 
 
 use app\admin\controller\Admin;
+use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
-
+include("app\cofco\common\getMap.php");
 /**终审页面
  * Class finaly
  * @package app\cofco\admin
@@ -25,7 +26,7 @@ class finaly extends Admin
 
     public function data()
     {
-        $map = getDataMap(3);
+        $map = getDataMap('3');
         $listRows = input('param.limit/s');
         $data_list = PendingModel::where($map)->paginate($listRows,false);
         return json(['data'=>$data_list,'code'=>0,'message'=>'操作完成']);
@@ -87,5 +88,24 @@ class finaly extends Admin
             return $this->error('操作失败！');
         }
         return $this->success('操作成功！');
+    }
+
+    public function passData()
+    {
+        $ids = input('param.ids/s');
+        $map = [];
+        $map['id'] = ['in', $ids];
+        $map['final_auditor'] = $_SESSION['hisiphp_']['admin_user']['nick']; //创建人
+        $map['status'] = 4; //输出
+        $ids_arr =explode(',',$ids);
+        foreach ($ids_arr as $tid) {
+            $logmap = getLogMap(3, $tid);
+            LogModel::insert($logmap);
+        }
+        if (!PendingModel::update($map)) {
+            return $this->error('修改失败！');
+        }
+        return $this->success('操作成功！');
+
     }
 }
