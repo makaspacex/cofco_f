@@ -1,4 +1,5 @@
-<form class="layui-form layui-form-pane">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<form class="layui-form ">
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">文章标题</label>
@@ -41,7 +42,7 @@
                 <input type="text" name="date_start" id="date_start" value="{:input('get.date_start')}"
                        lay-verify="date_start" placeholder="开始时间" class="layui-input">
             </div>
-            <div class="layui-form-mid">-</div>
+            <div class="layui-form-mid">—</div>
             <div class="layui-input-inline">
                 <input type="text" name="date_end" id="date_end" value="{:input('get.date_end')}" lay-verify="date"
                        placeholder="结束时间" autocomplete="off" class="layui-input">
@@ -55,7 +56,7 @@
                        value="{:input('get.impact_factor_start')}" lay-verify="date" placeholder="0" autocomplete="off"
                        class="layui-input">
             </div>
-            <div class="layui-form-mid">-</div>
+            <div class="layui-form-mid">—</div>
             <div class="layui-input-inline">
                 <input type="text" name="impact_factor_end" id="impact_factor_end"
                        value="{:input('get.impact_factor_end')}" lay-verify="date" placeholder="10" autocomplete="off"
@@ -88,12 +89,6 @@
     </div>
 
 </script>
-<style type="text/css">
-    .layui-table-cell {
-        height: 50px;
-        line-height: 50px;
-    }
-</style>
 <script>
     layui.use(['table'], function () {
         var $ = layui.jquery;

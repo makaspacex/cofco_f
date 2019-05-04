@@ -1,0 +1,15 @@
+.layui-col-md1,.layui-col-md2,.layui-col-md3,.layui-col-md4,.layui-col-md5,.layui-col-md6,.layui-col-md7,.layui-col-md8,.layui-col-md9,.layui-col-md10,.layui-col-md11,.layui-col-md12{
+    padding-right: 15px;
+}
+.layui-form-title {
+    float: left;
+    display: block;
+    padding: 6px 0 !important;
+    line-height: 20px;
+    margin-right: 10px;
+    color: #555!important;
+    font-size: 16px!important;
+}
+.margin-bottom-0{
+    margin-bottom: 0px;
+}

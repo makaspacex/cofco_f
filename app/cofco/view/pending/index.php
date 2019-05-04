@@ -84,12 +84,7 @@
 <!--        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除所有数据</button>-->
     </div>
 </script>
-<style type="text/css">
-    .layui-table-cell {
-        height: 40px;
-        line-height: 40px;
-    }
-</style>
+
 <script>
     layui.use(['table'], function () {
         var table = layui.table;

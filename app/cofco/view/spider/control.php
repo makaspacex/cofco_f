@@ -37,7 +37,12 @@
     <a>未初始化</a>
     {{# } }}
 </script>
-
+<style type="text/css">
+    .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+</style>
 <script src="__COFCO_JS__/spider.js"></script>
 <script>
     console.log('{$getthreadstatus_url}');

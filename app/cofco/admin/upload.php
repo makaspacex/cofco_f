@@ -7,9 +7,10 @@ namespace app\cofco\admin;
 use app\admin\controller\Admin;
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminPending as PendingModel;
+use think\Config;
 use think\Exception;
 include("app\cofco\common\getMap.php");
-
+include("app\cofco\config.php");
 class upload extends Admin
 {
     protected function _initialize()
@@ -141,7 +142,7 @@ class upload extends Admin
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
-        return $this->afetch('pending_form1');
+        return $this->afetch('form');
     }
 
     /** 爬虫输入
@@ -175,7 +176,8 @@ class upload extends Admin
             $this->assign('msg', $msg);
 
         }
-
+        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
+        $this->assign('controlspider_url',Config::get('controlspider_url'));
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);

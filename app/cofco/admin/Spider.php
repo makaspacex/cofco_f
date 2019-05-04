@@ -5,6 +5,7 @@ use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
 use app\admin\controller\Admin;
+use think\Config;
 use think\Exception;
 
 
@@ -31,9 +32,8 @@ use think\Exception;
  */
 class Spider extends Admin
 {
-    /*
-     * 该方法要返回
-     * */
+
+
 
     /**主页
      * @return mixed
@@ -46,43 +46,29 @@ class Spider extends Admin
         return $this->fetch();
     }
 
-    /**数据API
-     * @return \think\response\Json
-     * @throws \think\exception\DbException
+    /**
+     * 添加pubmed爬虫任务
      */
-    public function data(){
-        $title = input('param.title/s');
-        $sstr = input('param.sstr/s');
-        $date_start = input('param.date_start/s');
-        $date_end = input('param.date_end/s');
-        $impact_factor_start = input('param.impact_factor_start/s');
-        $impact_factor_end = input('param.impact_factor_end/s');
-        $journal_zone = input('param.journal_zone/s');
-        $map = array();
-        if($title) {
-            $map['title'] = ['like', '%' . $title . '%'];
-        }
-        if($sstr) {
-            $map['sstr']= ['like', '%' . $sstr . '%'];
-        }
-        if($date_start) {
-            $date_start = strtotime($date_start);
-            //var_dump($date_start);
-            $date_end = strtotime($date_end);
-            //var_dump($date_end);
-            $map['ctime']=['between',[$date_start,$date_end]];
-        }
-        if($impact_factor_end) {
-            $map['impact_factor']=['between',[$impact_factor_start,$impact_factor_end]];
-        }
-        if($journal_zone) {
-            $map['journal_zone']= $journal_zone;
-        }
-        $map['status']= '1';
-        $listRows = input('param.limit/s');
-        $data_list = PendingModel::where($map)->paginate($listRows,false);
-        return json(['code'=>0,'message'=>'操作完成','data'=>$data_list]);
+    public function addpubmed()
+    {
+        return $this->fetch();
     }
+
+    /**添加science爬虫任务
+     * @return mixed
+     */
+    public function addscience()
+    {
+        return$this->fetch();
+    }
+
+    public function control()
+    {
+        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
+        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        return $this->fetch();
+    }
+
 
     /**
      * 新建与编辑爬虫页面

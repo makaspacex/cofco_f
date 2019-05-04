@@ -75,7 +75,7 @@ class finaly extends Admin
         $row['institue'] = PendingModel::strFilter($row['institue']);
         $this->assign('data_info', $row);
         //var_dump($row);
-        return $this->afetch('finaly_form');
+        return $this->afetch('form');
     }
 
     public function del()

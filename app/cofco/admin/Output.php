@@ -24,7 +24,7 @@ class Output extends Admin
     {
         $keyword_list = KwModel::select();
         $this->assign('keyword_list', $keyword_list);
-        $this->assign('spider_url',Config::get('spider_url'));
+
         return $this->fetch();
     }
 
