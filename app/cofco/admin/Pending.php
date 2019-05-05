@@ -9,7 +9,7 @@ use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
 
-include("app\cofco\common\getMap.php");
+include("app".DS."cofco".DS."common".DS."getMap.php");
 /**审核及标注页面
  * Class pending
  * @package app\cofco\admin

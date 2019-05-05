@@ -9,7 +9,7 @@ use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 
-include("app\cofco\common\getMap.php");
+include("app".DS."cofco".DS."common".DS."getMap.php");
 
 class Spiderdata extends Admin
 {

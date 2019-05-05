@@ -1,16 +1,13 @@
 <?php
-
-
 namespace app\cofco\admin;
-
-
 use app\admin\controller\Admin;
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
 use think\Exception;
-include("app\cofco\common\getMap.php");
-include("app\cofco\config.php");
+include("app".DS."cofco".DS."common".DS."getMap.php");
+include("app".DS."cofco".DS."config.php");
+
 class upload extends Admin
 {
     protected function _initialize()
