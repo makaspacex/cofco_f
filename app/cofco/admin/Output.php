@@ -12,8 +12,8 @@ use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
 
-include("app\cofco\common\getMap.php");
-include ("app\config.php");
+include("app".DS."cofco".DS."common".DS."getMap.php");
+include ("app".DS."config.php");
 /** 输出页面
  * Class Prepending
  * @package app\cofco\admin

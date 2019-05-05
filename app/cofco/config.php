@@ -2,7 +2,7 @@
 //配置文件
 use think\Config;
 
-include "app\config.php";
+include "app".DS."config.php";
 $spider_url = Config::get('spider_url');
 /**
  * url 配置文件
