@@ -1,4 +1,4 @@
-<form class="layui-form layui-form-pane">
+<form class="layui-form layui-form-pane" method="post">
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">文章标题</label>
@@ -14,7 +14,7 @@
                 <select name="sstr" id="sstr"  lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
                     {volist name="keyword_list" id="v"}
-                    <option value={$v['keywords']}>{$v['keywords']}</option>
+                    <option value={$v['id']}>{$v['name']}</option>
                     {/volist}
                 </select>
             </div>

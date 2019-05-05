@@ -147,12 +147,12 @@
 
         <div class="layui-inline">
             <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
-            <div class="layui-input-inline " >
-                <!-- <input type="radio" class="field-status" name="status" value="3" title="已审核" checked> -->
+            <div class="layui-input-inline w600" >
+                 <input type="radio" class="field-status" name="status" value="4" title="输出" >
                 <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
                 <input type="radio" class="field-status" name="status" value="2" title="未审核">
             </div>
-            <div class="layui-form-mid layui-word-aux">已审核直接存入已审表</div>
+            <div class="layui-form-mid layui-word-aux">选择输出将存入输出页面,选择未审核将退回到审核及标注页面</div>
         </div>
 
     </div>

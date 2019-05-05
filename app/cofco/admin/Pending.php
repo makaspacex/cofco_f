@@ -121,9 +121,9 @@ class pending extends Admin
         var_dump($map);
         $res = PendingModel::where($map)->delete();
         if ($res === false) {
-            return $this->error('操作失败！');
+            return $this->error('添加失败。','index');;
         }
-        return $this->success('操作成功！');
+        return $this->success('操作成功！','index');
     }
 
     public function getAllIdByCondition(){

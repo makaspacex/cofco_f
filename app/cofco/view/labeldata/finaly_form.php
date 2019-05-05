@@ -35,7 +35,7 @@
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
-        <a href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
+        <a href="{:url('levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
 <!--        <label class="layui-form-label">来源网站</label>-->
@@ -130,17 +130,16 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w600">
-            <input type="radio" class="field-status" name="status" value="4" title="待输出" checked>
-            <input type="radio" class="field-status" name="status" value="3" title="已审核">
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
             <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
-        <div class="layui-form-mid layui-word-aux">预审核存入预审表，已审核直接存入已审表</div>
+        <div class="layui-form-mid layui-word-aux">选择未审核则删除并打回待审列表</div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">提交</button>
-            <a href="{:url('pre_pending_list')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+            <a href="{:url('finaly_list')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
         </div>
     </div>
 </form>
@@ -150,26 +149,18 @@
     var text1='';var text2='';
     function func(data) {
         var $ = layui.jquery;
-          for(var i=0;i<data.length;i++){
-             if (i==0){
-                 text1= data[i]['name'];
-                 text2= data[i]['title'];
-             }
-                      else{
-                 text1=text1+'#'+data[i]['name']
-                 text2=text2+'#'+data[i]['title']
-             }
-                 }
+        for(var i=0;i<data.length;i++){
+            if (i==0){
+                text1= data[i]['name'];
+                text2= data[i]['title'];
+            }
+            else{
+                text1=text1+'#'+data[i]['name']
+                text2=text2+'#'+data[i]['title']
+            }
+        }
         $('input[name="tag_id"]').val(text1);
         $('input[name="value"]').val(text2);
     }
-    // var str='';
-    // function func(data) {
-    //     var $ = layui.jquery;
-    //     $('input[name="tag_id"]').val(data[0]['id']);
-    //     str=data[0]['value'];
-    //     str= str.replace(/\r\n/g,"#");
-    //     $('input[name="value"]').val(str);
-    // }
 </script>
 <script src="__ADMIN_JS__/footer.js"></script>

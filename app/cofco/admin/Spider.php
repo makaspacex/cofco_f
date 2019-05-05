@@ -49,18 +49,18 @@ class Spider extends Admin
     /**
      * 添加pubmed爬虫任务
      */
-    public function addpubmed()
+    public function add()
     {
+        $keyword_list = KwModel::select();
+        $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
+        $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
+        $this->assign('uid',$uid);
+        $this->assign('uname',$uname);
+        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('keyword_list', $keyword_list);
         return $this->fetch();
     }
 
-    /**添加science爬虫任务
-     * @return mixed
-     */
-    public function addscience()
-    {
-        return$this->fetch();
-    }
 
     public function control()
     {
@@ -107,44 +107,7 @@ class Spider extends Admin
         return $this->afetch();
     }
 
-    /**
-     * 爬虫关键词列表页面
-     * @return string
-     */
-    public function keywords_list()
-    {
-        $data_list = KwModel::paginate();
 
-        // 分页
-        $pages = $data_list->render();
-        $this->assign('data_list', $data_list);
-        $this->assign('pages', $pages);
-//        var_dump($data_list);
-        return $this->fetch();
-    }
-
-    /**
-     * 新建关键词词组
-     * @return string
-     */
-    public function keywords_add()
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            // 验证
-            $result = $this->validate($data, 'AdminMember');
-            if($result !== true) {
-                return $this->error($result);
-            }
-            unset($data['id']);
-            if (!KwModel::create($data)) {
-                return $this->error('添加失败！');
-            }
-            return $this->success('添加成功。','keywords_list');
-        }
-
-        return $this->afetch('keywords_form');
-    }
 
     /**
      * 编辑关键词词组

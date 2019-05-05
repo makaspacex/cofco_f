@@ -112,6 +112,7 @@ class Labeldata extends Admin
     {
 
         $callback = input('param.callback/s');
+
         if (!$callback) {
             echo '<br><br>callback为必传参数！';
             exit;

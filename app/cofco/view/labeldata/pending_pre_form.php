@@ -35,7 +35,7 @@
         <div class="layui-input-inline">
             <input type="label" class="layui-input field-value" disabled="true" name="value" lay-verify="" autocomplete="off" placeholder="未标记">
         </div>
-        <a href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
+        <a href="{:url('levelpop?callback=func')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl">选择标签</a>
     </div>
     <div class="layui-form-item">
 <!--        <label class="layui-form-label">来源网站</label>-->
@@ -130,8 +130,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状&nbsp;&nbsp;&nbsp;&nbsp;态</label>
         <div class="layui-input-inline w600">
-            <input type="radio" class="field-status" name="status" value="4" title="待输出" checked>
-            <input type="radio" class="field-status" name="status" value="3" title="已审核">
+            <input type="radio" class="field-status" name="status" value="3" title="已审核" checked>
+            <input type="radio" class="field-status" name="status" value="4" title="预审核" checked>
             <input type="radio" class="field-status" name="status" value="2" title="未审核">
         </div>
         <div class="layui-form-mid layui-word-aux">预审核存入预审表，已审核直接存入已审表</div>

@@ -127,7 +127,6 @@
                 layui.layer.msg('请选择数据！');
                 return false;
             }
-
             // $('input[class="checkbox-ids"]:checked').each(function(i) {
             //     json = eval('(' + $(this).attr('data-json') + ')');
             //     data[i] = json;
@@ -139,7 +138,7 @@
                     data.push(obj[k]);
             }
             // 触发父级页面函数
-            parent.{$callback}(data);
+            parent.func(data);
             //alert(JSON.stringify(data));
             parent.layer.closeAll();
         });
