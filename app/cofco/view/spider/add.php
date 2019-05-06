@@ -29,7 +29,7 @@
         </div>
         <div class="layui-inline ">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="new">新建爬虫</button>
+                <button class="layui-btn" lay-submit="" lay-filter="newpubmed">新建爬虫</button>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
         </div>
         <div class="layui-inline ">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="new">新建爬虫</button>
+                <button class="layui-btn" lay-submit="" lay-filter="newscience">新建爬虫</button>
             </div>
         </div>
     </div>
@@ -66,28 +66,45 @@
 {include file="admin@block/layui" /}
 <script>
     layui.use('form', function(){
+
+        submit('submit(newpubmed)',1);
+        submit('submit(newscience)',2);
+    });
+
+
+    function submit(name,type) {
         var form = layui.form;
-        form.on('submit(new)', function(data){
-            console.log(data) //被执行事件的元素DOM对象，一般为button对象
-            console.log(data.field.kw_id);
-            //['hisiphp_']['admin_user']['nick']
-            console.log('{$uid}');
-            console.log('{$uname}');
+        form.on(name, function(data){
+            var url = '{$controlspider_url}'
             var $ = layui.jquery;
             $.ajax({
-                url:url, //+'?kw_id='+data.kw_id+'&action=pause',
-                data:{kw_id:data.field.kw_id,action:"new",uname:'{$uname}',uid:'{uid}'},
+                url:url,
+                data:{kw_id:data.field.kw_id,action:"new",uname:'{$uname}',uid:'{$uid}',spider_type:type},
                 type:"post",
                 dataType:"json",
                 success:function (res) {
                     console.log(url);
-                    console.log(res);
+                    console.log(res.status);
+                    if(res.status){
+                        layer.open({
+                            offset: 'auto',
+                            content: "创建成功" //注意，如果str是object，那么需要字符拼接。
+                        });
+
+                    }
+                    else{
+                        layer.open({
+                            offset: 'auto',
+                            content: "创建失败，当前爬虫已存在" //注意，如果str是object，那么需要字符拼接。
+                        });
+                    }
                 }
             });
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
         //各种基于事件的操作，下面会有进一步介绍
-    });
+
+    }
 
 </script>
 
