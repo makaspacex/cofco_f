@@ -2,14 +2,14 @@
 namespace app\cofco\admin;
 use app\admin\controller\Admin;
 use app\admin\model\AdminUserlog as LogModel;
+use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
 use think\Exception;
 include("app".DS."cofco".DS."common".DS."getMap.php");
 include("app".DS."cofco".DS."config.php");
 
-//include("app/cofco/common/getMap.php");
-//include("app/cofco/config.php");
+
 class upload extends Admin
 {
     protected function _initialize()
@@ -175,13 +175,28 @@ class upload extends Admin
             $this->assign('msg', $msg);
 
         }
-        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
-        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
+        $this->assign('controlspider_url',config('spider.controspider_url'));
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
         $this->assign('data_list', $data_list);
+        return $this->fetch();
+    }
+
+    public function add()
+    {
+        $pubmed_keyword_list = KwModel::where("type","0")->select();
+        $science_keyword_list = KwModel::where("type","1")->select();
+        $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
+        $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
+        $this->assign('uid',$uid);
+        $this->assign('uname',$uname);
+        $this->assign('controlspider_url',config('spider.controspider_url'));
+        $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
+        $this->assign('science_keyword_list', $science_keyword_list);
+        $this->view->engine->layout(false);
         return $this->fetch();
     }
 

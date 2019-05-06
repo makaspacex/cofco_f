@@ -1,5 +1,5 @@
 {include file="cofco@block/layui" /}
-
+<div class="layui-btn layui-btn-primary" lay-event="new" id="new">新建爬虫</div>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
     <div style="width: 300px;height: 80px">
@@ -40,7 +40,19 @@
 
 <script src="__COFCO_JS__/spider.js"></script>
 <script>
-    console.log('{$getthreadstatus_url}');
+    newBtn = document.getElementById("new");
+    newBtn.onclick = function(){
+        console.log("1");
+        layer.open({
+            type:2,
+            content:'add',
+            offset: 'auto',
+            area: ['800px', '100%'] //自定义文本域宽高
+        });
+
+    }
+    console.log("1");
+
     //监听工具条
     function renderTable() {
         layui.use(['jquery', 'table'], function () {

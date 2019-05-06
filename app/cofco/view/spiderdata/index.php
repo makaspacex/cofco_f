@@ -1,5 +1,5 @@
 <meta http-equiv="Access-Control-Allow-Origin" content="*">
-<form class="layui-form ">
+<form class="layui-form layui-form-pane">
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">文章标题</label>
