@@ -70,7 +70,7 @@
     </div>
     <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 <script>
     layui.use('laydate', function(){
         var laydate = layui.laydate; 

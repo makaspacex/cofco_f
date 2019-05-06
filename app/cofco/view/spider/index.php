@@ -71,7 +71,7 @@
     <table class="layui-hide" id="demo" lay-filter="test"></table>
     <div id="myDiv"></div>
 </form>
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 <script type="text/html" id="barDemo">
     <!--  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a> -->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>

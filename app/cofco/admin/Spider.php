@@ -1,13 +1,9 @@
 <?php
 
 namespace app\cofco\admin;
-use app\cofco\model\AdminKw as KwModel;
-use app\cofco\model\AdminPending as PendingModel;
-use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
-use app\admin\controller\Admin;
-use think\Config;
-use think\Exception;
 
+use app\cofco\model\AdminKw as KwModel;
+use think\Config;
 
 /**
  * Class Spider
@@ -30,7 +26,7 @@ use think\Exception;
  *
  * @package app\COFCO\admin
  */
-class Spider extends Admin
+class Spider extends AdminCOFCO
 {
 
 

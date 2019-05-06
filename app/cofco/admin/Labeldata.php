@@ -6,15 +6,8 @@ use app\cofco\model\AdminLabel as LabelModel;
 use app\cofco\model\AdminTag as TagModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminPending as PendingModel;
-use app\cofco\model\AdminFinaly as FinalyModel;
-use app\cofco\model\AdminId as IdModel;
-use app\admin\controller\Admin;
 use app\cofco\model\AdminSpiderTask as SpiderTaskModel;
 use app\cofco\model\AdminKw as KwModel;
-use app\admin\model\AdminUserlog as LogModel;
-use think\Exception;
-use think\Db;
-use app\cofco\common\util\OperateSql as OperateSql;
 
 /**
  * Class Spider
@@ -37,7 +30,7 @@ use app\cofco\common\util\OperateSql as OperateSql;
  *
  * @package app\COFCO\admin
  */
-class Labeldata extends Admin
+class Labeldata extends AdminCOFCO
 {
     /*
      * 人工输入说明

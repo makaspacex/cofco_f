@@ -1,16 +1,17 @@
 <?php
+
 namespace app\cofco\admin;
-use app\admin\controller\Admin;
+
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
-use think\Config;
 use think\Exception;
-include("app".DS."cofco".DS."common".DS."getMap.php");
-include("app".DS."cofco".DS."config.php");
+
+include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
+include("app" . DS . "cofco" . DS . "config.php");
 
 
-class upload extends Admin
+class upload extends AdminCOFCO
 {
     protected function _initialize()
     {
@@ -38,7 +39,7 @@ class upload extends Admin
     public function assist()
     {
         ini_set('max_execution_time', '60');
-        $msg='';
+        $msg = '';
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if (count($data) > 4) {
@@ -52,16 +53,17 @@ class upload extends Admin
                 $tid = max($ids);
 
                 // 插入日志 1代表人工输入
-                $logmap = getLogMap(1,$tid);
+                $logmap = getLogMap(1, $tid);
                 // 添加日志
                 LogModel::insert($logmap);
                 return $this->afetch('pending_pform');
             }
 
             $ch = curl_init();
-            if ($data['doi']!=null)
-            {$data['doi']='/'.$data['doi'];}//把doi处理成爬虫接受的字符
-            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_crawurl'));
+            if ($data['doi'] != null) {
+                $data['doi'] = '/' . $data['doi'];
+            }//把doi处理成爬虫接受的字符
+            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_crawurl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -70,7 +72,7 @@ class upload extends Admin
 
             curl_setopt($ch, CURLINFO_NAMELOOKUP_TIME, 3);
 
-            try{
+            try {
                 $output = curl_exec($ch);
 
                 $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -84,7 +86,7 @@ class upload extends Admin
                 if ($data_list['status'] == 0) {
                     //return $this->error($data_list['msg']);
                     curl_close($ch);
-                    $msg=$data_list['msg'];
+                    $msg = $data_list['msg'];
                     throw  new Exception($msg);
 //                    $msg=$data_list['msg'];
 //                    $this->assign('msg', $msg);
@@ -98,8 +100,8 @@ class upload extends Admin
 //                {$row['issue']=date("Y-m", (int)$row['issue']);}
                 $this->assign('data_info', $row);
                 return $this->afetch('pending_pform');
-            }catch (Exception $exception){
-                $msg=$exception->getMessage();
+            } catch (Exception $exception) {
+                $msg = $exception->getMessage();
                 //echo "<script>alert('$msg')</script>";
                 $this->assign('msg', $msg);
                 //return $this->afetch('pending_fform');
@@ -121,10 +123,10 @@ class upload extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            $data['issue']=strtotime($data['issue']);
-            $data['issue']=date("Y-m", $data['issue']);
+            $data['issue'] = strtotime($data['issue']);
+            $data['issue'] = date("Y-m", $data['issue']);
             $data['creater'] = $_SESSION['hisiphp_']['admin_user']['nick'];
-            if($data['status']==2) {
+            if ($data['status'] == 2) {
                 unset($data['id']);
                 if (!PendingModel::create($data)) {
                     return $this->error('添加失败！');
@@ -132,7 +134,7 @@ class upload extends Admin
                 $ids = PendingModel::field('id')->select();
                 $tid = max($ids);
                 // 插入日志 1代表人工输入
-                $logmap = getLogMap(1,$tid);
+                $logmap = getLogMap(1, $tid);
                 LogModel::insert($logmap);
                 return $this->success('添加成功。');
             }
@@ -163,20 +165,20 @@ class upload extends Admin
                 throw  new Exception('链接爬虫失败');
             }
             curl_close($cu);
-            $row = json_decode($ret,true);
+            $row = json_decode($ret, true);
             //var_dump($row);
-            $data_list=$row['data'];
-            $msg=$row['msg'];
+            $data_list = $row['data'];
+            $msg = $row['msg'];
             $this->assign('msg', $msg);
             //var_dump($data_list);
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             $data_list = array();
-            $msg=$exception->getMessage();
+            $msg = $exception->getMessage();
             $this->assign('msg', $msg);
 
         }
-        $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
-        $this->assign('controlspider_url',config('spider.controspider_url'));
+        $this->assign('getthreadstatus_url', config('spider.getthreadstatus_url'));
+        $this->assign('controlspider_url', config('spider.controspider_url'));
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
@@ -187,13 +189,13 @@ class upload extends Admin
 
     public function add()
     {
-        $pubmed_keyword_list = KwModel::where("type","0")->select();
-        $science_keyword_list = KwModel::where("type","1")->select();
+        $pubmed_keyword_list = KwModel::where("type", "0")->select();
+        $science_keyword_list = KwModel::where("type", "1")->select();
         $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
         $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
-        $this->assign('uid',$uid);
-        $this->assign('uname',$uname);
-        $this->assign('controlspider_url',config('spider.controspider_url'));
+        $this->assign('uid', $uid);
+        $this->assign('uname', $uname);
+        $this->assign('controlspider_url', config('spider.controspider_url'));
         $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
         $this->assign('science_keyword_list', $science_keyword_list);
         $this->view->engine->layout(false);

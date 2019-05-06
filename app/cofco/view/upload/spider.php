@@ -1,4 +1,4 @@
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 <div class="layui-btn layui-btn-primary" lay-event="new" id="new">新建爬虫</div>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">

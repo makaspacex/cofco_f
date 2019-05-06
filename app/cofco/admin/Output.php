@@ -4,7 +4,6 @@
 namespace app\cofco\admin;
 
 
-use app\admin\controller\Admin;
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminId as IdModel;
 use app\cofco\model\AdminKw as KwModel;
@@ -18,7 +17,7 @@ include ("app".DS."config.php");
  * Class Prepending
  * @package app\cofco\admin
  */
-class Output extends Admin
+class Output extends AdminCOFCO
 {
     public function index()
     {

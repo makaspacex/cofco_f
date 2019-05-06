@@ -9,7 +9,7 @@ use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
 
-class Keyword extends Admin
+class Keyword extends AdminCOFCO
 {
     protected function _initialize()
     {

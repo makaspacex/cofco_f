@@ -1,0 +1,87 @@
+body{
+    font-size: 12px;
+}
+.layui-form-label{min-width:80px;}
+
+
+.layui-layout-admin .layui-footer {
+    position: initial;
+}
+.layui-layout-admin .layui-body {
+     bottom: 0px;
+}
+
+/*侧边栏*/
+.layui-nav-tree .layui-nav-item {
+    line-height: 40px;
+}
+.layui-nav-tree .layui-nav-item a {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+.layui-nav-tree .layui-nav-item > a i{
+    font-size: 14px;
+    padding-right: 6px;
+}
+.layui-nav-tree .layui-nav-child a {
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+}
+
+.layui-side-scroll {
+    width: 180px;
+}
+.layui-layout-admin .layui-side {
+    width: 160px;
+}
+.layui-nav-tree {
+    width: 160px;
+}
+
+/*导航头*/
+.layui-header,.header-fold,.header-logo,.main-nav{
+    height: 45px;
+    line-height: 45px;
+    font-size: 16px;
+}
+#switchNav{
+    top: 45px;
+}
+.layui-nav .layui-nav-item {
+    line-height: 45px;
+}
+.main-nav .layui-nav-item a{
+    font-size: 14px;
+}
+.layui-layout-admin .layui-body {
+    top: 45px;
+    left: 170px;
+}
+
+
+/* 表格相关*/
+.layui-form-pane .layui-form-label {
+    width: 110px;
+    padding: 4px 8px;
+    height: 30px;
+    line-height: 20px;
+}
+
+.layui-input, .layui-select, .layui-textarea {
+    height: 30px;
+}
+.layui-table td, .layui-table th {
+    font-size: 1.0em;
+}
+.layui-btn-sm i {
+    font-size: 1.0em!important;
+}
+
+.right-align{
+    float: right;
+}
+.clear-both{
+    clear: both;
+}

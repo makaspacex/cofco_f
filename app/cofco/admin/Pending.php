@@ -2,7 +2,7 @@
 
 
 namespace app\cofco\admin;
-use app\admin\controller\Admin;
+
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminId as IdModel;
 use app\cofco\model\AdminKw as KwModel;
@@ -15,7 +15,7 @@ include("app".DS."cofco".DS."common".DS."getMap.php");
  * @package app\cofco\admin
  */
 
-class pending extends Admin
+class pending extends AdminCOFCO
 {
     /**主页
      * @return mixed

@@ -99,7 +99,7 @@
 <div class="hide">
     <div  id="count">1</div>
 </div>
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 <script>
 
         var addbtn = document.getElementById("addBtn0");

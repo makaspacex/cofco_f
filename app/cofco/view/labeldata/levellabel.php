@@ -3,10 +3,10 @@
 <form class="page-list-form">
     <div class="page-toolbar">
         <div class="layui-btn-group fl">
-            <a href="{:url('levellabel_add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-            <a data-href="{:url('status?table=admin_levellabel&val=1')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
-            <a data-href="{:url('status?table=admin_levellabel&val=0')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
-            <a data-href="{:url('levellabel_del')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
+            <a href="{:url('levellabel_add')}" class="layui-btn layui-btn-sm layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
+            <a data-href="{:url('status?table=admin_levellabel&val=1')}" class="layui-btn layui-btn-sm layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
+            <a data-href="{:url('status?table=admin_levellabel&val=0')}" class="layui-btn layui-btn-sm layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
+            <a data-href="{:url('levellabel_del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
         </div>
     </div>
     <dl class="menu-dl1 menu-hd mt10">

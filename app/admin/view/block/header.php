@@ -4,10 +4,15 @@
 <head>
     <title>{$_admin_menu_current['title']} -  Powered by {:config('hisiphp.name')}</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
+    {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+    {/if}
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/project.css?v={:config('hisiphp.version')}">
     <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
 </head>
 <body>
@@ -18,10 +23,15 @@
 <head>
     <title>{if condition="$_admin_menu_current['url'] eq 'admin/index/index'"}管理控制台{else /}{$_admin_menu_current['title']}{/if} -  Powered by {:config('hisiphp.name')}</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
+    {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+    {/if}
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/project.css?v={:config('hisiphp.version')}">
     <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
 </head>
 <body>

@@ -144,7 +144,7 @@
         </div>
     </div>
 </form>
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 <script>
     var formData = {:json_encode($data_info)};
     var text1='';var text2='';

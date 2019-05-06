@@ -142,8 +142,6 @@
         </div>
 </form>
 
-</body>
-</html>
 <link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
 
 {include file="admin@block/layui" /}

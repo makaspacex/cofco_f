@@ -1,7 +1,7 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
-        <a href="{:url('addpubmedkw')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-        <a data-href="{:url('kwdel')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
+        <a href="{:url('addpubmedkw')}" class="layui-btn layui-btn-sm layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
+        <a data-href="{:url('kwdel')}" class="layui-btn layui-btn-sm layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
     </div>
     <div class="layui-form">
         <table class="layui-table" lay-even="" lay-skin="row">

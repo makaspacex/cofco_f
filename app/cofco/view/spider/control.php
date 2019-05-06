@@ -1,4 +1,4 @@
-{include file="cofco@block/layui" /}
+{include file="admin@block/layui" /}
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
