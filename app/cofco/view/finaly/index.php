@@ -1,5 +1,5 @@
-{include file='cofco@block/search' /}
 {include file="admin@block/layui" /}
+{include file='cofco@block/search' /}
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="pass">输出</a>
@@ -27,18 +27,6 @@
 </script>
 
 <script>
-    layui.use('laydate', function() {
-        var laydate = layui.laydate;
-        //常规用法
-        laydate.render({
-            elem: '#date_start'
-        });
-        //常规用法
-        laydate.render({
-            elem: '#date_end'
-        });
-
-    })
     layui.use(['table'], function () {
         var table = layui.table;
         var $ = layui.jquery;

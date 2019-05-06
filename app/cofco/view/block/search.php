@@ -72,3 +72,16 @@
     <div class="clear-both"></div>
     <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#date_start'
+        });
+        //常规用法
+        laydate.render({
+            elem: '#date_end'
+        });
+    })
+</script>

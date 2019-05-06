@@ -1,5 +1,5 @@
-{include file='cofco@block/search' /}
 {include file="admin@block/layui" /}
+{include file='cofco@block/search' /}
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
