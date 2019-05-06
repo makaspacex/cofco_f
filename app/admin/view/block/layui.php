@@ -1,10 +1,9 @@
 {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
 <script src="__ADMIN_JS__/layui-v2.4.5/layui.js"></script>
-<!--<script src="__ADMIN_JS__/layui-v2.4.5/layui.all.js"></script>-->
 <script>
     var ADMIN_PATH = "{$_SERVER['SCRIPT_NAME']}", LAYUI_OFFSET = 0;
     layui.config({
-        base: '__ADMIN_JS__/',
+        base: '__ADMIN_JS__/layui-v2.4.5/',
         version: '{:config("hisiphp.version")}'
     }).use('global');
 </script>

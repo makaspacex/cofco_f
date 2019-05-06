@@ -6,6 +6,7 @@
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
     <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css" >
     {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
     {/if}
@@ -25,6 +26,8 @@
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
     <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css"  >
+
     {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
     {/if}
