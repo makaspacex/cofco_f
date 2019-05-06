@@ -13,3 +13,11 @@
 .margin-bottom-0{
     margin-bottom: 0px;
 }
+
+.layui-elem-field legend{
+    font-size: 16px;
+}
+.layui-field-title {
+    margin: 20px 0 10px;
+    border-width: 1px 0 0;
+}

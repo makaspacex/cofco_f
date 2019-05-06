@@ -57,7 +57,7 @@ body{
 }
 .layui-layout-admin .layui-body {
     top: 45px;
-    left: 170px;
+    left: 160px;
 }
 
 
@@ -84,4 +84,22 @@ body{
 }
 .clear-both{
     clear: both;
+}
+
+.margin-0{
+    margin: 0;
+}
+.margin-t-20{
+    margin-top:20px;
+}
+.margin-b-10{
+    margin-bottom:10px;
+}
+
+
+.abs-right{
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
 }
