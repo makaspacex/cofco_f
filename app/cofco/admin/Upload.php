@@ -8,6 +8,8 @@ use think\Exception;
 include("app".DS."cofco".DS."common".DS."getMap.php");
 include("app".DS."cofco".DS."config.php");
 
+//include("app/cofco/common/getMap.php");
+//include("app/cofco/config.php");
 class upload extends Admin
 {
     protected function _initialize()

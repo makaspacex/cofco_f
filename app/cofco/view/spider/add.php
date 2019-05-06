@@ -21,7 +21,7 @@
             <div class="layui-input-block">
                 <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
-                    {volist name="keyword_list" id="v"}
+                    {volist name="pubmed_keyword_list" id="v"}
                     <option value={$v['id']}>{$v['name']}</option>
                     {/volist}
                 </select>
@@ -49,7 +49,7 @@
             <div class="layui-input-block">
                 <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
-                    {volist name="keyword_list" id="v"}
+                    {volist name="science_keyword_list" id="v"}
                     <option value={$v['id']}>{$v['name']}</option>
                     {/volist}
                 </select>

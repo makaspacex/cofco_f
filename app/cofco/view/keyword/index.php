@@ -1,7 +1,7 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
         <a href="{:url('addpubmedkw')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-        <a data-href="{:url('keywords_del')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
+        <a data-href="{:url('kwdel')}" class="layui-btn layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
     </div>
     <div class="layui-form">
         <table class="layui-table" lay-even="" lay-skin="row">
@@ -22,10 +22,10 @@
             {volist name="data_list" id="v"}
             {php}
             if($v['type']==1){
-                $v['type'] = "Pubmed";
+                $v['type'] = "Science";
             }
             else
-            {   $v['type'] = "Science";
+            {   $v['type'] = "Pubmed";
             }
             $v['ctime'] =date("Y-m-d H:i", $v['ctime']);
             {/php}

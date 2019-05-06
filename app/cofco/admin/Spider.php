@@ -51,13 +51,15 @@ class Spider extends Admin
      */
     public function add()
     {
-        $keyword_list = KwModel::select();
+        $pubmed_keyword_list = KwModel::where("type","0")->select();
+        $science_keyword_list = KwModel::where("type","1")->select();
         $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
         $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
         $this->assign('uid',$uid);
         $this->assign('uname',$uname);
         $this->assign('controlspider_url',Config::get('controlspider_url'));
-        $this->assign('keyword_list', $keyword_list);
+        $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
+        $this->assign('science_keyword_list', $science_keyword_list);
         return $this->fetch();
     }
 

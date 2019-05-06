@@ -59,7 +59,17 @@ class Keyword extends Admin
 
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            var_dump($data);
+            $map = [];
+            $map['name'] = input('param.name/s');;
+            $map['type'] = 0;  // 0代表pubmed关键词
+            $map['value'] = json_encode($data);
+            $map['uid'] = $_SESSION['hisiphp_']['admin_user']['uid'];
+            $map['status'] = 1;
+            $map['sstatus'] = 0; //关键词使用状态 1 代表已使用  0代表未使用
+            if(KwModel::create($map)){
+                return $this->success('创建成功');
+            }
+            return $this->sucess('创建失败');
         }
 
         $keyword_list = KwModel::select();
