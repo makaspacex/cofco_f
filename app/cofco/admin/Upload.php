@@ -5,10 +5,11 @@ namespace app\cofco\admin;
 use app\admin\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
+use think\Config;
 use think\Exception;
 
-include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
-include("app" . DS . "cofco" . DS . "config.php");
+//include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
+//include("app" . DS . "cofco" . DS . "config.php");
 
 
 class upload extends AdminCOFCO
@@ -177,8 +178,10 @@ class upload extends AdminCOFCO
             $this->assign('msg', $msg);
 
         }
-        $this->assign('getthreadstatus_url', config('spider.getthreadstatus_url'));
-        $this->assign('controlspider_url', config('spider.controspider_url'));
+//        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
+//        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
+        $this->assign('controlspider_url',Config::get('controlspider_url'));
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);

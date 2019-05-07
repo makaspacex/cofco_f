@@ -47,8 +47,18 @@ class Spider extends AdminCOFCO
      */
     public function add()
     {
-        $pubmed_keyword_list = KwModel::where("type","0")->select();
-        $science_keyword_list = KwModel::where("type","1")->select();
+        //定义pubmed查询条件
+        $pubmed_map =[];
+        $pubmed_map['type'] = 0;
+        $pubmed_map['status'] = 1;
+
+        //定义science查询条件
+        $science_map = [];
+        $science_map['type'] = 1;
+        $science_map['status'] =1;
+
+        $pubmed_keyword_list = KwModel::where($pubmed_map)->select();
+        $science_keyword_list = KwModel::where($science_map)->select();
         $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
         $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
         $this->assign('uid',$uid);
