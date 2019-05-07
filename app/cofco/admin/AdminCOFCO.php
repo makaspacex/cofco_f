@@ -25,6 +25,7 @@ class AdminCOFCO extends Admin
     {
         parent::_initialize();
         define('MODULENAME', 'COFCO');
+        $this->assign('article_api_url','/cofco/article');
     }
 
 }

@@ -1,5 +1,10 @@
 {include file="admin@block/layui" /}
-<div class="layui-btn layui-btn-primary" lay-event="new" id="new">新建爬虫</div>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="spider_new">新建爬虫</button>
+    </div>
+</script>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="pause">暂停</a>
@@ -39,16 +44,7 @@
 
 <script src="__COFCO_JS__/spider.js"></script>
 <script>
-    newBtn = document.getElementById("new");
-    newBtn.onclick = function(){
-        layer.open({
-            type:2,
-            content:'add',
-            offset: 'auto',
-            area: ['800px', '100%'] //自定义文本域宽高
-        });
 
-    }
     layui.use(['jquery', 'table','tablePlug'], function () {
         var table = layui.table;
         var tablePlug = layui.tablePlug;
@@ -61,9 +57,9 @@
             elem: '#test'
             ,id: 'testReload'
             , url: '{$getthreadstatus_url}'
-            // , toolbar: true
+            , toolbar: '#toolbarDemo'
             , title: '用户数据表'
-            // , totalRow: true
+            , totalRow: true
             , cellMinWidth: 80
             , smartReloadModel:true
             , reloaddingShow:false
@@ -97,6 +93,17 @@
                     "count": res.count, //解析数据长度
                     "data": res.data.threadlist, //解析数据列表
                 };
+            }
+        });
+
+        table.on('toolbar(test)', function (obj) {
+            if(obj.event === 'spider_new'){
+                layer.open({
+                    type:2,
+                    content:'add',
+                    offset: 'auto',
+                    area: ['800px', '80%'] //自定义文本域宽高
+                });
             }
         });
 

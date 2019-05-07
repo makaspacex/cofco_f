@@ -12,7 +12,6 @@
         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">输出（选中行数据）</button>
         <!--        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_all_data">审核通过（所有数据）</button>-->
     </div>
-
 </script>
 <script type="text/html" id="statusTpl">
     {{#  if(d.status == 1){ }}

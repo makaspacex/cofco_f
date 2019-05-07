@@ -161,7 +161,7 @@ class AdminMenu extends Model
      * @author 橘子俊 <364666827@qq.com>
      * @return array
      */
-    public static function getMainMenu($update = false, $pid = 0, $level = 0, $data = [])
+    public static function getMainMenu($update = false, $pid = 0, $level = 0, $data = [],$nav=1, $status = 1)
     {
         $cache_tag = '_admin_menu'.ADMIN_ID.dblang('admin');
         $trees = [];
@@ -171,8 +171,12 @@ class AdminMenu extends Model
         if (empty($trees) || $update === true) {
             if (empty($data)) {
                 $map = [];
-                $map['status'] = 1;
-                $map['nav'] = 1;
+                if(isset($status)){
+                    $map['status'] = 1;
+                }
+                if(isset($nav)){
+                    $map['nav'] = 1;
+                }
                 $map['uid'] = ['in', '0,'.ADMIN_ID];
                 $data = self::where($map)->order('sort asc')->column('id,pid,module,title,url,param,target,icon');
                 $data = array_values($data); 

@@ -103,7 +103,7 @@ class Menu extends Admin
         if (config('sys.multi_language') == 1) {
             $row['title'] = $row['lang']['title'];
         }
-        
+
         $this->assign('data_info', $row);
         $this->assign('module_option', model('AdminModule')->getOption($row['module']));
         $this->assign('menu_option', self::menuOption($row['pid']));
@@ -117,7 +117,7 @@ class Menu extends Admin
      */
     private function menuOption($id = '', $str = '')
     {
-        $menus = MenuModel::getMainMenu();
+        $menus = MenuModel::getMainMenu($update = false, $pid = 0, $level = 0, $data = [],$nav=null, $status = 1);
         foreach ($menus as $v) {
             if ($id == $v['id']) {
                 $str .= '<option level="1" value="'.$v['id'].'" selected>['.$v['module'].']'.$v['title'].'</option>';
