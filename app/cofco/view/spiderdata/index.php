@@ -1,10 +1,10 @@
 <!-- 加载统一layui资源 -->
 {include file="admin@block/layui" /}
 
-<!-- 加载统一搜索框 -->
+<!-- 加载统一搜索表单 -->
 {include file='cofco@block/search'/}
 
-<!-- 加载统一的文章表格内容，注意此时并未执行渲染动作 -->
+<!-- 加载统一的文章表格框架，注意此时并未执行渲染动作 -->
 {include file='cofco@block/article_table' /}
 
 
@@ -28,14 +28,15 @@
 </script>
 <script>
 
-    //-------------- 执行渲染动作 ----------------------------------------
-    var init_url = "{$article_api_url}/search?status=1"; //记得加入status控制
-    render_article_table(init_url);
+    //-------------- 执行表格渲染动作 --------------------------------------------------
+    $(function () {
+        var init_url = "{$article_api_url}/search?status=1"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        render_article_table(init_url);
+    });
 
     //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
     layui.use(['jquery', 'table', 'tablePlug'], function () {
-        var table = layui.table;
-        var $ = layui.jquery;
+        var table = layui.table, $ = layui.jquery;
 
         // 行工具栏监听
         table.on('tool(articletable)',function (obj) {
@@ -60,23 +61,7 @@
             }else if(layEvent === 'del'){
 
             }
-            switch (layEvent) {
-                case 'detail':
-
-                    break;
-                case 'del':
-                    //删除数据
-                    window.location.href = "del?ids=" + data.id;
-                    break;
-                case 'edit':
-                    //编辑数据
-                    window.location.href = "edit?id=" + data.id;
-                    break;
-                case 'pass':
-                    window.location.href = "passData?ids=" + data.id;
-                    break;
-            }
-
+            // ............... 未完成的其操作
         })
 
     });
