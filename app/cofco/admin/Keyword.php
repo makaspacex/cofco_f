@@ -131,4 +131,28 @@ class Keyword extends AdminCOFCO
         return $this->success('操作成功！');
     }
 
+    /**
+     * 更改关键词状态
+     */
+    public function setstatus()
+    {
+        $ids = input('param.ids/s');
+        $status = input('param.status/s');
+        $map = [];
+        $map['id'] = ['in',$ids];
+        if($status){
+            $map['status'] = 0;
+        }
+        else{
+            $map['status'] = 1;
+        }
+        $res = KwModel::update($map);
+        if($res){
+            return $this->success("修改成功");
+        }
+        return $this->error("修改失败");
+        
+
+    }
+
 }

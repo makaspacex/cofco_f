@@ -7,15 +7,14 @@ function addBarEvent(table,url){
         var $ = layui.jquery;
         switch (layEvent) {
             case 'pause':
-                console.log('pause');
-                console.log(data.kw_id);
-
+                console.log(url);
                 $.ajax({
                     url:url, //+'?kw_id='+data.kw_id+'&action=pause',
                     data:{kw_id:data.kw_id,action:"pause",idsP:1,contentP:1},
                     type:"post",
                     dataType:"json",
                     success:function (res) {
+
                         console.log(url);
                         console.log(res);
                     }
@@ -46,6 +45,7 @@ function addBarEvent(table,url){
                 });
                 break;
             case 'del':
+                console.log(url);
                 $.ajax({
                     url:url,
                     data:{kw_id:data.kw_id,action:"del",idsP:1,contentP:1},

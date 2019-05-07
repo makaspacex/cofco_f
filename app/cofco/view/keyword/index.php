@@ -1,7 +1,7 @@
 <form class="page-list-form">
     <div class="layui-btn-group">
         <a href="{:url('addpubmedkw')}" class="layui-btn layui-btn-sm layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-        <a data-href="{:url('kwdel')}" class="layui-btn layui-btn-sm layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>
+<!--        <a data-href="{:url('kwdel')}" class="layui-btn layui-btn-sm layui-btn-primary j-page-btns confirm j-ajax"><i class="aicon ai-jinyong"></i>删除</a>-->
     </div>
     <div class="layui-form">
         <table class="layui-table" lay-even="" lay-skin="row">
@@ -35,12 +35,17 @@
                 <td>{$v['type']}</td>
 <!--                <td>{$v['value']}</td>-->
                 <td>{$v['username']}</td>
-                <td><input type="checkbox" name="status" {if condition="$v['status'] eq 1"}checked=""{/if}  value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_kw&ids='.$v['id'])}"></td>
+                <td>
+                    <input type="checkbox" name="status"
+                           {if condition="$v['status'] eq 1"}checked=""{/if}
+                    value="{$v['status']}" lay-skin="switch" lay-filter="switchStatus"
+                    lay-text="正常|关闭"
+                    data-href="{:url('setstatus?status='.$v['status'].'&ids='.$v['id'])}"></td>
                 <td>{$v['ctime']}</td>
                 <td>
                     <div class="layui-btn-group">
-                        <a href="{:url('kwedit?id='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                        <a href="{:url('kwdel?ids='.$v['id'])}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+
+                        <a href="{:url('kwdel?ids='.$v['id'])}" class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
                     </div>
                 </td>
 

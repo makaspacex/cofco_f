@@ -1,4 +1,5 @@
-
+{include file="admin@block/layui" /}
+<link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
 <blockquote class="layui-elem-quote layui-text">
     为了减少爬虫爬取数量和人工审核数量，爬虫系统2.0版本支持了关键词高级搜索。
     <br>
@@ -7,7 +8,7 @@
 </blockquote>
 
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+<fieldset class="layui-elem-field layui-field-title" >
     <legend>新建pubmed爬虫</legend>
 </fieldset>
 
@@ -62,7 +63,7 @@
     </div>
 
 </form>
-{include file="admin@block/layui" /}
+
 <script>
     layui.use('form', function(){
 

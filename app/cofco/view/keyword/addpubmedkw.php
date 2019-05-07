@@ -1,13 +1,17 @@
 <blockquote class="layui-elem-quote layui-text">
     为了减少爬虫爬取数量和人工审核数量，爬虫系统2.0版本支持了关键词高级搜索。
     <br>
-    本页面暂时未开放
+    本页面完全重现了Pubmed官网的高级搜索页面，
+    只在风格上有所不同，更详细的使用方式见
+    <a href="https://www.ncbi.nlm.nih.gov/pubmed/advanced" style="color: #0000cc">官网高级搜索</a>。
     <br>
     All of the fields are optional. Find out more about the new advanced search.
+    <br>
+    <h3 style="color: #ff0709">爬虫关键词一旦创建不可修改</h3>
 </blockquote>
 
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+<fieldset class="layui-elem-field layui-field-title" >
     <legend>关键词添加</legend>
 </fieldset>
 

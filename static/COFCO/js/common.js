@@ -179,7 +179,7 @@ function getTable(type) {
         , toolbar: '#toolbarDemo'
         , cellMinWidth: 80
         , title: getTitle(type)
-        , totalRow: true
+        // , totalRow: true
         , cols: getcols(type)
         , page: true
         , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
@@ -243,7 +243,7 @@ function getSpiderCol() {
         , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
         , {field: 'title', title: '文章标题', width: 500, fixed: 'left'}
         , {field: 'sstr', title: '爬虫关键词', width: 200}
-        , {field: 'creater', title: '创建人', width: 90}
+        // , {field: 'creater', title: '创建人', width: 90}
         // , {field: 'auditor', title: '审核人', width: 90}
         // , {field: 'final_auditor', title: '终审核', width: 90}
         , {field: 'ctime', title: '创建时间', width: 290}
