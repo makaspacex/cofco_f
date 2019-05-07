@@ -121,6 +121,17 @@ class Template
     }
 
     /**
+     * 模板引擎参数获取
+     * @access public
+     * @param mixed $name
+     * @param mixed $value
+     */
+    public function __get($name)
+    {
+        return $this->config[$name];
+    }
+
+    /**
      * 模板引擎配置项
      * @access public
      * @param array|string $config
