@@ -1,69 +1,82 @@
 
-<blockquote class="layui-elem-quote layui-text">
-    为了减少爬虫爬取数量和人工审核数量，爬虫系统2.0版本支持了关键词高级搜索。
-    <br>
-    本页面暂时未开放
-    <br>
-    All of the fields are optional. Find out more about the new advanced search.
-</blockquote>
-
-
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-    <legend>新建pubmed爬虫</legend>
-</fieldset>
-
-<form class="layui-form layui-form-pane" action="" lay-filter="example">
-
-    <div class="layui-form-item">
-
-        <div class="layui-inline w500">
-            <label class="layui-form-label">爬虫关键词</label>
-            <div class="layui-input-block">
-                <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
-                    <option value="">直接选择或搜索选择</option>
-                    {volist name="pubmed_keyword_list" id="v"}
-                    <option value={$v['id']}>{$v['name']}</option>
-                    {/volist}
-                </select>
-            </div>
-        </div>
-        <div class="layui-inline ">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="newpubmed">新建爬虫</button>
-            </div>
-        </div>
-    </div>
-
-</form>
-
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-    <legend>新建science爬虫</legend>
-</fieldset>
-
-<form class="layui-form layui-form-pane" action="" lay-filter="example">
-
-    <div class="layui-form-item">
-
-        <div class="layui-inline w500">
-            <label class="layui-form-label">爬虫关键词</label>
-            <div class="layui-input-block">
-                <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
-                    <option value="">直接选择或搜索选择</option>
-                    {volist name="science_keyword_list" id="v"}
-                    <option value={$v['id']}>{$v['name']}</option>
-                    {/volist}
-                </select>
-            </div>
-        </div>
-        <div class="layui-inline ">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="newscience">新建爬虫</button>
-            </div>
-        </div>
-    </div>
-
-</form>
 {include file="admin@block/layui" /}
+<link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
+<form class="layui-form layui-form-pane" >
+    <div class="layui-container-fluid">
+        <div class="row">
+            <div class="layui-col-md11">
+                <div class="layui-form-title margin-t-20 margin-b-10">基本设置</div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">爬虫类型</label>
+                <div class="layui-input-block">
+                    <select name="spider_type" id="spider_type" lay-verify="required" value="{:input('get.journal_zone')}">
+                        <option value="">请选择一个类型</option>
+                        <option value="1">PUBMED</option>
+                        <option value="2">ScienceDirect</option>
+                    </select>
+                </div>
+            </div>
+            <div  class="layui-col-md3">
+                <label class="layui-form-label">爬虫关键词</label>
+                <div class="layui-input-block">
+                    <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
+                        <option value="">直接选择或搜索选择</option>
+                        {volist name="pubmed_keyword_list" id="v"}
+                        <option value={$v['id']}>{$v['name']}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-col-md11">
+                <div class="layui-form-title margin-t-20 margin-b-10">可选信息</div>
+                <div class="layui-form-title layui-form-title-tip margin-t-20 ">请您合理选择并发数目，一是为了防止被封杀，二是服务器性能可能无法达到要求。</div>
+            </div>
+            <div  class="layui-col-md2">
+                <label class="layui-form-label">翻页线程数目</label>
+                <div class="layui-input-block">
+                    <select name="spider_type" id="spider_type" lay-verify="required" value="{:input('get.journal_zone')}">
+                        <option value="2">2</option>
+                        <option value="4" selected>4</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+            </div>
+            <div  class="layui-col-md2">
+                <label class="layui-form-label">内容获取进程数</label>
+                <div class="layui-input-block">
+                    <select name="spider_type" id="spider_type" lay-verify="required" value="{:input('get.journal_zone')}">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+            </div>
+            <div  class="layui-col-md2">
+                <label class="layui-form-label">内容获取线程数</label>
+                <div class="layui-input-block">
+                    <select name="spider_type" id="spider_type" lay-verify="required" value="{:input('get.journal_zone')}">
+                        <option value="4">4</option>
+                        <option value="8" selected>8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                    </select>
+                </div>
+            </div>
+
+            <div  class="layui-col-md2">
+                <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="newscience">添加爬虫</button>
+            </div>
+            <div  class="layui-col-md6">
+                &nbsp;
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
 <script>
     layui.use('form', function(){
 

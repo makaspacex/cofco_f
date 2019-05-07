@@ -21,3 +21,7 @@
     margin: 20px 0 10px;
     border-width: 1px 0 0;
 }
+.layui-form-title-tip{
+    font-size:10px!important;
+    line-height: 25px;
+}
