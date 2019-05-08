@@ -70,14 +70,14 @@
             <dd>
                 {volist name="v['childs']" id="vv"}
                 <dl>
-                    <dt><input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vv['id']}" data-pid="{$vv['pid']}" data-level="2" lay-skin="primary" title="{$vv['title']}"></dt>
+                    <dt><input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vv['id']}" data-pid="{$vv['pid']}" data-level="2" lay-skin="primary" title="{$vv['title']}" nodeurl="{$vv['url']}"></dt>
                     <dd>
                         {volist name="vv['childs']" id="vvv"}
                         <dl>
-                            <dt><input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vvv['id']}" data-pid="{$vvv['pid']}" data-level="3" lay-skin="primary" title="{$vvv['title']}"></dt>
+                            <dt><input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vvv['id']}" data-pid="{$vvv['pid']}" data-level="3" lay-skin="primary" title="{$vvv['title']}" nodeurl="{$vvv['url']}"></dt>
                             <dd>
                                 {volist name="vvv['childs']" id="vvvv"}
-                                    <input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vvvv['id']}" data-pid="{$vvvv['pid']}" data-level="4" lay-skin="primary" title="{$vvvv['title']}">
+                                    <input type="checkbox" name="auth[]" lay-filter="roleAuth" value="{$vvvv['id']}" data-pid="{$vvvv['pid']}" data-level="4" lay-skin="primary" title="{$vvvv['title']}" nodeurl="{$vvvv['url']}">
                                 {/volist}
                             </dd>
                         </dl>
@@ -99,6 +99,25 @@
 </div>
 </form>
 {include file="block/layui" /}
+<script>
+    layui.use('table', function() {
+        var table = layui.table
+            , $ = layui.$
+            , form = layui.form;
+
+        $('.layui-form-checkbox').mouseover(function (e) {
+            var nodeurl = $(this).prev('input[type=checkbox]').attr('nodeurl')
+            layer.tips(""+nodeurl,this,{
+                tips: 1
+            });
+        });
+
+        $('.layui-form-checkbox').mouseout(function (e) {
+            layer.close(layer.index);
+        });
+
+    });
+</script>
 <script>
 var formData = {:json_encode($data_info)};
 layui.use(['form'], function() {

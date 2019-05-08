@@ -112,7 +112,7 @@ body{
     padding: 0 0 0 20px;
 }
 .layui-form-checkbox[lay-skin=primary] span {
-    line-height: 14px;
+    line-height: 16px;
 }
 .layui-table-view .layui-form-checkbox[lay-skin=primary] i {
     width: 14px;
@@ -122,6 +122,8 @@ body{
     line-height: 14px;
     border: 1px solid #d2d2d2;
     font-size: 12px;
+    width: 14px;
+    height: 14px;
 }
 .layui-form-checkbox span {
     font-size: 12px;

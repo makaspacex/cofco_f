@@ -14,15 +14,18 @@
         <dt>菜单名称</dt>
         <dd>
             <span class="hd">排序</span>
-            <span class="hd2">状态</span>
-            <span class="hd3">操作</span>
+            <span class="hd2">地址</span>
+            <span class="hd3">状态</span>
+            <span class="hd4">操作</span>
         </dd>
     </dl>
     {volist name="v['childs']" id="vv" key="kk"}
     <dl class="menu-dl1">
         <dt>
-            <input type="checkbox" name="ids[{$kk}]" value="{$vv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vv['title']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['title']}</span><i class="layui-icon">&#xe626;</i></div>
+            <input type="checkbox" name="ids[{$kk}]" value="{$vv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vv['title']}">
+            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['title']}</span><i class="layui-icon">&#xe626;</i></div>
             <input type="text" class="menu-sort j-ajax-input" name="sort[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['sort']}" data-value="{$vv['sort']}" data-href="{:url('sort?table=admin_menu&ids='.$vv['id'])}">
+            <div class="menu-url layui-form-checkbox" lay-skin="primary"><span>{$vv['url']}</span></div>
             <input type="checkbox" name="status" value="{$vv['status']}" {if condition="$vv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_menu&ids='.$vv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
             <div class="menu-btns">
                 <a href="{:url('edit?id='.$vv['id'])}" title="编辑"><i class="layui-icon">&#xe642;</i></a>
@@ -46,6 +49,7 @@
                 <dt>
                     <input type="checkbox" name="ids[{$kk}]" value="{$vvv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vvv['title']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvv['title']}</span><i class="layui-icon">&#xe626;</i></div>
                     <input type="text" class="menu-sort j-ajax-input" name="sort[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvv['sort']}" data-value="{$vvv['sort']}" data-href="{:url('sort?table=admin_menu&ids='.$vvv['id'])}">
+                    <div class="menu-url layui-form-checkbox" lay-skin="primary"><span>{$vvv['url']}</span></div>
                     <input type="checkbox" name="status" value="{$vvv['status']}" {if condition="$vvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_menu&ids='.$vvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                     <div class="menu-btns">
                         <a href="{:url('edit?id='.$vvv['id'])}" title="编辑"><i class="layui-icon">&#xe642;</i></a>
@@ -66,6 +70,7 @@
                 <dd>
                     <input type="checkbox" name="ids[{$kk}]" value="{$vvvv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vvvv['title']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvvv['title']}</span><i class="layui-icon">&#xe626;</i></div>
                     <input type="text" class="menu-sort j-ajax-input" name="sort[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvvv['sort']}" data-value="{$vvvv['sort']}" data-href="{:url('sort?table=admin_menu&ids='.$vvvv['id'])}">
+                    <div class="menu-url layui-form-checkbox" lay-skin="primary"><span>{$vvvv['url']}</span></div>
                     <input type="checkbox" name="status" value="{$vvvv['status']}" {if condition="$vvvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_menu&ids='.$vvvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                     <div class="menu-btns">
                         <a href="{:url('edit?id='.$vvvv['id'])}" title="编辑"><i class="layui-icon">&#xe642;</i></a>
@@ -91,8 +96,9 @@
             <dt>模块名称</dt>
             <dd>
                 <span class="hd">排序</span>
-                <span class="hd2">状态</span>
-                <span class="hd3">操作</span>
+                <span class="hd2">地址</span>
+                <span class="hd3">状态</span>
+                <span class="hd4">操作</span>
             </dd>
         </dl>
         {volist name="menu_list" id="v" key="k"}
@@ -100,6 +106,8 @@
             <dt>
                 <input type="checkbox" name="ids[{$k}]" class="checkbox-ids" value="{$v['id']}" lay-skin="primary" title="{$v['title']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$v['title']}</span><i class="layui-icon">&#xe626;</i></div>
                 <input type="text" class="layui-input j-ajax-input menu-sort" name="sort[{$k}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$v['sort']}" data-value="{$v['sort']}" data-href="{:url('sort?table=admin_menu&ids='.$v['id'])}">
+                <input type="text" class="layui-input j-ajax-input menu-sort" name="sort[{$k}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$v['sort']}" data-value="{$v['sort']}" data-href="{:url('sort?table=admin_menu&ids='.$v['id'])}">
+                <div class="menu-url layui-form-checkbox" lay-skin="primary"><span>{$v['url']}</span></div>
                 <input type="checkbox" name="status" value="{$v['status']}" {if condition="$v['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_menu&ids='.$v['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$v['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                 <div class="menu-btns">
                 <a href="{:url('del?ids='.$v['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>

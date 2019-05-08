@@ -95,13 +95,16 @@ body{background-color:#fff;}
 .menu-dl .hd,
 .menu-dl .hd2,
 .menu-dl .hd3,
+.menu-dl .hd4,
 .menu-dl .layui-form-switch,.menu-btns{position:absolute;left:260px;top:4px;}
 .menu-dl .hd,
 .menu-dl .hd2,
-.menu-dl .hd3{top:-26px;}
+.menu-dl .hd3,
+.menu-dl .hd4{top:-26px;}
 .menu-dl .hd{left:280px}
 .menu-dl .hd2{left:520px;}
-.menu-dl .hd3{left:710px;}
+.menu-dl .hd3{left:760px;}
+.menu-dl .hd4{left:900px;}
 .menu-dl .layui-form-switch{left:490px;top:1px;margin:0;}
 .menu-dl .checkbox-ids{width:;}
 .menu-dl .menu-sort{position:absolute;left:260px;top:3px;height:20px;line-height:20px;width:40px;padding:0;text-align:center;color:#666;border: 1px solid #e6e6e6;background-color: #fff;border-radius: 2px}
@@ -112,10 +115,12 @@ body{background-color:#fff;}
 .menu-dl1 dt .menu-sort{left:280px}
 .menu-dl2 dt .menu-sort{left:300px;}
 .menu-dl2 dd .menu-sort{left:340px}
-.menu-dl1 .layui-form-switch{left:520px}
-.menu-dl2 .layui-form-switch{left:500px}
-.menu-btns{left:710px;}
-.menu-dl2 .menu-btns{left:688px;}
+.menu-dl1 .menu-url{left:510px; position: absolute;}
+.menu-dl2 .menu-url{left:490px; position: absolute;}
+.menu-dl1 .layui-form-switch{left:760px}
+.menu-dl2 .layui-form-switch{left:740px}
+.menu-btns{left:900px;}
+.menu-dl2 .menu-btns{left:880px;}
 .layui-nav-child dd:hover{background-color: #009688;color: #fff;}
 /*数据列表页排序字段*/
 .input-sort{height:24px;line-height:24px;width:40px;padding:0;text-align:center;color:#666;}
