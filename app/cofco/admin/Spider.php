@@ -49,12 +49,12 @@ class Spider extends AdminCOFCO
     {
         //定义pubmed查询条件
         $pubmed_map =[];
-        $pubmed_map['type'] = 0;
+        $pubmed_map['type'] = 1;
         $pubmed_map['status'] = 1;
 
         //定义science查询条件
         $science_map = [];
-        $science_map['type'] = 1;
+        $science_map['type'] = 2;
         $science_map['status'] =1;
 
         $pubmed_keyword_list = KwModel::where($pubmed_map)->select();

@@ -11,7 +11,7 @@
 </blockquote>
 
 
-<fieldset class="layui-elem-field layui-field-title" >
+<fieldset class="layui-elem-field layui-field-title">
     <legend>关键词添加</legend>
 </fieldset>
 
@@ -25,16 +25,15 @@
             <div class="layui-input-block">
                 <input type="text" name="name" required autocomplete="off" class="layui-input">
             </div>
-
         </div>
-
     </div>
 
     <div class="layui-form-item" id="0">
-
-        <div class="layui-inline w100">
+        <div class="layui-inline w100 " style="visibility:hidden;" >
+            <select class="index_field" id="symbol" name="0[symbol]">
+                <option value="none" selected></option>
+            </select>
         </div>
-
         <div class="layui-inline w200">
             <select class="index_field" id="field" name="0[field]">
                 <option value="Affiliation">Affiliation</option>
@@ -84,7 +83,6 @@
         </div>
 
         <div class="layui-inline w500">
-            <!--            <label class="layui-form-label">关键词名称</label>-->
             <input type="text" name="0[keyword]" autocomplete="off" class="layui-input">
         </div>
 
@@ -93,37 +91,30 @@
             <button id="addBtn0" class="layui-btn layui-btn-primary layui-btn-radius">+</button>
             <button type="submit" class="layui-btn">提交</button>
         </div>
-
-
     </div>
-
-
     </div>
 </form>
-<div class="hide">
-    <div  id="count">1</div>
+<div class="layui-hide">
+    <div id="count">1</div>
 </div>
 {include file="admin@block/layui" /}
 <script>
+    var addbtn = document.getElementById("addBtn0");
+    addbtn.onclick = function (event) {
+        event.preventDefault();
+        var count = document.getElementById("count").innerHTML;
+        var form_div = document.getElementById("form_div");
+        form_div.appendChild(addItem(count));
+        document.getElementById("count").innerHTML = parseInt(count) + 1;
+        addbtn.style.visibility = "visible";
+        formrender();
+    }
 
-        var addbtn = document.getElementById("addBtn0");
-        addbtn.onclick = function (event) {
-            event.preventDefault();
-            var count = document.getElementById("count").innerHTML;
-            var form_div = document.getElementById("form_div");
-            form_div.appendChild(addItem(count));
-            document.getElementById("count").innerHTML = parseInt(count) + 1;
-            addbtn.style.visibility="visible";
-            formrender();
-        }
-
-        var delbtn = document.getElementById("delBtn0");
-        delbtn.style.visibility="hidden";
-        delbtn.onclick = function (event) {
-            event.preventDefault();
-        }
-
-
+    var delbtn = document.getElementById("delBtn0");
+    delbtn.style.visibility = "hidden";
+    delbtn.onclick = function (event) {
+        event.preventDefault();
+    }
 
     function addItem(no) {
         var layui_form_item = document.createElement("div");
@@ -137,9 +128,6 @@
 
     }
 
-    function delItem(no) {
-
-    }
 
     //添加符号选择框
     function addSymbolSelect(no) {
@@ -203,7 +191,7 @@
         //添加del按钮
         var delBtn = document.getElementById("delBtn0");
         var newdelBtn = delBtn.cloneNode(true);
-        newdelBtn.setAttribute("id","delBtn"+no);
+        newdelBtn.setAttribute("id", "delBtn" + no);
         //newdelBtn.style.visibility = "none";      //隐藏元素
         newdelBtn.style.visibility = "visible"; //显示元素
         newdelBtn.onclick = function (event) {
@@ -211,13 +199,13 @@
             var id = event.target.id.substring(6); //当前组件的id
             var count = document.getElementById("count").innerHTML; //当前item数
 
-            lastid =  parseInt(id)-1;
-            lastaddBtn = document.getElementById("addBtn"+lastid);
+            lastid = parseInt(id) - 1;
+            lastaddBtn = document.getElementById("addBtn" + lastid);
             lastaddBtn.style.visibility = "visible";
 
             var item = document.getElementById(id);
             item.parentNode.removeChild(item);
-            document.getElementById("count").innerHTML = parseInt(count) -1 ;
+            document.getElementById("count").innerHTML = parseInt(count) - 1;
             formrender();
         }
         newbtnDiv.appendChild(newdelBtn);
@@ -230,8 +218,8 @@
         newaddBtn.onclick = function (event) {
             event.preventDefault();
             var id = event.target.id;
-            lastid =  parseInt(id.substring(6))-1;
-            lastaddBtn = document.getElementById("addBtn"+lastid);
+            lastid = parseInt(id.substring(6)) - 1;
+            lastaddBtn = document.getElementById("addBtn" + lastid);
             newaddBtn.style.visibility = "hidden";
 
             var count = document.getElementById("count").innerHTML;
@@ -241,12 +229,7 @@
             formrender();
         }
         newbtnDiv.appendChild(newaddBtn);
-
-
-
-
         return newbtnDiv;
-
     }
 
     //重新渲染表单
@@ -258,9 +241,9 @@
     }
 </script>
 
+
+
 <link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
 
-
-</div>
 
 

@@ -38,7 +38,6 @@ class Keyword extends AdminCOFCO
     {
         //$data_list = KwModel::paginate();
 
-
         $sql = 'SELECT a.username ,b.*  FROM `hisi_admin_user` a,hisi_admin_kw b WHERE a.id = b.uid';
         $data_list = KwModel::query($sql);
 
@@ -50,6 +49,17 @@ class Keyword extends AdminCOFCO
         return $this->fetch();
     }
 
+    /**
+     * 关键词list数据
+     */
+    public function data(){
+        $sql = 'SELECT a.username ,b.*  FROM `hisi_admin_user` a,hisi_admin_kw b WHERE a.id = b.uid';
+        $data_list = KwModel::query($sql);
+        foreach($data_list as &$data){  //时间戳转换
+            $data['ctime'] = date("Y-m-d H:i", $data['ctime']);
+        };
+        return json(['data'=>$data_list,'status'=>0,'message'=>'操作完成']);
+    }
 
     /**
      * 添加pubmed爬虫关键词
@@ -59,9 +69,10 @@ class Keyword extends AdminCOFCO
 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            unset($data['name']);
             $map = [];
             $map['name'] = input('param.name/s');;
-            $map['type'] = 0;  // 0代表pubmed关键词
+            $map['type'] = 1;  // 0代表pubmed关键词
             $map['value'] = json_encode($data);
             $map['uid'] = $_SESSION['hisiphp_']['admin_user']['uid'];
             $map['status'] = 1;
@@ -83,6 +94,7 @@ class Keyword extends AdminCOFCO
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->view->engine->layout(false);
         return $this->fetch();
     }
 
@@ -94,9 +106,10 @@ class Keyword extends AdminCOFCO
 
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            unset($data['name']);
             $map = [];
             $map['name'] = input('param.name/s');;
-            $map['type'] = 1;
+            $map['type'] = 2;
             $map['value'] = json_encode($data);
             $map['uid'] = $_SESSION['hisiphp_']['admin_user']['uid'];
             $map['status'] = 1;
@@ -112,6 +125,7 @@ class Keyword extends AdminCOFCO
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
         $this->assign('tab_type', 1);
+        $this->view->engine->layout(false);
         return $this->fetch();
     }
 

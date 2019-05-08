@@ -1,17 +1,3 @@
-
-/**
- * 弹出提示信息
- * @param msg
- */
-function layer_msg(msg) {
-    if (msg!='')
-    {
-        layui.use('layer', function(){
-            layer.msg(msg);
-        });
-    }
-}
-
 /**
  * 删除选择数据
  * @param checkStatus
@@ -182,6 +168,8 @@ function getTable(type) {
         // , totalRow: true
         , cols: getcols(type)
         , page: true
+        , limit:15
+        ,limits :[15,20,30,40,50,60,70,80]
         , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
         return {
             "code": res.code, //解析接口状态
@@ -240,8 +228,8 @@ function getcols(type) {
 function getSpiderCol() {
     return [[
         {type: 'checkbox', fixed: 'left'}
-        , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-        , {field: 'title', title: '文章标题', width: 500, fixed: 'left'}
+        // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+        , {field: 'title', title: '文章标题', width: 500}
         , {field: 'sstr', title: '爬虫关键词', width: 200}
         // , {field: 'creater', title: '创建人', width: 90}
         // , {field: 'auditor', title: '审核人', width: 90}
@@ -271,27 +259,27 @@ function getSpiderCol() {
 function getPendingCol() {
    return [[
        {type: 'checkbox', fixed: 'left'}
-       , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-       , {field: 'title', title: '文章标题', width: 500, fixed: 'left'}
+       // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+       , {field: 'title', title: '文章标题', width: 500}
        , {field: 'sstr', title: '爬虫关键词', width: 200}
-       , {field: 'creater', title: '创建人', width: 90}
+       , {field: 'creater', title: '创建人', width: 90,sort: true}
        // , {field: 'auditor', title: '审核人', width: 90}
        // , {field: 'final_auditor', title: '终审核', width: 90}
-       , {field: 'ctime', title: '创建时间', width: 290}
-       , {field: 'special_version', title: '特别说明', width: 90}
-       , {field: 'document_type', title: '文献类型', width: 90}
-       , {field: 'urgency', title: '紧要程度', width: 90}
-       , {field: 'status', title: '状态', width: 90, templet: '#statusTpl'}
-       , {field: 'tabstract', title: '摘要翻译', width: 100}
-       , {field: 'doi', title: 'doi', width: 100}
-       , {field: 'impact_factor', title: '影响因子', width: 100}
-       , {field: 'country', title: '国家', width: 100}
-       , {field: 'author', title: '作者', width: 100}
-       , {field: 'journal', title: '所属期刊', width: 100}
-       , {field: 'journal_zone', title: '期刊分区', width: 100}
-       , {field: 'issue', title: '文章发表时间', width: 100}
-       , {field: 'keyword', title: '关键词', width: 100}
-       , {field: 'institue', title: '发表机构', width: 100}
+       , {field: 'ctime', title: '创建时间', width: 150,sort: true}
+       , {field: 'special_version', title: '特别说明', width: 90,sort: true}
+       , {field: 'document_type', title: '文献类型', width: 90,sort: true}
+       , {field: 'urgency', title: '紧要程度', width: 90,sort: true}
+       , {field: 'status', title: '状态', width: 90, templet: '#statusTpl',sort: true}
+       , {field: 'tabstract', title: '摘要翻译', width: 100,sort: true}
+       , {field: 'doi', title: 'doi', width: 100,sort: true}
+       , {field: 'impact_factor', title: '影响因子', width: 100,sort: true}
+       , {field: 'country', title: '国家', width: 100,sort: true}
+       , {field: 'author', title: '作者', width: 100,sort: true}
+       , {field: 'journal', title: '所属期刊', width: 100,sort: true}
+       , {field: 'journal_zone', title: '期刊分区', width: 100,sort: true}
+       , {field: 'issue', title: '文章发表时间', width: 100,sort: true}
+       , {field: 'keyword', title: '关键词', width: 100,sort: true}
+       , {field: 'institue', title: '发表机构', width: 100,sort: true}
        , {fixed: 'right', width: 180, align: 'center', toolbar: '#barDemo'}
    ]];
 }
@@ -303,26 +291,26 @@ function getPendingCol() {
 function getFinalyCol() {
     return [[
         {type: 'checkbox', fixed: 'left'}
-        ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-        ,{field: 'title', title: '文章标题', width:500, fixed: 'left'}
-        ,{field: 'sstr', title: '爬虫关键词', width:200}
-        , {field: 'creater', title: '创建人', width: 90}
-        , {field: 'auditor', title: '审核人', width: 90}
+        // ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+        ,{field: 'title', title: '文章标题', width:500,sort: true}
+        ,{field: 'sstr', title: '爬虫关键词', width:200,sort: true}
+        , {field: 'creater', title: '创建人', width: 90,sort: true}
+        , {field: 'auditor', title: '审核人', width: 90,sort: true}
         // , {field: 'final_auditor', title: '终审核', width: 90}
         ,{field: 'journal_zone', title: '期刊分区', width: 100,sort: true}
-        ,{field: 'impact_factor', title: '影响因子', width: 100}
-        ,{field: 'special_version', title: '特别说明', width:90}
-        ,{field: 'document_type', title: '文献类型', width:90}
-        ,{field: 'urgency', title: '紧要程度', width: 90}
-        ,{field: 'status', title: '状态', width: 90,templet: '#statusTpl'}
-        ,{field: 'tabstract', title: '摘要翻译', width: 100}
-        ,{field: 'doi', title: 'doi', width: 100}
-        ,{field: 'country', title: '国家', width: 100}
-        ,{field: 'author', title: '作者', width: 100}
-        ,{field: 'journal', title: '所属期刊', width: 100}
-        ,{field: 'issue', title: '文章发表时间', width: 100,templet:'#timeTpl'}
-        ,{field: 'keyword', title: '关键词', width: 100}
-        ,{field: 'institue', title: '发表机构', width: 100}
+        ,{field: 'impact_factor', title: '影响因子', width: 100,sort: true}
+        ,{field: 'special_version', title: '特别说明', width:90,sort: true}
+        ,{field: 'document_type', title: '文献类型', width:90,sort: true}
+        ,{field: 'urgency', title: '紧要程度', width: 90,sort: true}
+        ,{field: 'status', title: '状态', width: 90,templet: '#statusTpl',sort: true}
+        ,{field: 'tabstract', title: '摘要翻译', width: 100,sort: true}
+        ,{field: 'doi', title: 'doi', width: 100,sort: true}
+        ,{field: 'country', title: '国家', width: 100,sort: true}
+        ,{field: 'author', title: '作者', width: 100,sort: true}
+        ,{field: 'journal', title: '所属期刊', width: 100,sort: true}
+        ,{field: 'issue', title: '文章发表时间', width: 100,templet:'#timeTpl',sort: true}
+        ,{field: 'keyword', title: '关键词', width: 100,sort: true}
+        ,{field: 'institue', title: '发表机构', width: 100,sort: true}
         ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
     ]];
 }
@@ -334,26 +322,26 @@ function getFinalyCol() {
 function getOutputCol() {
     return [[
         {type: 'checkbox', fixed: 'left'}
-        ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-        ,{field: 'title', title: '文章标题', width:500, fixed: 'left'}
-        ,{field: 'sstr', title: '爬虫关键词', width:200}
-        , {field: 'creater', title: '创建人', width: 100}
-        , {field: 'auditor', title: '审核人', width: 100}
-        , {field: 'final_auditor', title: '终审核', width: 100}
-        ,{field: 'special_version', title: '特别说明', width:90}
-        ,{field: 'document_type', title: '文献类型', width:90}
-        ,{field: 'urgency', title: '紧要程度', width: 90}
-        ,{field: 'status', title: '状态', width: 90,templet: '#statusTpl'}
-        ,{field: 'tabstract', title: '摘要翻译', width: 100,hide:'true'}
-        ,{field: 'doi', title: 'doi', width: 100,hide:'true'}
-        ,{field: 'impact_factor', title: '影响因子', width: 100,hide:'true'}
-        ,{field: 'country', title: '国家', width: 100,hide:'true'}
-        ,{field: 'author', title: '作者', width: 100,hide:'true'}
-        ,{field: 'journal', title: '所属期刊', width: 100,hide:'true'}
+        // ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+        ,{field: 'title', title: '文章标题', width:500,sort: true}
+        ,{field: 'sstr', title: '爬虫关键词', width:200,sort: true}
+        , {field: 'creater', title: '创建人', width: 100,sort: true}
+        , {field: 'auditor', title: '审核人', width: 100,sort: true}
+        , {field: 'final_auditor', title: '终审核', width: 100,sort: true}
+        ,{field: 'special_version', title: '特别说明', width:90,sort: true}
+        ,{field: 'document_type', title: '文献类型', width:90,sort: true}
+        ,{field: 'urgency', title: '紧要程度', width: 90,sort: true}
+        ,{field: 'status', title: '状态', width: 90,templet: '#statusTpl',sort: true}
+        ,{field: 'tabstract', title: '摘要翻译', width: 100,hide:'true',sort: true}
+        ,{field: 'doi', title: 'doi', width: 100,hide:'true',sort: true}
+        ,{field: 'impact_factor', title: '影响因子', width: 100,hide:'true',sort: true}
+        ,{field: 'country', title: '国家', width: 100,hide:'true',sort: true}
+        ,{field: 'author', title: '作者', width: 100,hide:'true',sort: true}
+        ,{field: 'journal', title: '所属期刊', width: 100,hide:'true',sort: true}
         ,{field: 'journal_zone', title: '期刊分区', width: 100}
-        ,{field: 'issue', title: '文章发表时间', width: 100,hide:'true'}
-        ,{field: 'keyword', title: '关键词', width: 100,hide:'true'}
-        ,{field: 'institue', title: '发表机构', width: 100,hide:'true'}
+        ,{field: 'issue', title: '文章发表时间', width: 100,hide:'true',sort: true}
+        ,{field: 'keyword', title: '关键词', width: 100,hide:'true',sort: true}
+        ,{field: 'institue', title: '发表机构', width: 100,hide:'true',sort: true}
         ,{fixed: 'right', width: 120, align:'center', toolbar: '#barDemo'}
     ]];
 

@@ -5,7 +5,7 @@
     All of the fields are optional. Find out more about the new advanced search.
 </blockquote>
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+<fieldset class="layui-elem-field layui-field-title" >
     <legend>新建pubmed爬虫</legend>
 </fieldset>
 
@@ -33,7 +33,7 @@
 
 </form>
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+<fieldset class="layui-elem-field layui-field-title" >
     <legend>新建science爬虫</legend>
 </fieldset>
 
@@ -75,7 +75,7 @@
                 dataType:"json",
                 success:function (res) {
                     console.log(url);
-                    console.log(res.status);
+                    console.log(res);
                     if(res.status){
                         layer.open({
                             offset: 'auto',
@@ -85,7 +85,7 @@
                     else{
                         layer.open({
                             offset: 'auto',
-                            content: "创建失败，当前爬虫已存在" //注意，如果str是object，那么需要字符拼接。
+                            content: res.info, //注意，如果str是object，那么需要字符拼接。
                         });
                     }
                 }

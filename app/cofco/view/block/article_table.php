@@ -10,7 +10,7 @@
             table.render({
                 elem: '#articletable'
                 , toolbar: '#toolbar'
-                , url: url
+                , url: 'data'
                 , id: 'articletable'
                 , cellMinWidth: 80
                 , title: '未审核数据表'
@@ -57,11 +57,13 @@
             $('#search_submit_btn').click(function (e) {
                 var form_s = $('#article_search_form')
                 var form_data = form_s.serializeArray()
+                console.log(form_data)
                 var data = []
                 for(var key in form_data){
                     var ele = form_data[key]
                     data[ele['name']] = ele['value']
                 }
+                console.log(data);
                 table.reload('articletable',{
                     page: {curr: 1},
                     where: data

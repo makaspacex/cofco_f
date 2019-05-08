@@ -103,42 +103,42 @@
                 <table class="layui-table" lay-skin="nob">
                     <tbody>
                     <tr>
-                        <td><input type="checkbox" name="articleTypes[REV]" lay-skin="primary" title="Review articles"></td>
-                        <td><input type="checkbox" name="articleTypes[COR]" lay-skin="primary" title="Correspondence"></td>
-                        <td><input type="checkbox" name="articleTypes[PNT]" lay-skin="primary" title="Patent reports"></td>
-                        <td><input type="checkbox" name="articleTypes[FLA]" lay-skin="primary" title="Research articles"></td>
-                        <td><input type="checkbox" name="articleTypes[DAT]" lay-skin="primary" title="Data articles"></td>
+                            <td><input type="checkbox" name="articleTypes[REV]" lay-skin="primary" title="Review articles"></td>
+                            <td><input type="checkbox" name="articleTypes[COR]" lay-skin="primary" title="Correspondence"></td>
+                            <td><input type="checkbox" name="articleTypes[PNT]" lay-skin="primary" title="Patent reports"></td>
+                            <td><input type="checkbox" name="articleTypes[FLA]" lay-skin="primary" title="Research articles"></td>
+                            <td><input type="checkbox" name="articleTypes[DAT]" lay-skin="primary" title="Data articles"></td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" name="articleTypes[PGL]" lay-skin="primary" title="Practice guidelines"></td>
-                        <td><input type="checkbox" name="articleTypes[EN]" lay-skin="primary" title="Encyclopedia"></td>
-                        <td><input type="checkbox" name="articleTypes[DIS]" lay-skin="primary" title="Discussion"></td>
-                        <td><input type="checkbox" name="articleTypes[PRV]" lay-skin="primary" title="Product reviews"></td>
-                        <td><input type="checkbox" name="articleTypes[CH]" lay-skin="primary" title="Book chapters"></td>
-                    </tr>
-
-                    <tr>
-
-                        <td><input type="checkbox" name="articleTypes[EDI]" lay-skin="primary" title="Editorials"></td>
-                        <td><input type="checkbox" name="articleTypes[RPL]" lay-skin="primary" title="Replication studies"></td>
-                        <td><input type="checkbox" name="articleTypes[ABS]" lay-skin="primary" title="Conference abstracts"></td>
-                        <td><input type="checkbox" name="articleTypes[ERR]" lay-skin="primary" title="Errata"></td>
-                        <td><input type="checkbox" name="articleTypes[SCO]" lay-skin="primary" title="Short communications"></td>
+                            <td><input type="checkbox" name="articleTypes[PGL]" lay-skin="primary" title="Practice guidelines"></td>
+                            <td><input type="checkbox" name="articleTypes[EN]" lay-skin="primary" title="Encyclopedia"></td>
+                            <td><input type="checkbox" name="articleTypes[DIS]" lay-skin="primary" title="Discussion"></td>
+                            <td><input type="checkbox" name="articleTypes[PRV]" lay-skin="primary" title="Product reviews"></td>
+                            <td><input type="checkbox" name="articleTypes[CH]" lay-skin="primary" title="Book chapters"></td>
                     </tr>
 
                     <tr>
-                        <td><input type="checkbox" name="articleTypes[BRV]" lay-skin="primary" title="Book reviews"></td>
-                        <td><input type="checkbox" name="articleTypes[EXM]" lay-skin="primary" title="Examinations"></td>
-                        <td><input type="checkbox" name="articleTypes[OSP]" lay-skin="primary" title="Software publications"></td>
-                        <td><input type="checkbox" name="articleTypes[CRP]" lay-skin="primary" title="Case reports"></td>
-                        <td><input type="checkbox" name="articleTypes[CNF]" lay-skin="primary" title="Mini reviews"></td>
+
+                            <td><input type="checkbox" name="articleTypes[EDI]" lay-skin="primary" title="Editorials"></td>
+                            <td><input type="checkbox" name="articleTypes[RPL]" lay-skin="primary" title="Replication studies"></td>
+                            <td><input type="checkbox" name="articleTypes[ABS]" lay-skin="primary" title="Conference abstracts"></td>
+                            <td><input type="checkbox" name="articleTypes[ERR]" lay-skin="primary" title="Errata"></td>
+                            <td><input type="checkbox" name="articleTypes[SCO]" lay-skin="primary" title="Short communications"></td>
                     </tr>
 
                     <tr>
-                        <td><input type="checkbox" name="articleTypes[SSU]" lay-skin="primary" title="Video articles"></td>
-                        <td><input type="checkbox" name="articleTypes[NWS]" lay-skin="primary" title="Conference info"></td>
-                        <td><input type="checkbox" name="articleTypes[VID]" lay-skin="primary" title="News"></td>
-                        <td><input type="checkbox" name="articleTypes[OT]" lay-skin="primary" title="Other"></td>
+                            <td><input type="checkbox" name="articleTypes[BRV]" lay-skin="primary" title="Book reviews"></td>
+                            <td><input type="checkbox" name="articleTypes[EXM]" lay-skin="primary" title="Examinations"></td>
+                            <td><input type="checkbox" name="articleTypes[OSP]" lay-skin="primary" title="Software publications"></td>
+                            <td><input type="checkbox" name="articleTypes[CRP]" lay-skin="primary" title="Case reports"></td>
+                            <td><input type="checkbox" name="articleTypes[CNF]" lay-skin="primary" title="Mini reviews"></td>
+                    </tr>
+
+                    <tr>
+                            <td><input type="checkbox" name="articleTypes[SSU]" lay-skin="primary" title="Video articles"></td>
+                            <td><input type="checkbox" name="articleTypes[NWS]" lay-skin="primary" title="Conference info"></td>
+                            <td><input type="checkbox" name="articleTypes[VID]" lay-skin="primary" title="News"></td>
+                            <td><input type="checkbox" name="articleTypes[OT]" lay-skin="primary" title="Other"></td>
                     </tr>
 
 
