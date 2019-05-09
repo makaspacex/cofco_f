@@ -56,8 +56,8 @@ function addBarEvent(table,url){
                     }
                 });
                 break;
-
         }
+        table.reload('testReload', {})
 
     });
 }

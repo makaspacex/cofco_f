@@ -67,8 +67,8 @@
                 , {field: 'total_num', title: '总文章'}
                 , {field: 'f_num', title: '完成文章'}
                 , {field: 'fail_num', title: '失败文章'}
-                , {field: 'idsP_status', title: '翻页进程', width: 80}
-                , {field: 'cP_status', title: '文章获取进程', width: 120}
+                , {field: 'idsP_status', title: '翻页进程', templet: '#statusTpl',width: 80}
+                , {field: 'cP_status', title: '文章获取进程',templet: '#statusTpl', width: 120}
                 , {field: 'c_time', title: '创建时间', width: 165}
                 , {field: 's_time', title: '最后启动时间', width: 165}
                 , {field: 'status', fixed: 'right',title: '状态',templet: '#statusTpl',width:80}
@@ -93,7 +93,7 @@
                     type:2,
                     content:'add',
                     offset: 'auto',
-                    area: ['800px', '80%'] //自定义文本域宽高
+                    area: ['800px', '85%'] //自定义文本域宽高
                 });
             }
         });

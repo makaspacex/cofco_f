@@ -135,3 +135,23 @@ body{
 .layui-body::-webkit-scrollbar {
     display: none;
 }
+
+
+/*!**/
+/* 单选按钮*/
+/**!*/
+/*.layui-form-onswitch em {*/
+/*    margin-left: 4px;*/
+/*    margin-right: 18px;*/
+/*}*/
+/*.layui-form-switch {*/
+/*    height: 18px;*/
+/*    line-height: 18px;*/
+/*    min-width: 28px;*/
+/*    padding: 0 5px;*/
+/*    border-radius: 10px;*/
+/*}*/
+
+/*.layui-form-onswitch i {*/
+/*    margin-left: -19px;*/
+/*}*/

@@ -139,11 +139,11 @@ class Admin extends Common
             }
         }
          // 获取主键
-        $pk = Db::name($table)->getPk();
+        $pk = model($table)->getPk();
         $map = [];
         $map[$pk] = ['in', $ids];
 
-        $res = Db::name($table)->where($map)->setField($field, $val);
+        $res = model($table)->where($map)->setField($field, $val);
         if ($res === false) {
             return $this->error('状态设置失败');
         }
@@ -175,11 +175,11 @@ class Admin extends Common
         }
             
         // 获取主键
-        $pk = Db::name($table)->getPk();
+        $pk = model($table)->getPk();
         $map = [];
         $map[$pk] = ['in', $ids];
 
-        $res = Db::name($table)->where($map)->delete();
+        $res = model($table)->where($map)->delete();
         if ($res === false) {
             return $this->error('删除失败');
         }

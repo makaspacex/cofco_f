@@ -312,7 +312,7 @@
             type: 1 //Page层类型
             , offset: 'auto'
             , skin: 'layer-ext-moon'
-            , area: ['750px', "100%"]
+            , area: ['800px', "85%"]
             , title: 'Science爬虫关键词 '
             , shade: 0.5 //遮罩透明度
             // ,maxmin: true //允许全屏最小化
@@ -326,7 +326,7 @@
             type: 2 //Page层类型
             , offset: 'auto'
             , skin: 'layer-ext-moon'
-            , area: ['60%', "100%"]
+            , area: ['800px', "85%"]
             , title: '添加Pubmed爬虫关键词 '
             , shade: 0.5 //遮罩透明度
             // ,maxmin: true //允许全屏最小化
@@ -343,7 +343,7 @@
             type: 2 //Page层类型
             , offset: 'auto'
             , skin: 'layer-ext-moon'
-            , area: ['70%', "100%"]
+            , area: ['800px', "85%"]
             , title: '添加Pubmed爬虫关键词 '
             , shade: 0.5 //遮罩透明度
             , anim: 1 //0-6的动画形式，-1不开启
