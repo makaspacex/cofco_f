@@ -12,7 +12,7 @@ use think\Exception;
 //include("app" . DS . "cofco" . DS . "config.php");
 
 
-class upload extends AdminCOFCO
+class upload extends AdminBase
 {
     protected function _initialize()
     {

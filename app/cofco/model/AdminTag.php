@@ -2,7 +2,7 @@
 namespace app\cofco\model;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Model;
-class AdminTag extends Model
+class AdminTag extends AdminBase
 {
     // 定义时间戳字段名
     protected $createTime = 'ctime';

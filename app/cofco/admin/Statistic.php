@@ -5,7 +5,7 @@ namespace app\cofco\admin;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use think\Db;
 
-class Statistic extends AdminCOFCO
+class Statistic extends AdminBase
 {
     /*
      * 数据标注说明

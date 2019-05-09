@@ -14,7 +14,7 @@ include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
  * Class finaly
  * @package app\cofco\admin
  */
-class Finaly extends AdminCOFCO
+class Finaly extends AdminBase
 {
     public function index()
     {

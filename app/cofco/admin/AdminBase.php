@@ -16,7 +16,7 @@ use app\admin\controller\Admin;
  * 后台公共控制器
  * @package app\admin\controller
  */
-class AdminCOFCO extends Admin
+class AdminBase extends Admin
 {
     /**
      * 初始化方法

@@ -15,7 +15,7 @@ include("app".DS."cofco".DS."common".DS."getMap.php");
  * @package app\cofco\admin
  */
 
-class pending extends AdminCOFCO
+class pending extends AdminBase
 {
     /**主页
      * @return mixed

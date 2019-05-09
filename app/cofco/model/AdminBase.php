@@ -13,9 +13,5 @@ namespace app\cofco\model;
 use think\Model;
 class AdminBase extends Model
 {
-    // 设置当前模型的数据库连接
-    protected $connection = [
-        'prefix'      => 'cofco_',
-    ];
-
+    protected $connection = ['prefix'=>'cofco_'];
 }

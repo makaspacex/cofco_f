@@ -3,7 +3,7 @@ namespace app\cofco\model;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Model;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
-class AdminLevellabel extends Model
+class AdminLevellabel extends AdminBase
 {
     // 定义时间戳字段名
     protected $createTime = 'ctime';
@@ -14,8 +14,6 @@ class AdminLevellabel extends Model
     {
         return self::column('id,value');
     }
-
-
 
     public static function getOption($id = 0)
     {

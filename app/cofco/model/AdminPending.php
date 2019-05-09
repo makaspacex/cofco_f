@@ -20,12 +20,11 @@ use think\Model;
 class AdminPending extends AdminBase
 {
     // 定义时间戳字段名
-    protected $tableName = 'content';
+    protected $name = 'admin_content';
     protected $createTime = 'ctime';
     protected $updateTime = false;
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
-
 
     public static function strFilter($str){
         //特殊字符的过滤方法

@@ -327,12 +327,12 @@ class Module extends Admin
         $info = include_once $mod_path.'info.php';
         if ($this->request->isPost()) {
             // 过滤系统表
-            foreach ($info['tables'] as $t) {
+            $tables = $this->getModuleTables($info);
+            foreach ($tables as $t) {
                 if (in_array($t, config('hs_system.tables'))) {
                     return $this->error('模块数据表与系统表重复['.$t.']');
                 }
             }
-
             $post = $this->request->post();
             // 导入SQL
             $sql_file = realpath($mod_path.'sql'.DS.'install.sql');
@@ -460,7 +460,7 @@ class Module extends Admin
         }
         // 插件依赖检查 TODO
         $info['id'] = $mod['id'];
-        $this->assign('tables', $this->checkTable($info['tables']));
+        $this->assign('tables', $this->checkTable($info['tables'],$info));
         $this->assign('data_info', $info);
         return $this->fetch();
     }
@@ -936,19 +936,35 @@ class Module extends Admin
         return true;
     }
 
+    private function getModuleTables($info){
+        $res = [];
+        $db_prefix = '';
+        if(key_exists('db_prefix',$info)){
+            $db_prefix =$info['db_prefix'];
+        }
+        foreach ($info['tables'] as $k => $v) {
+            $res[$k]= $db_prefix.$v;
+        }
+        return $res;
+    }
+
     /**
      * 检查表是否存在
      * @param array $list 目录列表
      * @author 橘子俊 <364666827@qq.com>
      * @return array
      */
-    private function checkTable($tables = [])
+    private function checkTable($tables = [],$info = [])
     {
         $res = [];
+        $db_prefix = config('database.prefix');
+        if(key_exists('db_prefix',$info)){
+            $db_prefix =$info['db_prefix'];
+        }
         foreach ($tables as $k => $v) {
-            $res[$k]['table'] = config('database.prefix').$v;
+            $res[$k]['table'] = $db_prefix.$v;
             $res[$k]['exist'] = '<span style="color:green">✔︎</span>';
-            if (Db::query("SHOW TABLES LIKE '".config('database.prefix').$v."'")) {
+            if (Db::query("SHOW TABLES LIKE '".$db_prefix.$v."'")) {
                 $res[$k]['exist'] = '<strong style="color:red">表名已存在</strong>'; 
             }
         }

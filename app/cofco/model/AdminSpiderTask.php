@@ -17,7 +17,7 @@ use think\Model;
  * 钩子模型
  * @package app\admin\model
  */
-class AdminSpiderTask extends Model
+class AdminSpiderTask extends AdminBase
 {
     // 定义时间戳字段名
     protected $createTime = 'ctime';

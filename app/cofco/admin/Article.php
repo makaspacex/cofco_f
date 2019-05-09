@@ -2,13 +2,15 @@
 
 
 namespace app\cofco\admin;
+use \think\Request;
 
 use app\cofco\model\AdminPending as PendingModel;
-class Article extends AdminCOFCO
+class Article extends AdminBase
 {
     public function getSearchMap(){
         $title = input('param.title/s');
-        $kw_id = input('param.$kw_id/s');
+        $kw_id = input('param.kw_id/s');
+        $art_ids = input('param.art_id/a');
         $date_start = input('param.date_start/s');
         $date_end = input('param.date_end/s');
         $impact_factor_start = input('param.impact_factor_start/s');
@@ -16,6 +18,7 @@ class Article extends AdminCOFCO
         $journal_zone_start = input('param.journal_zone_start/s');
         $journal_zone_end = input('param.journal_zone_end/s');
         $status = input('param.status/s');
+
         $map = array();
         if(!empty($title)) {
             $map['title'] = ['LIKE', '%' . $title . '%'];
@@ -24,27 +27,42 @@ class Article extends AdminCOFCO
             $map['kw_id']= ['EQ', $kw_id ];
         }
 
+        if(!empty($art_ids)){
+            $map['art_id']= ['IN', $art_ids];
+        }
+
+        // 影响因子
         if(!empty($impact_factor_start)){
             $map['impact_factor'] = ['EGT',$impact_factor_start];
         }
-
         if(!empty($impact_factor_end)) {
             $map['impact_factor']= ['ELT',$impact_factor_start];
         }
+        if(!empty($impact_factor_start) and !empty($impact_factor_end)){
+            $map['impact_factor']=['BETWEEN',[$impact_factor_start,$impact_factor_end]];
+        }
 
+        // 发表时间筛选
         if(!empty($date_start)){
             $map['issue']=['EGT',$date_start];
         }
         if(!empty($date_end)){
             $map['issue']=['ELT',$date_end];
         }
+        if(!empty($date_start) and !empty($date_end)){
+            $map['issue']=['BETWEEN',[$date_start,$date_end]];
+        }
+
+        // 分区处理
         if(!empty($journal_zone_start)) {
             $map['journal_zone']= ['EGT',$journal_zone_start];
         }
         if(!empty($journal_zone_end)) {
             $map['journal_zone']= ['ELT',$journal_zone_end];
         }
-
+        if(!empty($journal_zone_start) and !empty($journal_zone_end)){
+            $map['journal_zone']=['BETWEEN',[$journal_zone_start,$journal_zone_end]];
+        }
         if(!empty($status)){
             $map['status']= ['eq', $status ];
         }
@@ -57,13 +75,17 @@ class Article extends AdminCOFCO
      * @throws \think\exception\DbException
      */
     public function search(){
-
-        $where_map = $this->getSearchMap();
-        $page_size = input('param.limit/s');
-        $res = PendingModel::where($where_map)->paginate($page_size, false);
-        if ($res)
-            return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
-        return json(['code' => 0, 'message' => '操作失败', 'data' => []]);
+        try {
+            $where_map = $this->getSearchMap();
+            $page_size = input('param.limit/s');
+            $order_by = input('param.orderby/s','ctime');
+            $ordertype = input('param.ordertype/s','desc');
+            $res = PendingModel::where($where_map)->order($order_by,$ordertype) ->paginate($page_size, false);
+            if ($res)
+                return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
+        } catch(\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
+        }
     }
 
     /**
@@ -71,8 +93,19 @@ class Article extends AdminCOFCO
      */
     public function view(){
 
-
     }
 
+    /*
+     * 文章删除 一个或多个，或条件删除
+     */
+    public function del(){
+        try {
+            $where_map = $this->getSearchMap();
+            PendingModel::where($where_map)->delete();
+            return json(['code' => 0, 'message' => '操作完成']);
+        } catch(\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
+        }
 
+    }
 }

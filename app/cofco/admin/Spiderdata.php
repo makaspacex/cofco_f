@@ -10,7 +10,7 @@ use app\cofco\model\AdminPending as PendingModel;
 
 include("app".DS."cofco".DS."common".DS."getMap.php");
 
-class Spiderdata extends AdminCOFCO
+class Spiderdata extends AdminBase
 {
     /** 主页
      * @return mixed
@@ -20,8 +20,9 @@ class Spiderdata extends AdminCOFCO
      */
     public function index()
     {
-        $keyword_list = KwModel::select();
+        $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
+        $this->assign('art_status', 1);
         return $this->fetch();
     }
 

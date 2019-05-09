@@ -17,7 +17,7 @@ include ("app".DS."config.php");
  * Class Prepending
  * @package app\cofco\admin
  */
-class Output extends AdminCOFCO
+class Output extends AdminBase
 {
     public function index()
     {

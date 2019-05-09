@@ -12,26 +12,24 @@
 
 
 <!-- =================  自定义表格工具按钮, script标签的ID不要变  ===================================================-->
-<script type="text/html" id="toolbar">
+<div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除[选中行数据]</button>
         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">通过审核[选中行数据]</button>
         <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="pass_query_data">通过审核[搜索结果数据]</button>
     </div>
-</script>
+</div>
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
-<script type="text/html" id="rowtools">
+<div type="text/html" id="rowtools" class="hide">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-xs" lay-event="pass">通过审核</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
+</div>
 <script>
 
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
-        var init_url = "{$article_api_url}/search?status=1"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
         render_article_table(init_url);
     });
 

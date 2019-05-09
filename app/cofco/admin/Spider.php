@@ -26,7 +26,7 @@ use think\Config;
  *
  * @package app\COFCO\admin
  */
-class Spider extends AdminCOFCO
+class Spider extends AdminBase
 {
 
 

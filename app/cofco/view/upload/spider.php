@@ -7,19 +7,10 @@
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="pause">暂停</a>
-        <a class="layui-btn  layui-btn-sm" lay-event="resume">恢复</a>
-        <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="terminate">终止</a>
-        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
-<!--        <br>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">暂停IDS</a>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">恢复IDS</a>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">终止IDS</a>-->
-<!--        <br>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">暂停Content</a>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">恢复Content</a>-->
-<!--        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">终止Content</a>-->
-<!--    -->
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="pause">暂停</a>
+        <a class="layui-btn  layui-btn-xs" lay-event="resume">恢复</a>
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="terminate">终止</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 <script type="text/html" id="statusTpl">
@@ -59,30 +50,30 @@
             , url: '{$getthreadstatus_url}'
             , toolbar: '#toolbarDemo'
             , title: '用户数据表'
-            , totalRow: true
+            , totalRow: false
             , cellMinWidth: 80
+            // , height: 'full-200'
             , smartReloadModel:true
             , reloaddingShow:false
             , cols: [[
-                {field: 'uid', title: 'ID', width: 50, fixed: 'left', unresize: true, sort: true, totalRowText: '合计行'}
+                {field: 'uid', title: 'ID', width: 50, unresize: true, sort: true, totalRowText: '合计行'}
                 , {field: 'uname', title: '用户名', width: 100}
                 , {field: 'kw_name', title: '关键词名', width: 80}
                 , {field: 'sp_t', title: '爬虫', width: 140}
-                // , {field: 'w_num', title: '爬虫数目'}
+                , {field: 'w_num', title: '爬虫数目'}
                 // , {field: 'pN', title: '页数'}
                 // , {field: 'f_pN', title: '完成页数'}
                 // , {field: 'fail_pN', title: '失败页数'}
                 , {field: 'total_num', title: '总文章'}
                 , {field: 'f_num', title: '完成文章'}
                 , {field: 'fail_num', title: '失败文章'}
-
-                // , {field: 'idsP_status', title: '翻页进程'}
-                // , {field: 'cP_status', title: '文章获取进程', width: 120}
+                , {field: 'idsP_status', title: '翻页进程', width: 80}
+                , {field: 'cP_status', title: '文章获取进程', width: 120}
                 , {field: 'c_time', title: '创建时间', width: 165}
                 , {field: 's_time', title: '最后启动时间', width: 165}
                 , {field: 'status', fixed: 'right',title: '状态',templet: '#statusTpl',width:80}
                 // , {field: 'operation', title: '操作'}
-                , {fixed: 'right', width: 260, align: 'center', toolbar: '#barDemo'}
+                , {title: '操作', fixed: 'right', width: 260, align: 'center', toolbar: '#barDemo'}
 
             ]]
             , page: false

@@ -30,7 +30,7 @@ use app\cofco\model\AdminKw as KwModel;
  *
  * @package app\COFCO\admin
  */
-class Labeldata extends AdminCOFCO
+class Labeldata extends AdminBase
 {
     /*
      * 人工输入说明

@@ -1,7 +1,7 @@
 <?php
 namespace app\cofco\admin;
 
-class Index extends AdminCOFCO
+class Index extends AdminBase
 {
     public function index()
     {
