@@ -10,14 +10,11 @@
 // +----------------------------------------------------------------------
 namespace app\cofco\model;
 
-use think\Model;
-//use think\Loader;
-
 /**
  * 钩子模型
  * @package app\admin\model
  */
-class AdminFinaly extends Model
+class AdminFinaly extends AdminBase
 {
     // 定义时间戳字段名
     protected $createTime = 'ctime';

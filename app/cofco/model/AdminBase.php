@@ -10,26 +10,12 @@
 // +----------------------------------------------------------------------
 namespace app\cofco\model;
 
-class AdminKw extends AdminBase
+use think\Model;
+class AdminBase extends Model
 {
-    // 定义时间戳字段名
-    protected $createTime = 'ctime';
-    protected $updateTime = false;
-    // 自动写入时间戳
-    protected $autoWriteTimestamp = true;
-    public static function getOption($id = 0)
-    {
-        $rows = self::column('id,keywords');
-        $str = '';
-        foreach ($rows as $k => $v) {
-            if ($id == $k) {
-                $str .= '<option value="'.$v.'" selected>'.$v.'</option>';
-            } else {
-                $str .= '<option value="'.$v.'">'.$v.'</option>';
-            }
-        }
-        return $str;
-    }
-
+    // 设置当前模型的数据库连接
+    protected $connection = [
+        'prefix'      => 'cofco_',
+    ];
 
 }

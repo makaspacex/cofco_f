@@ -13,7 +13,7 @@
             <div class="layui-col-md2">
                 <label class="layui-form-label">期刊分区</label>
                 <div class="layui-input-block">
-                    <select name="journal_zone" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
+                    <select name="journal_zone_start" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                         <option value="">不限制</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -24,7 +24,7 @@
             </div>
             <div class="layui-col-md1">
                 <div class="layui-input-input">
-                    <select name="journal_zone" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
+                    <select name="journal_zone_end" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                         <option value="">不限制</option>
                         <option value="1">1</option>
                         <option value="2">2</option>

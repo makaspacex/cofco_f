@@ -180,8 +180,8 @@ class upload extends AdminCOFCO
         }
 //        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
 //        $this->assign('controlspider_url',Config::get('controlspider_url'));
-        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
-        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
+        $this->assign('controlspider_url',Config::get('spider.controlspider_url'));
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);
@@ -192,13 +192,23 @@ class upload extends AdminCOFCO
 
     public function add()
     {
-        $pubmed_keyword_list = KwModel::where("type", "0")->select();
-        $science_keyword_list = KwModel::where("type", "1")->select();
+        //定义pubmed查询条件
+        $pubmed_map =[];
+        $pubmed_map['type'] = 1;
+        $pubmed_map['status'] = 1;
+
+        //定义science查询条件
+        $science_map = [];
+        $science_map['type'] = 2;
+        $science_map['status'] =1;
+
+        $pubmed_keyword_list = KwModel::where($pubmed_map)->select();
+        $science_keyword_list = KwModel::where($science_map)->select();
         $uid = $_SESSION['hisiphp_']['admin_user']['uid'];
         $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
-        $this->assign('uid', $uid);
-        $this->assign('uname', $uname);
-        $this->assign('controlspider_url', config('spider.controspider_url'));
+        $this->assign('uid',$uid);
+        $this->assign('uname',$uname);
+        $this->assign('controlspider_url',config('spider.controlspider_url'));
         $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
         $this->assign('science_keyword_list', $science_keyword_list);
         $this->view->engine->layout(false);

@@ -12,11 +12,7 @@ namespace app\cofco\model;
 use think\Model;
 use app\cofco\model\AdminTag as TagModel;
 
-/**
- * 钩子模型
- * @package app\admin\model
- */
-class AdminLabel extends Model
+class AdminLabel extends AdminBase
 {
     // 定义时间戳字段名
     protected $createTime = 'ctime';

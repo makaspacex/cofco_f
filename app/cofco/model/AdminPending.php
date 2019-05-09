@@ -17,17 +17,17 @@ use think\Model;
  * 钩子模型
  * @package app\admin\model
  */
-class AdminPending extends Model
+class AdminPending extends AdminBase
 {
     // 定义时间戳字段名
-    protected $table = 'spiderapp_content';
+    protected $tableName = 'content';
     protected $createTime = 'ctime';
     protected $updateTime = false;
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
 
-      public static function strFilter($str){
+    public static function strFilter($str){
         //特殊字符的过滤方法
         $str = str_replace('`', '', $str);
         $str = str_replace('·', '', $str);
@@ -111,6 +111,5 @@ class AdminPending extends Model
         $str = str_replace("'", '', $str);
         return trim($str);
     }
-
 
 }

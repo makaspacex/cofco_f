@@ -22,7 +22,8 @@
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <script type="text/html" id="rowtools">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-xs" lay-event="pass">通过审核</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -60,6 +61,13 @@
                 });
             }else if(layEvent === 'del'){
 
+            }else if(layEvent === 'source'){
+                var type_ = data['project'];
+                var sourr_url = 'https://www.ncbi.nlm.nih.gov/pubmed/'+data['art_id'];
+                if( type_ === 'SCIENCE_SPIDER'){
+                    sourr_url = 'https://www.sciencedirect.com/science/article/pii/'+data['art_id'];
+                }
+                window.open(sourr_url, '_blank');
             }
             // ............... 未完成的其操作
         })

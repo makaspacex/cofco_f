@@ -63,7 +63,7 @@ class Spider extends AdminCOFCO
         $uname = $_SESSION['hisiphp_']['admin_user']['nick'];
         $this->assign('uid',$uid);
         $this->assign('uname',$uname);
-        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('controlspider_url',config('spider.controlspider_url'));
         $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
         $this->assign('science_keyword_list', $science_keyword_list);
         return $this->fetch();
@@ -72,8 +72,8 @@ class Spider extends AdminCOFCO
 
     public function control()
     {
-        $this->assign('getthreadstatus_url',Config::get('getthreadstatus_url'));
-        $this->assign('controlspider_url',Config::get('controlspider_url'));
+        $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
+        $this->assign('controlspider_url',config('spider.controlspider_url'));
         return $this->fetch();
     }
 
