@@ -20,6 +20,8 @@ class Spiderdata extends AdminBase
      */
     public function index()
     {
+//        $article = PendingModel::with(['createUser','spiderKw'])->where(['art_id'=>'30844296'])->find()->toArray();
+
         $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
         $this->assign('art_status', 1);

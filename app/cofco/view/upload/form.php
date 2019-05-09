@@ -3,6 +3,9 @@
     .layui-form-title{
         color: #5FB878!important;
     }
+    .layui-textarea {
+        min-height: 420px;
+    }
 </style>
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm" >
     <div class="layui-container-fluid" style="max-width: 1400px">
@@ -135,21 +138,22 @@
             </div>
 
 
-            <div class="layui-col-md11">
+            <div class="layui-col-md6">
                 <div class="layui-form-title margin-t-20 margin-b-10">原文摘要</div>
             </div>
-            <div class="layui-col-md11">
-                <div class="layui-form-item">
-                    <textarea rows="25" class="layui-textarea field-abstract" name="abstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
-                </div>
-
-            </div>
-            <div class="layui-col-md11">
+            <div class="layui-col-md6">
                 <div class="layui-form-title margin-t-20 margin-b-10">摘要翻译</div>
             </div>
-            <div class="layui-col-md11">
-                <div class="layui-form-item">
-                    <textarea rows="25"  class="layui-textarea field-tabstract" name="tabstract" lay-verify="" autocomplete="off" placeholder=""></textarea>
+            <div class="layui-col-md6">
+                <div class="layui-form-item textarea-container">
+                    <pre class="pre"><span /><br /><br /></pre>
+                    <textarea rows="25" class="layui-textarea field-abstract auto-textarea-content" name="abstract" lay-verify="" autocomplete="off" placeholder="原文摘要"></textarea>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item textarea-container">
+                    <pre class="pre"><span /><br /><br /></pre>
+                    <textarea rows="25" class="layui-textarea field-tabstract auto-textarea-content" name="tabstract" lay-verify="" autocomplete="off" placeholder="翻译摘要"></textarea>
                 </div>
             </div>
             <div class="layui-col-md12">
@@ -162,11 +166,8 @@
                 <input type="hidden" class="field-id" name="id">
                 <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">提交</button>
             </div>
-
-
         </div>
     </div>
-
 
 </form>
 {include file="admin@block/layui" /}
@@ -177,7 +178,8 @@
         laydate.render({
             elem: '#issue'
         });
-    })
+    });
+
 </script>
 
 <form class="layui-form " action="{:url()}" method="post" id="editForm">

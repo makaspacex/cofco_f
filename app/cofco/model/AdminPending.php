@@ -11,6 +11,7 @@
 namespace app\cofco\model;
 
 use think\Model;
+use app\admin\model\AdminUser;
 //use think\Loader;
 
 /**
@@ -110,5 +111,26 @@ class AdminPending extends AdminBase
         $str = str_replace("'", '', $str);
         return trim($str);
     }
+
+    public function getCreaterNameAttr($value, $data){
+        $aa = AdminUser::get(['id'=>$data['creater']])->toArray();
+        return $aa['nick'];
+    }
+
+    public function getKwnameAttr($value, $data){
+        $aa = AdminUser::get(['id'=>$data['creater']])->toArray();
+        return $aa;
+    }
+
+    // 自动查询爬虫关键词
+    public function spiderKw(){
+        return $this->hasOne('AdminKw','id','kw_id');
+    }
+
+    public function createUser(){
+        return $this->hasOne('app\admin\model\AdminUser','id','creater');
+    }
+
+
 
 }

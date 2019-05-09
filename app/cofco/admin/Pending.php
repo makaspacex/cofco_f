@@ -23,8 +23,9 @@ class pending extends AdminBase
      */
     public function index()
     {
-        $keyword_list = KwModel::paginate();
+        $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
+        $this->assign('art_status', 2);
         return $this->fetch();
     }
 

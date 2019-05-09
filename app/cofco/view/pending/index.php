@@ -1,39 +1,48 @@
+<!-- 加载统一layui资源 -->
 {include file="admin@block/layui" /}
-{include file='cofco@block/search' /}
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
-<script type="text/html" id="toolbarDemo">
+
+<!-- 加载统一搜索表单 -->
+{include file='cofco@block/search'/}
+
+<!-- 加载统一的文章表格框架，注意此时并未执行渲染动作 -->
+{include file='cofco@block/article_table' /}
+
+
+<!--  ---------------- 华 ------- 丽 ------- 丽 ------- 的 ------- 分 ------- 割 ------- 线 ----------------------- -->
+
+<!-- =================  自定义表格工具按钮, script标签的ID不要变  ===================================================-->
+<div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
-<!--        <button class="layui-btn layui-btn-sm" lay-event="pending_add">添加</button>-->
-        <button class="layui-btn layui-btn-sm" lay-event="pending_del">删除选中行数据</button>
-<!--        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pending_del_all">删除所有数据</button>-->
     </div>
-</script>
+</div>
 
+<!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
+<div type="text/html" id="rowtools" class="hide">
+</div>
 <script>
-    layui.use(['table'], function () {
-        var table = layui.table;
-        var $ = layui.jquery;
-        layui.use('form', function(){
-            try {
-                $("#journal_zone").find("option[value={:input('get.journal_zone')}]").attr('selected', 'true');
-            }
-            catch (e) {}
-            try {
-                $("#sstr").find("option[value={:input('get.sstr')}]").attr('selected', 'true');
-            }catch (e) {}
-            var form = layui.form;
-            form.render('select');
-        });
-        table.render(getTable('2'));
-        addToolBarEvent(table);
-        addBarEvent(table);
+
+    //-------------- 执行表格渲染动作 --------------------------------------------------
+    $(function () {
+        var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        render_article_table(init_url);
     });
+
+    //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
+    layui.use(['jquery', 'table'],function () {
+        var table = layui.table, $ = layui.jquery;
+        // 行工具栏监听
+        table.on('tool(articletable)',function (obj) {
+            var data = obj.data,layEvent = obj.event;
+            if(layEvent === 'detail'){
+
+            }else if(layEvent === 'source'){
+
+            }
+        });
+        // 工具栏监听
+        table.on('toolbar(articletable)',function (obj) {
+
+        });
+    });
+
 </script>
-<script src="__COFCO_JS__/common.js"></script>
-
-
-

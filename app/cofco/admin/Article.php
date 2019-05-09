@@ -7,7 +7,7 @@ use \think\Request;
 use app\cofco\model\AdminPending as PendingModel;
 class Article extends AdminBase
 {
-    public function getSearchMap(){
+    public static function getSearchMap(){
         $title = input('param.title/s');
         $kw_id = input('param.kw_id/s');
         $art_ids = input('param.art_id/a');
@@ -76,15 +76,15 @@ class Article extends AdminBase
      */
     public function search(){
         try {
-            $where_map = $this->getSearchMap();
+            $where_map = Article::getSearchMap();
             $page_size = input('param.limit/s');
             $order_by = input('param.orderby/s','ctime');
             $ordertype = input('param.ordertype/s','desc');
-            $res = PendingModel::where($where_map)->order($order_by,$ordertype) ->paginate($page_size, false);
+            $res = PendingModel::with(['createUser','spiderKw'])->where($where_map)->order($order_by,$ordertype) ->paginate($page_size, false);
             if ($res)
                 return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
         } catch(\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
+            return json(['code' => 0, 'message' => '操作失败'.$e->getMessage(),'data'=>[]]);
         }
     }
 
@@ -95,12 +95,24 @@ class Article extends AdminBase
 
     }
 
+    public function setStatus(){
+        try {
+            $where_map = Article::getSearchMap();
+            $status = input('param.status/s'); // 默认状态不改变
+            $setstatus = input('param.setstatus/s',$status);
+            PendingModel::where($where_map)->update(['status' => $setstatus]);;
+            return json(['code' => 0, 'message' => '操作完成']);
+        } catch(\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
+        }
+    }
+
     /*
      * 文章删除 一个或多个，或条件删除
      */
     public function del(){
         try {
-            $where_map = $this->getSearchMap();
+            $where_map = Article::getSearchMap();
             PendingModel::where($where_map)->delete();
             return json(['code' => 0, 'message' => '操作完成']);
         } catch(\Exception $e) {

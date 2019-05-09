@@ -19,18 +19,53 @@
 
 <script>
 
-    function getSelectRows() {
-        layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
-            var tablePlug = layui.tablePlug;
-            var table = layui.table;
-            var layer = layui.layer;
-            var $ = layui.jquery;
-            tablePlug.smartReload.enable(true);
-        });
+    function getField(except_field=[],width){
+        var all_filed = [
+            {type: 'checkbox', fixed: 'left'}
+            // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+            , {field: 'title', title: '文章标题', width: 500, sort: true}
+            , {field: 'issue', title: '发表时间', width: 100, sort: true}
+            , {field: 'keyword', title: '关键词', width: 100}
+            , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return "<a href='#'>"+d['spider_kw']['name']+"</a>"}}
+            , {field: 'creater', title: '创建人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
+            // , {field: 'auditor', title: '审核人', width: 90}
+            // , {field: 'final_auditor', title: '终审核', width: 90}
+            , {field: 'ctime', title: '创建时间', width: 150, sort: true}
+            , {field: 'special_version', title: '特别说明', width: 90}
+            , {field: 'document_type', title: '文献类型', width: 90, sort: true}
+            , {field: 'urgency', title: '紧要程度', width: 90, sort: true}
+            // , {field: 'status', title: '状态', width: 90, sort: true}
+            , {field: 'abstract', title: '摘要', width: 100}
+            , {field: 'tabstract', title: '摘要翻译', width: 100}
+            , {field: 'doi', title: 'doi', width: 100}
+            , {field: 'impact_factor', title: '影响因子', width: 100, sort: true}
+            , {field: 'country', title: '国家', width: 100}
+            , {field: 'author', title: '作者', width: 100}
+            , {field: 'journal', title: '所属期刊', width: 100}
+            , {field: 'journal_zone', title: '期刊分区', width: 100, sort: true}
+            , {field: 'institue', title: '发表机构', width: 100}
+            , {title: '操作',fixed: 'right', width: width, align: 'center', toolbar: '#all_rowtools'}
+        ];
+        var new_filed = [];
+        for(var key in all_filed){
+            var ele = all_filed[key];
+            var is_push = true;
+            for(var ex_key in except_field){
+                var ex_filed_name = except_field[ex_key];
+                if(ele.field === ex_filed_name){
+                    is_push = false;
+                }
+            }
+            if(is_push){ new_filed.push(ele)};
+        }
+        var cols = [];
+        cols.push(new_filed);
+        console.log(cols);
+        return cols
     }
 
     // 文章列表统一渲染方法
-    function render_article_table(url) {
+    function render_article_table(url,except_field=[], width=80) {
         layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
             var tablePlug = layui.tablePlug;
             var table = layui.table;
@@ -59,32 +94,7 @@
                 , smartReloadModel:true
                 , reloaddingShow:true
                 // ,size: 'sm' //小尺寸的表格
-                , cols: [[
-                    {type: 'checkbox', fixed: 'left'}
-                    // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'title', title: '文章标题', width: 500, sort: true}
-                    , {field: 'issue', title: '发表时间', width: 100, sort: true}
-                    , {field: 'keyword', title: '关键词', width: 100}
-                    , {field: 'kw_id', title: '爬虫关键词', width: 100}
-                    , {field: 'creater', title: '创建人', width: 90, sort: true}
-                    // , {field: 'auditor', title: '审核人', width: 90}
-                    // , {field: 'final_auditor', title: '终审核', width: 90}
-                    , {field: 'ctime', title: '创建时间', width: 150, sort: true}
-                    , {field: 'special_version', title: '特别说明', width: 90}
-                    , {field: 'document_type', title: '文献类型', width: 90, sort: true}
-                    , {field: 'urgency', title: '紧要程度', width: 90, sort: true}
-                    , {field: 'status', title: '状态', width: 90, sort: true}
-                    , {field: 'abstract', title: '摘要', width: 100}
-                    , {field: 'tabstract', title: '摘要翻译', width: 100}
-                    , {field: 'doi', title: 'doi', width: 100}
-                    , {field: 'impact_factor', title: '影响因子', width: 100, sort: true}
-                    , {field: 'country', title: '国家', width: 100}
-                    , {field: 'author', title: '作者', width: 100}
-                    , {field: 'journal', title: '所属期刊', width: 100}
-                    , {field: 'journal_zone', title: '期刊分区', width: 100, sort: true}
-                    , {field: 'institue', title: '发表机构', width: 100}
-                    , {fixed: 'right', width: 'auto', align: 'center', toolbar: '#all_rowtools'}
-                ]]
+                , cols: getField(except_field,width)
                 , page: true
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;
@@ -144,7 +154,6 @@
                 var form_s = $('#article_search_form');
                 var form_data = form_s.serializeArray();
 
-
                 // 检查提交参数
                 var has_status = false;
                 var danger = true;
@@ -172,6 +181,7 @@
                         , offset:'auto'
                     }, function(){
                         _exe_del(article_api_url_del,form_data)
+                        layer.closeAll()
                     });
                 }else{
                     _exe_del(article_api_url_del,form_data)
@@ -187,7 +197,7 @@
                     case 'select_all_row':
                         $(".layui-table input[type='checkbox']").prop("checked",true);
                         var aa = $(".layui-table input[type='checkbox']").serializeArray();
-                        console.log(aa);
+                        form.render('checkbox');
                         break;
                     case 'de_select':
                         $(".layui-table input[type='checkbox']").each(function(){
@@ -207,6 +217,7 @@
                         } else {
                             $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked", false);
                         }
+                        form.render('checkbox');
                         break;
                     case 'del_selected':
                         var checkStatus = table.checkStatus(obj.config.id)
@@ -216,15 +227,17 @@
                             var ele = data[key_i];
                             form_data.push({name: "art_id["+key_i+']', value: ele['art_id']});
                         }
-                        form_data.push({name: "status", value: "{$art_status}"});
-                        _exe_del(article_api_url_del,form_data);
+                        if(form_data.length == 0){
+                            layer.msg('请选择数据',{offset:'auto'})
+                        }else {
+                            form_data.push({name: "status", value: "{$art_status}"});
+                            _exe_del(article_api_url_del,form_data);
+                        }
                         break;
                 }
-                form.render('checkbox');
             });
 
             table.on('tool(articletable)',function (obj) {
-                console.log(obj);
                 if(obj.event === 'del_this_row'){
                     var form_data = [];
                     form_data.push({name: "art_id[0]", value: obj.data['art_id']});
