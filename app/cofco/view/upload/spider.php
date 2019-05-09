@@ -13,37 +13,15 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
-<script type="text/html" id="statusTpl">
-    {{#  if(d.status == 0){ }}
-    <a>未运行</a>
-    {{#  } else if (d.status == 1) { }}
-    <a>运行中</a>
-    {{#  } else if (d.status == 2) { }}
-    <a>已暂停</a>
-    {{#  } else if (d.status == 3) { }}
-    <a>已完成</a>
-    {{#  } else if (d.status == 4) { }}
-    <a>已终止</a>
-    {{#  } else if (d.status == 5) { }}
-    <a>混合状态</a>
-    {{#  } else if (d.status == 6) { }}
-    <a>失败</a>
-    {{#  } else{ }}
-    <a>未初始化</a>
-    {{# } }}
-</script>
-
 <script src="__COFCO_JS__/spider.js"></script>
 <script>
-
     layui.use(['jquery', 'table','tablePlug'], function () {
         var table = layui.table;
         var tablePlug = layui.tablePlug;
         var $ = layui.$;
-
         tablePlug.smartReload.enable(true);
-        console.log('{$controlspider_url}');
 
+        var STATUS_NAME = {'-2':'失败', '-1': '未初始化', '0': '未运行', '1': '运行中', '2': '已暂停', '3':'已完成', '4':'已终止', '5':'混合状态'}
         table.render({
             elem: '#test'
             ,id: 'testReload'
@@ -67,11 +45,11 @@
                 , {field: 'total_num', title: '总文章'}
                 , {field: 'f_num', title: '完成文章'}
                 , {field: 'fail_num', title: '失败文章'}
-                , {field: 'idsP_status', title: '翻页进程', templet: '#statusTpl',width: 80}
-                , {field: 'cP_status', title: '文章获取进程',templet: '#statusTpl', width: 120}
+                , {field: 'idsP_status', title: '翻页进程', templet: function (d) {return STATUS_NAME[d.idsP_status]},width: 80}
+                , {field: 'cP_status', title: '文章获取进程',templet: function (d) {return STATUS_NAME[d.cP_status]}, width: 120}
                 , {field: 'c_time', title: '创建时间', width: 165}
                 , {field: 's_time', title: '最后启动时间', width: 165}
-                , {field: 'status', fixed: 'right',title: '状态',templet: '#statusTpl',width:80}
+                , {field: 'status', fixed: 'right',title: '状态',templet: function (d) {return STATUS_NAME[d.status]},width:80}
                 // , {field: 'operation', title: '操作'}
                 , {title: '操作', fixed: 'right', width: 260, align: 'center', toolbar: '#barDemo'}
 
