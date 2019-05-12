@@ -15,6 +15,7 @@
                 <div class="layui-input-block">
                     <select name="journal_zone_start" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                         <option value="">不限制</option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -26,6 +27,7 @@
                 <div class="layui-input-input">
                     <select name="journal_zone_end" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                         <option value="">不限制</option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>

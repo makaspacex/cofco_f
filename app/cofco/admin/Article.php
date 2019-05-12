@@ -32,13 +32,13 @@ class Article extends AdminBase
         }
 
         // 影响因子
-        if(!empty($impact_factor_start)){
+        if(!empty($impact_factor_start) or $impact_factor_start == '0' ){
             $map['impact_factor'] = ['EGT',$impact_factor_start];
         }
-        if(!empty($impact_factor_end)) {
-            $map['impact_factor']= ['ELT',$impact_factor_start];
+        if(!empty($impact_factor_end) or $impact_factor_end == '0') {
+            $map['impact_factor']= ['ELT',$impact_factor_end];
         }
-        if(!empty($impact_factor_start) and !empty($impact_factor_end)){
+        if((!empty($impact_factor_start) or $impact_factor_start == '0' )and (!empty($impact_factor_end) or $impact_factor_end == '0')){
             $map['impact_factor']=['BETWEEN',[$impact_factor_start,$impact_factor_end]];
         }
 
@@ -54,17 +54,17 @@ class Article extends AdminBase
         }
 
         // 分区处理
-        if(!empty($journal_zone_start)) {
+        if(!empty($journal_zone_start) or $journal_zone_start == '0') {
             $map['journal_zone']= ['EGT',$journal_zone_start];
         }
-        if(!empty($journal_zone_end)) {
+        if(!empty($journal_zone_end) or $journal_zone_end == '0') {
             $map['journal_zone']= ['ELT',$journal_zone_end];
         }
-        if(!empty($journal_zone_start) and !empty($journal_zone_end)){
+        if((!empty($journal_zone_start) or $journal_zone_start == '0')and (!empty($journal_zone_end) or $journal_zone_end == '0')){
             $map['journal_zone']=['BETWEEN',[$journal_zone_start,$journal_zone_end]];
         }
         if(!empty($status)){
-            $map['status']= ['eq', $status ];
+            $map['status']= ['EQ', $status ];
         }
         return $map;
     }
@@ -83,7 +83,7 @@ class Article extends AdminBase
             $res = PendingModel::with(['createUser','spiderKw'])->where($where_map)->order($order_by,$ordertype) ->paginate($page_size, false);
             if ($res)
                 return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             return json(['code' => 0, 'message' => '操作失败'.$e->getMessage(),'data'=>[]]);
         }
     }
@@ -102,7 +102,7 @@ class Article extends AdminBase
             $setstatus = input('param.setstatus/s',$status);
             PendingModel::where($where_map)->update(['status' => $setstatus]);;
             return json(['code' => 0, 'message' => '操作完成']);
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
         }
     }
