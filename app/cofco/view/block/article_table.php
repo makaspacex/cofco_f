@@ -21,6 +21,11 @@
 
 <script>
 
+    // 全局共享数据
+    SEARCH_RESULT_ROWS = -1
+
+
+
     function getField(except_field=[],width){
         var all_filed = [
             {type: 'checkbox', fixed: 'left'}
@@ -62,9 +67,21 @@
         }
         var cols = [];
         cols.push(new_filed);
-        console.log(cols);
         return cols
     }
+
+    // 删除按钮样式控制
+
+    function enable_del_btn() {
+        $('#del_query_data').removeClass('layui-btn-disabled');
+        $('#del_query_data').attr('disabled',false);
+    }
+
+    function disable_del_btn() {
+        $('#del_query_data').addClass('layui-btn-disabled');
+        $('#del_query_data').attr('disabled',true);
+    }
+
 
     // 文章列表统一渲染方法
     function render_article_table(url,except_field=[], width=80) {
@@ -97,9 +114,12 @@
                 , reloaddingShow:true
                 // ,size: 'sm' //小尺寸的表格
                 , cols: getField(except_field,width)
+                , limit:10
+                , limits:[10,15,20,30,40,50,60,70,80,90]
                 , page: true
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;
+                    SEARCH_RESULT_ROWS = res.data.total;
                     return {
                         "code": res.code, //解析接口状态
                         "msg": res.message, //解析提示文本
@@ -122,6 +142,11 @@
                 });
             });
 
+            // 重置按钮
+            $('#search_reset_btn').click(function (e) {
+                disable_del_btn()
+            })
+
             // 搜索按钮
             $('#search_submit_btn').click(function (e) {
                 var form_s = $('#article_search_form')
@@ -136,7 +161,7 @@
                     page: {curr: 1},
                     where: data
                 });
-
+                enable_del_btn()
                 if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
             });
 
@@ -144,10 +169,16 @@
                 $.post(article_api_url,form_data,function (rsp) {
                     if(rsp['code'] === 0){
                         table.reload('articletable',{page: {curr: 1} });
+                        $('#search_reset_btn').trigger('click')
+                        $('#search_submit_btn').trigger('click')
+                        disable_del_btn()
+                        $('#search_reset_btn').trigger('click')
+                        layer.closeAll()
                     }else{
                         layer.msg(rsp['message'],{offset: 'auto'});
                     }
                 });
+
             }
 
             var article_api_url_del = "{$article_api_url}/del";
@@ -158,13 +189,8 @@
 
                 // 检查提交参数
                 var has_status = false;
-                var danger = true;
-
                 for(var key in form_data){
                     var ele = form_data[key];
-                    if(ele['value'] !== ''){
-                        danger = false;
-                    }
                     if(ele['name'] === 'status'){
                         has_status = true;
                     }
@@ -175,22 +201,16 @@
                     form_data.push({name: "status", value: "{$art_status}"})
                 }
 
-                // 如果查询条件太弱
-                if(danger){
-                    //询问框
-                    layer.confirm('由于查询条件太弱，本次操作将删除大量结果，是否继续？', {
-                        btn: ['确认','取消'] //按钮
-                        , offset:'auto'
-                    }, function(){
-                        _exe_del(article_api_url_del,form_data)
-                        layer.closeAll()
-                    });
-                }else{
+                //询问框
+                layer.confirm('本次操作将删除'+SEARCH_RESULT_ROWS+'条结果，是否继续？', {
+                    btn: ['确认','取消'] //按钮
+                    , offset:'auto'
+                }, function(){
                     _exe_del(article_api_url_del,form_data)
-                }
+                });
+
                 if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
             });
-
 
 
             table.on('toolbar(articletable)',function (obj) {
@@ -245,7 +265,6 @@
                     var form_data = [];
                     form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                     form_data.push({name: "status", value: "{$art_status}"});
-                    console.log(form_data)
                     _exe_del(article_api_url_del,form_data);
                 }else if(layEvent === 'source'){ // 查看来源
                     console.log(data['project']);

@@ -78,8 +78,8 @@
             <div class="layui-col-md4">
                 <div class="layui-inline right-align">
                     <button type="submit" class="layui-btn layui-btn-sm" id="search_submit_btn">搜索</button>
-                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="del_query_data">删除本次搜索结果</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary" id="search_reset_btn">重置</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled" id="del_query_data" disabled>删除本次搜索结果</button>
                 </div>
             </div>
         </div>

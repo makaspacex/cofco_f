@@ -2,10 +2,10 @@
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="spider_new">新建爬虫</button>
+        <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="sync_journal">同步分区表数据到文章列表</button>
     </div>
 </script>
 
-<table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="pause">暂停</a>
         <a class="layui-btn  layui-btn-xs" lay-event="resume">恢复</a>
@@ -13,15 +13,37 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
+<blockquote class="layui-elem-quote layui-text">
+    <div class="row">
+        <div class="layui-col-md-10">
+            <h3>重要说明</h3>
+        </div>
+        <div class="layui-col-md-10">
+            <ul>
+                <li>中科院分区网站由于登录方法加入了智能验证，所以暂时无法实现自动登录，需要用户输入登录完成后的cookie<br>
+                    当提示您需要输入cookie的时候，请重新登录中科院分区表网站，并更新cookie
+                </li>
+                <li>登录进程状态显示合并到了普通爬虫上，关键词名称表示正在使用的中科院账户名称</li>
+                <li>Pubmed和ScienceDirect爬虫默认只查询缓存到本地的影响因子、分区等信息，无法查询到的期刊置为空</li>
+                <li>目前仅爬取了中科院分区网站2018年所有期刊数据，共计8978本期刊，影响因子为2015-2017三年平均值</li>
+            </ul>
+        </div>
+    </div>
+</blockquote>
+
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
 <script src="__COFCO_JS__/spider.js"></script>
 <script>
-    layui.use(['jquery', 'table','tablePlug'], function () {
+    layui.use(['jquery', 'table','tablePlug','layer'], function () {
         var table = layui.table;
         var tablePlug = layui.tablePlug;
+        var layer = layui.layer;
         var $ = layui.$;
         tablePlug.smartReload.enable(true);
 
-        var STATUS_NAME = {'-2':'失败', '-1': '未初始化', '0': '未运行', '1': '运行中', '2': '已暂停', '3':'已完成', '4':'已终止', '5':'混合状态'}
+        var STATUS_NAME = {'-2':'失败', '-1': '未初始化', '0': '未运行', '1': '运行中', '2': '已暂停', '3':'已完成', '4':'已终止', '5':'混合状态','6':'等待用户输入Cookies'}
         table.render({
             elem: '#test'
             ,id: 'testReload'
@@ -36,7 +58,7 @@
             , cols: [[
                 {field: 'uid', title: 'ID', width: 50, unresize: true, sort: true, totalRowText: '合计行'}
                 , {field: 'uname', title: '用户名', width: 100}
-                , {field: 'kw_name', title: '关键词名', width: 80}
+                , {field: 'kw_name', title: '关键词名', width: 120}
                 , {field: 'sp_t', title: '爬虫', width: 140}
                 , {field: 'w_num', title: '爬虫数目'}
                 // , {field: 'pN', title: '页数'}
@@ -73,6 +95,22 @@
                     offset: 'auto',
                     area: ['800px', '85%'] //自定义文本域宽高
                 });
+            }else if(obj.event === 'sync_journal'){
+                // var index = layer.load(1, {
+                //     offset:'auto',
+                //     shade: [0.6,'#000'] //0.1透明度的白色背景
+                // });
+                var index =  layer.msg('正在执行，请稍后... <br/>如果长时间没有反应，请刷新并通知管理员', {
+                    icon: 16,
+                    offset:'auto',
+                    time:4000000,
+                    shade: [0.6,'#000'] //0.1透明度的白色背景
+                });
+
+                $.post()
+
+
+
             }
         });
 

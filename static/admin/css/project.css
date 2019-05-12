@@ -41,6 +41,9 @@ body{
 }
 
 /*导航头*/
+.header-logo {
+    width: 120px;
+}
 .layui-header,.header-fold,.header-logo,.main-nav{
     height: 45px;
     line-height: 45px;
@@ -50,7 +53,7 @@ body{
     top: 45px;
 }
 .layui-nav .layui-nav-item {
-    line-height: 45px;
+    line-height: 40px;
 }
 .main-nav .layui-nav-item a{
     font-size: 14px;
@@ -135,6 +138,36 @@ body{
 .layui-body::-webkit-scrollbar {
     display: none;
 }
+
+
+
+/* 标签栏 头*/
+.layui-tab-title{
+    height: 32px;
+}
+.layui-tab-title li{
+    line-height: 32px;
+    font-size: 13px;
+}
+
+.layui-tab-title .layui-this:after{
+    height: 33px;
+}
+.tool-btns{
+    top: 6px;
+}
+
+/*!* 普通按钮大小*!*/
+/*.layui-btn {*/
+/*    height: 30px;*/
+/*    line-height: 30px;*/
+/*    padding: 0 12px;*/
+/*    font-size: 12px;*/
+/*}*/
+/*.aicon {*/
+/*    font-size: 12px;*/
+/*}*/
+
 
 
 /*!**/
