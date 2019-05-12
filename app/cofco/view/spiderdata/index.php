@@ -14,7 +14,7 @@
 <div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">通过审核[选中行数据]</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="pass_query_data">通过审核[搜索结果数据]</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled" lay-event="pass_query_data" disabled>通过审核[搜索结果数据]</button>
     </div>
 </div>
 
@@ -33,6 +33,24 @@
         var except_field = ['special_version','document_type','urgency','tabstract']
         render_article_table(init_url,except_field,240);
     });
+    
+    function enable_pass_btn() {
+        $('button[lay-event="pass_query_data"]').removeClass('layui-btn-disabled')
+        $('button[lay-event="pass_query_data"]').attr('disabled',false)
+    }
+    function disable_pass_btn() {
+        $('button[lay-event="pass_query_data"]').addClass('layui-btn-disabled')
+        $('button[lay-event="pass_query_data"]').attr('disabled',true)
+    }
+
+    // 搜索按钮
+    $('#search_submit_btn').click(function (e) {
+        enable_pass_btn()
+    });
+    // 重置按钮, 必须放到搜索时间监听下面
+    $('#search_reset_btn').click(function (e) {
+        disable_pass_btn()
+    })
 
     function _exe_update_status(requset_url, form_data){
 
@@ -42,6 +60,11 @@
             $.post(requset_url,form_data,function (rsp) {
                 if(rsp['code'] === 0){
                     table.reload('articletable',{page: {curr: 1} });
+                    $('#search_reset_btn').trigger('click')
+                    $('#search_submit_btn').trigger('click')
+                    disable_pass_btn()
+                    disable_del_btn()
+                    layer.closeAll()
                 }else{
                     layer.msg(rsp['message'],{offset: 'auto'});
                 }
@@ -108,7 +131,6 @@
                     _exe_update_status(article_api_url_setstauts,form_data);
                 }
             }else if(layEvent === 'pass_query_data'){
-                console.log('pass_query_data')
                 var form_s = $('#article_search_form');
                 var form_data = form_s.serializeArray();
 
@@ -130,19 +152,14 @@
                     form_data.push({name: "status", value: "{$art_status}"})
                 }
 
-                // 如果查询条件太弱
-                if(danger){
-                    //询问框
-                    layer.confirm('由于查询条件太弱，本次操作将更改大量结果，是否继续？', {
-                        btn: ['确认','取消'] //按钮
-                        , offset:'auto'
-                    }, function(){
-                        _exe_update_status(article_api_url_setstauts,form_data)
-                        layer.closeAll()
-                    });
-                }else{
+                //询问框
+                layer.confirm('本次操作将审核通过'+SEARCH_RESULT_ROWS+'条结果，是否继续？', {
+                    btn: ['确认','取消'] //按钮
+                    , offset:'auto'
+                }, function(){
                     _exe_update_status(article_api_url_setstauts,form_data)
-                }
+                });
+
 
             }
         });
