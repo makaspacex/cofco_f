@@ -41,6 +41,9 @@ body{
 }
 
 /*导航头*/
+.header-logo {
+    width: 120px;
+}
 .layui-header,.header-fold,.header-logo,.main-nav{
     height: 45px;
     line-height: 45px;
@@ -50,7 +53,7 @@ body{
     top: 45px;
 }
 .layui-nav .layui-nav-item {
-    line-height: 45px;
+    line-height: 40px;
 }
 .main-nav .layui-nav-item a{
     font-size: 14px;

@@ -38,7 +38,7 @@ layui.define(['element', 'form'], function(exports) {
     if(window.sessionStorage.getItem("lockscreen") == "true"){
         lockscreen();
     }
-    
+
     /* 导航高亮标记 */
     $('.admin-nav-item').click(function() {
         window.localStorage.setItem("adminNavTag", $(this).attr('href'));
@@ -47,9 +47,9 @@ layui.define(['element', 'form'], function(exports) {
         $('#switchNav a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
     }
     if (typeof(LAYUI_OFFSET) == 'undefined') {
-        layer.config({offset:'60px'});  
+        layer.config({offset:'60px'});
     } else {
-        layer.config({offset:LAYUI_OFFSET+'px'});  
+        layer.config({offset:LAYUI_OFFSET+'px'});
     }
     /* 打开/关闭左侧导航 */
     $('#foldSwitch').click(function(){
@@ -58,7 +58,7 @@ layui.define(['element', 'form'], function(exports) {
             that.addClass('close');
             $('#switchNav').animate({width:'52px'}, 100).addClass('close').hover(function() {
                 if (that.hasClass('close')) {
-                    $(this).animate({width:'200px'}, 300);
+                    $(this).animate({width:'160px'}, 300);
                     $('#switchNav .fold-mark').removeClass('fold-mark');
                     $('a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
                 }
@@ -73,8 +73,8 @@ layui.define(['element', 'form'], function(exports) {
         } else {
             $('a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
             that.removeClass('close');
-            $('#switchNav').animate({width:'200px'}, 100).removeClass('close');
-            $('#switchBody,.footer').animate({left:'200px'}, 100);
+            $('#switchNav').animate({width:'160px'}, 100).removeClass('close');
+            $('#switchBody,.footer').animate({left:'160px'}, 100);
             $('#switchNav .fold-mark').removeClass('fold-mark');
         }
     });
@@ -140,10 +140,10 @@ layui.define(['element', 'form'], function(exports) {
 
     /*iframe弹窗*/
     $('.j-iframe-pop').click(function(){
-        var that = $(this), 
-            _url = that.attr('href'), 
-            _title = that.attr('title'), 
-            _width = that.attr('width') ? that.attr('width') : 750, 
+        var that = $(this),
+            _url = that.attr('href'),
+            _title = that.attr('title'),
+            _width = that.attr('width') ? that.attr('width') : 750,
             _height = that.attr('height') ? that.attr('height') : 500;
         if (!_url) {
             layer.msg('请设置href参数');
@@ -229,7 +229,7 @@ layui.define(['element', 'form'], function(exports) {
 
     /* ajax请求操作 */
     $(document).on('click', '.j-ajax', function() {
-        var that = $(this), 
+        var that = $(this),
             href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href'),
             refresh = !that.attr('refresh') ? 'yes' : that.attr('refresh');
         if (!href) {
@@ -331,7 +331,7 @@ layui.define(['element', 'form'], function(exports) {
                     layer.msg(res.msg, {}, function(){
                         if (res.code != 0) {
                             location.reload();
-                        } 
+                        }
                     });
                 });
             };
@@ -342,7 +342,7 @@ layui.define(['element', 'form'], function(exports) {
                 layer.close(index);
             });
         } else {
-           code(that); 
+            code(that);
         }
         return false;
     });

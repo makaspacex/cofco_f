@@ -112,6 +112,8 @@
                 , reloaddingShow:true
                 // ,size: 'sm' //小尺寸的表格
                 , cols: getField(except_field,width)
+                , limit:10
+                , limits:[10,15,20,30,40,50,60,70,80,90]
                 , page: true
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;

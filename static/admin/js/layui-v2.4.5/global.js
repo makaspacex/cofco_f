@@ -58,7 +58,7 @@ layui.define(['element', 'form'], function(exports) {
             that.addClass('close');
             $('#switchNav').animate({width:'52px'}, 100).addClass('close').hover(function() {
                 if (that.hasClass('close')) {
-                    $(this).animate({width:'200px'}, 300);
+                    $(this).animate({width:'160px'}, 300);
                     $('#switchNav .fold-mark').removeClass('fold-mark');
                     $('a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
                 }
@@ -73,8 +73,8 @@ layui.define(['element', 'form'], function(exports) {
         } else {
             $('a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
             that.removeClass('close');
-            $('#switchNav').animate({width:'200px'}, 100).removeClass('close');
-            $('#switchBody,.footer').animate({left:'200px'}, 100);
+            $('#switchNav').animate({width:'160px'}, 100).removeClass('close');
+            $('#switchBody,.footer').animate({left:'160px'}, 100);
             $('#switchNav .fold-mark').removeClass('fold-mark');
         }
     });
