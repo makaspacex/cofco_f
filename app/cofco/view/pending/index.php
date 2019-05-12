@@ -18,13 +18,15 @@
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 </div>
 <script>
 
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        render_article_table(init_url);
+        var except_field = ['special_version','document_type','urgency','tabstract','auditor','final_auditor']
+        render_article_table(init_url,except_field,240);
     });
 
     //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
@@ -33,10 +35,8 @@
         // 行工具栏监听
         table.on('tool(articletable)',function (obj) {
             var data = obj.data,layEvent = obj.event;
-            if(layEvent === 'detail'){
-
-            }else if(layEvent === 'source'){
-
+            if(layEvent === 'edit'){
+                console.log(data);
             }
         });
         // 工具栏监听

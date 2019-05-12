@@ -129,6 +129,7 @@ class AdminPending extends AdminBase
 
     public function createUser(){
         return $this->hasOne('app\admin\model\AdminUser','id','creater');
+
     }
 
 

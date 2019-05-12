@@ -18,8 +18,9 @@ class Finaly extends AdminBase
 {
     public function index()
     {
-        $keyword_list = KwModel::select();
+        $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
+        $this->assign('art_status', 3);
         return $this->fetch();
     }
 

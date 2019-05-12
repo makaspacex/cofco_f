@@ -83,7 +83,7 @@ class Article extends AdminBase
             $res = PendingModel::with(['createUser','spiderKw'])->where($where_map)->order($order_by,$ordertype) ->paginate($page_size, false);
             if ($res)
                 return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             return json(['code' => 0, 'message' => '操作失败'.$e->getMessage(),'data'=>[]]);
         }
     }
@@ -102,7 +102,7 @@ class Article extends AdminBase
             $setstatus = input('param.setstatus/s',$status);
             PendingModel::where($where_map)->update(['status' => $setstatus]);;
             return json(['code' => 0, 'message' => '操作完成']);
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             return json(['code' => 25, 'message' => '操作失败'.$e->getMessage()]);
         }
     }

@@ -20,8 +20,6 @@
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-xs" lay-event="pass_this_one">通过审核</a>
 </div>
 <script>
@@ -30,7 +28,7 @@
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        var except_field = ['special_version','document_type','urgency','tabstract']
+        var except_field = ['special_version','document_type','urgency','tabstract','auditor','final_auditor']
         render_article_table(init_url,except_field,240);
     });
 
@@ -56,36 +54,13 @@
         // 行工具栏监听
         table.on('tool(articletable)',function (obj) {
             var data = obj.data,layEvent = obj.event;
-            if(layEvent === 'detail'){
-                var content = '<table class="layui-table">';
-                for(var o in data){
-                    content+= '<tr><td>'+o+'</td><td>' + data[o] +'</td></tr>';
-                }
-                content+="</table>";
-                layer.open({
-                    type: 1 //Page层类型
-                    ,offset: 'auto'
-                    ,skin: 'layer-ext-moon'
-                    ,area: ['750px', "80%"]
-                    ,title: '当前行数据'
-                    ,shade: 0.5 //遮罩透明度
-                    // ,maxmin: true //允许全屏最小化
-                    ,anim: 1 //0-6的动画形式，-1不开启
-                    ,content: content
-                });
-            }else if(layEvent === 'source'){ // 查看来源
-                var type_ = data['project'];
-                var sourr_url = 'https://www.ncbi.nlm.nih.gov/pubmed/'+data['art_id'];
-                if( type_ === 'SCIENCE_SPIDER'){
-                    sourr_url = 'https://www.sciencedirect.com/science/article/pii/'+data['art_id'];
-                }
-                window.open(sourr_url, '_blank');
-            }else if(layEvent === 'pass_this_one'){ // 通过审核
+            if(layEvent === 'pass_this_one'){ // 通过审核
                 var form_data = [];
                 form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                 form_data.push({name: "status", value: "{$art_status}"});
                 _exe_update_status(article_api_url_setstauts,form_data);
             }
+
         });
     });
     // 工具栏监听

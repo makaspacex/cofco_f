@@ -12,6 +12,8 @@
 
 <!-- =================  通用每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="general_rowtools" class="hide">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_this_row">删除</a>
 </div>
 <!--预留站位-->
@@ -28,8 +30,8 @@
             , {field: 'keyword', title: '关键词', width: 100}
             , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return "<a href='#'>"+d['spider_kw']['name']+"</a>"}}
             , {field: 'creater', title: '创建人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
-            // , {field: 'auditor', title: '审核人', width: 90}
-            // , {field: 'final_auditor', title: '终审核', width: 90}
+            , {field: 'auditor', title: '审核人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
+            , {field: 'final_auditor', title: '终审核', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
             , {field: 'ctime', title: '创建时间', width: 150, sort: true}
             , {field: 'special_version', title: '特别说明', width: 90}
             , {field: 'document_type', title: '文献类型', width: 90, sort: true}
@@ -238,12 +240,38 @@
             });
 
             table.on('tool(articletable)',function (obj) {
-                if(obj.event === 'del_this_row'){
+                var layEvent = obj.event,data = obj.data;
+                if(layEvent === 'del_this_row'){
                     var form_data = [];
                     form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                     form_data.push({name: "status", value: "{$art_status}"});
                     console.log(form_data)
                     _exe_del(article_api_url_del,form_data);
+                }else if(layEvent === 'source'){ // 查看来源
+                    console.log(data['project']);
+                    var type_ = data['project'];
+                    var sourr_url = 'https://www.ncbi.nlm.nih.gov/pubmed/'+data['art_id'];
+                    if( type_ === 'SCIENCE_SPIDER'){
+                        sourr_url = 'https://www.sciencedirect.com/science/article/pii/'+data['art_id'];
+                    }
+                    window.open(sourr_url, '_blank');
+                }else if(layEvent === 'detail'){
+                    var content = '<table class="layui-table">';
+                    for(var o in data){
+                        content+= '<tr><td>'+o+'</td><td>' + data[o] +'</td></tr>';
+                    }
+                    content+="</table>";
+                    layer.open({
+                        type: 1 //Page层类型
+                        ,offset: 'auto'
+                        ,skin: 'layer-ext-moon'
+                        ,area: ['750px', "80%"]
+                        ,title: '当前行数据'
+                        ,shade: 0.5 //遮罩透明度
+                        // ,maxmin: true //允许全屏最小化
+                        ,anim: 1 //0-6的动画形式，-1不开启
+                        ,content: content
+                    });
                 }
             });
 
