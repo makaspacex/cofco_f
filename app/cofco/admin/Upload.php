@@ -2,13 +2,13 @@
 
 namespace app\cofco\admin;
 
-use app\admin\model\AdminUserlog as LogModel;
+use app\cofco\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
 use think\Exception;
 
-include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
+//include("app" . DS . "cofco" . DS . "common" . DS . "getMap.php");
 //include("app" . DS . "cofco" . DS . "config.php");
 
 

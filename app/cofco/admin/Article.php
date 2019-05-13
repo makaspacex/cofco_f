@@ -3,7 +3,7 @@
 
 namespace app\cofco\admin;
 
-use app\admin\model\AdminUserlog as LogModel;
+use app\cofco\model\AdminUserlog as LogModel;
 use \think\Request;
 
 use app\cofco\model\AdminPending as PendingModel;

@@ -1,3 +1,4 @@
+
 <table class="layui-table mt10" lay-even="" lay-skin="row">
     <colgroup>
         <col width="400">
@@ -21,4 +22,4 @@
     {/volist}
     </tbody>
 </table>
-{include file="block/layui" /}
+

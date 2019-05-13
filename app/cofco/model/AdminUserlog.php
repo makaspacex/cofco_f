@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\model;
+namespace app\cofco\model;
 
 use think\Model;
 
