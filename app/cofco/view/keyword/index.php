@@ -263,8 +263,8 @@
             type: 1 //Page层类型
             , offset: 'auto'
             , skin: 'layer-ext-moon'
-            , area: ['750px', "100%"]
-            , title: 'Science爬虫关键词'
+            , area: ['750px', "80%"]
+            , title: 'Pubmed爬虫关键词'
             , shade: 0.5 //遮罩透明度
             // ,maxmin: true //允许全屏最小化
             , anim: 1 //0-6的动画形式，-1不开启
@@ -297,7 +297,6 @@
                     // content+= '<tr><td>'+o+'</td><td>' + data[o] +'</td></tr>';
                     count++;
                     if(count%4===0){
-
                         content +='</tr><tr><td></td>';
                     }
 
@@ -312,7 +311,7 @@
             type: 1 //Page层类型
             , offset: 'auto'
             , skin: 'layer-ext-moon'
-            , area: ['800px', "85%"]
+            , area: ['800px', "80%"]
             , title: 'Science爬虫关键词 '
             , shade: 0.5 //遮罩透明度
             // ,maxmin: true //允许全屏最小化
@@ -344,7 +343,7 @@
             , offset: 'auto'
             , skin: 'layer-ext-moon'
             , area: ['800px', "85%"]
-            , title: '添加Pubmed爬虫关键词 '
+            , title: '添加Science爬虫关键词 '
             , shade: 0.5 //遮罩透明度
             , anim: 1 //0-6的动画形式，-1不开启
             , content: 'addsciencekw'

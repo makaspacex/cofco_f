@@ -2,6 +2,15 @@ layui.use(['jquery'], function() {
     var $ = layui.jquery, input = '';
     /* 修改模式下表单自动赋值 */
     if (formData) {
+        var status = formData['status'];
+        if(status){
+            for(var i=1;i<5;i++){
+                if(i<status-1||i>status+1) {
+                    input = $('.field-status[value="' + i + '"]');
+                    input.prop('disabled', true);
+                }
+            }
+        }
         for (var i in formData) {
             switch($('.field-'+i).attr('type')) {
                 case 'select':
@@ -10,6 +19,7 @@ layui.use(['jquery'], function() {
                     break;
                 case 'radio':
                     input = $('.field-'+i+'[value="'+formData[i]+'"]');
+                    console.log(input);
                     input.prop('checked', true);
                     break;
                 case 'checkbox':
@@ -26,6 +36,8 @@ layui.use(['jquery'], function() {
                     input.val(formData[i]);
                     break;
             }
+
+
             if (input.attr('data-disabled')) {
                 input.prop('disabled', true);
             }

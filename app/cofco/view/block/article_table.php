@@ -13,6 +13,7 @@
 <!-- =================  通用每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="general_rowtools" class="hide">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_this_row">删除</a>
 </div>
@@ -290,6 +291,18 @@
                         // ,maxmin: true //允许全屏最小化
                         ,anim: 1 //0-6的动画形式，-1不开启
                         ,content: content
+                    });
+                }else if(layEvent === 'edit'){
+                    var article_api_url_view = '{$article_api_url}/view?art_id=';
+                    console.log(data.art_id);
+                    article_api_url_view = article_api_url_view+data.art_id;
+                    layer.open({
+                        type: 2,
+                        title: '编辑页面',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['80%', '100%'],
+                        content: article_api_url_view //iframe的url
                     });
                 }
             });

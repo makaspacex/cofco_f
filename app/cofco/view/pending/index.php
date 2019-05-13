@@ -18,7 +18,7 @@
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+
 </div>
 <script>
 
@@ -35,9 +35,7 @@
         // 行工具栏监听
         table.on('tool(articletable)',function (obj) {
             var data = obj.data,layEvent = obj.event;
-            if(layEvent === 'edit'){
-                console.log(data);
-            }
+
         });
         // 工具栏监听
         table.on('toolbar(articletable)',function (obj) {
