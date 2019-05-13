@@ -14,6 +14,12 @@
                 <div class="layui-form-title margin-t-20 margin-b-10">文章基本信息</div>
             </div>
             <div class="layui-col-md11">
+                <label class="layui-form-label">文章ID</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input field-art_id" name="art_id">
+                </div>
+            </div>
+            <div class="layui-col-md11">
                 <label class="layui-form-label">文章标题</label>
                 <div class="layui-input-block">
                     <input type="text" class="layui-input field-title" name="title" lay-verify="" autocomplete="off" placeholder="">
@@ -165,7 +171,6 @@
                 </div>
             </div>
             <div class="layui-col-md10">
-                <input type="hidden" class="field-art_id" name="art_id">
                 <button type="submit" class="layui-btn" lay-submit="" id="formSubmit">提交</button>
             </div>
         </div>

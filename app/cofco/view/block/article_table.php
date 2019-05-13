@@ -34,10 +34,10 @@
             , {field: 'title', title: '文章标题', width: 500, sort: true}
             , {field: 'issue', title: '发表时间', width: 100, sort: true}
             , {field: 'keyword', title: '关键词', width: 100}
-            , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return "<a href='#'>"+d['spider_kw']['name']+"</a>"}}
+            , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return d.kw_id>0? "<a href='#'>"+d['spider_kw']['name']+"</a>":"<a></a>"}}
             , {field: 'creater', title: '创建人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
-            , {field: 'auditor', title: '审核人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
-            , {field: 'final_auditor', title: '终审核', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
+            , {field: 'auditor', title: '审核人', width: 90, sort: true}
+            , {field: 'final_auditor', title: '终审核', width: 90, sort: true}
             , {field: 'ctime', title: '创建时间', width: 150, sort: true}
             , {field: 'special_version', title: '特别说明', width: 90}
             , {field: 'document_type', title: '文献类型', width: 90, sort: true}
@@ -85,7 +85,7 @@
 
 
     // 文章列表统一渲染方法
-    function render_article_table(url,except_field=[], width=80) {
+    function render_article_table(url,except_field=[], width=80,title='') {
         layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
             var tablePlug = layui.tablePlug;
             var table = layui.table;
@@ -108,7 +108,7 @@
                 , url: url
                 , id: 'articletable'
                 , cellMinWidth: 80
-                , title: '未审核数据表'
+                , title: title
                 , totalRow: true
                 , autoSort: false
                 , smartReloadModel:true
@@ -294,7 +294,6 @@
                     });
                 }else if(layEvent === 'edit'){
                     var article_api_url_view = '{$article_api_url}/view?art_id=';
-                    console.log(data.art_id);
                     article_api_url_view = article_api_url_view+data.art_id;
                     layer.open({
                         type: 2,

@@ -1,13 +1,14 @@
 <?php
-namespace app\admin\controller;
-use app\admin\model\AdminUserlog as LogModel;
-use think\Validate;
+
+namespace app\cofco\admin;
+
+use app\cofco\model\AdminUserlog as LogModel;
 
 /**
  * 后台用户、角色控制器
  * @package app\admin\controller
  */
-class Useradmin extends Admin
+class Useradmin extends AdminBase
 {
     public $tab_data = [];
     /**
@@ -20,7 +21,7 @@ class Useradmin extends Admin
         $tab_data['menu'] = [
             [
                 'title' => '数据统计',
-                'url' => 'admin/useradmin/index',
+                'url' => 'cofco/useradmin/index',
             ],
             [
                 'title' => '人员信息管理',
@@ -35,7 +36,7 @@ class Useradmin extends Admin
      * @author LiFH
      * @return mixed
      */
-    public function index($q = '')
+    public function index()
     {
         $uID = $_SESSION['hisiphp_']['admin_user']['uid'];
 

@@ -24,7 +24,8 @@
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        render_article_table(init_url);
+        var except_field = ['special_version','document_type','urgency','tabstract']
+        render_article_table(init_url,except_field,240,'文献输出表');
     });
 
     //-------------- 为自定义的按钮添加监听事件 ----------------------------------------

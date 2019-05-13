@@ -2,7 +2,7 @@
 
 namespace app\cofco\admin;
 
-use app\admin\model\AdminUserlog as LogModel;
+use app\cofco\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 use think\Config;
@@ -122,24 +122,7 @@ class upload extends AdminBase
      */
     public function manual()
     {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $data['issue'] = strtotime($data['issue']);
-            $data['issue'] = date("Y-m", $data['issue']);
-            $data['creater'] = $_SESSION['hisiphp_']['admin_user']['nick'];
-            if ($data['status'] == 2) {
-                unset($data['id']);
-                if (!PendingModel::create($data)) {
-                    return $this->error('添加失败！');
-                }
-                $ids = PendingModel::field('id')->select();
-                $tid = max($ids);
-                // 插入日志 1代表人工输入
-                $logmap = getLogMap(1, $tid);
-                LogModel::insert($logmap);
-                return $this->success('添加成功。');
-            }
-        }
+
         $tab_data = $this->tab_data;
         $tab_data['current'] = url('');
         $this->assign('tab_data', $tab_data);

@@ -3,6 +3,7 @@
 
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminUserlog as LogModel;
 use \think\Request;
 
 use app\cofco\model\AdminPending as PendingModel;
@@ -74,7 +75,25 @@ class Article extends AdminBase
         }
         return $map;
     }
+    /**获取日志查询条件
+     * @param $type 日志类型 *
+     * 1文献初审状态  2文献标注状态
+     * 3文献终审状态  4文献输出状态
+     * @param $id 文章ID
+     * @return array
+     */
+    function insertLog($type,$tid){
+        $map = [];
+        $map['type'] = $type;
+        $map['uID'] = $_SESSION['hisiphp_']['admin_user']['uid'];  //用户ID
+        $map['tID'] = $tid;  //文章ID
+        $map['ctime'] = time();
+        $map['year'] = date('Y');
+        $map['month'] = date('m');
+        $map['day'] = date('d');
+        return LogModel::insert($map);
 
+    }
     /**
      * 文章筛选过滤统一接口
      * @return \think\response\Json
@@ -137,13 +156,61 @@ class Article extends AdminBase
 
     }
 
-    /**
-     * 文章编辑
+    /**文章添加
+     * @return \think\response\Json
+     */
+    public function add()
+    {
+        if ($this->request->isPost()) {
+
+            $data = $this->request->post();
+
+            $data['issue'] = strtotime($data['issue']);
+            $data['issue'] = date("Y-m", $data['issue']);
+            $data['creater'] = $_SESSION['hisiphp_']['admin_user']['uid'];
+            $data['project'] = 'MAN';
+            $art_id = $data['art_id'];
+            if ($data['status'] == 1) {
+
+                $res = PendingModel::where('art_id',$art_id)->find();
+                if($res){
+                    return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！','data' => $res]);
+                }
+
+                $res = PendingModel::create($data);
+                if (!$res) {
+                    return json(['code' => 25, 'message' => '操作失败']);
+                }
+                // 插入日志 1代表人工输入
+                Article::insertLog(1, $art_id);
+
+                return json(['code' => 0, 'message' => '操作成功']);
+            }
+        }
+
+    }
+
+    /**文章编辑
+     * @return \think\response\Json
      */
     public function edit()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+
+            $status = $data['status'];
+            $pre_status = $data['pre_status'];
+            $art_id = $data['art_id'];
+            if((int)$status-1==$pre_status){
+                Article::insertLog($pre_status, $art_id);
+            }
+            else if((int)$status==$pre_status-1){
+                $map = [];
+                $map['type'] = $status;
+                $map['tID'] = $art_id;  //文章ID
+                LogModel::where($map)->delete();
+            }
+            unset($data['pre_status']);
             $res = PendingModel::update($data);
             if (!$res) {
                 return json(['code' => 25, 'message' => '操作失败']);

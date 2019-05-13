@@ -19,7 +19,6 @@ layui.use(['jquery'], function() {
                     break;
                 case 'radio':
                     input = $('.field-'+i+'[value="'+formData[i]+'"]');
-                    console.log(input);
                     input.prop('checked', true);
                     break;
                 case 'checkbox':
