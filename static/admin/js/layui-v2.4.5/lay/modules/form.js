@@ -137,8 +137,11 @@ layui.define('layer', function(exports){
           // 是否是需要输入任意值的输入框 @izhangxm
           var enable_input = eval(select.attr('enable-input'));
           var submit_opt = select.find('option[class*="submit-value"]');
-          var hide_dd_rendered_opt = $("dd[class*='submit-value']");
+          var hide_dd_rendered_opt = select.next('div').children('dl').children("dd[class*='submit-value']");
           var pre_selectedIndex = select[0].selectedIndex;
+          var filter_name = $(select).next('div').children('div').children("input").attr('lay-verify');
+          var enable_date = filter_name === 'date';
+
           if(disabled) return;
           
           //展开下拉
@@ -211,7 +214,8 @@ layui.define('layer', function(exports){
           
           //点击标题区域
           title.on('click', function(e){
-            if(enable_input){  return; } // @izhangmx
+            if(enable_input || enable_date){
+              return false;} // @izhangmx
             reElem.hasClass(CLASS+'ed') ? (
               hideDown()
             ) : (
@@ -223,13 +227,16 @@ layui.define('layer', function(exports){
 
           //设置了一个伪类，增大三角号的可点击面积 @izhangxm
           title.find('.layui-edge2').on('click', function(e){
-            title.find('.layui-edge').trigger('click')
+            title.find('.layui-edge').trigger('click');
             return false;
           });
 
           //点击箭头获取焦点
           title.find('.layui-edge').on('click', function(e){
-            input.focus();
+            if(!enable_date){
+              input.focus();
+            }
+
             reElem.hasClass(CLASS+'ed') ? (
                 hideDown()
             ) : (
@@ -239,11 +246,17 @@ layui.define('layer', function(exports){
             return false;
           });
 
+          input.change(function (e) {
+            console.log('input changed...')
+            input.trigger('keyup')
+          });
+
           //select 中 input 键盘事件
           input.on('keyup', function(e){ //键盘松开
             var keyCode = e.keyCode;
-
-            if(enable_input){
+            console.log('input keyup...')
+            if(enable_input || enable_date){
+              console.log(input.val())
               // hide_dd_rendered_opt.addClass('layui-this')
               // submit_opt.attr('selected',true);
               submit_opt.val(input.val());
@@ -254,6 +267,7 @@ layui.define('layer', function(exports){
               if(input.val()===''){
                 select[0].selectedIndex = pre_selectedIndex
               }
+              input.trigger('blur')
               return;
             }
 
@@ -262,7 +276,7 @@ layui.define('layer', function(exports){
               showDown();
             }
           }).on('keydown', function(e){ //键盘按下
-            if(enable_input){ return;} // @izhangmx
+            if(enable_input || enable_date){ return;} // @izhangmx
             var keyCode = e.keyCode;
 
             //Tab键隐藏
@@ -373,9 +387,9 @@ layui.define('layer', function(exports){
             input.on('keyup', search).on('blur', function(e){
 
               // if(enable_input){return}
-
+              window.title_in=false;
               var selectedIndex = select[0].selectedIndex;
-              
+
               thatInput = input; //当前的 select 中的 input 元素
               initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
               
@@ -432,13 +446,21 @@ layui.define('layer', function(exports){
           $(document).off('click', hide).on('click', hide); //点击其它元素关闭 select
         }
 
+        window.finished_select = false
         selects.each(function(index, select){
-
           // 是否是需要输入任意值的输入框 @izhangxm
           var enable_input = eval($(select).attr('enable-input'));
           $(select).find('option[class*="submit-value"]').remove();
-          if(enable_input){
+
+          var filter_name = $(select).attr('lay-verify')
+          var enable_date = filter_name === 'date';
+          var select_id =  $(select).attr('id')
+          if(enable_input || enable_date){
             $(select).append("<option value='' class='hide submit-value'>测试</option>")
+          }
+          if(select_id){
+            $(select).removeAttr('id')
+            $(select).removeAttr('lay-verify')
           }
 
           var othis = $(this)
@@ -463,6 +485,7 @@ layui.define('layer', function(exports){
             ,('<input type="text" placeholder="'+ placeholder +'" '
                 +('value="'+ (value ? selected.html() : '') +'"') //默认值
                 +(isSearch ? '' : ' readonly') //是否开启搜索
+                +(enable_date?"id='"+select_id+"' lay-verify=\"date\" ":' ')
                 +' class="'+input_cls
                 +(isSearch ? '' : ' layui-unselect')
                 + (disabled ? (' ' + DISABLED) : '') +'">') //禁用状态
@@ -496,6 +519,7 @@ layui.define('layer', function(exports){
           othis.after(reElem);
           events.call(this, reElem, disabled, isSearch);
         });
+        window.finished_select = true
       }
       
       //复选框/开关

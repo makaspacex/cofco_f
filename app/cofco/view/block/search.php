@@ -43,6 +43,7 @@
                 <div class="layui-input-block">
                     <select name="kw_id" id="kw_id" lay-verify="required" lay-search="">
                         <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
                         {volist name="keyword_list" id="v"}
                         <option value={$v['id']}>{$v['name']}</option>
                         {/volist}
@@ -53,14 +54,20 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">发表时间</label>
                 <div class="layui-input-block">
-                    <input type="text" name="date_start" id="date_start" value="{:input('get.date_start')}"
-                           lay-verify="date_start" placeholder="不限制" class="layui-input">
+<!--                    <input type="text" name="date_start" id="date_start" value="{:input('get.date_start')}"-->
+<!--                           lay-verify="date_start" placeholder="不限制" class="layui-input">-->
+                    <select name="date_start" id="date_start" lay-search="" enable-input="false" lay-verify="date">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-col-md2">
                 <div class="layui-layer-input">
-                    <input type="text" name="date_end" id="date_end" value="{:input('get.date_end')}" lay-verify="date"
-                           placeholder="不限制" autocomplete="off" class="layui-input">
+                    <select name="date_end" id="date_end" lay-search="" enable-input="false" lay-verify="date">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                    </select>
                 </div>
             </div>
 
@@ -92,9 +99,11 @@
     <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
 <script>
-    layui.use(['laydate','jquery'], function() {
-        var laydate = layui.laydate;
 
+    layui.use(['laydate','jquery'], function() {
+
+        setInterval()
+        var laydate = layui.laydate;
         laydate.render({
             elem: '#date_start'
         });
