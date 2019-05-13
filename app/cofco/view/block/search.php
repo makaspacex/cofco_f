@@ -5,17 +5,19 @@
             <div class="layui-col-md5">
                 <label class="layui-form-label">文章标题</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" value="{:input('get.title')}" lay-verify="required" placeholder="不限制"
-                           autocomplete="off" class="layui-input">
+                    <select name="title" id="title" lay-verify="required" lay-search="" enable-input="true">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                    </select>
                 </div>
             </div>
 
             <div class="layui-col-md2">
                 <label class="layui-form-label">期刊分区</label>
                 <div class="layui-input-block">
-                    <select name="journal_zone_start" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
+                    <select name="journal_zone_start" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}" >
                         <option value="">不限制</option>
-                        <option value="0">0</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -27,7 +29,7 @@
                 <div class="layui-input-input">
                     <select name="journal_zone_end" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
                         <option value="">不限制</option>
-                        <option value="0">0</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>

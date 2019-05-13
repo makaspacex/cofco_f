@@ -25,6 +25,7 @@ class AdminBase extends Admin
     {
         parent::_initialize();
         define('MODULENAME', 'COFCO');
+        define('NULL_STR', 'NULL<STRING>!@#!');
         $this->assign('article_api_url','/cofco/article');
     }
 
