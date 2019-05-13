@@ -34,7 +34,7 @@
             , {field: 'title', title: '文章标题', width: 500, sort: true}
             , {field: 'issue', title: '发表时间', width: 100, sort: true}
             , {field: 'keyword', title: '关键词', width: 100}
-            , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return "<a href='#'>"+d['spider_kw']['name']+"</a>"}}
+            , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return d.kw_id>0? "<a href='#'>"+d['spider_kw']['name']+"</a>":"<a></a>"}}
             , {field: 'creater', title: '创建人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
             , {field: 'auditor', title: '审核人', width: 90, sort: true}
             , {field: 'final_auditor', title: '终审核', width: 90, sort: true}
