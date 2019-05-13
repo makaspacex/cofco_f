@@ -294,7 +294,6 @@
                     });
                 }else if(layEvent === 'edit'){
                     var article_api_url_view = '{$article_api_url}/view?art_id=';
-                    console.log(data.art_id);
                     article_api_url_view = article_api_url_view+data.art_id;
                     layer.open({
                         type: 2,
