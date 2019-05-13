@@ -25,7 +25,7 @@
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
         var except_field = ['final_auditor'];
-        render_article_table(init_url,except_field,240);
+        render_article_table(init_url,except_field,240,'文献终审表');
     });
 
     //-------------- 为自定义的按钮添加监听事件 ----------------------------------------

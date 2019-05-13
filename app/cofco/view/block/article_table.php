@@ -85,7 +85,7 @@
 
 
     // 文章列表统一渲染方法
-    function render_article_table(url,except_field=[], width=80) {
+    function render_article_table(url,except_field=[], width=80,title='') {
         layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
             var tablePlug = layui.tablePlug;
             var table = layui.table;
@@ -108,7 +108,7 @@
                 , url: url
                 , id: 'articletable'
                 , cellMinWidth: 80
-                , title: '未审核数据表'
+                , title: title
                 , totalRow: true
                 , autoSort: false
                 , smartReloadModel:true

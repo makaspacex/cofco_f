@@ -29,7 +29,7 @@
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
         var except_field = ['special_version','document_type','urgency','tabstract','auditor','final_auditor']
-        render_article_table(init_url,except_field,300);
+        render_article_table(init_url,except_field,300,'文献初审表');
     });
     
     function enable_pass_btn() {
