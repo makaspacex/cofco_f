@@ -99,17 +99,30 @@
     <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
 <script>
+    $.wait = function(ms) {
+        var defer = $.Deferred();
+        setTimeout(function() { defer.resolve(); }, ms);
+        return defer;
+    };
+    $(function () {
+        $.wait(500).then(function (value) {
+            console.log('33333')
+            layui.use(['laydate','jquery'], function() {
 
-    layui.use(['laydate','jquery'], function() {
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#date_start'
+                });
+                //常规用法
+                laydate.render({
+                    elem: '#date_end'
+                });
+            })
 
-        setInterval()
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: '#date_start'
         });
-        //常规用法
-        laydate.render({
-            elem: '#date_end'
-        });
+
     })
+
+
+
 </script>

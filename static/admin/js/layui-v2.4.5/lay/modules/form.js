@@ -267,7 +267,9 @@ layui.define('layer', function(exports){
               if(input.val()===''){
                 select[0].selectedIndex = pre_selectedIndex
               }
-              input.trigger('blur')
+              if(enable_date){
+                input.trigger('blur')
+              }
               return;
             }
 
