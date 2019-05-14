@@ -5,7 +5,6 @@ namespace app\cofco\admin;
 
 
 use app\admin\model\AdminUserlog as LogModel;
-use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
 
 include("app".DS."cofco".DS."common".DS."getMap.php");
@@ -21,9 +20,7 @@ class Spiderdata extends AdminBase
     public function index()
     {
 //        $article = PendingModel::with(['createUser','spiderKw'])->where(['art_id'=>'30844296'])->find()->toArray();
-
-        $keyword_list = KwModel::all();
-        $this->assign('keyword_list', $keyword_list);
+        $this->init_searchForm();
         $this->assign('art_status', 1);
         return $this->fetch();
     }

@@ -76,16 +76,18 @@
                     </select>
                 </div>
             </div>
-
         </div>
 
         <div class="layui-row advanced_part hide">
             <div class="layui-col-md3">
                 <label class="layui-form-label">创建人</label>
                 <div class="layui-input-block">
-                    <select name="creator" id="creator" lay-verify="required" lay-search=""  >
+                    <select name="creater" id="creater" lay-verify="required" lay-search=""  >
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        {volist name="all_users" id="v"}
+                        <option value={$v['id']}>{$v['nick']}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -95,6 +97,9 @@
                     <select name="auditor" id="auditor" lay-verify="required" lay-search="">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        {volist name="all_users" id="v"}
+                        <option value={$v['id']}>{$v['nick']}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -105,6 +110,9 @@
                     <select name="labelor" id="labelor" lay-verify="required" lay-search="">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        {volist name="all_users" id="v"}
+                        <option value={$v['id']}>{$v['nick']}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -115,6 +123,9 @@
                     <select name="final_auditor" id="final_auditor" lay-verify="required" lay-search="">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        {volist name="all_users" id="v"}
+                        <option value={$v['id']}>{$v['nick']}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -143,7 +154,7 @@
             <div class="layui-col-md6">
                 <label class="layui-form-label">关键词</label>
                 <div class="layui-input-block">
-                    <select name="key_word" id="key_word" lay-verify="required" lay-search=""
+                    <select name="keyword" id="keyword" lay-verify="required" lay-search=""
                             enable-input="true">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
@@ -154,7 +165,7 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">文档类型</label>
                 <div class="layui-input-block">
-                    <select name="country" id="country" lay-verify="required" lay-search=""
+                    <select name="project" id="project" lay-verify="required" lay-search=""
                             enable-input="true">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>

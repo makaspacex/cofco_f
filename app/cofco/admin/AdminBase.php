@@ -12,6 +12,7 @@ namespace app\cofco\admin;
 
 use app\admin\controller\Admin;
 use app\admin\model\AdminUser;
+use app\cofco\model\AdminKw as KwModel;
 
 /**
  * 后台公共控制器
@@ -35,7 +36,10 @@ class AdminBase extends Admin
      * 获取搜索栏所有的应该获取的信息，包括分类
      */
     public function init_searchForm(){
+        $all_users = AdminUser::all();
+        $this->assign('all_users',$all_users);
 
-
+        $keyword_list = KwModel::all();
+        $this->assign('keyword_list', $keyword_list);
     }
 }

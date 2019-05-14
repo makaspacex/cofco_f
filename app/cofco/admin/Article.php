@@ -12,6 +12,43 @@ use app\cofco\model\AdminPending as PendingModel;
 
 class Article extends AdminBase
 {
+
+
+    private static function _valid($value){
+        return !empty($value) && $value != NULL_STR;
+    }
+
+    private static function _get_null_contion(){
+        return [['EXP','IS NULL'],['EQ',""],'or'];
+    }
+
+    private static function _assignLikeCondition(&$map, $field_name, $value){
+        if (!empty($value)) {
+            if($value == NULL_STR){
+                $map[$field_name] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }else{
+                $map[$field_name] = ['LIKE', '%' . $value . '%'];
+            }
+        }
+    }
+
+    private static function _assignEqCondition(&$map, $field_name, $value){
+
+        if (!empty($value)) {
+            if($value == NULL_STR){
+                $map[$field_name] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }else{
+                $map[$field_name] = ['EQ', $value];
+            }
+        }
+    }
+
+    /**
+     * 根据Request的数据，生成whereMap，用于查询条件筛选
+     *
+     * @return array
+     * @throws Exception
+     */
     public static function getSearchMap()
     {
         $title = input('param.title/s');
@@ -22,28 +59,33 @@ class Article extends AdminBase
         $impact_factor = input('param.impact_factor/s');
         $journal_zone = input('param.journal_zone/s');
         $status = input('param.status/s');
+        $doi = input('param.doi/s');
+        $creater = input('param.creater/s');
+        $auditor = input('param.auditor/s');
+        $labelor = input('param.labelor/s');
+        $final_auditor = input('param.final_auditor/s');
+        $abstract = input('param.abstract/s');
+        $tabstract = input('param.tabstract/s');
+        $keyword = input('param.keyword/s');
+        $project = input('param.project/s');
+        $country = input('param.country/s');
+        $author = input('param.author/s');
+        $institue = input('param.institue/s');
+        $journal = input('param.journal/s');
+        $issn = input('param.issn/s');
+        $urgency = input('param.urgency/s');
+        $special_version = input('param.special_version/s');
+
 
         $map = array();
-
+        $null_condition = [['EXP','IS NULL'],['EQ',""],'or'];
 
         // 文章标题
-        if (!empty($title)) {
-            if($title == NULL_STR){
-                $map['title'] = [['EXP','IS NULL'],['EQ',""],'or'];
-            }else{
-                $map['title'] = ['LIKE', '%' . $title . '%'];
-            }
-        }
-
+        Article::_assignLikeCondition($map,'title', $title);
 
         // 爬虫关键词
-        if (!empty($kw_id)) {
-            if($kw_id == NULL_STR){
-                $map['kw_id'] = [['EXP','IS NULL'],['EQ',""],'or'];
-            }else{
-                $map['kw_id'] = ['EQ', $kw_id];
-            }
-        }
+        Article::_assignEqCondition($map,'kw_id', $kw_id);
+
 
         // 文章ID
         if (!empty($art_ids)) {
@@ -61,13 +103,12 @@ class Article extends AdminBase
                 $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_FLOAT_MAX;
                 $map['impact_factor'] = ['BETWEEN', $con_arr];
             }else if($impact_factor == NULL_STR){
-                $map['impact_factor'] = [['EXP','IS NULL'],['EQ',""],'or'];
+                $map['impact_factor'] = $null_condition;
             }
 
         }catch(\Exception $e){
             throw new Exception('影响因子填写格式不正确:'.$e->getMessage());
         }
-
 
 
         // 发表时间筛选
@@ -81,7 +122,7 @@ class Article extends AdminBase
             $map['issue'] = ['BETWEEN', [$date_start, $date_end]];
         }
         if($date_start == NULL_STR and $date_end == NULL_STR){
-            $map['issue'] = [['EXP','IS NULL'],['EQ',""],'or'];
+            $map['issue'] = $null_condition;
         }
 
         // 分区处理
@@ -95,14 +136,74 @@ class Article extends AdminBase
                 $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_INT_MAX;
                 $map['journal_zone'] = ['BETWEEN', $con_arr];
             }else if($journal_zone == NULL_STR){
-                $map['journal_zone'] = [['EXP','IS NULL'],['EQ',""],'or'];
+                $map['journal_zone'] = $null_condition;
             }
         }catch(\Exception $e){
             throw new Exception('分区填写格式不正确:'.$e->getMessage());
         }
-        if (!empty($status)) {
-            $map['status'] = ['EQ', $status];
-        }
+
+        // issn ISSN
+        self::_assignLikeCondition($map,'issnl|issne|issnp', $issn);
+
+        // status 状态
+        self::_assignEqCondition($map,'status', $status);
+
+        // doi doi
+        self::_assignLikeCondition($map,'doi', $doi);
+
+
+        // creater 创建人
+        self::_assignEqCondition($map,'creater', $creater);
+
+
+        // auditor 初审人
+        self::_assignEqCondition($map,'auditor', $auditor);
+
+        // labelor 标注人
+        self::_assignEqCondition($map,'labelor', $labelor);
+        
+        // final_auditor 终审人
+        self::_assignEqCondition($map,'final_auditor', $final_auditor);
+
+        
+        // abstract 原文摘要
+        self::_assignLikeCondition($map,'abstract', $abstract);
+
+
+        // tabstract 翻译摘要
+        self::_assignLikeCondition($map,'tabstract', $tabstract);
+
+
+        // keyword 关键词
+        self::_assignLikeCondition($map,'keyword', $keyword);
+
+
+        // project 文档类型
+        self::_assignEqCondition($map,'project', $project);
+
+
+        // country 国家
+        self::_assignLikeCondition($map,'country', $country);
+
+
+        // author 文献作者
+        self::_assignLikeCondition($map,'author', $author);
+
+        // institue 发表机构
+        self::_assignLikeCondition($map,'institue', $institue);
+
+
+        // journal 发表期刊
+        self::_assignLikeCondition($map,'journal', $journal);
+
+
+        // urgency 紧要程度
+        self::_assignLikeCondition($map,'urgency', $urgency);
+
+
+        // special_version 特别说明
+        self::_assignLikeCondition($map,'special_version', $special_version);
+
         return $map;
     }
     /**获取日志查询条件
