@@ -24,7 +24,7 @@
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{$article_api_url}/search?status={$art_status}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        var except_field = ['special_version','document_type','urgency','tabstract']
+        var except_field = [];
         render_article_table(init_url,except_field,240,'文献输出表');
     });
 
