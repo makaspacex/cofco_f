@@ -4,7 +4,9 @@
 namespace app\cofco\admin;
 
 use app\cofco\model\AdminUserlog as LogModel;
+use think\Exception;
 use \think\Request;
+use \think\Db;
 
 use app\cofco\model\AdminPending as PendingModel;
 
@@ -17,61 +19,89 @@ class Article extends AdminBase
         $art_ids = input('param.art_id/a');
         $date_start = input('param.date_start/s');
         $date_end = input('param.date_end/s');
-        $impact_factor_start = input('param.impact_factor_start/s');
-        $impact_factor_end = input('param.impact_factor_end/s');
-        $journal_zone_start = input('param.journal_zone_start/s');
-        $journal_zone_end = input('param.journal_zone_end/s');
+        $impact_factor = input('param.impact_factor/s');
+        $journal_zone = input('param.journal_zone/s');
         $status = input('param.status/s');
 
         $map = array();
+
+
+        // 文章标题
         if (!empty($title)) {
-            $map['title'] = ['LIKE', '%' . $title . '%'];
-        }
-        if (!empty($kw_id)) {
-            $map['kw_id'] = ['EQ', $kw_id];
+            if($title == NULL_STR){
+                $map['title'] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }else{
+                $map['title'] = ['LIKE', '%' . $title . '%'];
+            }
         }
 
+
+        // 爬虫关键词
+        if (!empty($kw_id)) {
+            if($kw_id == NULL_STR){
+                $map['kw_id'] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }else{
+                $map['kw_id'] = ['EQ', $kw_id];
+            }
+        }
+
+        // 文章ID
         if (!empty($art_ids)) {
             $map['art_id'] = ['IN', $art_ids];
         }
 
         // 影响因子
+        try{
+            if (!empty($impact_factor) && $impact_factor != NULL_STR) {
+                $con_arr = explode('-',$impact_factor, 2);
+                if(sizeof($con_arr) == 1){
+                    array_push($con_arr,$con_arr[0]);
+                }
+                $con_arr[0] = $con_arr[0] != ''?$con_arr[0]: PHP_FLOAT_MIN;
+                $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_FLOAT_MAX;
+                $map['impact_factor'] = ['BETWEEN', $con_arr];
+            }else if($impact_factor == NULL_STR){
+                $map['impact_factor'] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }
 
-        if (!empty($impact_factor_start) or $impact_factor_start == '0') {
-            $map['impact_factor'] = ['EGT', $impact_factor_start];
+        }catch(\Exception $e){
+            throw new Exception('影响因子填写格式不正确:'.$e->getMessage());
         }
-        if (!empty($impact_factor_end) or $impact_factor_end == '0') {
-            $map['impact_factor'] = ['ELT', $impact_factor_end];
-        }
-        if ((!empty($impact_factor_start) or $impact_factor_start == '0') and (!empty($impact_factor_end) or $impact_factor_end == '0')) {
-            $map['impact_factor'] = ['BETWEEN', [$impact_factor_start, $impact_factor_end]];
-        }
+
+
 
         // 发表时间筛选
-        if (!empty($date_start)) {
+        if (!empty($date_start) && $date_start != NULL_STR) {
             $map['issue'] = ['EGT', $date_start];
         }
-        if (!empty($date_end)) {
+        if (!empty($date_end) && $date_end != NULL_STR) {
             $map['issue'] = ['ELT', $date_end];
         }
-        if (!empty($date_start) and !empty($date_end)) {
+        if (!empty($date_start) and !empty($date_end) and $date_start != NULL_STR and $date_end != NULL_STR ) {
             $map['issue'] = ['BETWEEN', [$date_start, $date_end]];
+        }
+        if($date_start == NULL_STR and $date_end == NULL_STR){
+            $map['issue'] = [['EXP','IS NULL'],['EQ',""],'or'];
         }
 
         // 分区处理
-
-        if (!empty($journal_zone_start) or $journal_zone_start == '0') {
-            $map['journal_zone'] = ['EGT', $journal_zone_start];
-        }
-        if (!empty($journal_zone_end) or $journal_zone_end == '0') {
-            $map['journal_zone'] = ['ELT', $journal_zone_end];
-        }
-        if ((!empty($journal_zone_start) or $journal_zone_start == '0') and (!empty($journal_zone_end) or $journal_zone_end == '0')) {
-            $map['journal_zone'] = ['BETWEEN', [$journal_zone_start, $journal_zone_end]];
+        try{
+            if (!empty($journal_zone) && $journal_zone != NULL_STR) {
+                $con_arr = explode('-',$journal_zone, 2);
+                if(sizeof($con_arr) == 1){
+                    array_push($con_arr,$con_arr[0]);
+                }
+                $con_arr[0] = $con_arr[0] != ''?$con_arr[0]: PHP_INT_MIN;
+                $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_INT_MAX;
+                $map['journal_zone'] = ['BETWEEN', $con_arr];
+            }else if($journal_zone == NULL_STR){
+                $map['journal_zone'] = [['EXP','IS NULL'],['EQ',""],'or'];
+            }
+        }catch(\Exception $e){
+            throw new Exception('分区填写格式不正确:'.$e->getMessage());
         }
         if (!empty($status)) {
             $map['status'] = ['EQ', $status];
-
         }
         return $map;
     }
@@ -107,11 +137,11 @@ class Article extends AdminBase
             $order_by = input('param.orderby/s', 'ctime');
             $ordertype = input('param.ordertype/s', 'desc');
             $res = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
-            if ($res)
-                return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
+            $sql_str = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->buildSql(true);
+            return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
 
         } catch (\Exception $e) {
-            return json(['code' => 0, 'message' => '操作失败' . $e->getMessage(), 'data' => []]);
+            return json(['code' => 1, 'message' => '操作失败:' . $e->getMessage(), 'data' => []]);
         }
     }
 

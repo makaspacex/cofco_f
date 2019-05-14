@@ -12,28 +12,12 @@
                 </div>
             </div>
 
-            <div class="layui-col-md2">
+            <div class="layui-col-md3">
                 <label class="layui-form-label">期刊分区</label>
                 <div class="layui-input-block">
-                    <select name="journal_zone_start" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}" >
+                    <select name="journal_zone" id="journal_zone" lay-verify="required"  lay-search="" enable-input="true">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-col-md1">
-                <div class="layui-input-input">
-                    <select name="journal_zone_end" id="journal_zone" lay-verify="required" value="{:input('get.journal_zone')}">
-                        <option value="">不限制</option>
-                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
                     </select>
                 </div>
             </div>
@@ -71,19 +55,13 @@
                 </div>
             </div>
 
-            <div class="layui-col-md2">
+            <div class="layui-col-md3">
                 <label class="layui-form-label">影响因子</label>
                 <div class="layui-input-block" >
-                    <input type="text" name="impact_factor_start" id="impact_factor_start"
-                           value="{:input('get.impact_factor_start')}" lay-verify="date" placeholder="不限制" autocomplete="off"
-                           class="layui-input" >
-                </div>
-            </div>
-            <div class="layui-col-md1">
-                <div class="layui-input-input">
-                    <input type="text" name="impact_factor_end" id="impact_factor_end"
-                           value="{:input('get.impact_factor_end')}" lay-verify="date" placeholder="不限制" autocomplete="off"
-                           class="layui-input">
+                    <select name="impact_factor" id="impact_factor" lay-verify="required"  lay-search="" enable-input="true">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-col-md4">
@@ -106,7 +84,6 @@
     };
     $(function () {
         $.wait(500).then(function (value) {
-            console.log('33333')
             layui.use(['laydate','jquery'], function() {
 
                 var laydate = layui.laydate;
