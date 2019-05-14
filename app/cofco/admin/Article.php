@@ -208,8 +208,8 @@ class Article extends AdminBase
     }
     /**获取日志查询条件
      * @param $type 日志类型 *
-     * 1文献初审状态  2文献标注状态
-     * 3文献终审状态  4文献输出状态
+     * 1.创建文献 2.初审文献
+     * 3.标注文献 4.终审文献
      * @param $id 文章ID
      * @return array
      */
@@ -333,11 +333,11 @@ class Article extends AdminBase
             $pre_status = $data['pre_status'];
             $art_id = $data['art_id'];
             if((int)$status-1==$pre_status){
-                Article::insertLog($pre_status, $art_id);
+                Article::insertLog($status, $art_id);
             }
             else if((int)$status==$pre_status-1){
                 $map = [];
-                $map['type'] = $status;
+                $map['type'] = $pre_status;
                 $map['tID'] = $art_id;  //文章ID
                 LogModel::where($map)->delete();
             }

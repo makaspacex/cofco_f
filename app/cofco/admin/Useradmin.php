@@ -19,9 +19,10 @@ class Useradmin extends AdminBase
     {
         $uID = $_SESSION['hisiphp_']['admin_user']['uid'];
         $sql = 'select year,month, 
-            sum(case when type like 1 then 1 else 0 end) as "create",
-            sum(case when type like 2 then 1 else 0 end) as "pre",
-            sum(case when type like 3 then 1 else 0 end) as "finaly"
+            sum(case when type like 1 then 1 else 0 end) as "creater",
+            sum(case when type like 2 then 1 else 0 end) as "auditor",
+            sum(case when type like 3 then 1 else 0 end) as "labelor",
+            sum(case when type like 4 then 1 else 0 end) as "final_auditor"
             FROM `cofco_admin_userlog`  
             WHERE uID like '.$uID.'
             group by year,month';
