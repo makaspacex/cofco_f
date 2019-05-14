@@ -74,13 +74,11 @@
     // 删除按钮样式控制
 
     function enable_del_btn() {
-        $('#del_query_data').removeClass('layui-btn-disabled');
-        $('#del_query_data').attr('disabled',false);
+        $('.del_query_data').removeClass('layui-btn-disabled').attr('disabled',false);
     }
 
     function disable_del_btn() {
-        $('#del_query_data').addClass('layui-btn-disabled');
-        $('#del_query_data').attr('disabled',true);
+        $('.del_query_data').addClass('layui-btn-disabled').attr('disabled',true);
     }
 
 
@@ -95,17 +93,16 @@
             tablePlug.smartReload.enable(true);
 
             // 获取工具栏
-            $('#all_toolbar').append($('#general_toolbar  > div').html());
-            $('#all_toolbar').append($('#toolbar > div').html());
+            $('#all_toolbar').append($('#general_toolbar  > div').html()).append($('#toolbar > div').html());
 
             // 获取每行的按钮
-            $('#all_rowtools').append($('#rowtools').html());
-            $('#all_rowtools').append($('#general_rowtools').html());
+            $('#all_rowtools').append($('#rowtools').html()).append($('#general_rowtools').html());
 
             table.render({
                 elem: '#articletable'
                 , toolbar: '#all_toolbar'
                 , url: url
+                , method:'post'
                 , id: 'articletable'
                 , cellMinWidth: 80
                 , title: title
@@ -115,9 +112,10 @@
                 , reloaddingShow:true
                 // ,size: 'sm' //小尺寸的表格
                 , cols: getField(except_field,width)
-                , limit:10
+                , limit:15
                 , limits:[10,15,20,30,40,50,60,70,80,90]
                 , page: true
+                , skin:	'nob' //line （行边框风格）row （列边框风格） nob （无边框风格
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;
                     SEARCH_RESULT_ROWS = res.data.total;
@@ -149,12 +147,12 @@
             });
 
             // 重置按钮
-            $('#search_reset_btn').click(function (e) {
+            $('.search_reset_btn').click(function (e) {
                 disable_del_btn()
-            })
+            });
 
             // 搜索按钮
-            $('#search_submit_btn').click(function (e) {
+            $('.search_submit_btn').click(function (e) {
                 var form_s = $('#article_search_form')
                 var form_data = form_s.serializeArray()
                 var data = []
@@ -189,7 +187,7 @@
 
             var article_api_url_del = "{$article_api_url}/del";
             // ----------- 搜索删除按钮 -----------
-            $('#del_query_data').click(function (e) {
+            $('.del_query_data').click(function (e) {
                 var form_s = $('#article_search_form');
                 var form_data = form_s.serializeArray();
 

@@ -33,22 +33,20 @@
     });
     
     function enable_pass_btn() {
-        $('button[lay-event="pass_query_data"]').removeClass('layui-btn-disabled')
-        $('button[lay-event="pass_query_data"]').attr('disabled',false)
+        $('button[lay-event="pass_query_data"]').removeClass('layui-btn-disabled').attr('disabled',false);
     }
     function disable_pass_btn() {
-        $('button[lay-event="pass_query_data"]').addClass('layui-btn-disabled')
-        $('button[lay-event="pass_query_data"]').attr('disabled',true)
+        $('button[lay-event="pass_query_data"]').addClass('layui-btn-disabled').attr('disabled',true);
     }
 
     // 搜索按钮
-    $('#search_submit_btn').click(function (e) {
+    $('.search_submit_btn').click(function (e) {
         enable_pass_btn()
     });
     // 重置按钮, 必须放到搜索时间监听下面
-    $('#search_reset_btn').click(function (e) {
+    $('.search_reset_btn').click(function (e) {
         disable_pass_btn()
-    })
+    });
 
     function _exe_update_status(requset_url, form_data){
 

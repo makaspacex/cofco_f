@@ -11,6 +11,7 @@
 namespace app\cofco\admin;
 
 use app\admin\controller\Admin;
+use app\admin\model\AdminUser;
 
 /**
  * 后台公共控制器
@@ -29,4 +30,12 @@ class AdminBase extends Admin
         $this->assign('article_api_url','/cofco/article');
     }
 
+    /**
+     *
+     * 获取搜索栏所有的应该获取的信息，包括分类
+     */
+    public function init_searchForm(){
+
+
+    }
 }
