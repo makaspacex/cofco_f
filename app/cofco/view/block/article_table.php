@@ -33,7 +33,7 @@
             // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
             , {field: 'title', title: '文章标题', width: 500, sort: true}
             , {field: 'issue', title: '发表时间', width: 100, sort: true}
-            , {field: 'keyword', title: '关键词', width: 100}
+            , {field: 'keyword', title: '文章关键词', width: 100}
             , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return d.kw_id>0? "<a href='#'>"+d['spider_kw']['name']+"</a>":"<a></a>"}}
             , {field: 'creater', title: '创建人', width: 90, sort: true, templet: function(d){return d['create_user']['nick']}}
             , {field: 'auditor', title: '审核人', width: 90, sort: true}
@@ -109,7 +109,7 @@
                 , id: 'articletable'
                 , cellMinWidth: 80
                 , title: title
-                , totalRow: true
+                // , totalRow: true
                 , autoSort: false
                 , smartReloadModel:true
                 , reloaddingShow:true
@@ -121,6 +121,11 @@
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;
                     SEARCH_RESULT_ROWS = res.data.total;
+                    if(res.code != 0){
+                        layer.alert(res.message,{
+                            offset:'auto'
+                        })
+                    }
                     return {
                         "code": res.code, //解析接口状态
                         "msg": res.message, //解析提示文本

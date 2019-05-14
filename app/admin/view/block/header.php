@@ -30,8 +30,8 @@ Powered By cofco.com.cn
     <title>{$_admin_menu_current['title']} -  Powered by {:config('hisiphp.name')}</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
-    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
-    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css" >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css?v={:config('hisiphp.version')}"  >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css?v={:config('hisiphp.version')}" >
     {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
     {/if}
@@ -39,7 +39,7 @@ Powered By cofco.com.cn
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__ADMIN_CSS__/project.css?v={:config('hisiphp.version')}">
-    <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
+    <script src="__STATIC__/COFCO/js/echarts.min.js?v={:config('hisiphp.version')}"></script>
 </head>
 <body>
 <div style="padding:0 10px;" class="mcolor">{:runhook('system_admin_tips')}</div>
@@ -48,8 +48,8 @@ Powered By cofco.com.cn
     <title>{if condition="$_admin_menu_current['url'] eq 'admin/index/index'"}管理控制台{else /}{$_admin_menu_current['title']}{/if} -  Powered by {:config('hisiphp.name')}</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     {if condition="defined('MODULENAME') && MODULENAME eq 'COFCO' "}
-    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css"  >
-    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css"  >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/css/layui.css?v={:config('hisiphp.version')}"  >
+    <link rel="stylesheet" href="__ADMIN_JS__/layui-v2.4.5/tablePlug.css?v={:config('hisiphp.version')}"  >
 
     {else}
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
@@ -58,7 +58,7 @@ Powered By cofco.com.cn
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__ADMIN_CSS__/project.css?v={:config('hisiphp.version')}">
-    <script src="__STATIC__/COFCO/js/echarts.min.js"></script>
+    <script src="__STATIC__/COFCO/js/echarts.min.js?v={:config('hisiphp.version')}"></script>
 </head>
 <body>
 {php}
