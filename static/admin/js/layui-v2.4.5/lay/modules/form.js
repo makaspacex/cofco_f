@@ -460,7 +460,7 @@ layui.define('layer', function(exports){
           if(enable_input || enable_date){
             $(select).append("<option value='' class='hide submit-value'>测试</option>")
           }
-          if(select_id){
+          if(select_id && enable_date){
             $(select).removeAttr('id')
             $(select).removeAttr('lay-verify')
           }
@@ -469,6 +469,7 @@ layui.define('layer', function(exports){
               ,hasRender = othis.next('.'+CLASS)
               ,disabled = this.disabled
               ,value = select.value
+              ,selected = $(select.options[select.selectedIndex]) //获取当前选中项
               ,optionsFirst = select.options[0];
 
 
