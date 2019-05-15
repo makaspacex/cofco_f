@@ -2,6 +2,7 @@
 
 namespace app\cofco\admin;
 
+use app\admin\model\AdminUser;
 use app\cofco\model\AdminUserlog as LogModel;
 
 /**
@@ -17,18 +18,26 @@ class Useradmin extends AdminBase
      */
     public function index()
     {
-        $uID = $_SESSION['hisiphp_']['admin_user']['uid'];
-        $sql = 'select year,month, 
-            sum(case when type like 1 then 1 else 0 end) as "creater",
-            sum(case when type like 2 then 1 else 0 end) as "auditor",
-            sum(case when type like 3 then 1 else 0 end) as "labelor",
-            sum(case when type like 4 then 1 else 0 end) as "final_auditor"
-            FROM `cofco_admin_userlog`  
-            WHERE uID like '.$uID.'
-            group by year,month';
-        $data_list = LogModel::query($sql);
-        $this->assign('data_list', $data_list);
+        $all_users = AdminUser::all();
+        $this->assign('all_users',$all_users);
         return $this->fetch();
+    }
+
+    public function data()
+    {
+        $uID = $keyword = input('param.uID/s');
+        $field = ['year'
+                ,'month'
+                ,'sum(case when type like 1 then 1 else 0 end) as "creater"'
+                ,'sum(case when type like 2 then 1 else 0 end) as "auditor"'
+                ,'sum(case when type like 3 then 1 else 0 end) as "labelor"'
+                ,'sum(case when type like 4 then 1 else 0 end) as "final_auditor"'];
+        $map = [];
+        if($uID){
+            $map['uID']=$uID;
+        }
+        $res = LogModel::Where($map)->field($field)->group('year,month')->select();
+        return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
     }
 
    

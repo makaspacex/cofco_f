@@ -217,7 +217,7 @@ class Article extends AdminBase
         $map = [];
         $map['type'] = $type;
         $map['uID'] = $_SESSION['hisiphp_']['admin_user']['uid'];  //用户ID
-        $map['tID'] = $tid;  //文章ID
+        $map['tID'] =  $tid;  //文章ID
         $map['ctime'] = time();
         $map['year'] = date('Y');
         $map['month'] = date('m');
@@ -258,13 +258,22 @@ class Article extends AdminBase
         return $this->afetch('form');
     }
 
+
+    /**改变status状态
+     * @return \think\response\Json
+     */
     public function setStatus()
     {
         try {
             $where_map = Article::getSearchMap();
             $status = input('param.status/s'); // 默认状态不改变
             $setstatus = input('param.setstatus/s', $status);
+            $art_ids = input('param.art_id/a');
             PendingModel::where($where_map)->update(['status' => $setstatus]);;
+            foreach ($art_ids as $art_id){
+                Article::insertLog($setstatus, $art_id);
+            }
+
             return json(['code' => 0, 'message' => '操作完成']);
 
         } catch (\Exception $e) {
