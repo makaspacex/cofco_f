@@ -9,7 +9,7 @@ layui.define(['element', 'form'], function(exports) {
             content: '<div class="lock-screen"><input type="password" id="unlockedPwd" class="layui-input" placeholder="请输入登录密码解锁..." autocomplete="off"><button id="unlocked" class="layui-btn">解锁</button><div id="unlockTips"></div></div>',
             closeBtn: 0,
             shade: 0.95,
-            offset: '350px'
+            offset: 'auto'
         });
 
         $('#unlocked').click(function() {
@@ -47,9 +47,9 @@ layui.define(['element', 'form'], function(exports) {
         $('#switchNav a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');
     }
     if (typeof(LAYUI_OFFSET) == 'undefined') {
-        layer.config({offset:'60px'});
+        layer.config({offset:'auto'});
     } else {
-        layer.config({offset:LAYUI_OFFSET+'px'});
+        layer.config({offset:'auto'});
     }
     /* 打开/关闭左侧导航 */
     $('#foldSwitch').click(function(){
