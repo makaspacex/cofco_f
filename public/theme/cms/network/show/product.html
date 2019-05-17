@@ -1,0 +1,25 @@
+{/*****产品详情模板*****/}<!DOCTYPE html>
+<html lang="en">
+<head>        
+    <meta charset="UTF-8">
+    <title>{$content['seo_title'] ? $content['seo_title'] : $content['title']} - {:config('base.site_name')}</title>
+    <meta name="keywords" content="{$content['seo_keywords']}" />
+    <meta name="description" content="{$content['seo_description']}" />
+    {include file="public/head" /}
+</head>
+<body>
+{include file="public/nav" /}
+  <!-- main部分 -->
+  <div class="main-newsdate">
+        <div class="layui-container">
+          <p class="news"><a href="/">首页</a> > {hisi:position cid="$content['cid']" sep=" > " /} > 产品详情</p>
+          <h1>{$content['title']}</h1>
+          <p class="pushtime">发布时间：<span>{$content['create_time']}</span></p>
+          <p class="introTop">{$content['slogan']}</p>
+          <div><img src="{$content['image']}"></div>
+          <div class="introBott">{:htmlspecialchars_decode($content['content'])}</div>
+        </div> 
+      </div>
+{include file="public/footer" /}
+</body>
+</html>

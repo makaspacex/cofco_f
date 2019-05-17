@@ -1,0 +1,199 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+<div class="page-form">
+    <div class="layui-tab-item layui-show" title="基本信息">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属栏目</label>
+            <div class="layui-input-inline w300">
+                <select name="pid" class="field-pid" type="select">
+                    <option value="0">默认顶级</option>
+                    {$categorySelect|raw}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目名称</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-name" name="name" lay-verify="required"  placeholder="栏目名称" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">副名称</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-subtitle" name="subtitle" placeholder="栏目副名称" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">根据需要选填</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目URL</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-url" name="url" placeholder="默认自动生成" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">即前台访问的路径</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属模型</label>
+            <div class="layui-input-inline w300">
+                <select name="mid" class="field-mid" type="select">
+                    {foreach name="$modelSelect" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">友情提示：模型修改对此栏目下的数据会有影响！</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容限制</label>
+            <div class="layui-input-inline w300">
+                <input type="radio" name="content_limit" class="field-content_limit" value="0" title="无内容" />
+                <input type="radio" name="content_limit" class="field-content_limit" value="1" title="单条内容" />
+                <input type="radio" name="content_limit" class="field-content_limit" checked value="2" title="无限制" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">单页模型请选择单条内容</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">聚合模板</label>
+            <div class="layui-input-inline w300">
+                <select name="poly_template" class="field-poly_template" type="select">
+                    <option value="">请选择聚合模板</option>
+                    {foreach name="$templates['poly']" id="vo"}
+                        <option value="{$key}">{$key}{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">页面类型为单页、专题页、活动页、封面页等请设置此项</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">列表模板</label>
+            <div class="layui-input-inline w300">
+                <select name="list_template" class="field-list_template" type="select">
+                    <option value="">请选择列表模板</option>
+                    {foreach name="$templates['list']" id="vo"}
+                        <option value="{$key}">{$key}{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">需要列表页面时设置</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">详情模板</label>
+            <div class="layui-input-inline w300">
+                <select name="show_template" class="field-show_template" type="select">
+                    <option value="">请选择详情模板</option>
+                    {foreach name="$templates['show']" id="vo"}
+                        <option value="{$key}">{$key}{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">需要详情页面时设置</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目简介</label>
+            <div class="layui-input-inline w300">
+                <textarea  class="layui-textarea field-intro" name="intro"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-tab-item" title="其他设置">
+        <div class="layui-form-item">
+            <label class="layui-form-label">扩展类型</label>
+            <div class="layui-input-inline w300">
+                <select name="type_id" class="field-type_id" type="select">
+                    <option value="0">请选择</option>
+                    {foreach name="$typeSelect" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">用于前台筛选和内容信息完善</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目图片</label>
+            <div class="layui-input-inline upload w300">
+                <button type="button" name="img" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{accept:'image'}">点此上传栏目图片</button>
+                <input type="hidden" class="upload-input field-image" name="image">
+                <img src="{if (isset($formData['image']))}{$formData['image']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" style="border-radius:5px;border:1px solid #ccc" width="36" height="36">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">外部链接</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-jump_link" name="jump_link" placeholder="外部链接" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">[选填] 请填写完整的URL</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分页大小</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-pagesize" name="pagesize" placeholder="列表页的分页大小" value="20" />
+            </div>
+            <div class="layui-form-mid layui-word-aux">前台为列表页时有效</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SEO标题</label>
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-seo_title" name="seo_title" placeholder="SEO标题" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SEO关键词</label>
+            <div class="layui-input-inline w300">
+                <textarea  class="layui-textarea field-seo_keywords" name="seo_keywords" placeholder="多个关键词请用英文逗号“,”隔开"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SEO描述</label>
+            <div class="layui-input-inline w300">
+                <textarea  class="layui-textarea field-seo_description" name="seo_description" placeholder="描述内容建议控制在200个字以内"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hisi-footer">
+    <label class="layui-form-label"> </label>
+    <input type="hidden" class="field-id" name="id">
+    <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交保存</button>
+    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+</div>
+</form>
+{include file="system@block/layui" /}
+<script>
+layui.use(['func', 'upload', 'jquery', 'pinyin', 'form'], function() {
+    var upload = layui.upload, 
+        layer = layui.layer, 
+        $ = layui.jquery, 
+        pinyin = layui.pinyin,
+        form = layui.form,
+        formData = {:json_encode($formData)};
+
+    layui.func.assign(formData);
+
+    upload.render({
+        elem: '.layui-upload'
+        ,url: '{:url("system/annex/upload?water=&thumb=&from=&group=goods_brand")}'
+        ,method: 'post'
+        ,before: function(input) {
+            layer.msg('上传中...', {time:3000000});
+        },done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            if ($(obj).attr('lay-type') == 'image') {
+                input.siblings('img').attr('src', res.data.file).show();
+            }
+            input.val(res.data.file);
+        }
+    });
+
+    // 简称转拼音
+    $('input[name="name"]').on('blur', function(){
+        $('input[name="url"]').val(pinyin.exec($(this).val(), 1));
+    });
+
+}).extend({
+  pinyin: '{/}__ADMIN_JS__/pinyin'
+});;
+</script>

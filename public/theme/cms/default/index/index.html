@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{:config('base.site_title')}</title>
+		<meta name="keywords" content="{:config('base.site_keywords')}" />
+		<meta name="description" content="{:config('base.site_description')}" />
+		{include file="public/head" /}
+		<script src="http://libs.baidu.com/jquery/1.4.2/jquery.min.js"></script>
+		<script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+		<style type="text/css">
+			.slider{width:860px;height:335px;position:relative;overflow:hidden;background:#fff;text-align:center}
+			.slider .bd{width:860px;position:absolute;left:50%;margin-left:-430px}
+			.slider .bd li{width:860px;overflow:hidden}
+			.slider .bd li img{display:block;width:860px;height:335px}
+			.slider .tempWrap{overflow:visible!important}
+			.slider .tempWrap ul{margin-left:-860px!important}
+			.slider .hd{position:absolute;width:100%;left:0;z-index:1;height:8px;bottom:20px;text-align:center}
+			.slider .hd li{display:inline-block;*display:inline;zoom:1;width:8px;height:8px;line-height:99px;overflow:hidden;background:url(__IMG__/slider-btn.png) 0 -10px no-repeat;margin:0 5px;cursor:pointer;filter:alpha(opacity=60);opacity:.6}.slider .hd li.on{background-position:0 0;filter:alpha(opacity=100);opacity:1}
+		</style>
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div style="width:100%;padding:10px 0;margin-bottom:20px;text-align:center;background-color:#128cec;color:#fff;">
+			友情提示：当前模板为默认示例模板，为了避免升级覆盖，建议将当前主题（/theme/cms/<strong>default</strong>）复制重命名为新的主题。
+			</div>
+			<div class="container">
+				<div class="content">
+					<div class="slider"> 
+						<div class="bd"> 
+							<ul> 
+								{hisi:slide group="home" order="sort asc"}
+								<li><a target="_blank" title="{$r['title']}" href="{$r['url']}"><img src="{$r['image']}" title="{$r['title']}" /></a></li> 
+								{/hisi:slide}
+							</ul> 
+						</div> 
+						<div class="hd">
+							<ul></ul>
+						</div> 
+					</div> 
+					<div class="main-list mt15">
+						<div class="main-list-head">
+							<ul>
+								<li class="active" data-cid="40">国内资讯</li>
+								<li data-cid="41">国际资讯</li>
+							</ul>
+						</div>
+						<div class="main-list-items">
+							{hisi:list mid="2" cid="40" flag="top" field="intro"}
+							<div class="main-list-item">
+								<div class="item-img">
+									<a href="{$r['url']}"><img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';"></a>
+									<i class="light"></i>
+								</div>
+								<div class="item-cont">
+									<h2><a href="{$r['url']}">{$r['title']}</a></h2>
+									<div class="item-intro">
+										<p>{$r['intro']}</p>
+									</div>
+									<div class="item-extend">
+										{if ($r['tag'])}
+											<span class="item-tags">标签：{hisi:loop data="$r['tag']" id="rr" key="kk"}{$kk > 1 ? '、' : '' }<a href="/tag/{$rr}">{$rr}</a>{/hisi:loop}</span>
+										{/if}
+										<span>{$r['timing']}</span>
+										<span class="hs-icon hs-eye"> <i>{$r['views']}</i></span>
+										<span class="hs-icon hs-zan"> <i>{$r['likes']}</i></span>
+									</div>
+								</div>
+							</div>
+							{/hisi:list}
+						</div>
+						<div class="main-list-items" id="hisi-news-list" style="display:none">2</div>
+					</div>
+				</div>
+				<aside class="sidebar">
+					<div class="sidebar-block">
+						<img src="https://img.alicdn.com/tps/i4/TB164GRLFzqK1RjSZFCtKbbxVXa.gif" width="100%" />
+					</div>
+					<div class="widget-box mt15">
+						<h3>最新发布</h3>
+						<ul class="style1">
+							{hisi:list order="id desc" mid="2" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+					<div class="sidebar-block mt15">
+						<h3>热门标签</h3>
+						<div class="hot-tags">
+							{hisi:tag mid="2" limit="15"}
+							<a href="{$r['url']}">{$r['name']}</a>
+							{/hisi:tag}
+						</div>
+					</div>
+					<div class="widget-box mt15">
+						<h3>猜你喜欢</h3>
+						<ul class="style1">
+							{hisi:list order="rand()" model="article" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</aside>
+			</div>
+		</div>
+		<div class="container mt15 clearfix">
+			<div class="link-box">
+				<h3>友情链接</h3>
+				<ul class="link-list">
+					{hisi:link group="home" order="sort asc"}
+					<li><a href="{$r['url']}" target="{$r['target']}">{$r['title']}</a></li>
+					{/hisi:link}
+				</ul>
+			</div>
+		</div>
+		{include file="public/footer" /}
+		<script type="text/html" id="hisi-news-tpl">
+			{{# layui.each(d, function(index, item) { }}
+			<div class="main-list-item">
+				<div class="item-img">
+					<a href="{{ item.url }}"><img src="{{ item.image }}" onerror="this.src='__IMG__/dian.png';" width="480" height="300"></a>
+					<i class="light"></i>
+				</div>
+				<div class="item-cont">
+					<h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+					<div class="item-intro">
+						<p>{{ item.intro }}</p>
+					</div>
+					<div class="item-extend">
+						<span class="item-tags">标签：<a href="a">推广</a>、<a href="s">文案</a></span>
+						<span>{{ item.timing }}</span>
+						<span class="hs-icon hs-eye"> <i>{{ item.views }}</i></span>
+						<span class="hs-icon hs-zan"> <i>{{ item.likes }}</i></span>
+					</div>
+				</div>
+			</div>
+			{{# }); }}
+		</script>
+
+		<script type="text/javascript" src="__PUBLIC_JS__/layui/layui.js"></script>
+		<script type="text/javascript">
+			$(".slider").slide({ 
+				titCell: ".hd ul", 
+				mainCell: ".bd ul", 
+				effect: "fold",  
+				autoPlay: true, 
+				autoPage: true, 
+				trigger: "click",
+				mouseOverStop: false,
+				startFun: function() {
+					var timer = $(".slider .timer");
+					timer.stop(true,true).animate({ "width":"0%" },0).animate({ "width":"100%" },2500);
+				}
+			});
+			layui.use(['jquery', 'laytpl'], function() {
+				var $ = layui.jquery, laytpl = layui.laytpl;
+
+				$('.main-list-head li').bind('click', function() {
+					var that = $(this), index = that.index();
+					
+					that.addClass('active').siblings('li').removeClass('active');
+
+					if (index == 0) {
+						$('.main-list-items').eq(index).show().siblings('.main-list-items').html('').hide();
+					} else {
+						$.get('/cms/api/list', {
+							cid: that.attr('data-cid'), 
+							mid: 2, 
+							flag: 'top', 
+							field: 'intro',
+							timestamp: '{:date('Y-m-d H:i:s')}', 
+							sign: '{:md5(date('Y-m-d H:i:s').config('module_cms.api_secret_key'))}'
+						}, function(res) {
+				            layui.laytpl($('#hisi-news-tpl').html()).render(res.data.data, function(html) {
+				                $('#hisi-news-list').html(html);
+								$('.main-list-items').eq(index).show().siblings('.main-list-items').hide();
+				            });
+						}, 'json');
+					}
+				});	
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title></title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		{include file="public/head" /}
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container">
+				<div class="content">
+                    <div class="main-list">
+                        <div class="main-list-head">
+                            <h1><em>{$tag}</em> 相关的文章</h1>
+                        </div>
+                        <div class="main-list-items">
+                            {hisi:list tag="$tag" mid="2" pagesize="20" field="intro"}
+                            <div class="main-list-item">
+                                <div class="item-img">
+                                    <a href="{$r['url']}"><img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" alt="{$r['title']}"></a>
+                                    <i class="light"></i>
+                                </div>
+                                <div class="item-cont">
+                                    <h2><a href="{$r['url']}">{$r['title']}</a></h2>
+                                    <div class="item-intro">
+                                        <p>{$r['intro']}</p>
+                                    </div>
+                                    <div class="item-extend">
+                                        {if ($r['tag'])}<span class="item-tags">标签：{hisi:loop data="$r['tag']" id="rr" key="kk"}{$kk > 1 ? '、' : '' }<a href="/tag/{$rr}">{$rr}</a>{/hisi:loop}</span>{/if}
+                                        <span>{$r['create_time']}</span>
+                                        <span class="hs-icon hs-eye"> <i>{$r['views']}</i></span>
+                                        <span class="hs-icon hs-zan"> <i>{$r['likes']}</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/hisi:list}
+                        </div>
+                    </div>
+                    <div class="pages">{$pages|raw}</div>
+				</div>
+				<aside class="sidebar">
+                    <div class="sidebar-block">
+                        <h3>热门标签</h3>
+                        <div class="hot-tags">
+                            {hisi:tag mid="2" limit="15"}
+                            <a href="{$r['url']}">{$r['name']}</a>
+                            {/hisi:tag}
+                        </div>
+                    </div>
+					<div class="widget-box mt15">
+						<h3>最新发布</h3>
+						<ul class="style1">
+							{hisi:list order="id desc" mid="2" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+					<div class="widget-box mt15">
+						<h3>猜你喜欢</h3>
+						<ul class="style1">
+							{hisi:list order="rand()" mid="2" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</aside>
+			</div>
+		</div>
+
+		{include file="public/footer" /}
+	</body>
+</html>

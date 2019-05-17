@@ -1,0 +1,91 @@
+{/*****资讯详情模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$content['seo_title'] ? $content['seo_title'] : $content['title']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$content['seo_keywords']}" />
+		<meta name="description" content="{$content['seo_description']}" />
+		{include file="public/head" /}
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container">
+				<div class="content bgc">
+					<div class="position">
+						<i class="hs-icon hs-dingwei"></i>&nbsp;&nbsp;<a href="/">首页</a> / {hisi:position cid="$content['cid']" sep=" / " /}
+					</div>
+					<article class="detail-box">
+						<h1 class="title">{$content['title']}</h1>
+						<div class="detail-head">
+							<span>{$content['timing']}</span>
+							<span>{$content['author']}</span>
+							<span class="hs-icon hs-eye"> <i>{$content['views']}</i></span>
+							<span class="hs-icon hs-zan"> <i>{$content['likes']}</i></span>
+						</div>
+						<div class="detail-content">
+							{:htmlspecialchars_decode($content['content'])}
+						</div>
+						<div class="the-end">－ <strong>THE END</strong> －</div>
+						<div class="statement">免责声明：本文转载至互联网，不代表本站的观点和立场。</div>
+					</article>
+					<div class="detail-page">
+						{if (!empty($content['prev']['url']))}
+						<a href="{$content['prev']['url']}" class="fl prev">
+							<span class="title">{$content['prev']['title']}</span>
+							<span><< 上一篇<i>{$content['prev']['create_time']}</i></span>
+						</a>
+						{/if}
+						{if (!empty($content['next']['url']))}
+						<a href="{$content['next']['url']}" class="fr next">
+							<span class="title">{$content['next']['title']}</span>
+							<span>{$content['next']['create_time']}<i>下一篇 >></i></span>
+						</a>
+						{/if}
+					</div>
+				</div>
+				<aside class="sidebar">
+					<div class="sidebar-block">
+						<img src="https://img.alicdn.com/tps/i4/TB164GRLFzqK1RjSZFCtKbbxVXa.gif" width="100%" />
+					</div>
+					<div class="widget-box mt15">
+						<h3>最新发布</h3>
+						<ul class="style1">
+							{hisi:list cid="$content['cid']" limit="3"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+					<div class="widget-box mt15">
+						<h3>猜你喜欢</h3>
+						<ul class="style1">
+							{hisi:list order="rand()" mid="2" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</aside>
+			</div>
+		</div>
+		{include file="public/footer" /}
+	</body>
+</html>

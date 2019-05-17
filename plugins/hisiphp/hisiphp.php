@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | HisiPHP框架[基于ThinkPHP5开发]
+// | HisiPHP框架[基于ThinkPHP5.1开发]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016-2018 http://www.hisiphp.com
+// | Copyright (c) 2016-2021 http://www.hisiphp.com
 // +----------------------------------------------------------------------
 // | HisiPHP承诺基础框架永久免费开源，您可用于学习和商用，但必须保留软件版权信息。
 // +----------------------------------------------------------------------
@@ -11,6 +11,7 @@
 namespace plugins\hisiphp;
 use app\common\controller\Plugins;
 defined('IN_SYSTEM') or die('Access Denied');
+
 /**
  * 系统基础信息插件
  * @package plugins\hisiphp
@@ -29,7 +30,7 @@ class hisiphp extends Plugins
      * system_admin_tips钩子方法
      * @param $params
      */
-    public function systemAdminIndex(&$params)
+    public function systemAdminIndex($params)
     {
         $this->fetch('systeminfo');
     }

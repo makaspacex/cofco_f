@@ -1,0 +1,39 @@
+{/*****产品列表模板*****/}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+    {include file="public/head" /}
+</head>
+<body>
+  {include file="public/nav" /}
+  <!-- banner部分 -->
+  <div class="banner product">
+    <div class="title">
+      <p>产品展示</p>
+      <p class="en">Product Display</p>
+    </div>
+  </div>
+  <!-- main部分 -->
+  <div class="main product">
+    <div class="layui-container">
+      {hisi:list cid="$category['id']" pagesize="$category['pagesize']" field="slogan"}
+      <div class="content layui-row">
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md7 layui-col-lg6 content-img"><img src="{$r['image']}"></div>
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md5 layui-col-lg6 right">
+          <p class="label">{$r['title']}</p>
+          <p class="detail">{$r['slogan']}</p>
+          <div><a href="{$r['url']}">查看产品 ></a></div>
+        </div>
+      </div>
+      {/hisi:list}     
+    </div>
+    <div class="pages">
+        {$pages|raw}
+    </div>
+  </div>
+  {include file="public/footer" /}
+</body>
+</html>

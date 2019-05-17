@@ -1,0 +1,72 @@
+
+<meta name="referrer" content="never">
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-normal layui-btn-sm hisi-iframe-pop" hisi-data="{width: '550px', height: '500px', title: '添加幻灯片'}">添加幻灯片</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm hisi-page-btns confirm">删除</a>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit j-iframe-pop" hisi-data="{width: '550px', height: '500px', title: '修改幻灯片'}" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+
+<script type="text/html" title="排序模板" id="sortTpl">
+    <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ d.sort }}" data-value="{{ d.sort }}" data-href="{:url('sort')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,page: true
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '标题', width: 120}
+                ,{field: 'groups', title: '分组', width: 90}
+                ,{field: 'url', title: '链接'}
+                ,{field: 'image', title: '图片', width: 120, templet: function(d) {
+                    return d.image ? '<img src="'+d.image+'" title="'+d.title+'" class="hisi-img-'+d.type+'" width="50" />' : '';
+                }}
+                ,{field: 'type', title: '终端', width: 90, templet: '<div><a title="点击筛选" href="{:url()}?type={{ d.type }}" class="hisi-table-a-filter">{{ d.type == "pc" ? "电脑端" : "手机端" }}</a></div>'}
+                ,{field: 'sort', title: '排序', width: 90, templet: '#sortTpl'}
+                ,{field: 'status', title: '状态', width: 90, templet: '#statusTpl'}
+                ,{title: '操作', width: 120, templet: '#buttonTpl'}
+            ]]
+            ,done: function(res, curr, count) {
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+                
+                $('.hisi-img-pc').on('click', function() {
+                    var json = [];
+                    $('.hisi-img-pc').each(function(){
+                        var that = $(this);
+                        json.push({alt: that.attr('title'), pid: '0', src: that.attr('src'), 'thumb': that.attr('src')});
+                    });
+                    layer.photos({photos: {status: 1, start: 0, title: '预览', id: 1, data: json}});
+                });
+
+                $('.hisi-img-wap').on('click', function() {
+                    var json = [];
+                    $('.hisi-img-wap').each(function(){
+                        var that = $(this);
+                        json.push({alt: that.attr('title'), pid: '0', src: that.attr('src'), 'thumb': that.attr('src')});
+                    });
+                    layer.photos({photos: {status: 1, start: 0, title: '预览', id: 1, data: json}});
+                });
+            }
+        });
+	});
+</script>

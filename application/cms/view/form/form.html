@@ -1,0 +1,49 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+<div class="page-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">表单标题</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="表单标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">表单名称</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-table_name" name="table_name" lay-verify="required" placeholder="支持字母下划线，不含表前缀" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注说明</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-remark" name="remark" placeholder="备注说明" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">需要登录</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" name="need_login" class="field-need_login" value="0" title="否" checked />
+            <input type="radio" name="need_login" class="field-need_login" value="1" title="是" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">添加到菜单</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" name="is_menu" class="field-is_menu" value="0" title="否" checked />
+            <input type="radio" name="is_menu" class="field-is_menu" value="1" title="是" />
+        </div>
+    </div>
+    <div class="pop-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id">
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func'], function() {
+    layui.func.assign({:json_encode($formData)});
+});
+</script>

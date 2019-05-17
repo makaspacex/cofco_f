@@ -1,0 +1,72 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+<div class="page-form">
+    {volist name="$formData['hasContentFormFields']" id="vo"}
+        {switch $vo['type']}
+            {case radio}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                            <input type="radio" disabled class="field-{$vo['name']}" value="{$kk}" title="{$vv}" />
+                        {/foreach}
+			        </div>
+			    </div>
+            {/case}
+            {case checkbox}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                            <input type="checkbox" disabled class="field-{$vo['name']}" value="{$kk}" title="{$vv}" />
+                        {/foreach}
+			        </div>
+			    </div>
+            {/case}
+            {case select}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <select disabled class="field-{$vo['name']}" type="select">
+                            <option value="">请选择...</option>
+                            {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                <option value="{$kk}">{$vv}</option>
+                            {/foreach}
+                        </select>
+			        </div>
+			    </div>
+            {/case}
+            {case file}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <a href="{$formData[$vo['name']]}" target="_blank">{$formData[$vo['name']]}</a>
+			        </div>
+			    </div>
+            {/case}
+            {case image}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <img src="" class="hisi-img field-{$vo['name']}" type="img" onerror="this.src='__ADMIN_IMG__/theme.png';" style="border-radius:5px;border:1px solid #ccc" width="36" height="36">
+			        </div>
+			    </div>
+            {/case}
+            {default /}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+			            <input type="text" class="layui-input field-{$vo['name']}" disabled />
+			        </div>
+			    </div>
+        {/switch}
+    {/volist}
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func'], function() {
+    layui.func.assign({:json_encode($formData)});
+});
+</script>

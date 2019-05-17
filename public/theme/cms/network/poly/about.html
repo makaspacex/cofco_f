@@ -1,0 +1,72 @@
+{/*****关于我们*****/}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+    {include file="public/head" /}
+</head>
+<body>
+{include file="public/nav" /}
+  <!-- banner部分 -->
+  <div class="banner about">
+    <div class="title">
+      <p>关于我们</p>
+      <p class="en">About Us</p>
+    </div>
+  </div>
+  <!-- main部分 -->
+  <div class="main-about">
+    <div class="layui-container">
+      <div class="layui-row">
+        <ul class="aboutab">
+          <li class="layui-this">公司简介</li><li>招贤纳士</li><li>发展历程</li>
+        </ul>
+        {hisi:list cid="5" field="content"}
+          <div class="tabIntro">
+            {:htmlspecialchars_decode($r['content'])}      
+          </div>
+        {/hisi:list}
+        <div class="tabJob">
+          {hisi:list cid="6" field="content"}
+          <div class="content">
+            <p class="title">{$r['title']}</p>
+            <p>> 职位描述</p>
+            {:htmlspecialchars_decode($r['content'])}  
+          </div>
+          {/hisi:list}
+        </div>
+        <div class="tabCour">
+          <p class="title">我们的蜕变</p>
+          <ul class="timeline">
+            {hisi:list cid="7" order="id desc" field="content"}
+              {if ( ($i % 2) == 0  )}
+                <li>
+                  <div class="cour-img"><img src="{$r['image']}"></div>
+                  <div class="cour-panel layui-col-sm4 layui-col-sm-offset8 layui-col-lg5 layui-col-lg-offset7">
+                    <p class="label">{$r['title']}</p>
+                    {:htmlspecialchars_decode($r['content'])}  
+                  </div>
+                </li>
+              {else /}
+                <li class="odd">
+                  <div class="cour-img"><img src="{$r['image']}"></div>
+                  <div class="cour-panel layui-col-sm4 layui-col-lg5">
+                    <p class="label">{$r['title']}</p>
+                    {:htmlspecialchars_decode($r['content'])}  
+                  </div>
+                </li>
+              {/if}
+            {/hisi:list}
+            <li class="odd">
+              <div class="cour-img"><img src="__IMG__/us_img8.png"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {include file="public/footer" /}
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-normal layui-btn-sm hisi-iframe-pop" hisi-data="{width: '550px', height: '330px', title: '添加模型'}">添加模型</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm j-page-btns confirm">删除</a>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="javascript:;" data-json='{mid: {{ d.id }}, name: "{{ d.name }}", sort: 100, title: "{{ d.title }}", remark: "{{ d.remark }}" }' class="layui-btn layui-btn-xs layui-btn-primary hisi-prompt">复制</a>{{# if (d.system == 1) { }}<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-normal layui-disabled layui-icon layui-icon-edit"></a><a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-danger layui-disabled layui-icon layui-icon-delete"></a>{{# } else { }}<a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit j-iframe-pop" hisi-data="{width: '550px', height: '330px', title: '修改模型'}" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="hisi-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>{{# } }}
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+<script type="text/javascript">
+	layui.use(['table', 'jquery', 'layer'], function() {
+        var $ = layui.jquery, table = layui.table, layer = layui.layer;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'id', title: 'mid', width: 70}
+                ,{field: 'title', title: '模型标题'}
+                ,{field: 'name', title: '模型名称', templet: '<div>{{ d.name }}</div>'}
+                ,{field: 'remark', title: '备注说明'}
+                ,{field: 'system', title: '系统模型', width: 90, templet: '<div><span class="layui-btn layui-btn-xs layui-btn-normal">{{ d.system == 1 ? "是" : "否" }}</span></div>'}
+                ,{field: 'field', title: '字段管理', width: 90, templet: '<div><a href="{:url("field/index")}?mid={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">查看字段</a></div>'}
+                ,{field: 'status', title: '状态', width: 90, templet: '#statusTpl'}
+                ,{title: '操作', templet: '#buttonTpl', width: 150}
+            ]]
+            ,done:function(){
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+                $('.hisi-prompt').on('click', function() {
+                    var that = $(this), param = new Function('return '+ that.attr('data-json'))();
+                    layer.prompt({
+                        value: param.name + '_copy',
+                        title: '请输入模型名称',
+                    }, function(value, index, elem) {
+                        param.name = value;
+                        $.post("{:url('add')}", param, function(res) {
+                            if (res.code == 0) {
+                                layer.msg(res.msg)
+                            }
+                        }, 'json');
+                        layer.close(index);
+                    });
+                    return false;
+                });
+            }
+        });
+
+	});
+</script>

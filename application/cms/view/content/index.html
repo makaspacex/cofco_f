@@ -1,0 +1,151 @@
+<style type="text/css">
+	.content-category{float:left;width:16%;}
+    .content-category h3{display:block;width:100%;font-size:16px;height:40px;line-height:40px;}
+    .content-category h3 span{display:inline-block;width:80%;}
+    .content-category h3 a{color:var(--hisi-head-bg);}
+	.content-table{float:left;width:84%;}
+	.layui-tree-branch{display:none!important;}
+    .category-side-shrink{width:0%!important;height:0;}
+    .category-side-shrink h3 span{display:none;}
+    .category-side-shrink ul{display:none;}
+    .hisi-table-tool form{float:left;margin-left:10px;}
+    .hisi-table-tool .layui-input{float:left;width:150px!important;height:30px;line-height:30px;border-radius:2px 0 0 2px}
+    .hisi-table-tool .layui-search-btn{float:left;border-radius:0 2px 2px 0;margin-left:-1px;overflow: hidden;}
+    @media screen and (max-width:450px) {
+        .content-category,
+        .content-table{width:98%;margin:0 1%}
+    }
+</style>
+<div style="background-color:#FFF;overflow: hidden;">
+<div class="content-category">
+    <h3><span>栏目列表</span></h3>
+	<ul id="treeList"></ul>
+</div>
+
+<div class="content-table">
+    <!-- <div style="overflow: hidden;">
+        <div class="page-filter fr">
+            <form class="layui-form layui-form-pane" action="{:url()}" id="hisiSearch" method="get">
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="text" name="keyword" value="{:input('get.keyword')}" lay-verify="required" placeholder="请输入关键词搜索" autocomplete="off" class="layui-input">
+                    </div>
+                    <input type="hidden" name="cid" value="{:input('param.cid/d')}" />
+                    <button type="submit" class="layui-btn layui-btn-normal">搜索</button>
+                </div>
+            </form>
+        </div>
+    </div> -->
+	<table id="dataTable" lay-filter="dataTable"></table>
+</div>
+</div>
+<script type="text/html" id="toolbar">
+    <div class="hisi-table-tool">
+        <div class="fl"><a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary layui-icon layui-icon-shrink-right category-shrink" title="显示/隐藏栏目列表"></a><a href="{:url('add', ['cid' => input('param.cid')])}" id="hisi-add-btn" class="layui-btn layui-btn-sm layui-btn-normal">添加内容</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm j-page-btns confirm">删除</a><a href="{:url('')}?recycle=1" class="layui-btn layui-btn-primary layui-btn-sm hisi-table-a-filter">回收站</a></div><form action="{:url()}" id="hisiSearch" method="get"><input type="text" name="keyword" value="{:input('get.keyword')}" placeholder="输入关键词搜索" autocomplete="off" class="layui-input"><input type="hidden" name="cid" value="{:input('param.cid/d')}" /><button type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-search-btn">搜索</button></form>
+    </div>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    {{# if (d.delete_time > 0) { }}
+        <a href="{:url('restore')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal hisi-ajax">恢复</a>
+    {{# } else { }}
+	   <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+    {{# } }}
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" title="排序模板" id="sortTpl">
+    <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ d.sort }}" data-value="{{ d.id }}" data-href="{:url('sort')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+    var shark = true;
+	layui.use(['table', 'jquery', 'tree', 'layer'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, 
+            table = layui.table, layer = layui.layer, url = '{:url()}';
+            
+        table.render({
+            elem: '#dataTable'
+            ,url: url + '?cid={:input('param.cid')}&tag={:input('param.tag')}'
+            ,page: true
+            ,limit: 20
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '标题', templet: '<div><a href="/cms/{{ d.has_category.url }}{{# if (d.has_category.content_limit != 1) { }}/{{ d.url }}{{# } }}.html" target="_blank" style="color:{{ d.title_color }}">{{ d.title }}</a></div>'}
+                ,{field: 'category', title: '分类', width: 120, templet: '<div><a title="点击筛选" href="{:url()}?cid={{ d.cid }}" class="hisi-table-a-filter">{{ d.has_category.name }}</a></div>'}
+                ,{field: 'hits', title: '看/赞/评', width: 110, templet: '<div>{{ d.views }} / {{ d.likes }} / {{ d.comments }}</div>'}
+                ,{field: 'timing', title: '发布时间', width: 120}
+                ,{field: 'sort', title: '排序', width: 60, edit: 'text'}
+                ,{field: 'status', title: '显示', width: 80, templet: '#statusTpl'}
+                ,{title: '操作', templet: '#buttonTpl', width: 90}
+            ]]
+            ,done: function() {
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+            }
+        });
+
+        layui.tree({
+			elem: '#treeList',
+			nodes: {:json_encode($categorys, 1)},
+			click:function(node) {
+                if (node.content_limit == 0) {
+                    if (''+node.id == ''+node.childs) {
+                        layer.msg('此栏目禁止操作');
+                        return false;
+                    }
+                }
+                
+				table.reload('dataTable', {
+                    url: url,
+                    where:{cid: node.id},
+                    page: true,
+                    done: function() {
+                        $('input[name="cid"]').val(node.id);
+                        if (node.content_limit == 0) {
+                            $('#hisi-add-btn').attr('href', "javascript:layui.layer.msg('此栏目限制添加内容');");
+                        } else {
+                            $('#hisi-add-btn').attr('href', "{:url('add')}?cid=" + node.id);
+                        }
+                    }
+				});
+			}
+		});
+
+        $(document).on('click', '.category-shrink', function() {
+            var that = $(this);
+            if (shark) {
+                that.removeClass('layui-icon-shrink-right').addClass('layui-icon-spread-left');
+                $('.content-category').addClass('category-side-shrink');
+                $('.content-table').css({width: '99%', margin: '0 0.5%'});
+                shark = false;
+            } else {
+                shark = true;
+                that.removeClass('layui-icon-spread-left').addClass('layui-icon-shrink-right');
+                $('.content-category').removeClass('category-side-shrink');
+                $('.content-table').css({width: '84%', margin: '0'});
+            }
+
+            table.reload('dataTable');
+        });
+
+        table.on('edit(dataTable)', function(obj) {
+            if (obj.field == 'sort') {
+                $.get('{:url('sort')}?id='+obj.data.id, {val: obj.value}, function(res) {
+                    if (res.code == 0) {
+                        layer.msg(res.msg);
+                    }
+                }, 'json');
+            }
+        });
+	});
+</script>

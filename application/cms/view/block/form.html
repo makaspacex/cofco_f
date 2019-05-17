@@ -1,0 +1,94 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+<div class="page-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="标题名称" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">别名</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-name" name="name" lay-verify="required" placeholder="支持字母、数字、下划线" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline">
+            <select name="type" class="field-type" lay-filter="type" type="select">
+                <option value="1">富文本</option>
+                <option value="2">文本</option>
+                <option value="3">图片</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item content" style="display:none">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline" style="width:80%;z-index:0;">
+            <textarea id="content" class="layui-textarea" name="content1">{if (isset($formData['content']) && $formData['type'] == 1)}{:htmlspecialchars_decode($formData['content'])}{/if}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item content" style="display:none">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline">
+            <textarea class="layui-textarea" name="content2" placeholder="碎片内容">{if (isset($formData['content']) && $formData['type'] == 2)}{$formData['content']}{/if}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item content" style="display:none">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline upload">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">上传图片</button>
+            <input type="hidden" class="upload-input" name="content3" value="{if (isset($formData['content']) && $formData['type'] == 3)}{$formData['content']}{/if}" />
+            <img src="{if (isset($formData['content']) && $formData['type'] == 3)}{$formData['content']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+        </div>
+    </div>
+    <div class="page-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id" />
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交保存</button>
+        <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a>
+    </div>
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func', 'form', 'jquery', 'upload'], function() {
+    var form = layui.form, 
+        $ = layui.jquery, 
+        upload = layui.upload,
+        formData = {:json_encode($formData)};
+
+    layui.func.assign(formData);
+
+    form.on('select(type)', function(data) {
+        $('.content').hide().eq(data.value - 1).show();
+    });
+
+    if (formData.type) {
+        $('.content').hide().eq(formData.type - 1).show();
+    } else {
+        $('.content').eq(0).show();
+    }
+
+    upload.render({
+        elem: '.layui-upload'
+        ,url: '{:url("system/annex/upload?group=links")}'
+        ,method: 'post'
+        ,before: function(input) {
+            layer.msg('上传中...', {time:3000000});
+        },done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            input.siblings('img').attr('src', res.data.file);
+            input.val(res.data.file);
+        }
+    });
+});
+</script>
+{:editor(['content'])}

@@ -1,0 +1,50 @@
+{/*****案例模板*****/}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+    {include file="public/head" /}
+</head>
+<body>
+    {include file="public/nav" /}
+  <!-- banner部分 -->
+  <div class="banner case">
+    <div class="title">
+      <p>成功案例</p>
+      <p class="en">Successful Case</p>
+    </div>
+  </div>
+  <!-- main部分 -->
+  <div class="main-case">
+    <div class="layui-container">
+      <div class="layui-row">
+        {hisi:list cid="$category['id']" pagesize="$category['pagesize']" field="content"}{/hisi:list}
+        {php}
+          if (!empty($hisiList)) {
+            $arr = $hisiList->toArray();
+            $hisiList = array_chunk($arr['data'], 3);
+          } else {
+            $hisiList = [];
+          }
+        {/php}
+        {volist name="$hisiList" id="r"}
+          {foreach name="$r" id="rr" key="kk"}
+          <div class="layui-inline content {if ($kk == 1)}even center{/if}">
+            <div class="layui-inline case-img"><img src="{$rr['image']}"></div>
+            <p class="lable">{$rr['title']}</p>
+            <p>{:htmlspecialchars_decode($rr['content'])}</p>
+          </div>
+          {/foreach}
+        {/volist}
+      </div>
+      <div class="pages">
+          {$pages|raw}
+      </div>
+    </div>
+  </div>
+  
+{include file="public/footer" /}
+</body>
+</html>

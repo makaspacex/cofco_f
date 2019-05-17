@@ -1,0 +1,44 @@
+
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-normal layui-btn-sm hisi-iframe-pop" hisi-data="{width: '550px', height: '390px', title: '添加表单'}">添加表单</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm hisi-page-btns confirm">删除</a>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit j-iframe-pop" hisi-data="{width: '550px', height: '390px', title: '修改表单'}" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: false
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '表单标题'}
+                ,{field: 'table_name', title: '表单名称', templet: '<div>{{ d.table_name }}</div>'}
+                ,{field: 'remark', title: '备注说明'}
+                ,{field: 'content', title: '表单内容', width: 100, templet: '<div><a href="{:url("formContent/index")}?fid={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">内容管理</a></div>'}
+                ,{field: 'field', title: '表单字段', width: 100, templet: '<div><a href="{:url("formField/index")}?fid={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">字段管理</a></div>'}
+                ,{field: 'field', title: '表单代码', width: 100, templet: '<div><a href="{:url("code")}?fid={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-primary j-iframe-pop" hisi-data="{width: \'600px\', height: \'460px\', title: \'表单代码\'}">获取代码</a></div>'}
+                ,{field: 'status', title: '状态', width: 90, templet: '#statusTpl'}
+                ,{title: '操作', templet: '#buttonTpl', width: 160}
+            ]]
+            ,done: function() {
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+            }
+        });
+	});
+</script>

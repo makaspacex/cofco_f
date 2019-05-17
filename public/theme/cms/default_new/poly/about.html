@@ -1,0 +1,25 @@
+{/*****关于我们模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$content['seo_title'] ? $content['seo_title'] : $content['title']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$content['seo_keywords']}" />
+		<meta name="description" content="{$content['seo_description']}" />
+		{include file="public/head" /}
+		<style type="text/css">
+			.page-head{display:block;padding:30px 0;text-align:center;font-size:24px;font-weight:500;border-bottom:1px solid #eee;}
+			.page-content{display:block;padding:30px 50px;overflow:hidden;}
+		</style>
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container bgc">
+				<div class="page-head">{$category['name']}</div>
+				<div class="page-content">
+					{:htmlspecialchars_decode($content['content'])}
+				</div>
+			</div>
+		</div>
+		{include file="public/footer" /}
+	</body>
+</html>

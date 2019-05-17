@@ -1,0 +1,163 @@
+body{
+    background-color: #fff;
+    font-size: 12px;
+}
+.layui-form-label{min-width:80px;}
+
+
+.layui-layout-admin .layui-footer {
+    position: initial;
+}
+.layui-layout-admin .layui-body {
+     bottom: 0px;
+}
+
+/*侧边栏*/
+#switchNav .admin-nav-item {
+    padding-left: 20px;
+}
+
+.layui-nav-tree .layui-nav-item {
+    line-height: 40px;
+}
+.layui-nav-tree .layui-nav-item a {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+.layui-nav-tree .layui-nav-item > a i{
+    font-size: 14px;
+    padding-right: 6px;
+}
+.layui-nav-tree .layui-nav-child a {
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+}
+
+.layui-side-scroll {
+    width: 180px;
+}
+.layui-layout-admin .layui-side {
+    width: 160px;
+}
+.layui-nav-tree {
+    width: 160px;
+}
+
+/*导航头*/
+.header-logo {
+    width: 120px;
+}
+.layui-header,.header-fold,.header-logo,.main-nav{
+    height: 45px;
+    line-height: 45px;
+    font-size: 16px;
+}
+#switchNav{
+    top: 45px;
+}
+.layui-nav .layui-nav-item {
+    line-height: 40px;
+}
+.main-nav .layui-nav-item a{
+    font-size: 14px;
+}
+.layui-layout-admin .layui-body {
+    top: 45px;
+    left: 160px;
+}
+
+
+/* 表格相关*/
+.layui-form-pane .layui-form-label {
+    width: 110px;
+    padding: 4px 8px;
+    height: 30px;
+    line-height: 20px;
+}
+
+.layui-input, .layui-select, .layui-textarea {
+    height: 30px;
+}
+.layui-table td, .layui-table th {
+    font-size: 1.0em;
+}
+.layui-btn-sm i {
+    font-size: 1.0em!important;
+}
+
+.right-align{
+    float: right;
+}
+.clear-both{
+    clear: both;
+}
+
+.margin-0{
+    margin: 0;
+}
+.margin-t-20{
+    margin-top:20px;
+}
+.margin-b-10{
+    margin-bottom:10px;
+}
+
+
+.abs-right{
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+}
+
+/*列选择弹框*/
+.layui-table-tool-panel {
+    min-width: 120px;
+}
+.layui-table-tool-panel li .layui-form-checkbox[lay-skin=primary] span {
+    padding: 0 0 0 20px;
+}
+.layui-form-checkbox[lay-skin=primary] span {
+    line-height: 16px;
+}
+.layui-table-view .layui-form-checkbox[lay-skin=primary] i {
+    width: 14px;
+    height: 14px;
+}
+.layui-form-checkbox[lay-skin=primary] i {
+    line-height: 14px;
+    border: 1px solid #d2d2d2;
+    font-size: 12px;
+    width: 14px;
+    height: 14px;
+}
+.layui-form-checkbox span {
+    font-size: 12px;
+}
+.page-tab-content {
+    overflow: unset;
+    min-height: 750px;
+}
+.layui-body::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+/* 标签栏 头*/
+.layui-tab-title{
+    height: 32px;
+}
+.layui-tab-title li{
+    line-height: 32px;
+    font-size: 13px;
+}
+
+.layui-tab-title .layui-this:after{
+    height: 33px;
+}
+.tool-btns{
+    top: 6px;
+}

@@ -1,0 +1,52 @@
+.slider{width:100%;min-width:1180px;height:470px;position:relative;overflow:hidden;background:#fff;text-align:center;margin-top:62px;}
+.slider .bd{width:1180px;position:absolute;left:50%;margin-left:-590px}
+.slider .bd li{width:1180px;overflow:hidden;}
+.slider .bd li img{display:block;width:1180px;height:470px;}
+.slider .tempWrap{overflow:visible !important}
+.slider .tempWrap ul{margin-left:-1180px !important;}
+.slider .hd{position:absolute;width:100%;left:0;z-index:1;height:8px;bottom:20px;text-align:center;}
+.slider .hd li{display:inline-block;*display:inline;zoom:1;width:8px;height:8px;line-height:99px;overflow:hidden;background:url(../image/slider-btn.png) 0 -10px no-repeat;margin:0 5px;cursor:pointer;filter:alpha(opacity=60);opacity:0.6;}
+.slider .hd li.on{background-position:0 0;filter:alpha(opacity=100);opacity:1;}
+.slider .pnBtn{position:absolute;z-index:1;top:0;width:100%;height:470px;cursor:pointer;}
+.slider .prev{left:-50%;margin-left:-590px;}
+.slider .next{left:50%;margin-left:590px;}
+.slider .pnBtn .blackBg{display:block;position:absolute;left:0;top:0;width:100%;height:470px;background:#000;filter:alpha(opacity=50);opacity:0.5;}
+.slider .pnBtn .arrow{display:none;position:absolute;top:0;z-index:1;width:60px;height:470px;}
+.slider .pnBtn .arrow:hover{filter:alpha(opacity=60);opacity:0.6;}
+.slider .prev .arrow{right:0;background:url(../image/slider-arrow.png) -120px 0 no-repeat;}
+.slider .next .arrow{left:0;background:url(../image/slider-arrow.png) 0 0 no-repeat;}
+
+.pic-box{display:block;overflow:hidden;width:100%;background-color:#fff;}
+.pic-head{display:block;width:100%;height:4px;background-color:#eee;position:relative;margin:30px 0 20px 0;}
+.pic-head h4{position:absolute;left:50%;width:120px;margin:0 0 0 -60px;height:30px;top:-13px;line-height:30px;background-color:#fff;text-align:center;font-size:20px;font-weight:400;color:#666;}
+.pic-items{overflow:hidden;width:100%;}
+.pic-items ul{padding-bottom:15px;overflow:hidden;}
+.pic-items ul li{width:275px;float:left;margin:15px 0px 0px 15px;text-align:center;cursor:pointer;overflow:hidden;border-bottom:3px solid #eee;}
+.pic-items ul li .pic-items-img{display:table-cell;vertical-align:middle;text-align:center;width:265px;height:265px;border:1px solid #eee;padding:4px;background-color:#f5f5f5;}
+.pic-items ul li .pic-items-img img{max-width:100%;max-height:100%;}
+.pic-items ul li span{display:block;width:100%;height:40px;line-height:40px;overflow:hidden;}
+.pic-items ul li:hover{border-bottom-color:#bbb;}
+
+.pic-title{width:1180px;margin:20px auto 0;overflow:hidden;color:#fff;height:40px;line-height:40px;}
+.pic-h1{float:left;font-size:24px;text-indent:15px;width:900px;overflow:hidden;}
+.pic-title .pic-exp{float:right;color:#bebebe;}
+
+.pic-show-container{position:relative;padding:20px 90px;overflow:hidden;width:1000px;background-color:#000;color:#fff;}.img-show-box{display:table-cell;text-align:center;vertical-align:middle;width:1000px;overflow:hidden;padding:30px 0}.img-show-box img{max-width:100%}
+.img-desc-box{display:block;width:100%;line-height:25px;padding-bottom:30px}
+.small-scroll{height:122px;margin-bottom:6px}
+.small-prev,.small-next{float:left;width:14px;height:116px;background-color:#555}
+.small-prev{border-radius:5px 0 0 5px}
+.small-next{border-radius:0 5px 5px 0}
+.small-prev .prev-icon{float:left;width:0;height:0;margin:50px 0 0 -8px;border-width:10px;border-style:solid;border-color:transparent #000 transparent transparent}
+.small-next .next-icon{float:left;width:0;height:0;margin:50px 0 0 3px;border-width:10px;border-style:solid;border-color:transparent transparent transparent #000}
+.pic-show-container .small-prev:hover,
+.pic-show-container .small-next:hover{background-color:#999}
+.small-img-box{float:left;margin:0 6px;display:inline;width:960px;overflow:hidden}
+.small-img-box ul{height:122px;width:99999px;overflow:hidden}
+.small-img-box li{float:left;padding:0 10px 0 11px;width:116px;cursor:pointer;display:inline}
+.small-img-box img{border:2px solid #000;width:112px;height:112px}
+.small-img-box .on img{border-color:#fff}
+.pic-show-container .pageState{position:absolute;right:90px;bottom:160px;font-family:"Times New Roman",serif;letter-spacing:1px}
+.pic-show-container .pageState span{color:#f00;font-size:24px}
+
+

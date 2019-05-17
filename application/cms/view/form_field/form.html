@@ -1,0 +1,108 @@
+<form class="layui-form hisi-form mt10 pb50" action="{:url()}" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段类型</label>
+        <div class="layui-input-inline w300">
+            <select name="type" class="field-type" type="select" lay-filter="type">
+                <option value="input">单行文本</option>
+                <option value="textarea">多行文本</option>
+                <option value="password">密码框</option>
+                <option value="radio">单选按钮</option>
+                <option value="checkbox">多选框</option>
+                <option value="select">下拉框</option>
+                <option value="file">文件上传</option>
+                <option value="image">图片上传</option>
+                <option value="hidden">隐藏域</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段标题</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="字段标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段名称</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-name" name="name" lay-verify="required" placeholder="支持字母、下划线组合" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">操作提示</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-tips" name="tips" placeholder="[选填]" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段备注</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-remark" name="remark" placeholder="[选填]" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><a href="https://www.kancloud.cn/manual/thinkphp5_1/354107" target="_blank">验证规则</a></label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-rule" name="rule" placeholder="示例：require|number" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">列表显示</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" name="list_show" class="field-list_show" value="1" checked title="是" />
+            <input type="radio" name="list_show" class="field-list_show" value="0" title="否" />
+        </div>
+    </div>
+    <div class="layui-form-item item3">
+        <label class="layui-form-label">字段长度</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-max_length" name="max_length" value="255" />
+        </div>
+    </div>
+    <div class="layui-form-item item1">
+        <label class="layui-form-label">默认值</label>
+        <div class="layui-input-inline w300">
+            <textarea class="layui-textarea field-value" name="value" placeholder="字段类型为单选、多选、下拉时请填写键值。字段类型为多选，如有多个默认值请使换行分割"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item item2" style="display:none">
+        <label class="layui-form-label">字段选项</label>
+        <div class="layui-input-inline w300">
+            <textarea rows="8" class="layui-textarea field-options" name="options" lay-verify="" autocomplete="off" placeholder="请严格按照以下格式设置：                                 选项值:选项名                                               选项值:选项名                                   "></textarea>
+        </div>
+    </div>
+    <div class="pop-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id">
+        <input type="hidden" class="field-fid" name="fid" value="{:input('param.fid/d', 0)}" />
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true, refresh: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func', 'form', 'jquery'], function() {
+    var form = layui.form, $ = layui.jquery;
+    layui.func.assign({:json_encode($formData)});
+
+    form.on('select(type)', function(data) {
+        switch(data.value) {
+            case 'radio':
+            case 'checkbox':
+            case 'select':
+                $('.item2,.item1').show();
+                break;
+
+            case 'hidden':
+            case 'password':
+            case 'textarea':
+            case 'input':
+            case 'file':
+            case 'image':
+                $('.item1').show();
+                $('.item2').hide();
+                break;
+        }
+    });
+});
+</script>

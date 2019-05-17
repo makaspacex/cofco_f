@@ -1,0 +1,343 @@
+<link rel="stylesheet" type="text/css" href="__ADMIN_MOD_CSS__/style.css">
+<style type="text/css">
+	.layui-table .layui-input,
+	.J_param-items .layui-input,
+	.J_param-group .layui-input {height:30px!important;}
+	.layui-table .layui-form-switch{margin-top:1px!important;}
+	.layui-layer-btn2{border-color: #1E9FFF!important;; background-color: #1E9FFF!important;;color: #fff!important;;}
+</style>
+
+<form class="layui-form" action="{:url()}" refresh="true" method="post">
+	<div class="layui-tab-item layui-show" title="基本信息">
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">类型名称：</label>
+	        <div class="layui-input-inline">
+	            <input type="text" class="layui-input field-name" name="name" lay-verify="required" />
+	        </div>
+	        <div class="layui-form-mid layui-word-aux">例如：手机、女鞋、图书等</div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">类型排序：</label>
+	        <div class="layui-input-inline">
+	            <input type="text" class="layui-input field-sort" name="sort" value="100" />
+	        </div>
+	        <div class="layui-form-mid layui-word-aux">请填写自然数，栏目类型列表将会根据排序进行由小到大排列显示</div>
+	    </div>
+	    <div class="layui-form-item">
+	        <label class="layui-form-label">类型状态：</label>
+	        <div class="layui-input-inline">
+	            <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
+	            <input type="radio" class="field-status" name="status" value="0" title="禁用">
+	        </div>
+	    </div>
+	</div>
+	<div class="layui-tab-item" title="扩展属性">
+	    <table class="layui-table">
+	    	<thead>
+	    		<tr>
+	    			<th width="50">排序</th>
+	    			<th width="160">属性名</th>
+	    			<th width="100">类型</th>
+	    			<th width="80">支持筛选</th>
+	    			<th>属性值</th>
+	    			<th width="120">删除</th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+	    		{if condition="isset($formData['has_attr_items'])"}
+		    		{volist name="$formData['has_attr_items']" id="v"}
+					<tr>
+						<td>
+							<input type="text" name="attribute[{$v['sort']}][sort]" class="layui-input" value="{$v['sort']}" />
+						</td>
+						<td>
+							<input type="text" name="attribute[{$v['sort']}][name]" class="layui-input" value="{$v['name']}" />
+						</td>
+						<td>
+							<select name="attribute[{$v['sort']}][form_type]" lay-filter="attributeType" data-index="{$v['sort']}">
+								<option value="1" {if condition="$v['form_type'] eq 1"}selected{/if}>单选框</option>
+								<option value="2" {if condition="$v['form_type'] eq 2"}selected{/if}>复选框</option>
+								<option value="3" {if condition="$v['form_type'] eq 3"}selected{/if}>输入框</option>
+							</select>
+						</td>
+						<td>
+							<input type="checkbox" name="attribute[{$v['sort']}][search]" value="1" {if condition="$v['search'] eq 1"}checked{/if} lay-skin="switch" lay-text="是|否" />
+						</td>
+						<td>
+							<textarea name="attribute[{$v['sort']}][values]" class="hide" id="J_attrValueInput{$v['sort']}">{:json_encode($v['has_values'], 1)}</textarea>
+							<div id="J_attrValueShow{$v['sort']}">
+								{volist name="$v['has_values']" id="vv"}
+									{$vv['name']}&nbsp;
+								{/volist}
+							</div>
+						</td>
+						<td>
+							<input type="hidden" name="attribute[{$v['sort']}][id]" value="{$v['id']}" />
+							<a href="javascript:void(0);" data-index="{$v['sort']}" id="J_attrValueBtn{$v['sort']}" class="layui-btn layui-btn-normal layui-btn-xs J_attr-value-btn">编辑属性值</a>
+							<a href="{:url('del')}?hisiModel=CmsAttributeItem&id={$v['id']}" class="layui-btn layui-btn-danger layui-btn-xs hisi-tr-del" data-index="{$v['sort']}">删除</a>
+						</td>
+					</tr>
+					{/volist}
+				{/if}
+                <tr>
+                    <td colspan="6" style="background-color:#f8f8f8">
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-xs J_add-tr" data-tpl="attribute">添加一个属性</button>
+                    </td>
+                </tr>
+	    	</tbody>
+	    </table>
+	</div>
+	<div class="layui-tab-item" id="J_paramBox" title="详细参数">
+	    <fieldset class="layui-elem-field layui-field-title">
+	        <legend><a href="javascript:void(0);" id="J_addParamGroup" class="layui-btn layui-btn-xs layui-btn-normal">添加参数组</a></legend>
+	    </fieldset>
+	</div>
+	<div class="hisi-footer">
+		<input type="hidden" class="field-id" name="id">
+		<button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交保存</button>
+		<a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+	</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/html" id="attributeTpl">
+	<tr>
+		<td>
+			<input type="text" name="attribute[{i}][sort]" class="layui-input" value="{i}" />
+		</td>
+		<td>
+			<input type="text" name="attribute[{i}][name]" class="layui-input" />
+		</td>
+		<td>
+			<select name="attribute[{i}][form_type]" lay-filter="attributeType" data-index="{i}">
+				<option value="1">单选框</option>
+				<option value="2">复选框</option>
+				<option value="3">输入框</option>
+			</select>
+		</td>
+		<td>
+			<input type="checkbox" name="attribute[{i}][search]" value="1" checked lay-skin="switch" lay-text="是|否" />
+		</td>
+		<td>
+			<textarea name="attribute[{i}][values]" class="hide" id="J_attrValueInput{i}"></textarea>
+			<div id="J_attrValueShow{i}"></div>
+		</td>
+		<td>
+			<a href="javascript:void(0);" data-index="{i}" id="J_attrValueBtn{i}" class="layui-btn layui-btn-normal layui-btn-xs J_attr-value-btn">编辑属性值</a>
+			<a href="javascript:void(0);" class="layui-btn layui-btn-danger layui-btn-xs tr-del" data-index="{i}">删除</a>
+		</td>
+	</tr>
+</script>
+
+<script type="text/html" id="J_attrValueTpl">
+	<tr data-rand="{rand}">
+		<td>
+			<input type="text" class="layui-input J_attr-value-sort" value="{sort}" />
+		</td>
+		<td>
+			<input type="hidden" class="J_attr-value-id" value="{id}" />
+			<input type="text" class="layui-input J_attr-value-name" value="{name}" />
+		</td>
+		<td><a href="javascript:void(0);" data-id="{id}" class="J_attr-tr-del">删除</a></td>
+	</tr>
+</script>
+
+<script type="text/html" id="J_paramGroupTpl">
+	<div class="layui-form-item param-items">
+		<div class="J_param-group">
+			<label class="layui-form-label">参数组名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="params[{i}][name]" lay-verify="required" placeholder="请输入参数组名称" class="layui-input" value="{name}" />
+			</div>
+			<div class="layui-form-mid layui-word-aux">
+				<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete delete-param-items"></a>
+				<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-add-circle J_add-param-item-btn"></a>
+			</div>
+		</div>
+		<div class="J_param-items J_param-items-{i}" data-index="{i}"></div>
+	</div>
+</script>
+
+<script type="text/html" id="J_paramItemTpl">
+	<div class="layui-form-item param-item">
+		<label class="layui-form-label">参数名称</label>
+		<div class="layui-input-inline">
+			<input type="text" name="params[{i}][child][{j}][name]" lay-verify="required" placeholder="请输入参数名称" class="layui-input" value="{name}" />
+		</div>
+		<label class="layui-form-label">默认值</label>
+		<div class="layui-input-inline">
+			<input type="text" name="params[{i}][child][{j}][value]" placeholder="[选填]" class="layui-input" value="{value}" />
+		</div>
+		<div class="layui-form-mid layui-word-aux">
+			<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete delete-param-item"></a>
+		</div>
+	</div>
+</script>
+
+<script type="text/javascript">
+	var formData = {:json_encode($formData, 1)};
+	layui.use(['jquery', 'form', 'layer', 'func'], function(){
+    	var $ = layui.jquery, form = layui.form, layer = layui.layer;
+    	layui.func.assign(formData);
+    	/* 详细参数自动赋值 */
+    	var paramsAssign = function () {
+	    	if (formData.params) {
+	    		var obj = $('#J_paramBox');
+	    		for(var i in formData.params) {
+					obj.append($('#J_paramGroupTpl').html().replace(/{name}/g, formData.params[i].name).replace(/{i}/g, i));
+					for(var j in formData.params[i].child) {
+						$('.J_param-items-'+i).append( $('#J_paramItemTpl').html().replace(/{i}/g, i).replace(/{j}/g, j).replace(/{name}/g, formData.params[i].child[j].name).replace(/{value}/g, formData.params[i].child[j].value) );
+					}
+	    		}
+	    	}
+    	}
+    	paramsAssign();
+
+    	/* 添加TR */
+        $(document).on('click', '.J_add-tr', function() {
+            var that = $(this), 
+            	tpl = $('#'+that.attr('data-tpl')+'Tpl').html(), 
+            	len = that.parents('tbody').find('tr').length;
+            that.parents('tr').before(tpl.replace(/{i}/g, len+100));
+            form.render();
+        });
+
+        /* 属性类型切换 */
+		form.on('select(attributeType)', function(data) {
+        	var index = $(data.elem).attr('data-index');
+        	if (data.value == 3) {
+        		$('#J_attrValueBtn' + index).hide();
+        		$('#J_attrValueInput' + index).val('');
+        		$('#J_attrValueShow' + index).html('');
+        	} else {
+        		$('#J_attrValueBtn' + index).show();
+        	}
+		});
+
+		/* 属性值重复检查 */
+     	$(document).on('blur', '#J_attrValueTable .J_attr-value-name', function() {
+     		var that = $(this), val = that.val(), rand = $(this).parents('tr').attr('data-rand');
+     		$('#J_attrValueTable .J_attr-value-name').each(function(i) {
+     			if (val != '' && val == $(this).val() && rand != $(this).parents('tr').attr('data-rand')) {
+     				layer.msg('属性值' + val + ' 已存在');
+     				return;
+     			}
+     		});
+     	});
+
+		/* 属性值编辑 */
+		$(document).on('click', '.J_attr-value-btn', function() {
+			var that = $(this), 
+				html = '', 
+				oldHtml = '',
+				key = that.attr('data-index'),
+				inputObj = $('#J_attrValueInput' + key);
+			if (inputObj.val() != '') {
+				var oldVal = JSON.parse(inputObj.val()), 
+					tpl = $('#J_attrValueTpl').html();
+				for (var i in oldVal) {
+					oldHtml += tpl.replace(/{sort}/g, oldVal[i].sort).replace(/{name}/g, oldVal[i].name).replace(/{id}/g, oldVal[i].id).replace(/{rand}/g, Math.random()).replace(/{i}/g, i);
+				}
+			}
+
+			html += '<table class="layui-table" id="J_attrValueTable">';
+				html += '<thead>';
+					html += '<tr>';
+						html += '<th width="60">排序</th>';
+						html += '<th>属性值</th>';
+						html += '<th width="50">删除</th>';
+					html += '</tr>';
+				html += '</thead>';
+				html += '<tbody>';
+					html += oldHtml;
+				html += '</tbody>';
+			html += '</table>';
+
+			layer.open({
+				type: 1,
+				title: '编辑属性值',
+				area: ['500px', '400px'],
+				btnAlign: 'c',
+				btn: ['确定', '取消', '添加一个属性值'],
+				content: html,
+				yes: function(index, layero) {
+					var valueArr = new Array(), 
+						nameObj = $('#J_attrValueTable .J_attr-value-name'), 
+						sortObj = $('#J_attrValueTable .J_attr-value-sort'),
+						str = '';
+
+					/* 将参数值整合到数组 */
+					$('#J_attrValueTable .J_attr-value-id').each(function(i) {
+						valueArr.push({
+							'id': $(this).val(), 
+							'name' : nameObj.eq(i).val(), 
+							'sort' : sortObj.eq(i).val()
+						});
+					});
+
+					/* 升序重排 */
+					valueArr.sort(function(x, y) {
+						return (x['sort'] > y['sort']) ? 1 : -1;
+					});
+
+					/* 提取参数值 */
+					for(var i in valueArr) {
+						if (i > 0) str += ' ';
+						str += valueArr[i].name;
+					}
+					$('#J_attrValueInput' + key).html(JSON.stringify(valueArr));
+					$('#J_attrValueShow' + key).text(str);
+					layer.closeAll();
+				},
+				btn2: function(index, layero) {
+					return true;
+				},
+				btn3: function(index, layero) {
+		            var tpl = $('#J_attrValueTpl').html(), 
+		            	len = $('.J_attr-value-name').length;
+		            $('#J_attrValueTable').append(tpl.replace(/{sort}/g, len+100).replace(/{name}/g, '').replace(/{id}/g, 0).replace(/{rand}/g, Math.random()));
+					return false;
+				}
+			});
+		});
+
+		/* 添加参数组 */
+		$('#J_addParamGroup').on('click', function() {
+			var obj = $('#J_paramBox');
+			obj.append($('#J_paramGroupTpl').html().replace(/{j}/g, 0).replace(/{i}/g, obj.children('.layui-form-item').length).replace(/{name}/g, ''));
+		});
+
+		/* 添加参数 */
+		$(document).on('click', '.J_add-param-item-btn', function() {
+			var that = $(this), obj = that.parents('.J_param-group').siblings('.J_param-items'), len = obj.children('.layui-form-item').length;
+			obj.append( $('#J_paramItemTpl').html().replace(/{i}/g, obj.attr('data-index')).replace(/{j}/g, len).replace(/{name}/g, '').replace(/{value}/g, '') );
+		});
+
+		/* 删除参数项 */
+		$(document).on('click', '.delete-param-item', function() {
+			$(this).parents('.param-item').remove();
+		});
+
+		/* 删除参数组 */
+		$(document).on('click', '.delete-param-items', function() {
+			$(this).parents('.param-items').remove();
+		});
+
+		$(document).on('click', '.J_attr-tr-del', function(){
+			var that = $(this), id = parseInt(that.attr('data-id'));
+			if (id > 0) {
+				$.get("{:url('del')}?hisiModel=CmsAttributeValue&id="+id, {}, function(res) {
+					if (res.code == 1) {
+						that.parents('tr').remove();
+					} else {
+						layer.msg(res.msg);
+					}
+				}, 'json');
+			} else {
+				that.parents('tr').remove();
+			}
+		});
+
+    });
+</script>

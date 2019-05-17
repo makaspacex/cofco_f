@@ -1,0 +1,117 @@
+<form class="layui-form hisi-form mt10 pb50" action="{:url()}" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段类型</label>
+        <div class="layui-input-inline w300">
+            <select name="type" class="field-type" type="select" lay-filter="type">
+                <option value="input">单行文本</option>
+                <option value="textarea">多行文本</option>
+                <option value="editor">编辑器</option>
+                <option value="file">附件</option>
+                <option value="image">单图上传</option>
+                <option value="images">多图上传</option>
+                <option value="date">日期</option>
+                <option value="datetime">日期+时间</option>
+                <option value="number">数字</option>
+                <option value="radio">单选按钮</option>
+                <option value="checkbox">多选框</option>
+                <option value="select">下拉框</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段标题</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="字段标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段名称</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-name" name="name" lay-verify="required" placeholder="支持字母、下划线组合" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">操作提示</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-tips" name="tips" placeholder="[选填] 填写当前表单的时候提示" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字段备注</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-remark" name="remark" placeholder="[选填] 数据库备注" />
+        </div>
+    </div>
+    <div class="layui-form-item item3">
+        <label class="layui-form-label">字段长度</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input" name="max_length" value="{if (isset($formData['max_length']) && $formData['max_length'] > 0)}{$formData['max_length']}{/if}" />
+        </div>
+    </div>
+    <div class="layui-form-item item1">
+        <label class="layui-form-label">默认值</label>
+        <div class="layui-input-inline w300">
+            <textarea class="layui-textarea field-value" name="value" placeholder="字段类型为单选、多选、下拉时请填写选项值。字段类型为多选，如有多个默认值请使换行分割"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item item2" style="display:none">
+        <label class="layui-form-label">字段选项</label>
+        <div class="layui-input-inline w300">
+            <textarea rows="8" class="layui-textarea field-options" name="options" lay-verify="" autocomplete="off" placeholder="请严格按照以下格式设置：                                 选项值:选项名                                               选项值:选项名                                   "></textarea>
+        </div>
+    </div>
+    <div class="pop-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id">
+        <input type="hidden" class="field-mid" name="mid" value="{:input('param.mid/d', 0)}" />
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true, refresh: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func', 'form', 'jquery'], function() {
+    var form = layui.form, $ = layui.jquery, formData = {:json_encode($formData)};
+
+    layui.func.assign(formData);
+
+    var selected = function(val) {
+        switch(val) {
+            case 'number':
+            case 'file':
+            case 'image':
+            case 'date':
+            case 'datetime':
+                $('.item2,.item1').hide();
+                $('.item3').show();
+                break;
+
+            case 'radio':
+            case 'checkbox':
+            case 'select':
+                $('.item2,.item1,.item3').show();
+                break;
+
+            case 'images':
+                $('.item1,.item2,.item3').hide();
+                break;
+
+            case 'textarea':
+            case 'editor':
+            case 'input':
+                $('.item1').show();
+                $('.item2,.item3').hide();
+                break;
+        }
+    }
+
+    form.on('select(type)', function(data) {
+        selected(data.value);
+    });
+
+    if (formData.type) {
+        selected(formData.type);
+    }
+});
+</script>

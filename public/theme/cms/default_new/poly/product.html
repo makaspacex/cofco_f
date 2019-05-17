@@ -1,0 +1,88 @@
+{/*****产品专题模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+		{include file="public/head" /}
+		<script src="http://libs.baidu.com/jquery/1.4.2/jquery.min.js"></script>
+		<script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+		<link rel="stylesheet" type="text/css" href="__CSS__/product.css">
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="slider clearfix"> 
+			<div class="bd"> 
+				<ul> 
+					{hisi:slide group="product" order="sort asc"}
+					<li><a target="_blank" title="{$r['title']}" href="{$r['url']}"><img src="{$r['image']}" title="{$r['title']}" /></a></li> 
+					{/hisi:slide}
+				</ul> 
+			</div> 
+			<div class="hd">
+				<ul></ul>
+			</div> 
+			<div class="pnBtn prev"> 
+				<span class="blackBg"></span> 
+				<a class="arrow" href="javascript:void(0)"></a> 
+			</div> 
+			<div class="pnBtn next"> 
+				<span class="blackBg"></span> 
+				<a class="arrow" href="javascript:void(0)"></a> 
+			</div> 
+		</div> 
+		<div class="container">
+			{hisi:rec name="product_channel" id="r"}
+				<div class="product-rec-box mt15">
+					<div class="product-rec-head">
+						<h4>{$r['title']}</h4>
+						<div class="product-rec-subcat">
+							{hisi:loop data="$r['childs'][0]['childs']" id="rr"}
+								<a href="{:url('/cms/'.$rr['url'])}">{$rr['title']}</a>
+							{/hisi:loop}
+						</div>
+					</div>
+					<div class="product-rec-content">
+						<div class="product-rec-left">
+							<a target="{$r['childs'][1]['childs'][0]['target']}" href="{$r['childs'][1]['childs'][0]['url']}" title="{$r['childs'][1]['childs'][0]['title']}"><img alt="{$r['childs'][1]['childs'][0]['title']}" width="236" src="{$r['childs'][1]['childs'][0]['image']}"></a>
+						</div>
+						<div class="product-rec-right">
+							{hisi:loop data="$r['childs'][2]['childs']" id="rr"}
+								<div class="product-rec-item product-rec-item{$key+1}">
+									<div class="product-rec-item-img">
+										<a href="{:url($rr['url'])}"><img src="{$rr['image']}" alt="{$rr['title']}" /></a>
+									</div>
+									<div class="product-rec-item-name">
+										<a href="{:url($rr['url'])}">{$rr['title']}</a>
+									</div>
+									<div class="product-rec-item-price">
+										￥{:db('cms_diy_'.$rr['has_model']['name'])->where('eid', $rr['has_content']['extend_id'])->value('price')}
+									</div>
+								</div>
+							{/hisi:loop}
+						</div>
+					</div>
+				</div>
+			{/hisi:rec}
+		</div>
+		{include file="public/footer" /}
+		<script type="text/javascript">
+			$(".slider .bd li").first().before($(".slider .bd li").last());
+			$(".slider").hover(function() {
+			    $(this).find(".arrow").stop(true, true).fadeIn(300)
+			},
+			function() {
+			    $(this).find(".arrow").fadeOut(300)
+			});
+			$(".slider").slide({
+			    titCell: ".hd ul",
+			    mainCell: ".bd ul",
+			    effect: "leftLoop",
+			    autoPlay: true,
+			    vis: 3,
+			    autoPage: true,
+			    trigger: "click"
+			});
+		</script>
+	</body>
+</html>

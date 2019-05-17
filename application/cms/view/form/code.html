@@ -1,0 +1,66 @@
+<textarea class="layui-textarea" style="height:400px;">
+    <form action="/form" method="post">
+        <table>
+        {volist name="$form['hasFormFields']" id="vo"}
+            {switch $vo['type']}
+                {case radio}
+                    <tr>
+                        <td>{$vo['title']}：</td>
+                        <td>
+                            {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                <input type="radio" name="{$vo['name']}" value="{$kk}" {if ($kk == $vo['value'])}checked{/if} /> {$vv}
+                            {/foreach}
+                        </td>
+                        <td>{$vo['tips']}</td>
+                    </tr>
+                {/case}
+                {case checkbox}
+                    <tr>
+                        <td>{$vo['title']}：</td>
+                        <td>
+                            {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                <input type="checkbox" name="{$vo['name']}[]" value="{$kk}" title="{$vv}" {if (in_array($kk, parse_attr($vo['value'])))}checked{/if}> {$vv}
+                            {/foreach}
+                        </td>
+                        <td>{$vo['tips']}</td>
+                    </tr>
+                {/case}
+                {case select}
+                    <tr>
+                        <td>{$vo['title']}：</td>
+                        <td>
+                            <select name="{$vo['name']}">
+                                <option value="">请选择...</option>
+                                {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                    <option value="{$kk}" {if ($kk eq $vo['value'])}selected{/if}>{$vv}</option>
+                                {/foreach}
+                            </select>
+                        </td>
+                        <td>{$vo['tips']}</td>
+                    </tr>
+                {/case}
+                {default /}
+                    <tr>
+                        <td>{$vo['title']}：</td>
+                        <td>
+                            <input type="text" name="{$vo['name']}" placeholder="{$vo['title']}" value="{$vo['value']}" />
+                        </td>
+                        <td>{$vo['tips']}</td>
+                    </tr>
+            {/switch}
+        {/volist}
+            <tr>
+                <td colspan="3">
+                    {literal}
+                    <input type="hidden" name="timestamp" tips="此参数必须" value="{:date('Y-m-d H:i:s')}" />
+                    <input type="hidden" name="sign" tips="此参数必须" value="{:md5(date('Y-m-d H:i:s').config('module_cms.api_secret_key'))}" />
+                    {/literal}
+                    <input type="hidden" name="fid" tips="此参数为必须" value="{$form['id']}" />
+                    <input type="submit" name="提交" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</textarea>
+
+{include file="system@block/layui" /}

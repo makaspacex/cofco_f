@@ -1,0 +1,21 @@
+  <!-- nav部分 -->
+  <div class="nav index">
+    <div class="layui-container">
+      <!-- 公司logo -->
+      <div class="nav-logo">
+        <a href="/">
+          <img src="{:config('base.site_logo')}" onerror="this.src='__IMG__/logo.png';" alt="网络公司">
+        </a>
+      </div>
+      <div class="nav-list">
+        <button>
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="layui-nav" lay-filter="">
+          {hisi:nav cache="false"}
+          <li class="layui-nav-item"><a href="{$r['url']}">{$r['title']}</a></li>
+          {/hisi:nav}
+        </ul>
+      </div>
+    </div>
+  </div>

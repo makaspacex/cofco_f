@@ -1,0 +1,84 @@
+<form class="layui-form" action="{:url()}" method="post">
+<div class="page-form">
+    {volist name="$formData['hasContentFormFields']" id="vo"}
+        {switch $vo['type']}
+            {case radio}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                            <input type="radio" name="{$vo['name']}" class="field-{$vo['name']}" value="{$kk}" title="{$vv}" {if ($kk == $vo['value'])}checked{/if} />
+                        {/foreach}
+			        </div>
+                	<div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+			    </div>
+            {/case}
+            {case checkbox}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                            <input type="checkbox" name="{$vo['name']}" class="field-{$vo['name']}" value="{$kk}" title="{$vv}" {if (in_array($kk, parse_attr($vo['value'])))}checked{/if}>
+                        {/foreach}
+			        </div>
+                	<div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+			    </div>
+            {/case}
+            {case select}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <select name="{$vo['name']}" class="field-{$vo['name']}" type="select">
+                            <option value="">请选择...</option>
+                            {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                <option value="{$kk}" {if ($kk eq $vo['value'])}selected{/if}>{$vv}</option>
+                            {/foreach}
+                        </select>
+			        </div>
+                	<div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+			    </div>
+            {/case}
+            {case file}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <a href="{$formData[$vo['name']]}" target="_blank">{$formData[$vo['name']]}</a>
+                        <input type="hidden" name="{$vo['name']}" class="field-{$vo['name']}" />
+			        </div>
+			    </div>
+            {/case}
+            {case image}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+                        <img src="{$formData[$vo['name']]}" class="hisi-img" type="img" onerror="this.src='__ADMIN_IMG__/theme.png';" style="border-radius:5px;border:1px solid #ccc" width="36" height="36">
+                        <input type="hidden" name="{$vo['name']}" class="field-{$vo['name']}" />
+			        </div>
+			    </div>
+            {/case}
+            {default /}
+			    <div class="layui-form-item">
+			        <label class="layui-form-label">{$vo['title']}</label>
+			        <div class="layui-input-inline w300">
+			            <input type="text" class="layui-input field-{$vo['name']}" name="{$vo['name']}" />
+			        </div>
+                	<div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+			    </div>
+        {/switch}
+    {/volist}
+    <div class="pop-bottom-bar">
+        <input type="hidden" class="field-id" name="id" />
+        <input type="hidden" class="field-fid" name="fid" value="{:input('param.fid/d')}">
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true, refresh: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func'], function() {
+    layui.func.assign({:json_encode($formData)});
+});
+</script>

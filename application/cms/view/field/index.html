@@ -1,0 +1,49 @@
+
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('model/index')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-prev">返回</a>{if ($modelInfo['system'] != 1)}<a href="{:url('add', ['mid' => $modelInfo['id']])}" class="layui-btn layui-btn-normal layui-btn-sm hisi-iframe-pop" hisi-data="{width: '550px', height: '430px', title: '添加字段'}">添加字段</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm hisi-page-btns confirm">删除</a>{/if}
+</script>
+
+<script type="text/html" id="buttonTpl">
+    {{# if ({$modelInfo['system']} == 1) { }}<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-normal layui-disabled layui-icon layui-icon-edit"></a><a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-danger layui-disabled layui-icon layui-icon-delete"></a>{{# } else { }}<a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit j-iframe-pop" hisi-data="{width: '550px', height: '430px', title: '修改字段'}" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>{{# } }}
+</script>
+
+<script type="text/html" title="排序模板" id="sortTpl">
+    <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ d.sort }}" data-value="{{ d.id }}" data-href="{:url('sort')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} {$modelInfo['system'] == 1 ? 'disabled' : ''} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}?mid={$modelInfo['id']}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '字段标题', width: 120}
+                ,{field: 'name', title: '字段名称', width: 120}
+                ,{field: 'type', title: '字段类型', width: 120}
+                ,{field: 'tips', title: '字段提示'}
+                ,{field: 'sort', title: '排序', width: 90, templet: '#sortTpl'}
+                ,{field: 'status', title: '状态', width: 90, templet: '#statusTpl'}
+                ,{title: '操作', templet: '#buttonTpl', width: 180}
+            ]]
+            ,done:function(){
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+            }
+        });
+	});
+</script>

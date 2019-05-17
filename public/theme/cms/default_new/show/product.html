@@ -1,0 +1,154 @@
+{/*****产品详情模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$content['seo_title'] ? $content['seo_title'] : $content['title']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$content['seo_keywords']}" />
+		<meta name="description" content="{$content['seo_description']}" />
+		{include file="public/head" /}
+        <link rel="stylesheet" type="text/css" href="__CSS__/product.css">
+        <script src="http://libs.baidu.com/jquery/1.4.2/jquery.min.js"></script>
+        <script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container">
+				<div class="position" style="background-color:#fff;margin-bottom:15px;">
+					<i class="hs-icon hs-dingwei"></i>&nbsp;&nbsp;<a href="/">首页</a> / {hisi:position cid="$content['cid']" sep=" / " /}
+				</div>
+				<div class="product-albums-box">
+	                {php}
+	                    $photos = json_decode($content['albums'], 1);
+	                {/php}
+	                <div class="big-show">
+	                	<img src="{$photos[0]['path']}" id="bigImg" />
+	                </div>
+                    <div class="small-scroll"> 
+                        <a class="small-prev" href="javascript:void(0)">
+                            <i class="prev-icon"></i>
+                        </a> 
+                        <div class="small-img-box"> 
+                            <ul> 
+                                {hisi:loop data="$photos"}
+                                <li class="{$key == 0 ? 'on' : ''}"><img title="{$r['desc']}" class="small-img" src="{$r['path']}" width="112" height="112" /></li> 
+                                {/hisi:loop}
+                            </ul> 
+                        </div> 
+                        <a class="small-next" href="javascript:void(0)">
+                            <i class="next-icon"></i>
+                        </a> 
+                    </div>
+				</div>
+				<div class="product-base-info">
+					<h1>{$content['title']}</h1>
+					{if ($content['slogan'])}<div class="slogan">{$content['slogan']}</div>{/if}
+					<div class="price">
+						销售价格：<strong>￥{$content['price']}</strong>&nbsp;&nbsp;&nbsp;&nbsp;市场价：<s>￥{$content['mkprice']}</s>
+					</div>
+					<dl>
+						<dt>产品型号：</dt>
+						<dd>{$content['model']}</dd>
+					</dl>
+					<dl>
+						<dt>生产厂家：</dt>
+						<dd>{$content['factory']}</dd>
+					</dl>
+					<dl>
+						<dt>产品重量：</dt>
+						<dd>{$content['weight']}</dd>
+					</dl>
+                    <div class="">
+                        <a href="{$content['buy_url']}" target="_blank" class="buy-btn">立即购买</a>
+                    </div>
+				</div>
+			</div>
+		</div>
+		{if ($content['params'])}
+		<div class="container mt20 bgc clearfix">
+			<div class="product-block-head">详细参数</div>
+			<div class="product-params">
+				{hisi:loop data="$content['params']"}
+				<dl>
+					<dt>{$key}</dt>
+					<dd>
+						<ul>
+							{foreach name="$r" id="rr" key="kk"}
+							<li>{$kk}：{$rr}</li>
+							{/foreach}
+						</ul>
+					</dd>
+				</dl>
+				{/hisi:loop}
+			</div>
+		</div>
+		{/if}
+		<div class="container mt20 clearfix">
+			<div class="fl">
+				<div class="product-block-head">产品详情</div>
+				<div class="product-detail">
+					{:htmlspecialchars_decode($content['content'])}
+				</div>
+			</div>
+			<aside class="sidebar">
+				<div class="widget-box">
+					<h3>热门推荐</h3>
+					<ul class="style1">
+						{hisi:list cid="$content['cid']" flag="hot" limit="10"}
+						<li>
+							<a href="{$r['url']}">
+								<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+								<div class="item-content">
+									<p class="item-title">
+										{$r['title']}
+									</p>
+									<p class="item-time">{$r['timing']}</p>
+								</div>
+							</a>
+						</li>
+						{/hisi:list}
+					</ul>
+				</div>
+				<div class="widget-box mt15">
+					<h3>猜你喜欢</h3>
+					<ul class="style1">
+						{hisi:list order="rand()" mid="$content['mid']" field="price" limit="10"}
+						<li>
+							<a href="{$r['url']}">
+								<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+								<div class="item-content">
+									<p class="item-title">
+										{$r['title']}
+									</p>
+									<p class="item-time">￥<em style="color:#f50">{$r['price']}</em></p>
+								</div>
+							</a>
+						</li>
+						{/hisi:list}
+					</ul>
+				</div>
+			</aside>
+		</div>
+		{include file="public/footer" /}
+        <script type="text/javascript">
+            
+            $(".small-scroll").slide({ 
+                mainCell: "ul",
+                delayTime: 100,
+                vis: 4,
+                scroll: 1,
+                effect: "left",
+                autoPage: false,
+                pnLoop: true,
+                prevCell: ".small-prev",
+                nextCell: ".small-next"
+            }); 
+
+            $(".small-img").bind('mouseover', function() {
+                var that = $(this);
+                that.parent('li').addClass('on').siblings('li').removeClass('on');
+                $('#bigImg').attr('src', that.attr('src'));
+                $('.img-desc-box').html(that.attr('title'));
+            });
+        </script>
+	</body>
+</html>

@@ -1,0 +1,113 @@
+<style type="text/css">
+    .layui-table-body{overflow:hidden;}
+    .tr-switch{cursor:pointer;}
+</style>
+
+<table id="dataTable"></table>
+
+{include file="system@block/layui" /}
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-normal layui-btn-sm">添加推荐</a>
+</script>
+
+<script type="text/html" title="排序模板" id="sortTpl">
+    <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ d.sort }}" data-value="{{ d.id }}" data-href="{:url('sort')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url("edit")}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit" title="修改推荐"></a><a href="{:url("del")}?id={{d.id}}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a><a href="{:url('add')}?pid={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">添加推荐</a>
+</script>
+
+<script type="text/html" id="childsTpl">
+    {{# layui.each(d.data, function(index, item) { }}
+    <tr class="{{ d.class }}">
+        <td>
+            <div class="layui-table-cell" style="padding-left: {{ d.level * 15  }}px">
+                {{# if (item.childs != item.id) { }}
+                    <i class="tr-switch layui-icon layui-icon-triangle-r" data-class="{{ d.class +' tr-index-'+ item.id }}" data-level="{{ d.level }}" data-pid="{{ item.id }}">{{ item.title }}</i>
+                {{# } else { }}
+                    {{ item.title }}
+                {{# } }}
+            </div>
+        </td>
+        <td>
+            <div class="layui-table-cell">{{ item.name }}</div>
+        </td>
+        <td>
+            <div class="layui-table-cell">{{ item.url }}</div>
+        </td>
+        <td>
+            <div class="layui-table-cell">
+                <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ item.sort }}" data-value="{{ item.id }}" data-href="{:url('sort')}?id={{ item.id }}">
+            </div>
+        </td>
+        <td>
+            <div class="layui-table-cell">
+                <a href="{:url("edit")}?id={{ item.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit" title="修改推荐"></a><a href="{:url("del")}?id={{ item.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>{{# if (item.type == 1) { }}<a href="{:url('add')}?pid={{ item.id }}" class="layui-btn layui-btn-xs layui-btn-normal">添加推荐</a>{{# } }}
+            </div>
+        </td>
+    </tr>
+    {{# }); }}
+</script>
+
+<script type="text/javascript">
+    layui.use(['table', 'jquery', 'laytpl'], function() {
+        var $ = layui.jquery, 
+            table = layui.table, 
+            ajaxUrl = '{:url()}?hisiModel=CmsRecPos', 
+            laytpl = layui.laytpl,
+            form = layui.form;
+        table.render({
+            elem: '#dataTable'
+            ,url: ajaxUrl
+            ,page: false
+            ,text: {
+                none: '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: false
+            ,cols: [[ //表头
+                {field: 'title', title: '推荐位标题', templet: function(d) {
+                    if (d.childs != d.id) {
+                        return '<i class="tr-switch layui-icon layui-icon-triangle-r" data-class="tr-index-'+d.id+'" data-level="1" data-pid="'+d.id+'">'+d.title+'</i>';
+                    } else {
+                        return d.title;
+                    }
+                }}
+                ,{field: 'name', title: '调用名称', width: 150}
+                ,{field: 'url', title: '链接', width: 150}
+            	,{field: 'sort', title: '排序', width: 70, templet: '#sortTpl'}
+                ,{title: '操作', templet: '#buttonTpl', width: 200}
+            ]]
+            ,done:function(){
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+            }
+        });
+
+        // 显示/隐藏子分类
+        $(document).on('click', '.tr-switch', function() {
+            var that = $(this), pid = parseInt(that.attr('data-pid'));
+            if (that.hasClass('layui-icon-triangle-r')) {
+                that.removeClass('layui-icon-triangle-r').addClass('layui-icon-triangle-d');
+                if ($('.tr-index-'+pid)[0]) {
+                    $('.tr-index-'+pid).show();
+                } else {
+                    $.get(ajaxUrl, {pid : pid}, function(res) {
+                        var data = {};
+                        data.data = res.data;
+                        data.class = that.attr('data-class');
+                        data.level = parseInt(that.attr('data-level')) + 1;
+                        laytpl($('#childsTpl').html()).render(data, function(html) {
+                            that.parents('tr').after(html);
+                            form.render('checkbox');
+                        });
+                    }, 'json');
+                }
+            } else {
+                that.removeClass('layui-icon-triangle-d').addClass('layui-icon-triangle-r');
+                $('.tr-index-'+pid).hide();
+            }
+        });
+    });
+</script>

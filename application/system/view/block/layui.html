@@ -1,0 +1,18 @@
+{if condition="$layout_on eq false"}
+    <link rel="stylesheet" href="__PUBLIC_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/theme.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}" media="all">
+    <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/project.css?v={:config('hisiphp.version')}" media="all">
+{/if}
+
+<script src="__PUBLIC_JS__/jquery.2.1.4.min.js?v={:config('hisiphp.version')}"></script>
+<script src="__PUBLIC_JS__/layui/layui.js?v={:config('hisiphp.version')}"></script>
+<script>
+    var ADMIN_PATH = "{$_SERVER['SCRIPT_NAME']}", LAYUI_OFFSET = 60;
+    layui.config({
+        base: '__PUBLIC_JS__/layui/',
+        version: '{:config("hisiphp.version")}'
+    }).use('global');
+</script>

@@ -1,0 +1,73 @@
+{/*****图片专题模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+		{include file="public/head" /}
+		<script src="http://libs.baidu.com/jquery/1.4.2/jquery.min.js"></script>
+		<script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+		<link rel="stylesheet" type="text/css" href="__CSS__/pic.css">
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="slider clearfix"> 
+			<div class="bd"> 
+				<ul> 
+					{hisi:slide group="pic" order="sort asc"}
+					<li><a target="_blank" title="{$r['title']}" href="{$r['url']}"><img src="{$r['image']}" title="{$r['title']}" /></a></li> 
+					{/hisi:slide}
+				</ul> 
+			</div> 
+			<div class="hd">
+				<ul></ul>
+			</div> 
+			<div class="pnBtn prev"> 
+				<span class="blackBg"></span> 
+				<a class="arrow" href="javascript:void(0)"></a> 
+			</div> 
+			<div class="pnBtn next"> 
+				<span class="blackBg"></span> 
+				<a class="arrow" href="javascript:void(0)"></a> 
+			</div> 
+		</div> 
+		<div class="container">
+			{hisi:rec name="pic_channel"}
+				<div class="pic-box mt15">
+					<div class="pic-head">
+						<h4>{$r['title']}</h4>
+					</div>
+					<div class="pic-items">
+						<ul>
+							{hisi:loop data="$r['childs']" id="rr"}
+							<li>
+								<div class="pic-items-img"><a href="{:url($rr['url'])}"><img src="{$rr['image']}" alt="{$rr['title']}" /></a></div>
+								<span><a href="{:url($rr['url'])}" title="{$rr['title']}">{$rr['title']}</a></span>
+							</li>
+							{/hisi:loop}
+						</ul>
+					</div>
+				</div>
+			{/hisi:rec}
+		</div>
+		{include file="public/footer" /}
+		<script type="text/javascript">
+			$(".slider .bd li").first().before($(".slider .bd li").last());
+			$(".slider").hover(function() {
+			    $(this).find(".arrow").stop(true, true).fadeIn(300)
+			},
+			function() {
+			    $(this).find(".arrow").fadeOut(300)
+			});
+			$(".slider").slide({
+			    titCell: ".hd ul",
+			    mainCell: ".bd ul",
+			    effect: "leftLoop",
+			    autoPlay: true,
+			    vis: 3,
+			    autoPage: true,
+			    trigger: "click"
+			});
+		</script>
+	</body>
+</html>

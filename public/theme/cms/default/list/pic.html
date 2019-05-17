@@ -1,0 +1,37 @@
+{/*****图片列表模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+		{include file="public/head" /}
+		<link rel="stylesheet" type="text/css" href="__CSS__/pic.css">
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container">
+				<div class="main-list-head bgc" style="padding-left:15px;">
+					<h1>{$category['name']}</h1>
+					<div class="position fr">
+						<i class="hs-icon hs-dingwei"></i>&nbsp;<a href="/">首页</a> / {hisi:position cid="$category['id']" sep=" / " /}
+					</div>
+				</div>
+				<div class="pic-box">
+					<div class="pic-items">
+						<ul>
+							{hisi:list cid="$category['id']" attr="$attrIndexs" pagesize="$category['pagesize']"}
+							<li>
+								<div class="pic-items-img"><a href="{$r['url']}"><img alt="{$r['title']}" src="{$r['image']}" /></a></div>
+								<span><a href="{$r['url']}">{$r['title']}</a></span>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</div>
+				<div class="pages">{$pages|raw}</div>
+			</div>
+		</div>
+		{include file="public/footer" /}
+	</body>
+</html>

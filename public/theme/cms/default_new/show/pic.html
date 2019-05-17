@@ -1,0 +1,84 @@
+{/*****图片详情模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>{$content['seo_title'] ? $content['seo_title'] : $content['title']} - {:config('base.site_name')}</title>
+        <meta name="keywords" content="{$content['seo_keywords']}" />
+        <meta name="description" content="{$content['seo_description']}" />
+        {include file="public/head" /}
+        <script src="http://libs.baidu.com/jquery/1.4.2/jquery.min.js"></script>
+        <script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+        <link rel="stylesheet" type="text/css" href="__CSS__/pic.css">
+        <style type="text/css">
+            
+        </style>
+    </head>
+    <body style="background-color:#222;">
+        {include file="public/header" /}
+        <div class="wrap clearfix">
+            <div class="pic-title">
+                <h1 class="pic-h1">{$content['title']}</h1>
+                <div class="pic-exp">{$content['create_time']}&nbsp;&nbsp;&nbsp;&nbsp;来源：{$content['source'] ? $content['source'] : '未知'}</div>
+            </div>
+            <div class="container">
+                <div class="position" style="border-color:#000;color:#666;">
+                    <i class="hs-icon hs-dingwei"></i>&nbsp;&nbsp;<a href="/">首页</a> / {hisi:position cid="$content['cid']" sep=" / " /}
+                </div>
+                {php}
+                    $photos = json_decode($content['albums'], 1);
+                {/php}
+                <div class="pic-show-container">
+                    <div class="img-show-box">
+                        <img src="{$photos[0]['path']}" id="bigImg" />
+                    </div>
+                    <div class="img-desc-box">
+                        {$photos[0]['desc']}
+                    </div>
+                    <div class="small-scroll"> 
+                        <a class="small-prev" href="javascript:void(0)">
+                            <i class="prev-icon"></i>
+                        </a> 
+                        <div class="small-img-box"> 
+                            <ul> 
+                                {hisi:loop data="$photos"}
+                                <li><img title="{$r['desc']}" class="small-img" src="{$r['path']}" width="112" height="112" /></li> 
+                                {/hisi:loop}
+                            </ul> 
+                        </div> 
+                        <a class="small-next" href="javascript:void(0)">
+                            <i class="next-icon"></i>
+                        </a> 
+                    </div> 
+                    <div class="pageState"></div>
+                </div>
+            </div>
+        </div>
+        {include file="public/footer" /}
+        <script type="text/javascript">
+            $(".pic-show-container").slide({
+                titCell: ".small-img-box li", 
+                effect: "fold", 
+                autoPlay: false,
+                trigger: 'click',
+                delayTime: 200
+            });
+            
+            $(".pic-show-container .small-scroll").slide({ 
+                mainCell: "ul",
+                delayTime: 100,
+                vis: 7,
+                scroll: 5,
+                effect: "left",
+                autoPage: false,
+                pnLoop: true,
+                prevCell: ".small-prev",
+                nextCell: ".small-next"
+            }); 
+
+            $(".small-img").bind('click', function() {
+                var that = $(this);
+                $('#bigImg').attr('src', that.attr('src'));
+                $('.img-desc-box').html(that.attr('title'));
+            });
+        </script>
+    </body>
+</html>

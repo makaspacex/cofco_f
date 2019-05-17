@@ -1,0 +1,154 @@
+{/*****新闻资讯专题模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{:config('base.site_name')}</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		{include file="public/head" /}
+		<script src="http://lib.sinaapp.com/js/jquery/1.4.2/jquery.min.js"></script>
+		<script src="__PUBLIC_JS__/jquery.SuperSlide.2.1.1.js"></script>
+		<style type="text/css">
+			.slider{position:relative;width:500px;height:240px;overflow:hidden;font:12px/1.5 Verdana,Geneva,sans-serif;text-align:left;background:white}.slider .pic img{width:500px;height:240px;display:block}.slider .txt-bg{position:absolute;bottom:0;z-index:1;height:36px;width:100%;background:#333;filter:alpha(opacity=40);opacity:.4;overflow:hidden}.slider .txt{position:absolute;bottom:0;z-index:2;height:36px;width:100%;overflow:hidden}.slider .txt li{height:36px;line-height:36px;position:absolute;bottom:-36px}.slider .txt li a{display:block;color:white;padding:0 0 0 10px;font-size:12px;font-weight:bold;text-decoration:none}.slider .num{position:absolute;z-index:3;bottom:8px;right:8px}.slider .num li{float:left;position:relative;width:18px;height:15px;line-height:15px;overflow:hidden;text-align:center;margin-right:1px;cursor:pointer}.slider .num li a,.slider .num li span{position:absolute;z-index:2;display:block;color:white;width:100%;height:100%;top:0;left:0;text-decoration:none}.slider .num li span{z-index:1;background:black;filter:alpha(opacity=50);opacity:.5}.slider .num li.on a,.slider .num a:hover{background:#f60}
+			.left-content{float:left;width:500px;overflow:hidden;}
+			.pic-box{overflow:hidden;height:440px;}
+			.pic-box ul{width:120%;}
+			.pic-box ul li{float:left;width:240px;margin:0 20px 15px 0;height:210px;background-color:#fff;}
+			.pic-box ul li img{width:240px;height:160px;}
+			.pic-box ul li span{display:block;width:230px;height:50px;line-height:20px;text-align:left;overflow:hidden;padding:5px;}
+			.right-content{float:right;width:665px;background-color:#fff;padding:0 0 13px 0;}
+			.news-rec{display:block;overflow:hidden;}
+			.news-rec li{float:left;height:24px;line-height:24px;margin:5px 0;padding:0 15px;overflow:hidden;width:635px;font-size:16px;}
+			.news-rec1{font-weight:500;border-bottom:1px solid #eee;padding:10px 0;margin-bottom:10px;}
+			.news-rec1 li{font-size:18px;}
+			.item-cont{width:98%;}
+		</style>
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container">
+				<div class="left-content">
+					<div class="slider"> 
+						<ul class="pic"> 
+							{hisi:slide order="sort asc"}
+							<li><a target="_blank" title="{$r['title']}" href="{$r['url']}"><img src="{$r['image']}" title="{$r['title']}" /></a></li> 
+							{/hisi:slide}
+						</ul> 
+	   					<div class="txt-bg"></div>
+						<div class="txt"> 
+							<ul> 
+								{hisi:loop data="$hisiSlide"}
+									<li><a href="#">{$r['title']}</a></li> 
+								{/hisi:loop}
+							</ul> 
+						</div> 
+						<ul class="num"> 
+							{hisi:loop data="$hisiSlide"}
+								<li><a>{$i}</a><span></span></li> 
+							{/hisi:loop}
+						</ul>
+						</ul> 
+					</div>
+					<div class="pic-box mt15">
+						<ul>
+							{hisi:list flag="hot" mid="2"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}">
+									<span>{$r['title']}</span>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</div>
+				<div class="right-content">
+					<ul class="news-rec news-rec1">
+						{hisi:list flag="top" mid="2"}
+							<li><a href="{$r['url']}" title="{$r['title']}">{$r['title']}</a></li>
+						{/hisi:list}
+					</ul>
+					<ul class="news-rec">
+						{hisi:list flag="new" mid="2"}
+							<li><a href="{$r['url']}" title="{$r['title']}">{$r['title']}</a></li>
+						{/hisi:list}
+					</ul>
+				</div>
+			</div>
+			<div class="container clearfix">
+				<div class="content">
+					<div class="main-list mt15">
+						<div class="main-list-head">
+							<ul>
+								<li class="active" data-cid="40">国内资讯</li>
+								<li data-cid="41">国际资讯</li>
+							</ul>
+						</div>
+						<div class="main-list-items">
+							{hisi:list mid="2" cid="40" field="intro"}
+							<div class="main-list-item">
+								<div class="item-cont">
+									<h2><a href="{$r['url']}">{$r['title']}</a></h2>
+									<div class="item-intro">
+										<p>{$r['intro']}</p>
+									</div>
+									<div class="item-extend">
+										<span>{$r['timing']}</span>
+										<span class="hs-icon hs-eye"> <i>{$r['views']}</i></span>
+										<span class="hs-icon hs-zan"> <i>{$r['likes']}</i></span>
+									</div>
+								</div>
+							</div>
+							{/hisi:list}
+						</div>
+						<div class="main-list-items" style="display:none">2</div>
+					</div>
+				</div>
+				<aside class="sidebar">
+					<div class="widget-box mt15">
+						<h3>点击排行</h3>
+						<ul class="style1">
+							{hisi:list order="rand()" limit="5"}
+							<li>
+								<a href="{$r['url']}">
+									<img src="{$r['image']}" onerror="this.src='__IMG__/dian.png';" width="100">
+									<div class="item-content">
+										<p class="item-title">
+											{$r['title']}
+										</p>
+										<p class="item-time">{$r['timing']}</p>
+									</div>
+								</a>
+							</li>
+							{/hisi:list}
+						</ul>
+					</div>
+				</aside>
+			</div>
+		</div>
+		{include file="public/footer" /}
+		<script type="text/javascript">
+			$(".slider").slide({ 
+				titCell:".num li", 
+				mainCell:".pic",
+				effect:"fold", 
+				autoPlay:true,
+				trigger:"click",	
+				startFun: function(i) {		 
+					$(".slider .txt li").eq(i).animate({"bottom":0}).siblings().animate({"bottom":-36});	
+			}});
+
+			$('.main-list-head li').bind('click', function(){
+				var that = $(this), index = that.index();
+
+				if (index == 0) {
+					$('.main-list-items').eq(index).show().siblings('.main-list-items').html('').hide();
+				} else {
+					$.get('/cms/api/list', {cid: that.attr('data-cid'), mid: 2}, function(res) {
+						$('.main-list-items').eq(index).show().siblings('.main-list-items').hide();
+					}, 'json');
+				}
+			});	
+		</script>
+	</body>
+</html>

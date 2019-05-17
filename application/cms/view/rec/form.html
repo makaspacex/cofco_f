@@ -1,0 +1,122 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属模型</label>
+        <div class="layui-input-inline">
+            <select name="mid" class="field-mid" type="select">
+                <option value="0">通用模型</option>
+                {foreach name="$modelSelect" id="vo"}
+                    <option value="{$key}">{$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐位</label>
+        <div class="layui-input-inline">
+            <select name="pid" class="field-pid" lay-filter="pid" type="select">
+                <option value="0">默认顶级</option>
+                {$select|raw}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐类型</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" class="field-type" name="type" lay-filter="type" value="1" title="推荐位" />
+            <input type="radio" class="field-type" name="type" lay-filter="type" checked value="2" title="推荐内容" />
+        </div>
+    </div>
+    <div class="layui-form-item lay-filter-type" {if (!isset($formData['type']) || $formData['type'] == 2)}style="display:none;"{/if}>
+        <label class="layui-form-label">调用名称</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-name" name="name" placeholder="[选填] 非开发人员慎用" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐标题</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="推荐标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">副标题</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-sub_title" name="sub_title" placeholder="[选填] 推荐副标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐图片</label>
+        <div class="layui-input-inline upload" style="width:150px">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">上传主图</button>
+            <input type="hidden" class="upload-input field-image" name="image" />
+            <img src="{if (isset($formData['image']))}{$formData['image']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" class="field-image" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+        </div>
+        <div class="layui-input-inline upload" style="width:150px">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">上传副图</button>
+            <input type="hidden" class="upload-input field-sub_image" name="sub_image" />
+            <img src="{if (isset($formData['sub_image']))}{$formData['sub_image']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" class="field-sub_image" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐链接</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input field-url" name="url" placeholder="[选填] 外链请填写完整地址" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">打开方式</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" class="field-target" name="target" value="_self" title="当前窗口" />
+            <input type="radio" class="field-target" name="target" checked value="_blank" title="新窗口" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <textarea  class="layui-textarea field-remark" name="remark" placeholder="[选填]"></textarea>
+        </div>
+    </div>
+    <div class="pop-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id">
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true}">提交保存</button>
+        <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+    </div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func', 'upload', 'jquery', 'form'], function() {
+    var upload = layui.upload, $ = layui.jquery, form = layui.form;
+    layui.func.assign({:json_encode($formData)});
+
+    upload.render({
+        elem: '.layui-upload'
+        ,url: '{:url("system/annex/upload?group=links")}'
+        ,method: 'post'
+        ,before: function(input) {
+            layer.msg('上传中...', {time:3000000});
+        },done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            input.siblings('img').attr('src', res.data.file);
+            input.val(res.data.file);
+        }
+    });
+
+    form.on('radio(type)', function(data) {
+        if (data.value == 1) {
+            $('.lay-filter-type').show();
+        } else {
+            $('.lay-filter-type').hide();
+        }
+    });
+
+});
+</script>

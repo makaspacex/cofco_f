@@ -1,0 +1,52 @@
+<table id="dataTable"></table>
+
+{include file="system@block/layui" /}
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-sm layui-btn-normal">添加类型</a><a data-href="{:url('del')}" class="layui-btn layui-btn-sm layui-btn-danger hisi-page-btns confirm">删除</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-filter="switchStatus" lay-text="开|关" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status?table=goods_spec')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" title="排序模板" id="sortTpl">
+    <input type="text" class="layui-input j-ajax-input input-sort" onkeyup="value=value.replace(/[^\d]/g,'')" value="{{ d.sort }}" data-value="{{ d.id }}" data-href="{:url('sort')}?id={{ d.id }}">
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+
+<script type="text/javascript">
+    layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, table = layui.table;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: false //开启分页
+            ,text: {
+                none: '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                {type:'checkbox'}
+                ,{field: 'id', title: 'tid', width: 60}
+                ,{field: 'name', title: '类型名称', width: 150}
+                ,{field: 'has_attr_items', title: '扩展属性', templet: function(d) {
+                	var str = '';
+                	for(var i in d.has_attr_items) {
+                		if (i > 0) str += ' ';
+                		str += d.has_attr_items[i].name;
+                	}
+                	return str;
+                }}
+                ,{field: 'sort', title: '排序', width: 70, templet: '#sortTpl'}
+                ,{field: 'status', title: '状态', width: 90, templet:'#switchTpl'}
+                ,{title: '操作', width: 150, templet: '#buttonTpl'}
+            ]]
+            ,done: function(res, curr, count) {
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);   
+            }
+        });
+    });
+</script>

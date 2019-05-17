@@ -1,0 +1,35 @@
+  <!-- footer部分 -->
+  <div class="footer">
+    <div class="layui-container">
+      <p class="footer-web">
+        {hisi:link order="sort asc"}
+        <a href="{$r['url']}" target="_blank">{$r['title']}</a>
+        {/hisi:link}
+      </p>
+      <div class="layui-row footer-contact">
+        <div class="layui-col-sm2 layui-col-lg1">{hisi:block name="footer_qrcode" /}</div>
+        <div class="layui-col-sm10 layui-col-lg11">
+          <div class="layui-row">
+            <div class="layui-col-sm6 layui-col-md8 layui-col-lg9">
+              <p class="contact-top"><i class="layui-icon layui-icon-cellphone"></i>&nbsp;{hisi:block name="footer_phone" /}</p>
+              <p class="contact-bottom"><i class="layui-icon layui-icon-home"></i>&nbsp;{hisi:block name="footer_email" /}</span></p>
+            </div>
+            <div class="layui-col-sm6 layui-col-md4 layui-col-lg3">
+              <p class="contact-top"><span class="right">该模板版权归 <a href="https://www.layui.com/" target="_blank">layui.com</a> 所有</span></p>
+              <p class="contact-bottom"><span class="right">Copyright&nbsp;©&nbsp;2016-2018&nbsp;&nbsp;{:config('base.site_icp')}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="__PUBLIC_JS__/layui/layui.js"></script>
+<!--[if lt IE 9]>
+  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script>
+  layui.config({
+    base: '__JS__/' 
+  }).use('firm'); 
+</script>

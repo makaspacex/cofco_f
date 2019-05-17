@@ -1,0 +1,669 @@
+<link rel="stylesheet" type="text/css" href="__ADMIN_MOD_CSS__/style.css">
+<form class="layui-form" action="{:url()}" method="post">
+        <div class="layui-tab-item layui-show" title="基本信息">
+            <div class="fl form-l-box" {if (isset($category['content_limit']) && $category['content_limit'] == 1)}style="width:100%;"{/if}>
+                <div class="layui-form-item mt10">
+                    <label class="layui-form-label">标题/名称</label>
+                    <div class="layui-input-inline" style="width:70%;">
+                        <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="请填写标题/名称" value="{if (isset($category['content_limit']) && $category['content_limit'] == 1)}{$category['name']}{/if}">
+                        <input type="hidden" name="title_color" value="" />
+                    </div>
+                    <div id="title-color" title="设置主标题颜色"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SEO标题</label>
+                    <div class="layui-input-inline" style="width:80%;">
+                        <input type="text" class="layui-input field-seo_title" name="seo_title" placeholder="SEO标题" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SEO关键词</label>
+                    <div class="layui-input-inline" style="width:80%;">
+                        <textarea  class="layui-textarea field-seo_keywords" name="seo_keywords" placeholder="多个关键词请用英文逗号“,”隔开" style="min-height:60px;"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SEO描述</label>
+                    <div class="layui-input-inline" style="width:80%;">
+                        <textarea  class="layui-textarea field-seo_description" name="seo_description" placeholder="描述内容建议控制在200个字以内"></textarea>
+                    </div>
+                </div>
+                {if (isset($category['has_fields']) && $category['has_fields'])}
+                    {volist name="$category['has_fields']" id="vo"}
+                        {switch $vo['type']}
+
+                            {case textarea}
+                                <!--文本域-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:80%;">
+                                        {if $vo['is_must']}
+                                            <textarea class="layui-textarea field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[必填] {$vo['title']}" lay-verify="required">{$vo['value']}</textarea>
+                                        {else /}
+                                            <textarea class="layui-textarea field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[选填] {$vo['title']}">{$vo['value']}</textarea>
+                                        {/if}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case date}
+                                <!--日期-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:40%;">
+                                        {if $vo['is_must']}
+                                            <input type="text" class="layui-input layui-date field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[必填] {$vo['title']}" lay-verify="required" value="{$vo['value']}" />
+                                        {else /}
+                                            <input type="text" class="layui-input layui-date field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[选填] {$vo['title']}" value="{$vo['value']}" />
+                                        {/if}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case datetime}
+                                <!--日期+时间-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:40%;">
+                                        {if $vo['is_must']}
+                                            <input type="text" class="layui-input layui-datetime field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[必填] {$vo['title']}" lay-verify="required" value="{$vo['value']}" />
+                                        {else /}
+                                            <input type="text" class="layui-input layui-datetime field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[选填] {$vo['title']}" value="{$vo['value']}" />
+                                        {/if}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case editor}
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>{$vo['title']}</legend>
+                                </fieldset>
+                                <div class="layui-form-item">
+                                    <div style="width:96%;margin:0 2%;">
+                                    <textarea id="editor-{$vo['name']}" class="field-{$vo['name']}" name="extend_content[{$vo['name']}]">{if (isset($hasContent[$vo['name']]))}{:htmlspecialchars_decode($hasContent[$vo['name']])}{else /}{:htmlspecialchars_decode($vo['value'])}{/if}</textarea></div>
+                                </div>
+                            {/case}
+
+                            {case file}
+                                <!--文件-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline upload" style="width:40%;">
+                                        <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'file'}">请上传{$vo['title']}</button>
+                                        <input type="hidden" class="upload-input field-{$vo['name']}" name="extend_content[{$vo['name']}]" value="{$vo['value']}" {:$vo['is_must'] == 1 ? 'lay-verify="required"' : ''} />
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case image}
+                                <!--单图-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline upload" style="width:40%;">
+                                        <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">请上传{$vo['title']}</button>
+                                        <input type="hidden" class="upload-input field-{$vo['name']}" name="extend_content[{$vo['name']}]" value="{$vo['value']}" {:$vo['is_must'] == 1 ? 'lay-verify="required"' : ''} />
+                                        <img src="{if (isset($hasContent[$vo['name']]) && !empty($hasContent[$vo['name']]) )}{$hasContent[$vo['name']]}{else /}{$vo['value']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case images}
+                                <!--多图-->
+                                <div class="layui-form-block">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:80%;">
+                                        <ul class="hisi-form-item-photo">
+                                            <li class="upload-btn hisi-upload-photo" lay-type="image" lay-data="{accept:'image'}" data-field="{$vo['name']}" />
+                                                <i class="layui-icon layui-icon-upload"></i>上传图片
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {/case}
+
+                            {case radio}
+                                <!--单选-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:80%;">
+                                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                            <input type="radio" class="field-{$vo['name']}" name="extend_content[{$vo['name']}]" value="{$kk}" title="{$vv}" {if ($kk == $vo['value'])}checked{/if} />
+                                        {/foreach}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case checkbox}
+                                <!--多选-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:80%;">
+                                        {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                            <input type="checkbox" class="field-{$vo['name']}" name="extend_content[{$vo['name']}][]" value="{$kk}" title="{$vv}" lay-skin="primary" {if (in_array($kk, parse_attr($vo['value'])))}checked{/if}>
+                                        {/foreach}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {case select}
+                                <!--下拉框-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:40%;">
+                                        <select name="extend_content[{$vo['name']}]" class="field-{$vo['name']}" type="select" {if $vo['is_must']}lay-verify="required"{/if}>
+                                            {foreach name=":parse_attr($vo['options'])" id="vv" key="kk"}
+                                                <option value="{$kk}" {if ($kk eq $vo['value'])}selected{/if}>{$vv}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                            {/case}
+
+                            {default /}
+                                <!--文本框-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$vo['title']}</label>
+                                    <div class="layui-input-inline" style="width:50%;">
+                                        {if $vo['is_must']}
+                                            <input type="text" class="layui-input field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[必填] {$vo['title']}" lay-verify="required" value="{$vo['value']}" />
+                                        {else /}
+                                            <input type="text" class="layui-input field-{$vo['name']}" name="extend_content[{$vo['name']}]" placeholder="[选填] {$vo['title']}" value="{$vo['value']}" />
+                                        {/if}
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">{$vo['tips']}</div>
+                                </div>
+                        {/switch}
+                    {/volist}
+                {/if}
+            </div>
+            {if (isset($category['content_limit']) && $category['content_limit'] == 2)}
+            <div class="fr form-r-box">
+                    <div class="form-head">
+                        扩展面板
+                    </div>
+                    {if isset($category['name'])}
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属栏目</label>
+                            <div class="layui-input-inline">
+                                <select name="cid" type="select">
+                                    {$categorys|raw}
+                                </select>
+                            </div>
+                        </div>
+                    {/if}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">内容模板</label>
+                        <div class="layui-input-inline">
+                            <select name="template" class="field-template" type="select">
+                                <option value="">选择模板[非必须]</option>
+                                {foreach name="$templates" id="vo"}
+                                    <option value="{$key}">{$key}{$vo}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">定时发布</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input layui-datetime field-timing" name="timing" value="{:date('Y-m-d H:i:s')}" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">页面地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input field-url" name="url" placeholder="[选填]自定义页面地址" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">DIY标签</label>
+                        <div class="layui-input-inline">
+                            <textarea class="layui-textarea field-tag" style="min-height:80px" name="tag" placeholder="多个标签用逗号“,”隔开"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><a href="{:url('system/system/index', ['group' => 'cms'])}" title="点此编辑">推荐旗帜</a></label>
+                        <div class="layui-input-inline">
+                            {foreach name=":parse_attr(config('module_cms.content_flag'))" id="vo"}
+                            <input type="checkbox" class="field-flag" name="flag[]" value="{$key}" title="{$vo}" />
+                            {/foreach}
+                            <input type="hidden" name="flag[]" value="" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">浏览</label>
+                        <div class="layui-input-inline w50">
+                            <input type="text" class="layui-input field-views" name="views" value="0" />
+                        </div>
+                        <label class="layui-form-label w50" style="min-width:50px;">收藏</label>
+                        <div class="layui-input-inline w50">
+                            <input type="text" class="layui-input field-favs" name="favs" value="0" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">点赞</label>
+                        <div class="layui-input-inline w50">
+                            <input type="text" class="layui-input field-likes" name="likes" value="0" />
+                        </div>
+                        <label class="layui-form-label w50" style="min-width:50px;">点踩</label>
+                        <div class="layui-input-inline w50">
+                            <input type="text" class="layui-input field-dislike" name="dislike" value="0" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline upload">
+                            {if (isset($formData['image']) && !empty($formData['image']))}
+                                <img src="{$formData['image']}" onerror="this.src='__ADMIN_IMG__/theme.png';" class="form-image field-image" width="200" height="200">
+                                <a href="javascript:void(0);" title="删除图片" class="form-image-del layui-icon layui-icon-close image-del-btn"></a>
+                            {else /}
+                                <img src="__ADMIN_IMG__/theme.png" onerror="this.src='__ADMIN_IMG__/theme.png';" class="form-image field-image" width="200" height="200">
+                                <a href="javascript:void(0);" title="删除图片" class="form-image-del layui-icon layui-icon-close image-del-btn" style="display:none;"></a>
+                            {/if}
+                            <a href="javascript:void(0);" class="layui-upload" lay-type="image" lay-data="{accept:'image'}"><span>上传封面图</span></a>
+                            <input type="hidden" class="upload-input field-image" name="image">
+                        </div>
+                    </div>
+                    <div class="form-head" style="border-top:3px solid var(--hisi-head-bg)">
+                        推荐设置
+                    </div>
+                    <div class="layui-form-item">
+                        <ul class="hisi-position" style="width:95%;margin:0 0 0 5%;"></ul>
+                    </div>
+            </div>
+            {/if}
+            <div class="layui-form-item">
+                <div class="layui-input-inline">&nbsp;</div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div id="J_typeShow"></div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">&nbsp;</div>
+            </div>
+        </div>
+        {if ($category)}
+        <div class="hisi-footer">
+            <input type="hidden" class="field-id" name="id" />
+            <input type="hidden" class="field-status" name="status" value="1" />
+            <input type="hidden" class="field-extend_id" name="extend_id" value="0" />
+            <input type="hidden" class="field-mid" name="mid" value="{$category['mid']}" />
+            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交保存</button>
+            <a href="{:url('index', ['cid' => $category['id']])}" class="layui-btn layui-btn-primary ml10">返回</a>
+        </div>
+        {/if}
+
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/html" id="J_PhotoTpl">
+    <li>
+        <div class="img"><img src="{{file}}" /></div>
+        <input type="hidden" name="extend_content[{{field}}][path][]" value="{{file}}" />
+        <input type="hidden" name="extend_content[{{field}}][desc][]" class="photo-desc-input" value="{{desc}}" />
+        <i class="layui-icon layui-icon-edit photo-desc-edit" title="编辑图片描述"></i>
+        <i class="layui-icon layui-icon-delete hisi-photo-delete" title="删除图片" data-path="{{file}}"></i>
+        <i class="layui-icon layui-icon-prev" title="向前移动"></i>
+        <i class="layui-icon layui-icon-next" title="向后移动"></i>
+    </li>
+</script>
+
+<script type="text/html" id="J_typeTpl">
+    {{# if (d.attribute) { }}
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>扩展类型<span style="font-size:12px;color:#999">（可用于列表筛选）</span></legend>
+        </fieldset>
+        {{# layui.each(d.attribute, function(index, item) { }}
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{ item.name }}：</label>
+                <div class="layui-input-inline" style="width:70%">
+                    {{# try{ }}
+                        {{# if (item.form_type == 1) { }}
+                            {{# for (var i in item.has_values) { }}
+                                <input type="radio" name="extend_attribute[{{ item.id }}]" value="{{ item.has_values[i].id }}" title="{{ item.has_values[i].name }}" {{ attributeIndex[item.id] == item.has_values[i].id ? 'checked' : '' }} />
+                            {{# } }}
+                        {{#  } else if (item.form_type == 2) { }}
+                            {{# for (var i in item.has_values) { }}
+                                <input type="checkbox" name="extend_attribute[{{ item.id }}][]" value="{{ item.has_values[i].id }}" title="{{ item.has_values[i].name }}" lay-skin="primary" {{ attributeIndex[item.id].indexOf(item.has_values[i].id.toString()) != -1 ? 'checked' : '' }} />
+                            {{# } }}
+                        {{#  } else { }}
+                            <input type="text" class="layui-input w200" name="extend_attribute[{{ item.id }}]" value="{{ attributeIndex[item.id] }}" />
+                        {{# } }}
+                    {{#  } catch(err) { }}
+                        {{# if (item.form_type == 1) { }}
+                            {{# for (var i in item.has_values) { }}
+                                <input type="radio" name="extend_attribute[{{ item.id }}]" value="{{ item.has_values[i].id }}" title="{{ item.has_values[i].name }}" />
+                            {{# } }}
+                        {{#  } else if (item.form_type == 2) { }}
+                            {{# for (var i in item.has_values) { }}
+                                <input type="checkbox" name="extend_attribute[{{ item.id }}][]" value="{{ item.has_values[i].id }}" title="{{ item.has_values[i].name }}" lay-skin="primary" />
+                            {{# } }}
+                        {{#  } else { }}
+                            <input type="text" class="layui-input w200" name="extend_attribute[{{ item.id }}]" />
+                        {{# } }}
+                    {{# } }}
+                </div>
+            </div>
+        {{# }); }}
+    {{# } }}
+
+    {{# if (d.params) { }}
+        <fieldset class="layui-elem-field layui-field-title mt20">
+            <legend>详细参数</legend>
+        </fieldset>
+        {{# layui.each(d.params, function(index, item) { }}
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="color:#f00">{{ item.name }}</label>
+            </div>
+            {{# layui.each(item.child, function(index, item2) { }}
+            <div class="layui-form-item">
+                <label class="layui-form-label w200">{{ item2.name }}</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input w200" name="params[{{ item.name }}][{{ item2.name }}]" value="{{# try{ }}{{ formData.params[item.name][item2.name] }}{{#  }catch(err){ }}{{ item2.value }}{{# } }}" />
+                </div>
+            </div>
+            {{# }); }}
+        {{# }); }}
+    {{# } }}
+</script>
+
+<script type="text/html" id="J_popCategoryTpl">
+    <div class="J_cascader-box" style="margin:10px;">
+        <button type="button" class="layui-input">
+            <span>
+                点此选择栏目...
+            </span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+        <input type="hidden" name="pop_cid" id="J_popCidInput" />
+        <div class="J_cascader-pop"></div>
+    </div>
+</script>
+
+<script type="text/javascript">
+{if ($formData)}
+var formData = {:json_encode(array_merge($formData->toArray(), $hasContent))};
+{else /}
+var formData = {title_color: ''};
+{/if}
+var attributeIndex = {:json_encode($attributeIndex)};
+var recPos = {:json_encode($recPos)};
+var recMark = {:json_encode($recMark)};
+
+layui.use(['func', 'upload', 'jquery', 'laydate', 'laytpl', 'form', 'colorpicker'], function() {
+    var upload = layui.upload, 
+        layer = layui.layer, 
+        $ = layui.jquery, 
+        laydate = layui.laydate,
+        laytpl = layui.laytpl,
+        form = layui.form,
+        colorpicker = layui.colorpicker;
+
+    colorpicker.render({
+        elem: '#title-color',
+        color: formData['title_color'],
+        change: function(color) {
+            $('input[name="title_color"]').val(color);
+            $('.field-title').css({color: color});
+        }
+    });
+
+    if (formData.title_color) {
+        $('.field-title').css({color: formData.title_color});
+    }
+
+    var assignType = function(id) {
+        $.get('{:url("ajax/typeInfo")}', {id: id}, function(d) {
+            laytpl($('#J_typeTpl').html()).render(d, function(html) {
+                $('#J_typeShow').html(html);
+            });
+            form.render();
+        }, 'json');
+    }
+
+    var assignPosition = function(data, parent, level) {
+        var html = '';
+        for (var i in data) {
+            if (data[i].childs) {
+                html += assignPosition(data[i].childs, (parent + ' / ' + data[i].name), level + 1);
+            } else {
+                html += '<li><input type="checkbox" name="rec[]" value="'+data[i].id+'" lay-skin="primary" title="'+(parent ? parent + ' / ' + data[i].name : data[i].name)+ '" '+(recMark[data[i].id] ? 'checked' : '')+' /></li>';
+            }
+        }
+        return html;
+    }
+
+    $('.hisi-position').html(assignPosition(recPos, '', 0));
+
+    var category = {:json_encode($category)};
+
+    layui.func.assign(formData);
+
+    if (!category) {
+        layer.open({
+            type: 1, 
+            title: '请选择栏目', 
+            content: $('#J_popCategoryTpl').html(), 
+            area: ['60%', '370px'],
+            closeBtn: 0,
+            btn:['确定'],
+            success: function(layero, index) {
+                /* 级联选择-触发容器 */
+                $('.J_cascader-box button').on('click', function(event) {
+                    event.stopPropagation();
+                    var obj = $(this).parent('.J_cascader-box');
+                    $.get('{:url("ajax/category")}', {}, function(d) {
+                        var html = '<ul>';
+                        for(var i in d.data) {
+                            html += '<li class="J_cascader-item" data-id="' + d.data[i].id + '">'+ d.data[i].name +'</li>';
+                        }
+                        html += '</ul>';
+                        obj.children('.J_cascader-pop').html(html).show();
+                        var ulObj = obj.children('.J_cascader-pop').children('ul');
+                        /* 监听子菜单点击事件 */
+                        $(document).on('click', '.J_cascader-item', function(event) {
+                            event.stopPropagation();
+                            var that = $(this), 
+                                index = that.parent('ul').index(), 
+                                popObj = that.parents('.J_cascader-pop'),
+                                str = '';
+
+                            that.addClass('active').siblings('li').removeClass('active');
+                            popObj.find('.active').each(function(i) {
+                                if (i > 0) str += ' / ';
+                                str += $(this).text();
+                                $('#J_popCidInput').val($(this).attr('data-id'));
+                            });
+
+                            that.parents('.J_cascader-box').find('span').html(str);
+
+                            $.get('{:url("ajax/category")}', {pid: that.attr('data-id')}, function(d) {
+                                if (d.data.length <= 0) {
+                                    popObj.hide();
+                                    return;
+                                }
+                                popObj.find('ul').each(function(i) {
+                                    if (i > index) $(this).remove();
+                                });
+                                var html = '<ul>';
+                                for(var i in d.data) {
+                                    html += '<li class="J_cascader-item" data-id="' + d.data[i].id + '">'+ d.data[i].name +'</li>';
+                                }
+                                html += '</ul>';
+                                popObj.append(html);
+                            }, 'json');
+                        });
+                    }, 'json');
+                    $(document).on('click', function() {
+                        obj.children('.J_cascader-pop').html('').hide();
+                    });
+                });
+            },
+            yes: function(index, layero) {
+                var cid = $('#J_popCidInput').val();
+                if (!cid) {
+                    layer.msg('请选择栏目')
+                    return false;
+                }
+                location.href = '{:url('add')}?cid='+cid;
+            }
+        });
+    }
+
+    if (category['type_id'] > 0) {
+        assignType(category['type_id']);
+    }
+
+    /* 绑定多个日期 */
+    $('.layui-date').each(function() {
+        laydate.render({
+          elem: this
+          ,trigger: 'click'
+        });
+    });
+
+    /* 绑定多个时间日期 */
+    $('.layui-datetime').each(function() {
+        laydate.render({
+          elem: this
+          ,trigger: 'click'
+          ,type: 'datetime'
+        });
+    });
+
+    /* 通用附件上传 */
+    upload.render({
+        elem: '.layui-upload'
+        ,url: '{:url("system/annex/upload?water=&thumb=&from=&group=cms")}'
+        ,method: 'post'
+        ,before: function(input) {
+            layer.msg('上传中...', {time:3000000});
+        }
+        ,done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            if ($(obj).attr('lay-type') == 'image') {
+                input.siblings('img').attr('src', res.data.file).show();
+            }
+            input.val(res.data.file);
+        }
+    });
+
+    /* 删除封面图 */
+    $(document).on('click', '.image-del-btn', function() {
+        var that = $(this), imgObj = that.siblings('img');
+        that.siblings('.field-image').val('');
+        imgObj.attr('src', '__ADMIN_IMG__/theme.png');
+        that.hide();
+    });
+
+    /* 相册上传 */
+    upload.render({
+        elem: '.hisi-upload-photo'
+        ,url: '{:url("system/annex/upload?group=cms&thumb=")}'
+        ,method: 'post'
+        ,multiple: true
+        ,before: function(input) {
+            layer.msg('文件上传中...', {time:3000000});
+        }
+        ,done: function(res, index, upload) {
+
+            var obj = $(this.item), 
+                tpl = $('#J_PhotoTpl').html(), 
+                field = obj.attr('data-field');
+
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+
+            layer.closeAll();
+            var html = tpl.replace(/{{file}}/g, res.data.file).replace(/{{field}}/g, field).replace(/{{desc}}/g, '');
+            obj.before(html);
+        }
+    });
+
+    /* 相册排序 */
+    $(document).on('click', '.layui-icon-prev,.layui-icon-next', function() {
+        var that = $(this);
+        if (that.hasClass('layui-icon-prev')) {
+            var cur = that.parent(),
+                prev = cur.prev();
+            if (prev.length > 0) { 
+                prev.insertAfter(cur); 
+            } 
+        } else {
+            var cur   = that.parent(),
+                next  = cur.next();
+            if (next.length > 0) { 
+                next.insertBefore(cur); 
+            } 
+        }
+    });
+
+    /* 删除相册 */
+    $(document).on('click', '.hisi-photo-delete', function() {
+        var that = $(this);
+        that.parent('li').remove();
+    });
+    
+    /* 相册图片描述 */
+    $(document).on('click', '.photo-desc-edit', function() {
+        var that = $(this), input = that.siblings('.photo-desc-input');
+        layer.prompt({
+            formType: 2,
+            value: input.val(),
+            title: '图片描述',
+            area: ['350px', '100px']
+        }, function(value, index, elem){
+            input.val(value);
+            layer.close(index);
+        });
+    });
+
+    /* 相册渲染 */
+    $('.hisi-upload-photo').each(function() {
+        var that = $(this), field = that.attr('data-field'), tpl = $('#J_PhotoTpl').html(), html = '';
+
+        if (formData[field]) {
+            var json = new Function('return '+ formData[field])() || {};
+            for(var i in json) {
+                html += tpl.replace(/{{file}}/g, json[i].path).replace(/{{field}}/g, field).replace(/{{desc}}/g, json[i].desc);
+            }
+            that.before(html);
+        }
+    });
+
+});
+</script>
+{php}
+    /* 加载扩展编辑器 */
+    $editors = [];
+    if (isset($category['has_fields']) && $category['has_fields']) {
+
+        foreach($category['has_fields'] as $v) {
+
+            if ($v['type'] == 'editor') {
+                array_push($editors, 'editor-'.$v['name']);
+            }
+
+        }
+
+    }
+
+    if ($editors) {
+        echo editor($editors);
+    }
+{/php}

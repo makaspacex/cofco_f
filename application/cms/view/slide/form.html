@@ -1,0 +1,100 @@
+<form class="layui-form hisi-form" action="{:url()}" method="post">
+<div class="page-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">幻灯片分组</label>
+        {if (count($groups))}
+            <div class="layui-input-inline" style="width:180px">
+                <input type="text" class="layui-input field-groups w200" name="groups" placeholder="根据需求选填" />
+            </div>
+            <div class="layui-input-inline" style="width:110px">
+                <select lay-filter="select">
+                    <option value="">选择分组</option>
+                    {foreach name="$groups" id="item"}
+                        <option value="{$item['groups']}">{$item['groups']}</option>
+                    {/foreach}
+                </select>
+            </div>
+        {else /}
+            <div class="layui-input-inline w300">
+                <input type="text" class="layui-input field-groups" name="groups" placeholder="根据需求选填" />
+            </div>
+        {/if}
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">幻灯片标题</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-title" name="title" lay-verify="required" placeholder="[必填] 幻灯片标题" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">幻灯片地址</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-url" name="url" lay-verify="required" placeholder="[必填] http或https开头" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">幻灯片图片</label>
+        <div class="layui-input-inline upload" style="width:150px">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">上传主图</button>
+            <input type="hidden" class="upload-input field-image" name="image" />
+            <img src="{if (isset($formData['image']))}{$formData['image']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" class="field-image" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+        </div>
+        <div class="layui-input-inline upload" style="width:150px">
+            <button type="button" name="upload" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'image'}" lay-type="image">上传副图</button>
+            <input type="hidden" class="upload-input field-sub_image" name="sub_image" />
+            <img src="{if (isset($formData['sub_image']))}{$formData['sub_image']}{/if}" onerror="this.src='__ADMIN_IMG__/theme.png';" class="field-sub_image" style="display:inline-block;border-radius:5px;border:1px solid #ccc" width="36" height="36">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">显示终端</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" class="field-type" name="type" checked value="pc" title="电脑端" />
+            <input type="radio" class="field-type" name="type" value="wap" title="手机端" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline w300">
+            <textarea  class="layui-textarea field-remark" name="remark" placeholder="[选填]"></textarea>
+        </div>
+    </div>
+    <div class="pop-bottom-bar hisi-footer">
+        <input type="hidden" class="field-id" name="id">
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func', 'upload', 'jquery', 'form'], function() {
+    var upload = layui.upload, $ = layui.jquery, form = layui.form;
+    layui.func.assign({:json_encode($formData)});
+
+    upload.render({
+        elem: '.layui-upload'
+        ,url: '{:url("system/annex/upload?group=links")}'
+        ,method: 'post'
+        ,before: function(input) {
+            layer.msg('上传中...', {time:3000000});
+        },done: function(res, index, upload) {
+            var obj = this.item;
+            if (res.code == 0) {
+                layer.msg(res.msg);
+                return false;
+            }
+            layer.closeAll();
+            var input = $(obj).parents('.upload').find('.upload-input');
+            input.siblings('img').attr('src', res.data.file);
+            input.val(res.data.file);
+        }
+    });
+
+    form.on('select(select)', function(data) {
+        if (!data.value) return false;
+        $('.field-groups').val(data.value);
+    });
+});
+</script>

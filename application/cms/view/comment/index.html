@@ -1,0 +1,48 @@
+<meta name="referrer" content="never">
+
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-group fl">
+        <a data-href="{:url('del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
+    </div>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit j-iframe-pop" hisi-data="{width: '500px', height: '60%', title: '修改评论'}" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="显示|隐藏" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?id={{ d.id }}">
+</script>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: false
+            , page: true
+            ,limit: 20
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '标题', templet: '<div><a title="点击筛选" href="{:url()}?content_id={{ d.content_id }}" class="hisi-table-a-filter">{{ d.has_content ? d.has_content.title : \'---\' }}</a></div>'}
+                ,{field: 'user_id', title: '用户', width: 90, templet: '<div><a title="点击筛选" href="{:url()}?user_id={{ d.user_id }}" class="hisi-table-a-filter">{{ d.has_user ? d.has_user.nick : \'---\' }}</a></div>'}
+                ,{field: 'email', title: '邮箱', width: 90, templet: '<div><a title="点击筛选" href="{:url()}?email={{ d.email }}" class="hisi-table-a-filter">{{ d.email ? d.email : \'---\' }}</a></div>'}
+                ,{field: 'nick', title: '昵称', width: 90}
+                ,{field: 'ip', title: 'IP', width: 140, templet: '<div><a title="点击筛选" href="{:url()}?ip={{ d.ip }}" class="hisi-table-a-filter">{{ d.ip ? d.ip : \'---\' }}</a></div>'}
+                ,{field: 'create_time', title: '创建时间', width: 120}
+                ,{field: 'status', title: '显示', width: 100, templet: '#statusTpl'}
+                ,{title: '操作', width: 90, templet: '#buttonTpl'}
+            ]]
+        });
+	});
+</script>

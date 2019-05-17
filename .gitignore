@@ -1,9 +1,5 @@
 runtime/*
 .idea/
 .DS_Store
-app/database.php
-.htaccess
-app/config.php
-DataAnalyse.php
-app/cofco/admin/AdminBase.php
+config/database.php
 

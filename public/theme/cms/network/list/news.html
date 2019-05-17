@@ -1,0 +1,43 @@
+{/*****资讯列表模板*****/}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+    {include file="public/head" /}
+</head>
+<body>
+{include file="public/nav" /}
+  <!-- banner部分 -->
+  <div class="banner news">
+    <div class="title">
+      <p>实时新闻</p>
+      <p class="en">Real-time News</p>
+    </div>
+  </div>
+  <!-- main -->
+  <div class="main-news">
+    <div class="layui-container">
+      <div class="layui-row layui-col-space20">
+        {hisi:list cid="$category['id']" pagesize="$category['pagesize']" field="intro"}
+        <div class="layui-col-lg6 content">
+          <div>
+            <div class="news-img"><a href="{$r['url']}"><img src="{$r['image']}"></a></div><div class="news-panel">
+              <strong><a href="{$r['url']}">{$r['title']}</a></strong>
+              <p class="detail"><span>{$r['intro']}</span><a href="{$r['url']}">[详细]</a></p>
+              <p class="read-push">阅读 <span>{$r['views']}</span>&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<span>{$r['create_time']}</span></p>
+            </div>
+          </div>
+        </div>
+        {/hisi:list}
+      </div>
+      <div class="pages">
+          {$pages|raw}
+      </div>
+      <div id="newsPage"></div>
+    </div>
+  </div>
+  {include file="public/footer" /}
+</body>
+</html>

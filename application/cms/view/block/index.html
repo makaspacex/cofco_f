@@ -1,0 +1,40 @@
+
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a href="{:url('add')}" class="layui-btn layui-btn-normal layui-btn-sm">添加碎片</a><a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm j-page-btns confirm">删除</a>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal layui-icon layui-icon-edit" title="修改"></a><a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: false
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'title', title: '碎片标题', width: 120}
+                ,{field: 'name', title: '碎片名称', width: 120}
+                ,{field: 'type', title: '类型', width: 120}
+                ,{field: 'code', title: '调用代码', templet: function(d) {
+                    return '{'+'hisi:block name="'+d.name+'" /}';
+                }}
+                ,{title: '操作', templet: '#buttonTpl', width: 180}
+            ]]
+            ,done:function(){
+                if (typeof(layui.global.addTableTool) == 'function') layui.global.addTableTool(['refresh']);
+            }
+        });
+	});
+</script>

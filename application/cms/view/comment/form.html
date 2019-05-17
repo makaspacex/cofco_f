@@ -1,0 +1,73 @@
+<form class="layui-form pb50" action="{:url()}" method="post">
+<div class="page-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-title" value="{$formData['hasContent']['title']}" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-user_id" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-nick" name="nick"  placeholder="评论者昵称" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-email" name="email"  placeholder="评论者邮箱" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">网址</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-url" name="url" placeholder="评论者网址" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">IP</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-ip" name="ip" placeholder="评论者ip" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">点赞</label>
+        <div class="layui-input-inline w300">
+            <input type="text" class="layui-input field-likes" name="likes" placeholder="点赞数" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline w300">
+            <input type="radio" class="field-status" name="status" value="1" title="显示" />
+            <input type="radio" class="field-status" name="status" value="0" title="隐藏" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline w300">
+            <textarea class="layui-textarea field-content" name="content"></textarea>
+        </div>
+    </div>
+    <div class="pop-bottom-bar">
+        <input type="hidden" class="field-id" name="id" />
+        <input type="hidden" class="field-content_id" name="content_id" />
+        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit" lay-data="{pop: true, refresh: true}">提交保存</button>
+        <a href="javascript:parent.layui.layer.closeAll();" class="layui-btn layui-btn-primary ml10">取消</a>
+    </div>
+</div>
+</form>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+layui.use(['func'], function() {
+    layui.func.assign({:json_encode($formData)});
+});
+</script>

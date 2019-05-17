@@ -1,0 +1,186 @@
+{/*****表单模板*****/}<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<title>{$category['seo_title'] ? $category['seo_title'] : $category['name']} - {:config('base.site_name')}</title>
+		<meta name="keywords" content="{$category['seo_keywords']}" />
+		<meta name="description" content="{$category['seo_description']}" />
+    	<link rel="stylesheet" href="__PUBLIC_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+		{include file="public/head" /}
+		<style type="text/css">
+			.page-head{display:block;padding:30px 0;text-align:center;font-size:24px;font-weight:500;border-bottom:1px solid #eee;}
+			.page-content{display:block;padding:30px 50px;overflow:hidden;}
+
+			.form-table{}
+			.form-table td{padding:5px 10px;}
+		</style>
+	</head>
+	<body>
+		{include file="public/header" /}
+		<div class="wrap clearfix">
+			<div class="container bgc">
+				<div class="page-head">{$category['name']}演示</div>
+				<div class="page-content">
+					<form class="layui-form" action="/cms/api/form_save" method="post">
+						{hisi:form name="test"}
+				            {switch $r['type']}
+				                {case radio}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+				                        <div class="layui-input-inline">
+				                            {foreach name=":parse_attr($r['options'])" id="vv" key="kk"}
+				                                <input type="radio" name="{$r['name']}" title="{$vv}" value="{$kk}" {if ($kk == $r['value'])}checked{/if} />
+				                            {/foreach}
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case checkbox}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+				                        <div class="layui-input-inline">
+				                            {foreach name=":parse_attr($r['options'])" id="vv" key="kk"}
+				                                <input type="checkbox" name="{$r['name']}[]" value="{$kk}" title="{$vv}" {if (in_array($kk, parse_attr($r['value'])))}checked{/if}> {$vv}
+				                            {/foreach}
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case select}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+				                        <div class="layui-input-inline">
+				                            <select name="{$r['name']}">
+				                                <option value="">请选择...</option>
+				                                {foreach name=":parse_attr($r['options'])" id="vv" key="kk"}
+				                                    <option value="{$kk}" {if ($kk eq $r['value'])}selected{/if}>{$vv}</option>
+				                                {/foreach}
+				                            </select>
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case file}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+				                        <div class="layui-input-inline upload">
+				                        	<button type="button" class="layui-btn layui-btn-primary layui-upload" lay-data="{accept:'file', data: {timestamp: '{:date('Y-m-d H:i:s')}', sign: '{:md5(date('Y-m-d H:i:s').config('module_cms.api_secret_key'))}', fid: '1', field: '{$r['name']}'}}">点此上传{$r['title']}</button>
+				                        	<input type="hidden" class="upload-input" name="{$r['name']}" />
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case image}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+				                        <div class="layui-input-inline upload">
+				                        	<button type="button" class="layui-btn layui-btn-primary layui-upload" lay-type="image" lay-data="{accept:'image', data: {timestamp: '{:date('Y-m-d H:i:s')}', sign: '{:md5(date('Y-m-d H:i:s').config('module_cms.api_secret_key'))}', fid: '1', field: '{$r['name']}'}}">点此上传{$r['title']}</button>
+				                        	<input type="hidden" class="upload-input" name="{$r['name']}" />
+				                        	<img src="" onerror="this.src='__ADMIN_IMG__/theme.png';" style="border-radius:5px;border:1px solid #ccc" width="36" height="36">
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case password}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+								        <div class="layui-input-inline">
+								            <input type="password" class="layui-input" name="{$r['name']}" value="{$r['value']}" />
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				                {/case}
+				                {case textarea}
+								<div class="layui-form-item">
+									<label class="layui-form-label">{$r['title']}</label>
+									<div class="layui-input-inline">
+										<textarea class="layui-textarea" name="{$r['name']}">{$r['value']}</textarea>
+									</div>
+									<div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								</div>
+				                {/case}
+				                {case hidden}
+								    <input type="hidden" name="{$r['name']}" value="{$r['value']}" />
+				                {/case}
+				                {default /}
+								    <div class="layui-form-item">
+								        <label class="layui-form-label">{$r['title']}</label>
+								        <div class="layui-input-inline">
+								            <input type="text" class="layui-input" name="{$r['name']}" value="{$r['value']}" />
+								        </div>
+								        <div class="layui-form-mid layui-word-aux">{$r['tips']}</div>
+								    </div>
+				            {/switch}
+						{/hisi:form}
+					    <div class="layui-form-item">
+					        <label class="layui-form-label"></label>
+	                        <div class="layui-input-inline">
+	                        	<input type="hidden" name="fid" value="{$hisiFormFid}" />
+	                        	<input type="hidden" name="timestamp" value="{:date('Y-m-d H:i:s')}" />
+	                        	<input type="hidden" name="sign" value="{:md5(date('Y-m-d H:i:s').config('module_cms.api_secret_key'))}" />
+								<button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{include file="public/footer" /}
+		<script type="text/javascript" src="__PUBLIC_JS__/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.use(['jquery', 'form', 'layer', 'upload'], function(){
+				var $ = layui.jquery, form = layui.form, layer = layui.layer, upload = layui.upload;
+
+				form.on('submit(formSubmit)', function(data) {
+					var that = $(this), _form = that.parents('form'), text = that.text();
+					that.prop('disabled', true).text('提交中...');
+			        $.ajax({
+			            type: "POST",
+			            url: _form.attr('action'),
+			            data: _form.serialize(),
+			            success: function(res) {
+			                that.text(res.msg);
+			                if (res.code == 0) {
+			                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+			                    setTimeout(function(){
+			                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+			                    }, 3000);
+			                } else {
+			                	that.text('保存成功');
+			                    setTimeout(function(){
+			                        location.reload();
+			                    }, 3000);
+			                	
+			                }
+			            }
+			        });
+        			return false;
+				});
+
+	            upload.render({
+	                elem: '.layui-upload'
+	                ,url: '/cms/api/upload'
+	                ,method: 'post'
+	                ,before: function(input) {
+	                    layer.msg('上传中...', {time:3000000});
+	                },done: function(res, index, upload) {
+	                    var obj = this.item;
+	                    if (res.code == 0) {
+	                        layer.msg(res.msg);
+	                        return false;
+	                    }
+
+	                    layer.closeAll();
+
+			            var input = $(obj).parents('.upload').find('.upload-input');
+			            if ($(obj).attr('lay-type') == 'image') {
+			                input.siblings('img').attr('src', res.data.file).show();
+			            }
+
+			            input.val(res.data.file);
+	                    $(obj).parents('.upload').find('button').text('上传成功');
+	                }
+	            });
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,38 @@
+<meta name="referrer" content="never">
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <a data-href="{:url('del')}" class="layui-btn layui-btn-danger layui-btn-sm hisi-page-btns confirm">删除</a>
+</script>
+
+<script type="text/html" id="buttonTpl">
+    <a href="{:url('del')}?id={{ d.id }}" class="j-tr-del layui-btn layui-btn-xs layui-btn-danger layui-icon layui-icon-delete" title="删除"></a>
+</script>
+
+{include file="system@block/layui" /}
+
+<script type="text/javascript">
+	layui.use(['table', 'jquery'], function() {
+        var $ = layui.jquery, laydate = layui.laydate, table = layui.table;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,page: true
+            ,limit: 20
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: false
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'name', title: '标签'}
+                ,{field: 'model', title: '所属模型', templet: '<div><a href="{:url()}?mid={{ d.mid }}" class="hisi-table-a-filter">{{ d.has_model.title }}</a></div>'}
+                ,{field: 'doc_count', title: '文档统计', templet: '<div><a href="{:url('content/index')}?tag={{ d.name }}">{{ d.doc_count }}</a></div>'}
+                ,{field: 'search_count', title: '搜索统计'}
+                ,{title: '操作', templet: '#buttonTpl'}
+            ]]
+        });
+	});
+</script>
