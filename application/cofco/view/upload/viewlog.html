@@ -1,0 +1,77 @@
+{include file="system@block/layui" /}
+<link rel="stylesheet" href="__ADMIN_MOD_JS__/xterm/xterm.css" />
+<!--<link rel="stylesheet" href="__ADMIN_MOD_JS__/xterm/addons/fullscreen/fullscreen.css" />-->
+<!--<link rel="stylesheet" href="__ADMIN_MOD_JS__/xterm/addons/fullscreen/fullscreen.js" />-->
+<script src="__ADMIN_MOD_JS__/xterm/xterm.js"></script>
+<div id="terminal" style="width: 100%;height: 100%"></div>
+<script>
+    $(function () {
+        var term = new Terminal();
+        term.open(document.getElementById('terminal'));
+        // term.applyAddon('fullscreen')
+        // term.fit();
+        var roomName = '12346';
+        var ws = new WebSocket('ws://127.0.0.1:9001/ws/chat/'+roomName+'/');
+
+        ws.onerror = function (e) { console.log(e); };
+        ws.onmessage = function(event) {
+            term.writeln(event.data);
+        };
+        ws.onopen = function () {
+            console.log("connection opened!");
+        }
+        ws.onclose = function (event) {
+            //关闭连接
+            console.log("connection closed!");
+            ws.close();
+        };
+
+        var x = 0
+
+        function send() {
+            x +=1
+            ws.send(x)
+
+        }
+
+        setInterval(send,1000);
+
+        function runFakeTerminal() {
+            if (term._initialized) {
+                return;
+            }
+            term._initialized = true;
+
+            term.prompt = () => {
+                term.write('\r\n$ ');
+            };
+
+            term.writeln('Welcome to xterm.js');
+            term.writeln('This is a local terminal emulation, without a real terminal in the back-end.');
+            term.writeln('Type some keys and commands to play around.');
+            term.writeln('');
+            term.prompt();
+
+            term.on('key', function(key, ev) {
+                const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+                if (ev.keyCode === 13) {
+                    term.prompt();
+                } else if (ev.keyCode === 8) {
+                    // Do not delete the prompt
+                    if (term._core.buffer.x > 2) {
+                        term.write('\b \b');
+                    }
+                } else if (printable) {
+                    term.write(key);
+                }
+            });
+
+            term.on('paste', function(data) {
+                term.write(data);
+            });
+        }
+        runFakeTerminal();
+    });
+
+</script>
+

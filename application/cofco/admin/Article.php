@@ -4,6 +4,7 @@
 namespace app\cofco\admin;
 
 use app\cofco\model\AdminUserlog as LogModel;
+use think\db\Where;
 use think\Exception;
 use \think\Request;
 use \think\Db;
@@ -37,7 +38,7 @@ class Article extends AdminBase
     /**
      * 根据Request的数据，生成whereMap，用于查询条件筛选
      *
-     * @return array
+     * @return Where
      * @throws Exception
      */
     public static function getSearchMap()
@@ -80,7 +81,7 @@ class Article extends AdminBase
 
         // 文章ID
         if (!empty($art_ids)) {
-            $map['art_id'] = $art_ids;
+            $map['art_id'] = ['IN', $art_ids];
         }
 
         // 影响因子
@@ -195,7 +196,7 @@ class Article extends AdminBase
         // special_version 特别说明
         self::_assignLikeCondition($map,'special_version', $special_version);
 
-        return $map;
+        return new Where($map);
     }
     /**获取日志查询条件
      * @param $type 日志类型 *
@@ -261,14 +262,15 @@ class Article extends AdminBase
             $setstatus = input('param.setstatus/s', $status);
             $art_ids = input('param.art_id/a');
             PendingModel::where($where_map)->update(['status' => $setstatus]);
-            foreach ($art_ids as $art_id){
-                Article::insertLog($setstatus, $art_id);
-            }
+
+                // 这个地方写得不对，批量操作不会有art_id传上来
+//            foreach ($art_ids as $art_id){
+//                Article::insertLog($setstatus, $art_id);
+//            }
 
             return json(['code' => 0, 'message' => '操作完成']);
 
         } catch (\Exception $e) {
-            throw $e;
             return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
         }
     }

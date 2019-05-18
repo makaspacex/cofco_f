@@ -93,4 +93,15 @@ class upload extends AdminBase
         return $this->fetch();
     }
 
+    /**
+     * 爬虫日志查看
+     *
+     * @return string
+     */
+    public function viewlog(){
+
+        $this->view->engine->layout(false);
+        return $this->fetch();
+    }
+
 }

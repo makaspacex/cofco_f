@@ -3,6 +3,7 @@
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="spider_new">新建爬虫</button>
         <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="sync_journal">同步分区表数据到文章列表</button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="view_log">查看运行日志</button>
     </div>
 </script>
 
@@ -108,9 +109,13 @@
                 });
 
                 $.post()
-
-
-
+            }else if(obj.event === 'view_log'){
+                layer.open({
+                    type:2,
+                    content:'viewlog/',
+                    offset: 'auto',
+                    area: ['800px', '85%'] //自定义文本域宽高
+                });
             }
         });
 
