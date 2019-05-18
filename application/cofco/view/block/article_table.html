@@ -102,6 +102,7 @@
             table.render({
                 elem: '#articletable'
                 , toolbar: '#all_toolbar'
+                , defaultToolbar:['filter', 'exports']
                 , url: url
                 , method:'post'
                 , id: 'articletable'
@@ -174,10 +175,10 @@
                 $.post(article_api_url,form_data,function (rsp) {
                     if(rsp['code'] === 0){
                         table.reload('articletable',{page: {curr: 1} });
-                        $('#search_reset_btn').trigger('click')
-                        $('#search_submit_btn').trigger('click')
+                        $('.search_reset_btn').trigger('click')
+                        $('.search_submit_btn').trigger('click')
                         disable_del_btn()
-                        $('#search_reset_btn').trigger('click')
+                        $('.search_reset_btn').trigger('click')
                         layer.closeAll()
                     }else{
                         layer.msg(rsp['message'],{offset: 'auto'});
@@ -186,7 +187,7 @@
 
             }
 
-            var article_api_url_del = "{$article_api_url}/del";
+            var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status)}";
             // ----------- 搜索删除按钮 -----------
             $('.del_query_data').click(function (e) {
                 var form_s = $('#article_search_form');
@@ -309,6 +310,45 @@
                     });
                 }
             });
+
+
+            //表格导出
+            table.exportFile = function(id, data, type){
+                console.log('it is me!')
+
+                var long_warn_text = '耗时较长，';
+                if(SEARCH_RESULT_ROWS<200){
+                    long_warn_text = '';
+                }
+
+                //询问框
+                layer.confirm('本次操作导出'+SEARCH_RESULT_ROWS+'条结果，'+long_warn_text+'是否继续？', {
+                    btn: ['确认','取消'] //按钮
+                    , offset:'auto'
+                }, function(){
+                    var download_url = "{:url($article_api_url.'/exportExcel','status='.$art_status)}";
+
+                    var form_s = $('#article_search_form');
+                    var form_data = form_s.serializeArray();
+
+                    // 检查提交参数
+                    var has_status = false;
+                    for(var key in form_data){
+                        var ele = form_data[key];
+                        if(ele['value'] !== ''){
+                            download_url += '&'+ele['name'] +'=' + ele['value'];
+                        }
+                    }
+                    layer.closeAll();
+                    var alink = document.createElement("a");
+                    alink.href = download_url;
+                    // alink.target = '_blank';
+                    document.body.appendChild(alink);
+                    alink.click();
+                    document.body.removeChild(alink);
+                });
+
+            };
 
         })
     }

@@ -14,28 +14,31 @@ use app\cofco\model\AdminPending as PendingModel;
 
 class Article extends AdminBase
 {
-    public static function _getNullCondation(){
+    public static function _getNullCondation()
+    {
 
-        return [['EXP',new Expression(' is null')],['=',""],'OR'];
+        return [['EXP', new Expression(' is null')], ['=', ""], 'OR'];
     }
 
-    private static function _assignLikeCondition(&$map, $field_name, $value){
+    private static function _assignLikeCondition(&$map, $field_name, $value)
+    {
         if (!empty($value)) {
-            if($value == NULL_STR){
+            if ($value == NULL_STR) {
                 $map[$field_name] = self::_getNullCondation();
 
-            }else{
+            } else {
                 $map[$field_name] = ['LIKE', '%' . $value . '%'];
             }
         }
     }
 
-    private static function _assignEqCondition(&$map, $field_name, $value){
+    private static function _assignEqCondition(&$map, $field_name, $value)
+    {
 
         if (!empty($value)) {
-            if($value == NULL_STR){
+            if ($value == NULL_STR) {
                 $map[$field_name] = self::_getNullCondation();
-            }else{
+            } else {
                 $map[$field_name] = ['EQ', $value];
             }
         }
@@ -79,10 +82,10 @@ class Article extends AdminBase
         $null_condition = Article::_getNullCondation();
 
         // 文章标题
-        Article::_assignLikeCondition($map,'title', $title);
+        Article::_assignLikeCondition($map, 'title', $title);
 
         // 爬虫关键词
-        Article::_assignEqCondition($map,'kw_id', $kw_id);
+        Article::_assignEqCondition($map, 'kw_id', $kw_id);
 
 
         // 文章ID
@@ -91,21 +94,21 @@ class Article extends AdminBase
         }
 
         // 影响因子
-        try{
+        try {
             if (!empty($impact_factor) && $impact_factor != NULL_STR) {
-                $con_arr = explode('-',$impact_factor, 2);
-                if(sizeof($con_arr) == 1){
-                    array_push($con_arr,$con_arr[0]);
+                $con_arr = explode('-', $impact_factor, 2);
+                if (sizeof($con_arr) == 1) {
+                    array_push($con_arr, $con_arr[0]);
                 }
-                $con_arr[0] = $con_arr[0] != ''?$con_arr[0]: PHP_FLOAT_MIN;
-                $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_FLOAT_MAX;
+                $con_arr[0] = $con_arr[0] != '' ? $con_arr[0] : PHP_FLOAT_MIN;
+                $con_arr[1] = $con_arr[1] != '' ? $con_arr[1] : PHP_FLOAT_MAX;
                 $map['impact_factor'] = ['BETWEEN', $con_arr];
-            }else if($impact_factor == NULL_STR){
+            } else if ($impact_factor == NULL_STR) {
                 $map['impact_factor'] = $null_condition;
             }
 
-        }catch(\Exception $e){
-            throw new Exception('影响因子填写格式不正确:'.$e->getMessage());
+        } catch (\Exception $e) {
+            throw new Exception('影响因子填写格式不正确:' . $e->getMessage());
         }
 
 
@@ -116,94 +119,95 @@ class Article extends AdminBase
         if (!empty($date_end) && $date_end != NULL_STR) {
             $map['issue'] = ['ELT', $date_end];
         }
-        if (!empty($date_start) and !empty($date_end) and $date_start != NULL_STR and $date_end != NULL_STR ) {
+        if (!empty($date_start) and !empty($date_end) and $date_start != NULL_STR and $date_end != NULL_STR) {
             $map['issue'] = ['BETWEEN', [$date_start, $date_end]];
         }
-        if($date_start == NULL_STR and $date_end == NULL_STR){
+        if ($date_start == NULL_STR and $date_end == NULL_STR) {
             $map['issue'] = $null_condition;
         }
 
         // 分区处理
-        try{
+        try {
             if (!empty($journal_zone) && $journal_zone != NULL_STR) {
-                $con_arr = explode('-',$journal_zone, 2);
-                if(sizeof($con_arr) == 1){
-                    array_push($con_arr,$con_arr[0]);
+                $con_arr = explode('-', $journal_zone, 2);
+                if (sizeof($con_arr) == 1) {
+                    array_push($con_arr, $con_arr[0]);
                 }
-                $con_arr[0] = $con_arr[0] != ''?$con_arr[0]: PHP_INT_MIN;
-                $con_arr[1] = $con_arr[1] != ''?$con_arr[1]: PHP_INT_MAX;
+                $con_arr[0] = $con_arr[0] != '' ? $con_arr[0] : PHP_INT_MIN;
+                $con_arr[1] = $con_arr[1] != '' ? $con_arr[1] : PHP_INT_MAX;
                 $map['journal_zone'] = ['BETWEEN', $con_arr];
-            }else if($journal_zone == NULL_STR){
+            } else if ($journal_zone == NULL_STR) {
                 $map['journal_zone'] = $null_condition;
             }
-        }catch(\Exception $e){
-            throw new Exception('分区填写格式不正确:'.$e->getMessage());
+        } catch (\Exception $e) {
+            throw new Exception('分区填写格式不正确:' . $e->getMessage());
         }
 
         // issn ISSN
-        self::_assignLikeCondition($map,'issnl|issne|issnp', $issn);
+        self::_assignLikeCondition($map, 'issnl|issne|issnp', $issn);
 
         // status 状态
-        self::_assignEqCondition($map,'status', $status);
+        self::_assignEqCondition($map, 'status', $status);
 
         // doi doi
-        self::_assignLikeCondition($map,'doi', $doi);
+        self::_assignLikeCondition($map, 'doi', $doi);
 
 
         // creater 创建人
-        self::_assignEqCondition($map,'creater', $creater);
+        self::_assignEqCondition($map, 'creater', $creater);
 
 
         // auditor 初审人
-        self::_assignEqCondition($map,'auditor', $auditor);
+        self::_assignEqCondition($map, 'auditor', $auditor);
 
         // labelor 标注人
-        self::_assignEqCondition($map,'labelor', $labelor);
-        
-        // final_auditor 终审人
-        self::_assignEqCondition($map,'final_auditor', $final_auditor);
+        self::_assignEqCondition($map, 'labelor', $labelor);
 
-        
+        // final_auditor 终审人
+        self::_assignEqCondition($map, 'final_auditor', $final_auditor);
+
+
         // abstract 原文摘要
-        self::_assignLikeCondition($map,'abstract', $abstract);
+        self::_assignLikeCondition($map, 'abstract', $abstract);
 
 
         // tabstract 翻译摘要
-        self::_assignLikeCondition($map,'tabstract', $tabstract);
+        self::_assignLikeCondition($map, 'tabstract', $tabstract);
 
 
         // keyword 关键词
-        self::_assignLikeCondition($map,'keyword', $keyword);
+        self::_assignLikeCondition($map, 'keyword', $keyword);
 
 
         // project 文档类型
-        self::_assignEqCondition($map,'project', $project);
+        self::_assignEqCondition($map, 'project', $project);
 
 
         // country 国家
-        self::_assignLikeCondition($map,'country', $country);
+        self::_assignLikeCondition($map, 'country', $country);
 
 
         // author 文献作者
-        self::_assignLikeCondition($map,'author', $author);
+        self::_assignLikeCondition($map, 'author', $author);
 
         // institue 发表机构
-        self::_assignLikeCondition($map,'institue', $institue);
+        self::_assignLikeCondition($map, 'institue', $institue);
 
 
         // journal 发表期刊
-        self::_assignLikeCondition($map,'journal', $journal);
+        self::_assignLikeCondition($map, 'journal', $journal);
 
 
         // urgency 紧要程度
-        self::_assignLikeCondition($map,'urgency', $urgency);
+        self::_assignLikeCondition($map, 'urgency', $urgency);
 
 
         // special_version 特别说明
-        self::_assignLikeCondition($map,'special_version', $special_version);
+        self::_assignLikeCondition($map, 'special_version', $special_version);
 
         return new Where($map);
     }
+
     /**获取日志查询条件
      * @param $type 日志类型 *
      * 1.创建文献 2.初审文献
@@ -211,11 +215,12 @@ class Article extends AdminBase
      * @param $id 文章ID
      * @return array
      */
-    function insertLog($type,$tid){
+    function insertLog($type, $tid)
+    {
         $map = [];
         $map['type'] = $type;
         $map['uID'] = getCurUser()['uid'];  //用户ID
-        $map['tID'] =  $tid;  //文章ID
+        $map['tID'] = $tid;  //文章ID
         $map['ctime'] = time();
         $map['year'] = date('Y');
         $map['month'] = date('m');
@@ -223,6 +228,7 @@ class Article extends AdminBase
         return LogModel::insert($map);
 
     }
+
     /**
      * 文章筛选过滤统一接口
      * @return \think\response\Json
@@ -269,7 +275,7 @@ class Article extends AdminBase
             $art_ids = input('param.art_id/a');
             PendingModel::where($where_map)->update(['status' => $setstatus]);
 
-                // 这个地方写得不对，批量操作不会有art_id传上来
+            // 这个地方写得不对，批量操作不会有art_id传上来
 //            foreach ($art_ids as $art_id){
 //                Article::insertLog($setstatus, $art_id);
 //            }
@@ -312,9 +318,9 @@ class Article extends AdminBase
             $art_id = $data['art_id'];
             if ($data['status'] == 1) {
 
-                $res = PendingModel::where('art_id',$art_id)->find();
-                if($res){
-                    return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！','data' => $res]);
+                $res = PendingModel::where('art_id', $art_id)->find();
+                if ($res) {
+                    return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！', 'data' => $res]);
                 }
 
                 $res = PendingModel::create($data);
@@ -341,10 +347,9 @@ class Article extends AdminBase
             $status = $data['status'];
             $pre_status = $data['pre_status'];
             $art_id = $data['art_id'];
-            if((int)$status-1==$pre_status){
+            if ((int)$status - 1 == $pre_status) {
                 Article::insertLog($status, $art_id);
-            }
-            else if((int)$status==$pre_status-1){
+            } else if ((int)$status == $pre_status - 1) {
                 $map = [];
                 $map['type'] = $pre_status;
                 $map['tID'] = $art_id;  //文章ID
@@ -357,5 +362,62 @@ class Article extends AdminBase
             }
             return json(['code' => 0, 'message' => '操作成功']);
         }
+    }
+
+    /**
+     *
+     * 数据导出
+     */
+    public function exportExcel()
+    {
+        try {
+            // Create new PHPExcel object
+            $objPHPExcel = new \PHPExcel();
+            $file_name = date("YmdHis",time()).'.xlsx';
+
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("中粮数据挖掘系统v2.0.3")
+                ->setTitle("检索数据导出")
+                ->setSubject("数据自动导出");
+
+
+            $where_map = Article::getSearchMap();
+            $results = PendingModel::where($where_map)->select()->toArray();
+
+            if(empty($results)){
+                throw new Exception('没有结果');
+            }
+
+            foreach ($results as $row=>$row_ele){
+                $col = 0;
+                if($row == 0){
+                    foreach ($row_ele as $filed_name=>$value){
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row+1, $filed_name);
+                        $col += 1;
+                    }
+                }
+                $col = 0;
+                foreach ($row_ele as $filed_name=>$value){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row+2, $value);
+                    $col += 1;
+                }
+            }
+
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('检索数据');
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a client’s web browser (Excel5)
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'.$file_name.'"');
+            header('Cache-Control: max-age=0');
+            $objWriter->save('php://output');
+            exit;
+        } catch (\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
+        }
+
     }
 }

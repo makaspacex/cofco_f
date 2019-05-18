@@ -84,6 +84,18 @@ return [
             'nav' => 0,
             'sort' => 0,
           ],
+          [
+            'title' => '导出Excel',
+            'icon' => '',
+            'module' => 'cofco',
+            'url' => 'cofco/article/exportexcel',
+            'param' => '',
+            'target' => '_self',
+            'debug' => 0,
+            'system' => 1,
+            'nav' => 0,
+            'sort' => 0,
+          ],
         ],
       ],
       [
