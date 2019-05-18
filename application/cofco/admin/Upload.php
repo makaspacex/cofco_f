@@ -61,37 +61,10 @@ class upload extends AdminBase
      */
     public function spider()
     {
-        try {
-            $cu = curl_init();
-            curl_setopt($cu, CURLOPT_URL, config('spider.spider_api_all'));
-            //echo config('spider.spider_api_all');
-            curl_setopt($cu, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($cu, CURLOPT_CONNECTTIMEOUT_MS, 300);
-            curl_setopt($cu, CURLOPT_TIMEOUT, 3);
-            $ret = curl_exec($cu);
-            //var_dump(json_decode($ret,true));
-            $http = curl_getinfo($cu, CURLINFO_HTTP_CODE);
-            if ($http != 200) {
-                throw  new Exception('链接爬虫失败');
-            }
-            curl_close($cu);
-            $row = json_decode($ret, true);
-            //var_dump($row);
-            $data_list = $row['data'];
-            $msg = $row['msg'];
-            $this->assign('msg', $msg);
-            //var_dump($data_list);
-        } catch (Exception $exception) {
-            $data_list = array();
-            $msg = $exception->getMessage();
-            $this->assign('msg', $msg);
-
-        }
         $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
         $this->assign('controlspider_url',config('spider.controlspider_url'));
         $tab_data['current'] = url('');
         $this->assign('hisiTabData', $this->tab_data);
-        $this->assign('data_list', $data_list);
         return $this->fetch();
     }
 
