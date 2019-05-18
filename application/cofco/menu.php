@@ -310,7 +310,7 @@ return [
             'title' => '文献上传',
             'icon' => 'aicon ai-huiyuanliebiao',
             'module' => 'cofco',
-            'url' => 'cofco/upload/assist',
+            'url' => 'cofco/upload/index',
             'param' => '',
             'target' => '_self',
             'debug' => 0,
