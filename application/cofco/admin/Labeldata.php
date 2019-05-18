@@ -47,9 +47,6 @@ class Labeldata extends AdminBase
     public $tab_data1 = [];
 
 
-
-
-
     public function levellabel()
     {
         $menu_list = LevellabelModel::getAllC(0, 0);
@@ -58,9 +55,7 @@ class Labeldata extends AdminBase
     }
 
 
-
-
-    public function levellabel_add($cid='')
+    public function levellabel_add($cid = '')
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
@@ -71,7 +66,7 @@ class Labeldata extends AdminBase
             return $this->success('添加成功。', 'levellabel');
         }
         $this->assign('levellabel_option', LevellabelModel::getOption());
-        $row['cid']=$cid;
+        $row['cid'] = $cid;
         $this->assign('data_info', $row);
         return $this->fetch('levellabel_form');
     }
@@ -236,6 +231,7 @@ class Labeldata extends AdminBase
         $this->assign('data_info', $row);
         return $this->fetch('tag_form');
     }
+
 //
     public function tag_del()
     {
@@ -260,9 +256,8 @@ class Labeldata extends AdminBase
         $map = [];
         if ($q) {
             $map['value'] = ['like', '%' . $q . '%'];
-        }
-        else
-            $map['status']=1;
+        } else
+            $map['status'] = 1;
 
         $data_list = TagModel::where($map)->paginate(10, false, ['query' => input('get.')]);
         // 分页
@@ -275,190 +270,31 @@ class Labeldata extends AdminBase
     }
 
 
-
-public function pop($id)
-{
+    public function pop($id)
+    {
         // $q = input('param.q/s');
-    $callback = input('param.callback/s');
-    if (!$callback) {
-        echo '<br><br>callback为必传参数！';
-        exit;
-    }
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
         //$ids   = input('param.ids/a');
-    $map = [];
-    $map['id'] = ['in', $id];
-    $data_list = PendingModel::where($map)->paginate(10, false);
+        $map = [];
+        $map['id'] = ['in', $id];
+        $data_list = PendingModel::where($map)->paginate(10, false);
         // 分页
         // var_dump($data_list);
-    $pages = $data_list->render();
-    $this->assign('data_list', $data_list);
-    $this->assign('pages', $pages);
-    $this->assign('callback', $callback);
-    $this->view->engine->layout(false);
-    return $this->fetch();
-}
-
-
-    public function finaly_url($id=0)
-    {
-        $row = PendingModel::where('id', $id)->find()->toArray();
-//        return $this->error($row['url']);
-        if ($row['source']=='pm'){
-            header("location:https://www.ncbi.nlm.nih.gov/pubmed/".$row['pmid']);
-        }
-        else
-            header("location:https://www.sciencedirect.com/science/article/pii/".$row['pmid']);
-        //header("location:".$row['url']);
+        $pages = $data_list->render();
+        $this->assign('data_list', $data_list);
+        $this->assign('pages', $pages);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        return $this->fetch();
     }
 
-    public function task_add()
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $row=$data;
-            //$row=$data;
-            //var_dump($row);
-            //$url = "http://39.108.188.10:9001/spider/add";
-            //$url = "http://10.2.148.107:8000/spider/add";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,config('spider.spider_api_add'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('添加成功！','task_list1');
-            }
-            return $this->error('添加失败');
-        }
-        $this->assign('spider_option', SpiderTaskModel::getOption());
-        return $this->fetch('task_form');
-    }
-    public function task_stop($id=0)
-    {
-        if($id==0)
-            { return $this->error('此爬虫未运行，禁止操作');}
-        else
-        {
-            $ret=array('pid');
-            $row=array_fill_keys($ret,$id);
-            //$url = "http://http://10.2.175.30:9001/spider/stop";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_stop'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if($output = curl_exec($ch)){
-                curl_close($ch);
-                $data_list = json_decode($output,true);
-                if($data_list['status']==0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('停止成功','task_list1');
-            }
-            return $this->error('停止失败');
-        }
-    }
-    public function task_pause($id=0)
-    {
-        if($id==0)
-            { return $this->error('此爬虫未运行，禁止操作');}
-        else {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/pause";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_pause'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('暂停成功');
-            }
-            return $this->error('暂停失败');
-        }
-    }
 
-    public function task_continue($id=0)
+    public function keywords_pop($q = '')
     {
-        if($id==0)
-            { return $this->error('此爬虫未运行，禁止操作');}
-        else
-        {
-            $ret = array('pid');
-            $row = array_fill_keys($ret, $id);
-            //$url = "http://10.2.145.166:8000/spider/continue";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_continue'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-            if ($output = curl_exec($ch)) {
-                curl_close($ch);
-                $data_list = json_decode($output, true);
-                if ($data_list['status'] == 0)
-                    return $this->error($data_list['msg']);
-                else
-                    return $this->success('继续成功');
-            }
-            return $this->error('继续失败');
-        }
-    }
-
-    public function task_remove($id='')
-    {
-        $ret = array('sstr');
-        $row = array_fill_keys($ret, $id);
-        //$url = "http://10.2.145.166:8000/spider/remove";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_remove'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if ($output = curl_exec($ch)) {
-            curl_close($ch);
-            $data_list = json_decode($output, true);
-            if ($data_list['status'] == 0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('删除成功');
-        }
-        return $this->error('删除失败');
-
-    }
-
-    public function task_startforce($id='')
-    {
-        $ret = array('sstr');
-        $row = array_fill_keys($ret, $id);
-        //return $this->error($id);
-        //$url = "http://10.2.145.166:8000/spider/startforce";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, config('spider.spider_api_startforce'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $row);
-        if ($output = curl_exec($ch)) {
-            curl_close($ch);
-            $data_list = json_decode($output, true);
-            if ($data_list['status'] == 0)
-                return $this->error($data_list['msg']);
-            else
-                return $this->success('重启成功');
-        }
-        return $this->error('重启失败');
-
-    }
-    public function keywords_pop($q = '') {
         $q = input('param.q/s');
         $callback = input('param.callback/s');
         if (!$callback) {
@@ -467,11 +303,10 @@ public function pop($id)
         }
         $map = [];
         if ($q) {
-            $map['keywords'] = ['like', '%'.$q.'%'];
-        }
-        else
-            $map['status']=1;
-        $data_list = KwModel::where($map)->paginate(10, false,['query' => input('get.')]);
+            $map['keywords'] = ['like', '%' . $q . '%'];
+        } else
+            $map['status'] = 1;
+        $data_list = KwModel::where($map)->paginate(10, false, ['query' => input('get.')]);
         // 分页
         //var_dump($data_list);
         $pages = $data_list->render();
