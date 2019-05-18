@@ -4,6 +4,7 @@
 namespace app\cofco\admin;
 
 use app\cofco\model\AdminUserlog as LogModel;
+use think\db\Expression;
 use think\db\Where;
 use think\Exception;
 use \think\Request;
@@ -13,11 +14,16 @@ use app\cofco\model\AdminPending as PendingModel;
 
 class Article extends AdminBase
 {
+    public static function _getNullCondation(){
+
+        return [['EXP',new Expression(' is null')],['=',""],'OR'];
+    }
 
     private static function _assignLikeCondition(&$map, $field_name, $value){
         if (!empty($value)) {
             if($value == NULL_STR){
-                $map[$field_name] = [['EXP','IS NULL'],['EQ',""],'or'];
+                $map[$field_name] = self::_getNullCondation();
+
             }else{
                 $map[$field_name] = ['LIKE', '%' . $value . '%'];
             }
@@ -28,7 +34,7 @@ class Article extends AdminBase
 
         if (!empty($value)) {
             if($value == NULL_STR){
-                $map[$field_name] = [['EXP','IS NULL'],['EQ',""],'or'];
+                $map[$field_name] = self::_getNullCondation();
             }else{
                 $map[$field_name] = ['EQ', $value];
             }
@@ -70,7 +76,7 @@ class Article extends AdminBase
 
 
         $map = array();
-        $null_condition = [['EXP','IS NULL'],['EQ',""],'or'];
+        $null_condition = Article::_getNullCondation();
 
         // 文章标题
         Article::_assignLikeCondition($map,'title', $title);
@@ -229,11 +235,11 @@ class Article extends AdminBase
             $page_size = input('param.limit/s');
             $order_by = input('param.orderby/s', 'ctime');
             $ordertype = input('param.ordertype/s', 'desc');
-            $res = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
             $sql_str = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->buildSql(true);
+            $res = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
             return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return json(['code' => 1, 'message' => '操作失败:' . $e->getMessage(), 'data' => []]);
         }
     }
