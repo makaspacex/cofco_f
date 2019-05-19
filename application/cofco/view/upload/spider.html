@@ -43,7 +43,7 @@
         var layer = layui.layer;
         var $ = layui.$;
         tablePlug.smartReload.enable(true);
-
+        console.log('{$getthreadstatus_url}');
         var STATUS_NAME = {'-2':'失败', '-1': '未初始化', '0': '未运行', '1': '运行中', '2': '已暂停', '3':'已完成', '4':'已终止', '5':'混合状态','6':'等待用户输入Cookies'}
         table.render({
             elem: '#test'
