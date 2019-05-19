@@ -317,7 +317,6 @@ class Article extends AdminBase
             $data['project'] = 'MAN';
             $art_id = $data['art_id'];
             if ($data['status'] == 1) {
-
                 $res = PendingModel::where('art_id', $art_id)->find();
                 if ($res) {
                     return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！', 'data' => $res]);
