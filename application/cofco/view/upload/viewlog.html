@@ -12,17 +12,28 @@
         // term.fit();
         var roomName = '12346';
         var ws = new WebSocket('ws://127.0.0.1:9001/ws/chat/'+roomName+'/');
+        // var ws = new WebSocket('ws://0.0.0.0:9002/');
 
-        ws.onerror = function (e) { console.log(e); };
-        ws.onmessage = function(event) {
-            term.writeln(event.data);
+        ws.onerror = function (e) {
+
+            console.log(e);
+
         };
-        ws.onopen = function () {
-            console.log("connection opened!");
+        ws.onmessage = function(event) {
+            console.log(event);
+            var data = $.parseJSON(event.data);
+
+            term.writeln(data['message']);
+        };
+        ws.onopen = function (e) {
+            console.log("connection opened!")
+            console.log(e);
         }
-        ws.onclose = function (event) {
-            //关闭连接
+        ws.onclose = function (e) {
             console.log("connection closed!");
+            //关闭连接
+            console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean);
+            console.log(e);
             ws.close();
         };
 
@@ -34,7 +45,7 @@
 
         }
 
-        setInterval(send,1000);
+        // setInterval(send,1000);
 
         function runFakeTerminal() {
             if (term._initialized) {

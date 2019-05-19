@@ -14,9 +14,10 @@ function getCurUser(){
 function is_auth($url){
 
     $curMenu = MenuModel::get(['url'=>$url])->toArray();
-
     if (!empty($curMenu)) {
-
+        if(!$curMenu['status']){
+            return false;
+        }
         if (!RoleModel::checkAuth($curMenu['id']) &&
             $curMenu['url'] != 'system/index/index') {
             return false;
