@@ -1,34 +1,36 @@
 <link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
 <style>
     .layui-form-title{
-        color: #5FB878!important;
+        color: #2E9588!important;
     }
     .layui-textarea {
         min-height: 420px;
     }
 </style>
+{php} if(!isset($art_arr)){ $art_arr = ''; } {/php}
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm" style="padding-left: 20px">
-    <div class="layui-container-fluid" style="max-width: 1400px">
-        <div class="row">
+    <div class="layui-container-fluid" style="max-width: 1400px;margin-bottom: 50px;">
+        <div class="layui-row">
             <div class="layui-col-md11">
                 <div class="layui-form-title margin-t-20 margin-b-10">文章基本信息</div>
             </div>
+
             <div class="layui-col-md11">
                 <label class="layui-form-label">文章ID</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input field-art_id" name="art_id">
+                    <input type="text" class="layui-input field-art_id" name="art_id" value="{:artFiledValue($art_arr,'art_id')}"/>
                 </div>
             </div>
             <div class="layui-col-md11">
                 <label class="layui-form-label">文章标题</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input field-title" name="title" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-title" name="title" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'title')}">
                 </div>
             </div>
             <div class="layui-col-md5">
                 <label class="layui-form-label">文章作者</label>
                 <div class="layui-input-block ">
-                    <input type="text" class="layui-input field-author" name="author" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-author" name="author" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'author')}">
                 </div>
             </div>
             <!--            <div class="layui-col-md3">-->
@@ -41,13 +43,13 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">DOI</label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-doi" name="doi" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-doi" name="doi" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'doi')}">
                 </div>
             </div>
             <div class="layui-col-md3">
                 <label class="layui-form-label">发表时间</label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-issue" name="issue" id="issue" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-issue" name="issue" id="issue" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'doi')}">
                 </div>
             </div>
 
@@ -58,13 +60,13 @@
             <div class="layui-col-md5">
                 <label class="layui-form-label">所属期刊</label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-journal" name="journal" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-journal" name="journal" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'journal')}">
                 </div>
             </div>
             <div class="layui-col-md3">
                 <label class="layui-form-label">影响因子</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-impact_factor" name="impact_factor" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'impact_factor')}">
                 </div>
             </div>
             <div class="layui-col-md3">
@@ -88,7 +90,7 @@
             <div class="layui-col-md5">
                 <label class="layui-form-label ">发表机构</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input field-institue" name="institue" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-institue" name="institue" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'institue')}">
                 </div>
             </div>
 
@@ -96,7 +98,13 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">文献类型 </label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-document_type" name="document_type" lay-verify="" autocomplete="off" placeholder="">
+                    <select name="project" id="project" lay-verify="required" lay-search="" enable-input="true">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        <option value="MAN" {if artFiledValue($art_arr, 'project') == 'MAN'}selected{/if}>人工输入</option>
+                        <option value="PUBMED_SPIDER"{if artFiledValue($art_arr, 'project') == 'PUBMED_SPIDER'}selected{/if}>Pubmed爬虫</option>
+                        <option value="SCIENCE_SPIDER"{if artFiledValue($art_arr, 'project') == 'SCIENCE_SPIDER'}selected{/if}>Science爬虫</option>
+                    </select>
                 </div>
             </div>
 
@@ -104,14 +112,14 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">机构国家</label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-country" name="country" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-country" name="country" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'country')}">
                 </div>
             </div>
 
             <div class="layui-col-md11">
                 <label class="layui-form-label">文章关键词</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input field-keyword" name="keyword" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-keyword" name="keyword" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'keyword')}">
                 </div>
             </div>
 
@@ -119,27 +127,27 @@
                 <div class="layui-form-title margin-t-20 margin-b-10">标注及说明</div>
             </div>
 
-            <!--            <div class="layui-col-md11">-->
-            <!--                <label class="layui-form-label">标签标注</label>-->
-            <!--                <div class="layui-input-block" >-->
-            <!--                    <input type="label" class="layui-input field-value" disabled="true"-->
-            <!--                           name="value" lay-verify="" autocomplete="off" placeholder="未标记">-->
-            <!--                    <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"-->
-            <!--                            class="layui-btn layui-btn-sm layui-btn-primary j-iframe-pop fl margin-0 abs-right" style="margin-left:0px;">选择标签</button>-->
-            <!--                    <input type="hidden"  class="layui-input field-tag_id" name="tag_id"-->
-            <!--                           lay-verify="" autocomplete="off" placeholder="标签选择">-->
-            <!--                </div>-->
-            <!--            </div>-->
+<!--            <div class="layui-col-md11">-->
+<!--                <label class="layui-form-label">标签标注</label>-->
+<!--                <div class="layui-input-block" >-->
+<!--                    <input type="label" class="layui-input field-value" disabled="true"-->
+<!--                           name="value" lay-verify="" autocomplete="off" placeholder="未标记">-->
+<!--                    <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"-->
+<!--                            class="layui-btn layui-btn-sm layui-btn-primary j-iframe-pop fl margin-0 abs-right" style="margin-left:0px;">选择标签</button>-->
+<!--                    <input type="hidden"  class="layui-input field-tag_id" name="tag_id"-->
+<!--                           lay-verify="" autocomplete="off" placeholder="标签选择">-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-col-md6">
                 <label class="layui-form-label">特别说明</label>
                 <div class="layui-input-block ">
-                    <input type="text" class="layui-input field-special_version" name="special_version" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-special_version" name="special_version" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'special_version')}">
                 </div>
             </div>
             <div class="layui-col-md5">
                 <label class="layui-form-label">紧要程度 </label>
                 <div class="layui-input-block" >
-                    <input type="text" class="layui-input field-urgency" name="urgency" lay-verify="" autocomplete="off" placeholder="">
+                    <input type="text" class="layui-input field-urgency" name="urgency" lay-verify="" autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'urgency')}">
                 </div>
             </div>
 
@@ -152,14 +160,12 @@
             </div>
             <div class="layui-col-md6">
                 <div class="layui-form-item textarea-container">
-                    <pre class="pre"><span /><br /><br /></pre>
-                    <textarea rows="25" class="layui-textarea field-abstract auto-textarea-content" name="abstract" lay-verify="" autocomplete="off" placeholder="原文摘要"></textarea>
+                    <textarea rows="25" class="layui-textarea field-abstract auto-textarea-content" name="abstract" lay-verify="" autocomplete="off" placeholder="原文摘要">{:artFiledValue($art_arr,'abstract')}</textarea>
                 </div>
             </div>
             <div class="layui-col-md6">
                 <div class="layui-form-item textarea-container">
-                    <pre class="pre"><span /><br /><br /></pre>
-                    <textarea rows="25" class="layui-textarea field-tabstract auto-textarea-content" name="tabstract" lay-verify="" autocomplete="off" placeholder="摘要翻译"></textarea>
+                    <textarea rows="25" class="layui-textarea field-tabstract auto-textarea-content" name="tabstract" lay-verify="" autocomplete="off" placeholder="摘要翻译">{:artFiledValue($art_arr,'tabstract')}</textarea>
                 </div>
             </div>
             <div class="layui-col-md12">
@@ -171,7 +177,7 @@
                 </div>
             </div>
             <div class="layui-col-md10">
-                <button type="submit" class="layui-btn" lay-submit="" id="formSubmit">提交</button>
+                <button type="submit" class="layui-btn layui-btn-sm" lay-submit=""  style="width: 200px;" id="formSubmit">提交</button>
             </div>
         </div>
     </div>

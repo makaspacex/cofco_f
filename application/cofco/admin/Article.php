@@ -256,10 +256,7 @@ class Article extends AdminBase
     public function view($art_id = 0)
     {
 
-        $row = PendingModel::where('art_id', $art_id)->find()->toArray();
-        $this->assign('data_info', $row);
-        $this->view->engine->layout(false);
-        return $this->fetch('form');
+
     }
 
 
@@ -296,7 +293,7 @@ class Article extends AdminBase
             $where_map = Article::getSearchMap();
             PendingModel::where($where_map)->delete();
             return json(['code' => 0, 'message' => '操作完成']);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
         }
 
@@ -335,31 +332,39 @@ class Article extends AdminBase
 
     }
 
-    /**文章编辑
-     * @return \think\response\Json
+    /**
+     * 文章编辑
      */
     public function edit()
     {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-
-            $status = $data['status'];
-            $pre_status = $data['pre_status'];
-            $art_id = $data['art_id'];
-            if ((int)$status - 1 == $pre_status) {
-                Article::insertLog($status, $art_id);
-            } else if ((int)$status == $pre_status - 1) {
-                $map = [];
-                $map['type'] = $pre_status;
-                $map['tID'] = $art_id;  //文章ID
-                LogModel::where($map)->delete();
+        try {
+            if ($this->request->isPost()) {
+                $data = $this->request->post();
+                $status = $data['status'];
+                $pre_status = $data['pre_status'];
+                $art_id = $data['art_id'];
+                if ((int)$status - 1 == $pre_status) {
+                    Article::insertLog($status, $art_id);
+                } else if ((int)$status == $pre_status - 1) {
+                    $map = [];
+                    $map['type'] = $pre_status;
+                    $map['tID'] = $art_id;  //文章ID
+                    LogModel::where($map)->delete();
+                }
+                unset($data['pre_status']);
+                $res = PendingModel::update($data);
+                if (!$res) {
+                    return json(['code' => 25, 'message' => '操作失败']);
+                }
+                return json(['code' => 0, 'message' => '操作成功']);
             }
-            unset($data['pre_status']);
-            $res = PendingModel::update($data);
-            if (!$res) {
-                return json(['code' => 25, 'message' => '操作失败']);
-            }
-            return json(['code' => 0, 'message' => '操作成功']);
+            $art_id = input('param.art_id/s');
+            $art_arr = PendingModel::where('art_id', $art_id)->find()->toArray();
+            $this->assign('art_arr', $art_arr);
+            $this->view->engine->layout(false);
+            return $this->fetch('form');
+        } catch (\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
         }
     }
 

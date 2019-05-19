@@ -6,16 +6,23 @@ use app\system\model\SystemRole as RoleModel;
 /**
  * 获取当前登录的用户
  */
-function getCurUser(){
+function getCurUser()
+{
 
     return session('admin_user');
 }
 
-function is_auth($url){
+/***
+ * 判断用户对URL是否有权限
+ * @param $url
+ * @return bool
+ */
+function is_auth($url)
+{
 
-    $curMenu = MenuModel::get(['url'=>$url])->toArray();
+    $curMenu = MenuModel::get(['url' => $url])->toArray();
     if (!empty($curMenu)) {
-        if(!$curMenu['status']){
+        if (!$curMenu['status']) {
             return false;
         }
         if (!RoleModel::checkAuth($curMenu['id']) &&
@@ -26,4 +33,16 @@ function is_auth($url){
         return false;
     }
     return true;
+}
+
+/***
+ *
+ * 返回article相应的值
+ */
+function artFiledValue($art_arr, $field_name)
+{
+    if(empty($art_arr) || !array_key_exists($art_arr,$field_name)){
+        return "";
+    }
+    return $art_arr[$field_name];
 }

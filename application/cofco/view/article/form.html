@@ -1,27 +1,5 @@
 {include file="cofco@block/edit_form"/}
 <script>
-    var formData = {:json_encode($data_info)};
-    var pre_status = formData['status'];   // 更改之前的状态
-    var text1 = '';
-    var text2 = '';
-    function func(data) {
-        var $ = layui.jquery;
-        for (var i = 0; i < data.length; i++) {
-            if (i == 0) {
-                text1 = data[i]['name'];
-                text2 = data[i]['title'];
-            } else {
-                text1 = text1 + '#' + data[i]['name'];
-                text2 = text2 + '#' + data[i]['title'];
-            }
-        }
-        $('input[name="tag_id"]').val(text1);
-        $('input[name="value"]').val(text2);
-    }
-
-</script>
-<script src="__ADMIN_JS__/footer.js"></script>
-<script>
     $('#formSubmit').click(function (e) {
         var form_s = $('#editForm');
         var form_data = form_s.serializeArray();
