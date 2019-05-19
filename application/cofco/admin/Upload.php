@@ -14,10 +14,12 @@ use think\Exception;
 
 class upload extends AdminBase
 {
+
+    public $tab_data = [];
     protected function initialize()
     {
         parent::initialize();
-        $tab_data['menu'] = [
+        $this->tab_data['menu'] = [
             [
                 'title' => '辅助输入',
                 'url' => 'cofco/upload/assist',
@@ -32,7 +34,21 @@ class upload extends AdminBase
             ],
         ];
         $this->assign('hisiTabType', 3);
-        $this->tab_data = $tab_data;
+        $this->assign('hisiTabData', $this->tab_data);
+    }
+
+    /** 辅助输入
+     * @return string|void
+     */
+    public function index()
+    {
+        foreach( $this->tab_data['menu'] as $tab){
+            if(is_auth($tab['url'])){
+                $this->tab_data['current'] = url($tab['url']);
+                return $this->redirect($tab['url']);
+            }
+        }
+        return $this->fetch('form');
     }
 
     /** 辅助输入
@@ -40,9 +56,6 @@ class upload extends AdminBase
      */
     public function assist()
     {
-
-        $tab_data['current'] = url('');
-        $this->assign('hisiTabData', $this->tab_data);
         return $this->fetch('pending_fform');
     }
 
@@ -51,8 +64,6 @@ class upload extends AdminBase
      */
     public function manual()
     {
-        $tab_data['current'] = url('');
-        $this->assign('hisiTabData', $this->tab_data);
         return $this->fetch('form');
     }
 
@@ -63,8 +74,6 @@ class upload extends AdminBase
     {
         $this->assign('getthreadstatus_url',config('spider.getthreadstatus_url'));
         $this->assign('controlspider_url',config('spider.controlspider_url'));
-        $tab_data['current'] = url('');
-        $this->assign('hisiTabData', $this->tab_data);
         return $this->fetch();
     }
 
@@ -89,6 +98,17 @@ class upload extends AdminBase
         $this->assign('controlspider_url',config('spider.controlspider_url'));
         $this->assign('pubmed_keyword_list', $pubmed_keyword_list);
         $this->assign('science_keyword_list', $science_keyword_list);
+        $this->view->engine->layout(false);
+        return $this->fetch();
+    }
+
+    /**
+     * 爬虫日志查看
+     *
+     * @return string
+     */
+    public function viewlog(){
+
         $this->view->engine->layout(false);
         return $this->fetch();
     }

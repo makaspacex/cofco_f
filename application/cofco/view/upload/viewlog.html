@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Butterfly - A web terminal based on websocket and tornado">
+    <meta name="author" content="Mounier Florian">
+    <title>Butterfly</title>
+    <link href="__ADMIN_MOD_JS__/webterm/main.css?v=022df8d20581de36bf728c083bee7390" rel="stylesheet" id="style">
+</head>
+<style>
+    body{
+        font-size: 12px;
+    }
+</style>
+<body spellcheck="false"
+      data-force-unicode-width="no"
+      data-root-path=""
+      data-session-token=970cb068-d085-4c49-895f-63768aca50f3>
+<textarea id="input-helper">
+</textarea>
+<div id="input-view" class="hidden">
+</div>
+<div id="popup" class="hidden">
+</div>
+<script src="__ADMIN_MOD_JS__/webterm/html-sanitizer.js?v=c54621161aedf5faa8aeb98dd347acf1"></script>
+<script src="__ADMIN_MOD_JS__/webterm/main.js?v=ac84998051412787e5367f3e23c77e89"></script>
+<script src="__ADMIN_MOD_JS__/webterm/ext.js?v=f1e6dd44172d4104096af645303f5e68"></script>
+<div id="packed"></div>
+<div id="term"></div>
+<script>
+    function ready() {
+        var term = new Terminal(document.body);
+        term.write('opening connection.....\r\n')
+
+        var ws = new WebSocket('{:config("spider.view_spider_log_url")}');
+        ws.onerror = function (e) {
+            console.log(e);
+            term.write('connection error!\r\n')
+        };
+        ws.onmessage = function(event) {
+            term.write(event.data+'\r\n')
+        };
+        ws.onopen = function (e) {
+            term.write('connection to server opened!\r\n')
+        }
+        ws.onclose = function (e) {
+            console.log("connection closed!");
+            ws.close();
+        };
+    }
+    ready()
+</script>
+</body>
+</html>
+
+

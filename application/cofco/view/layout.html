@@ -45,6 +45,9 @@
                 <ul class="layui-tab-title">
                     {volist name="hisiTabData['menu']" id="vo"}
                         {php}
+                            if(!is_auth($vo['url'])){
+                                continue;
+                            }
                             $hisiTabData['current'] = isset($hisiTabData['current']) ? $hisiTabData['current'] : '';
                         {/php}
                         {if ($vo['url'] eq $hisiCurMenu['url'] or (url($vo['url']) eq $hisiTabData['current']))}
@@ -52,12 +55,12 @@
                         {else /}
                             <li>
                         {/if}
-                            {if (substr($vo['url'], 0, 4) eq 'http')}
-                                <a href="{$vo['url']}" target="_blank">{$vo['title']|raw}</a>
-                            {else /}
-                                <a href="{:url($vo['url'])}" class="{if (isset($vo['class']))}{$vo['class']}{/if}" id="{if (isset($vo['id']))}{$vo['id']}{/if}">{$vo['title']|raw}</a>
-                            {/if}
-                        </li>
+                        {if (substr($vo['url'], 0, 4) eq 'http')}
+                            <a href="{$vo['url']}" target="_blank">{$vo['title']|raw}</a>
+                        {else /}
+                            <a href="{:url($vo['url'])}" class="{if (isset($vo['class']))}{$vo['class']}{/if}" id="{if (isset($vo['id']))}{$vo['id']}{/if}">{$vo['title']|raw}</a>
+                        {/if}
+                            </li>
                     {/volist}
                 </ul>
                 <div class="layui-tab-content page-tab-content">
