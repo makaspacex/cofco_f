@@ -286,8 +286,10 @@
                         ,content: content
                     });
                 }else if(layEvent === 'edit'){
-                    var article_api_url_view = '{$article_api_url}/view?art_id=';
-                    article_api_url_view = article_api_url_view+data.art_id;
+                    var article_api_url_view = "{:url($article_api_url.'/view')}"+'?art_id='+data.art_id;
+                    console.log(article_api_url_view);
+                    //article_api_url_view = article_api_url_view+data.art_id;
+                    console.log(article_api_url_view);
                     layer.open({
                         type: 2,
                         title: '编辑页面',
