@@ -29,25 +29,5 @@
         var except_field = [];
         var except_btns = ['edit'];
         render_article_table(init_url,{except_field:except_field,width:180,title:'文献输出表',except_btns:except_btns});
-
     });
-
-    //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
-    layui.use(['jquery', 'table'],function () {
-        var table = layui.table, $ = layui.jquery;
-        // 行工具栏监听
-        table.on('tool(articletable)',function (obj) {
-            var data = obj.data,layEvent = obj.event;
-            if(layEvent === 'detail'){
-
-            }else if(layEvent === 'source'){
-
-            }
-        });
-        // 工具栏监听
-        table.on('toolbar(articletable)',function (obj) {
-
-        });
-    });
-
 </script>

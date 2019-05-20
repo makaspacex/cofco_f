@@ -13,16 +13,28 @@
 <div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
         <div class="layui-inline" style="width: 200px">
-            <select name="setstatus" id="setstatus" lay-verify="required" lay-search="" enable-input="true" style="width: 100px">
-                <option value="">请选择设置类型</option>
-                <option value="0">放入待分配</option>
-                <option value="1">放入待初审</option>
-                <option value="2">放入待标注</option>
-                <option value="3">放入待终审</option>
-                <option value="4">放入文献输出</option>
-                <option value="-1">放入回收站</option>
-                <option value="-2">放入黑名单</option>
-                <option value="-3">彻底删除</option>
+            <select name="auditor" id="auditor" lay-verify="required" lay-search="" enable-input="true">
+                <option value="">请选择初审人</option>
+                {volist name="all_users" id="v"}
+                <option value={$v['id']}>{$v['nick']}</option>
+                {/volist}
+            </select>
+        </div>
+
+        <div class="layui-inline" style="width: 200px">
+            <select name="labelor" id="labelor" lay-verify="required" lay-search="" enable-input="true">
+                <option value="">请选择标注人</option>
+                {volist name="all_users" id="v"}
+                <option value={$v['id']}>{$v['nick']}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-inline" style="width: 200px">
+            <select name="setstatus" id="setstatus" lay-verify="required" lay-search="" enable-input="true">
+                <option value="">请选择终审人</option>
+                {volist name="all_users" id="v"}
+                <option value={$v['id']}>{$v['nick']}</option>
+                {/volist}
             </select>
         </div>
         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="submit_status_selected_data">确认[选中行数据]</button>

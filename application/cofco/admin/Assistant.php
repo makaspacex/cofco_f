@@ -38,4 +38,16 @@ class Assistant extends AdminBase
         return $this->fetch();
     }
 
+    /***
+     *
+     * 文献输出
+     * @return string
+     */
+    public function output()
+    {
+        $this->init_searchForm();
+        $this->assign('art_status', 4);
+        return $this->fetch();
+    }
+
 }

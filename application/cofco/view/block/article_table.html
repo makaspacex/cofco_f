@@ -144,6 +144,8 @@
                 tip_str = '本次操作会将'+row_len+'条结果拉入黑名单，是否继续？';
             }else if(setstatus === '-1'){
                 tip_str = '本次操作会将'+row_len+'条结果放入回收站，是否继续？';
+            }else if(setstatus === '0'){
+                tip_str = '本次操作会将'+row_len+'条结果放入待分配列表，是否继续？';
             }else if(setstatus === '1'){
                 tip_str = '本次操作会将'+row_len+'条结果放入初审列表，是否继续？';
             }else if(setstatus === '2'){

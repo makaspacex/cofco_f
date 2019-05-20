@@ -146,8 +146,16 @@ class Article extends AdminBase
         // issn ISSN
         self::_assignLikeCondition($map, 'issnl|issne|issnp', $issn);
 
-        // status 状态
-        self::_assignEqCondition($map, 'status', $status);
+        // status 状态，需要处理虚拟状态位
+        if (!empty($status)||$status == '0') {
+            if ($status == NULL_STR) {
+                $map['status'] = self::_getNullCondation();
+            } else if($status == '6'){ //虚拟状态位6，表示状态1，2，3，4
+                $map['status'] = ['IN', ['1','2','3','4']];
+            }else{
+                $map['status'] = ['EQ', $status];
+            }
+        }
 
         // doi doi
         self::_assignLikeCondition($map, 'doi', $doi);
