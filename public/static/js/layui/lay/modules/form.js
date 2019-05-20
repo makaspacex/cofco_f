@@ -151,6 +151,7 @@ layui.define('layer', function(exports){
             
             index = select[0].selectedIndex; //获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
+            console.log(dds.html())
             dds.removeClass(HIDE);
             nearElem = null;
 

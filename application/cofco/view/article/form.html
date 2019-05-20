@@ -1,5 +1,10 @@
 {include file="cofco@block/edit_form"/}
 <script>
+
+    $(function () {
+        disableField(['special_version']);
+    });
+
     $('#formSubmit').click(function (e) {
         var form_s = $('#editForm');
         var form_data = form_s.serializeArray();

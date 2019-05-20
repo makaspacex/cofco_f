@@ -41,7 +41,7 @@ function is_auth($url)
  */
 function artFiledValue($art_arr, $field_name)
 {
-    if(empty($art_arr) || !array_key_exists($art_arr,$field_name)){
+    if(empty($art_arr) || !array_key_exists($field_name, $art_arr)){
         return "";
     }
     return $art_arr[$field_name];

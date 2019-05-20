@@ -24,8 +24,12 @@
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{:url($article_api_url.'/search','status='.$art_status)}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
+        var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = [];
-        render_article_table(init_url,except_field,240,'文献输出表');
+        var except_btns = ['edit'];
+        render_article_table(init_url,{except_field:except_field,width:180,title:'文献输出表',except_btns:except_btns});
+
     });
 
     //-------------- 为自定义的按钮添加监听事件 ----------------------------------------

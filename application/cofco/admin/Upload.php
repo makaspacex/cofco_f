@@ -64,7 +64,7 @@ class upload extends AdminBase
      */
     public function manual()
     {
-        return $this->fetch('form');
+        return $this->fetch('manual');
     }
 
     /** 爬虫输入

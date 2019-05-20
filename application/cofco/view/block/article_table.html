@@ -5,6 +5,8 @@
         <button class="layui-btn layui-btn-sm" lay-event="select_all_row">全选</button>
         <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="de_select">反选</button>
         <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del_selected">删除选中</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger cofco-blacklist" lay-event="black_selected">进入黑名单[选中]</button>
+        <button class="layui-btn layui-btn-sm  cofco-blacklist toggle-enable layui-btn-disabled" lay-event="black_query" disabled>进入黑名单[搜索结果]</button>
     </div>
 </div>
 <!--预留站位-->
@@ -21,13 +23,10 @@
 <div type="text/html" id="all_rowtools" class="hide"></div>
 
 <script>
-
     // 全局共享数据
     SEARCH_RESULT_ROWS = -1
 
-
-
-    function getField(except_field=[],width){
+    function getField(except_field, width){
         var all_filed = [
             {type: 'checkbox', fixed: 'left'}
             // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
@@ -73,25 +72,198 @@
     }
 
     // 删除按钮样式控制
-
-    function enable_del_btn() {
-        $('.del_query_data').removeClass('layui-btn-disabled').attr('disabled',false);
+    function enable_toggle_btn() {
+        $('.toggle-enable').removeClass('layui-btn-disabled').attr('disabled',false);
     }
 
-    function disable_del_btn() {
-        $('.del_query_data').addClass('layui-btn-disabled').attr('disabled',true);
+    function disable_toggle_btn() {
+        $('.toggle-enable').addClass('layui-btn-disabled').attr('disabled',true);
     }
 
+    // 获取搜索字段, type1 用于$.post提交 , 2 用于搜索
+    function getSearchFormData(type=1){
+        var form_s = $('#article_search_form');
+        var form_data = form_s.serializeArray();
+        if(type === 1){ return form_data;  }
+
+        var data = [];
+        for(var key in form_data){
+            var ele = form_data[key];
+            data[ele['name']] = ele['value']
+        }
+        return data;
+    }
+
+    // 获取选中数据, type1 用于post直接提交，
+    function getSelectData(type){
+        if(type === undefined) type = 1;
+        var table = layui.table;
+        var checkStatus = table.checkStatus('articletable');
+        var data = checkStatus.data;
+
+        if(type!==1) return data;
+
+        var form_data = [];
+        for(var key_i in data){
+            var ele = data[key_i];
+            form_data.push({name: "art_id["+key_i+']', value: ele['art_id']});
+        }
+        if(form_data.length === 0){
+            layer.msg('请选择数据',{offset:'auto'})
+            return undefined;
+        }
+        return form_data;
+    }
+
+    // 执行状态更新
+    function _exe_update_status(requset_url, form_data, tip=true, type='search'){
+        if(tip){
+            var row_len = SEARCH_RESULT_ROWS;
+            if(type === 'selected' ){
+                var count = 0
+                for(var dd in form_data){
+                    if(form_data[dd].name.indexOf('art_id')!==-1) count += 1;
+                }
+                row_len = count;
+            }else if(type === 'this_row'){
+                row_len = 1;
+            }
+            // 获取设置状态
+
+            var setstatus = '1';
+            for(var dd in form_data){
+                if(form_data[dd].name === 'setstatus'){
+                    setstatus = form_data[dd].value;
+                    break;
+                }
+            }
+            // 提示语
+            var c_flag = true;
+            var tip_str = '本次操作会将'+row_len+'条结果放入待初审列表，是否继续？';
+            if(setstatus === '-2'){
+                tip_str = '本次操作会将'+row_len+'条结果拉入黑名单，是否继续？';
+            }else if(setstatus === '-1'){
+                tip_str = '本次操作会将'+row_len+'条结果放入回收站，是否继续？';
+            }else if(setstatus === '1'){
+                tip_str = '本次操作会将'+row_len+'条结果放入初审列表，是否继续？';
+            }else if(setstatus === '2'){
+                tip_str = '本次操作会将'+row_len+'条结果放入标注列表，是否继续？';
+            }else if(setstatus === '3'){
+                tip_str = '本次操作会将'+row_len+'条结果放入终审列表，是否继续？';
+            }else if(setstatus === '4'){
+                tip_str = '本次操作会将'+row_len+'条结果放入文献输出列表，是否继续？';
+            }else{
+                tip_str = '未知的操作，请联系管理员';
+                c_flag = false;
+            }
+
+            //询问框
+            layer.confirm(tip_str, {
+                btn: ['确认','取消'] //按钮
+                , offset:'auto'
+            }, function(){
+                if(c_flag){
+                    _exe_update_status(requset_url, form_data, false,type)
+                }else{
+                    layui.layer.closeAll();
+                }
+            });
+        }else{
+            layui.use(['jquery', 'table'],function () {
+                var table = layui.table, $ = layui.jquery;
+                $.post(requset_url,form_data,function (rsp) {
+                    if(rsp['code'] === 0){
+                        table.reload('articletable',{page: {curr: 1} });
+                        $('#search_reset_btn').trigger('click')
+                        $('#search_submit_btn').trigger('click')
+                        disable_toggle_btn()
+                        layer.closeAll()
+                    }else{
+                        layer.msg(rsp['message'],{offset: 'auto'});
+                    }
+                });
+            });
+        }
+    }
+
+    //执行删除
+    function _exe_del(article_api_url, form_data, tip=true, type='search'){
+        if(typeof(DELETE_T) === 'undefined' ){
+            DELETE_T = -1 //如果没有定义就定义为软删除
+        }
+
+        if(tip){
+            var row_len = SEARCH_RESULT_ROWS;
+
+            if(type === 'selected' ){
+                var count = 0
+                for(var dd in form_data){
+                    if(form_data[dd].name.indexOf('art_id')!==-1) count += 1;
+                }
+                row_len = count;
+            }else if(type === 'this_row'){
+                row_len = 1;
+            }
+
+            // 提示语
+            var tip_str = '本次操作会将'+row_len+'条结果放入回收站，是否继续？';
+
+            if(DELETE_T === -2){
+                tip_str = '本次操作会将'+row_len+'条结果拉入黑名单，是否继续？';
+            }else if(DELETE_T === -3){
+                tip_str = '本次操作会将'+row_len+'条结果彻底删除，是否继续？';
+            }
+            //询问框
+            layer.confirm(tip_str, {
+                btn: ['确认','取消'] //按钮
+                , offset:'auto'
+            }, function(){
+                _exe_del(article_api_url, form_data, false, type)
+            });
+        }else{
+            // 检查是否有 DELETE_T 标志
+            var DELETE_T_Flag = false;
+            for(var d in form_data){
+                if(form_data[d]['name'] === 'delete_t'){
+                    DELETE_T_Flag= true;
+                    break;
+                }
+            }
+            if(!DELETE_T_Flag){ form_data.push({name:'delete_t',value:DELETE_T});  }
+            $.post(article_api_url,form_data,function (rsp) {
+                if(rsp['code'] === 0){
+                    $('.search_reset_btn').trigger('click')
+                    $('.search_submit_btn').trigger('click')
+                    disable_toggle_btn()
+                    layer.closeAll()
+                }else{
+                    layer.msg(rsp['message'],{offset: 'auto'});
+                }
+            });
+        }
+    }
 
     // 文章列表统一渲染方法
-    function render_article_table(url,except_field=[], width=80,title='') {
+    function render_article_table(url,config) {
         layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
+
             var tablePlug = layui.tablePlug;
             var table = layui.table;
             var layer = layui.layer;
-            var form = layui.form
+            var form = layui.form;
             var $ = layui.jquery;
+            var de_config = {except_field:[], width:90, title:'',except_btns:[]};
+
+            $.extend(de_config, config)
             tablePlug.smartReload.enable(true);
+
+            // 过滤不需要显示的按钮
+            for(var kk in de_config.except_btns){
+                var btn_lay_event = de_config.except_btns[kk];
+                $('#general_toolbar  > div').children('button[lay-event*="'+btn_lay_event+'"]').remove();
+                $('#general_rowtools').children('a[lay-event*="'+btn_lay_event+'"]').remove();
+                $('button[class*="'+btn_lay_event+'"]').remove();
+            }
 
             // 获取工具栏
             $('#all_toolbar').append($('#general_toolbar  > div').html()).append($('#toolbar > div').html());
@@ -113,7 +285,7 @@
                 , smartReloadModel:true
                 , reloaddingShow:true
                 // ,size: 'sm' //小尺寸的表格
-                , cols: getField(except_field,width)
+                , cols: getField(de_config.except_field, de_config.width)
                 , limit:15
                 , limits:[10,15,20,30,40,50,60,70,80,90]
                 , page: true
@@ -121,7 +293,7 @@
                 , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     tableContent = res;
                     SEARCH_RESULT_ROWS = res.data.total;
-                    if(res.code != 0){
+                    if(res.code !== 0){
                         layer.alert(res.message,{
                             offset:'auto'
                         })
@@ -135,23 +307,11 @@
                 }
             });
 
-            // 获取搜索字段
-            function getSearchFormData(){
-                var form_s = $('#article_search_form');
-                var form_data = form_s.serializeArray();
-                var data = [];
-                for(var key in form_data){
-                    var ele = form_data[key];
-                    data[ele['name']] = ele['value']
-                }
-                return data;
-            }
-
             //排序
             table.on('sort(articletable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 //尽管我们的 table 自带排序功能，但并没有请求服务端。
                 //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，如：
-                var data = getSearchFormData();
+                var data = getSearchFormData(2);
                 data['orderby'] = obj.field;
                 data['ordertype'] = obj.type;
                 table.reload('articletable', {
@@ -162,94 +322,72 @@
 
             // 重置按钮
             $('.search_reset_btn').click(function (e) {
-                disable_del_btn();
+                disable_toggle_btn();
             });
 
             // 搜索按钮
             $('.search_submit_btn').click(function (e) {
-                var data = getSearchFormData();
+                var data = getSearchFormData(2);
                 table.reload('articletable',{
                     page: {curr: 1},
                     where: data
                 });
-                enable_del_btn();
+                enable_toggle_btn();
                 if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
             });
-
-            function _exe_del(article_api_url,form_data){
-                $.post(article_api_url,form_data,function (rsp) {
-                    if(rsp['code'] === 0){
-                        table.reload('articletable',{page: {curr: 1} });
-                        $('.search_reset_btn').trigger('click')
-                        $('.search_submit_btn').trigger('click')
-                        disable_del_btn()
-                        $('.search_reset_btn').trigger('click')
-                        layer.closeAll()
-                    }else{
-                        layer.msg(rsp['message'],{offset: 'auto'});
-                    }
-                });
-            }
 
             var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status)}";
+            var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
+
             // ----------- 搜索删除按钮 -----------
             $('.del_query_data').click(function (e) {
-                var data = getSearchFormData();
-                //询问框
-                layer.confirm('本次操作将删除'+SEARCH_RESULT_ROWS+'条结果，是否继续？', {
-                    btn: ['确认','取消'] //按钮
-                    , offset:'auto'
-                }, function(){
-                    _exe_del(article_api_url_del,form_data)
-                });
-
+                var form_data = getSearchFormData(1);
+                _exe_del(article_api_url_del, form_data)
                 if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
             });
-
 
             table.on('toolbar(articletable)',function (obj) {
                 var check_all = true;
-                switch(obj.event){
-                    case 'select_all_row':
-                        $(".layui-table input[type='checkbox']").prop("checked",true);
-                        var aa = $(".layui-table input[type='checkbox']").serializeArray();
-                        form.render('checkbox');
-                        break;
-                    case 'de_select':
-                        $(".layui-table input[type='checkbox']").each(function(){
-                            if($(this).attr('lay-filter') === 'layTableAllChoose'){
-                                return;
-                            }
-                            if($(this).prop("checked")){
-                                check_all = false;
-                                console.log('dddd')
-                                $(this).prop("checked",false);
-                            }else{
-                                $(this).prop("checked",true);
-                            }
-                        });
-                        if(check_all){
-                            $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked",true)
-                        } else {
-                            $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked", false);
+                var layEvent = obj.event;
+                if(layEvent === 'black_selected' || layEvent === 'black_query'){
+
+                    if(layEvent === 'black_query'){
+                        form_data = getSearchFormData(1);
+                        type = 'search';
+                    }else if(layEvent === 'black_selected'){
+                        var form_data = getSelectData(1);
+                        var type = 'selected';
+                    }
+                    if(!form_data) return;
+                    form_data.push({name:'setstatus',value: '-2'});
+                    _exe_update_status(article_api_url_setstauts, form_data, true, type);
+
+                }else if(layEvent === 'select_all_row'){
+                    $(".layui-table input[type='checkbox']").prop("checked",true);
+                    form.render('checkbox');
+                }else if(layEvent === 'de_select'){
+                    $(".layui-table input[type='checkbox']").each(function(){
+                        if($(this).attr('lay-filter') === 'layTableAllChoose'){
+                            return;
                         }
-                        form.render('checkbox');
-                        break;
-                    case 'del_selected':
-                        var checkStatus = table.checkStatus(obj.config.id)
-                            ,data = checkStatus.data;
-                        var form_data = [];
-                        for(var key_i in data){
-                            var ele = data[key_i];
-                            form_data.push({name: "art_id["+key_i+']', value: ele['art_id']});
+                        if($(this).prop("checked")){
+                            check_all = false;
+                            $(this).prop("checked",false);
+                        }else{
+                            $(this).prop("checked",true);
                         }
-                        if(form_data.length === 0){
-                            layer.msg('请选择数据',{offset:'auto'})
-                        }else {
-                            form_data.push({name: "status", value: "{$art_status}"});
-                            _exe_del(article_api_url_del,form_data);
-                        }
-                        break;
+                    });
+                    if(check_all){
+                        $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked",true)
+                    } else {
+                        $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked", false);
+                    }
+                    form.render('checkbox');
+                }else if(layEvent === 'del_selected'){
+                    var form_data = getSelectData(1);
+                    if(!form_data) return;
+                    form_data.push({name: "status", value: "{$art_status}"});
+                    _exe_del(article_api_url_del,form_data, DELETE_T === -3,'selected');
                 }
             });
 
@@ -259,7 +397,7 @@
                     var form_data = [];
                     form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                     form_data.push({name: "status", value: "{$art_status}"});
-                    _exe_del(article_api_url_del,form_data);
+                    _exe_del(article_api_url_del,form_data, DELETE_T === -3,'this_row');
                 }else if(layEvent === 'source'){ // 查看来源
                     console.log(data['project']);
                     var type_ = data['project'];
@@ -286,17 +424,14 @@
                         ,content: content
                     });
                 }else if(layEvent === 'edit'){
-                    var article_api_url_view = "{:url($article_api_url.'/view')}"+'?art_id='+data.art_id;
-                    console.log(article_api_url_view);
-                    //article_api_url_view = article_api_url_view+data.art_id;
-                    console.log(article_api_url_view);
+                    var article_api_url_edit = "{:url($article_api_url.'/edit')}"+'?art_id='+data.art_id;
                     layer.open({
                         type: 2,
                         title: '编辑页面',
                         shadeClose: true,
                         shade: 0.8,
                         area: ['80%', '100%'],
-                        content: article_api_url_view //iframe的url
+                        content: article_api_url_edit //iframe的url
                     });
                 }
             });

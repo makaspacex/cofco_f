@@ -256,7 +256,6 @@ class Article extends AdminBase
     public function view($art_id = 0)
     {
 
-
     }
 
 
@@ -287,16 +286,23 @@ class Article extends AdminBase
     /*
      * 文章删除 一个或多个，或条件删除
      */
-    public function del()
+    public function del($delete_t='-1')
     {
         try {
             $where_map = Article::getSearchMap();
-            PendingModel::where($where_map)->delete();
+            if($delete_t === '-1'){ // 软删除, 设置状态为-1
+                PendingModel::where($where_map)->update(['status'=>-1]);
+            }else if($delete_t === '-2'){ // 黑名单, 设置状态为-2
+                PendingModel::where($where_map)->update(['status'=>-2]);
+            }else if($delete_t === '-3'){ // 硬删除，这次是真的删除了，库中没有了
+                PendingModel::where($where_map)->delete();
+            }else{
+                throw new \Exception('未知的删除类型');
+            }
             return json(['code' => 0, 'message' => '操作完成']);
         } catch (\Exception $e) {
             return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
         }
-
     }
 
     /**文章添加
@@ -304,30 +310,33 @@ class Article extends AdminBase
      */
     public function add()
     {
-        if ($this->request->isPost()) {
+        try {
+            if ($this->request->isPost()) {
 
-            $data = $this->request->post();
+                $data = $this->request->post();
+                $data['issue'] = strtotime($data['issue']);
+                $data['issue'] = date("Y-m", $data['issue']);
+                $data['creater'] = getCurUser()['uid'];
+                $data['project'] = 'MAN';
+                $art_id = $data['art_id'];
+                if ($data['status'] == 1) {
+                    $res = PendingModel::where('art_id', $art_id)->find();
+                    if ($res) {
+                        return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！', 'data' => $res]);
+                    }
 
-            $data['issue'] = strtotime($data['issue']);
-            $data['issue'] = date("Y-m", $data['issue']);
-            $data['creater'] = getCurUser()['uid'];
-            $data['project'] = 'MAN';
-            $art_id = $data['art_id'];
-            if ($data['status'] == 1) {
-                $res = PendingModel::where('art_id', $art_id)->find();
-                if ($res) {
-                    return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！', 'data' => $res]);
+                    $res = PendingModel::create($data);
+                    if (!$res) {
+                        return json(['code' => 25, 'message' => '操作失败']);
+                    }
+                    // 插入日志 1代表人工输入
+                    Article::insertLog(1, $art_id);
+
+                    return json(['code' => 0, 'message' => '操作成功']);
                 }
-
-                $res = PendingModel::create($data);
-                if (!$res) {
-                    return json(['code' => 25, 'message' => '操作失败']);
-                }
-                // 插入日志 1代表人工输入
-                Article::insertLog(1, $art_id);
-
-                return json(['code' => 0, 'message' => '操作成功']);
             }
+        } catch (\Exception $e) {
+            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
         }
 
     }

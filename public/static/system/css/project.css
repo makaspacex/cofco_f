@@ -161,3 +161,8 @@ body{
 .tool-btns{
     top: 6px;
 }
+
+
+.cofco-blacklist{
+    background-color: #000;
+}
