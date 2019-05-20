@@ -1,5 +1,12 @@
 {include file="cofco@block/edit_form"/}
 <script>
+    var status = parseInt({:artFiledValue($art_arr, 'status')});
+    for (var i = 1; i < 5; i++) {
+        if (i < parseInt(status) - 1 || i > parseInt(status) + 1) {
+            input = $('.field-status[value="' + i + '"]');
+            input.prop('disabled', true);
+        }
+    }
 
     $(function () {
         disableField(['special_version']);
@@ -10,12 +17,14 @@
         var form_data = form_s.serializeArray();
         form_data.push({
             name: "pre_status",
-            value: pre_status
+            value: status
         });
-        // console.log(form_data);
-        var article_api_url_edit = "{$article_api_url}/edit";
+        console.log(form_data);
+        var article_api_url_edit = "{:url($article_api_url.'/edit')}";
         $.post(article_api_url_edit, form_data, function (res) {
+            console.log(res);
             if (res.code === 0) {
+                console.log(res.message);
                 layer.msg(
                     res.message
                     , {time: 1000}

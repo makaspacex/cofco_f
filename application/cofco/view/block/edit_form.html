@@ -57,7 +57,7 @@
                 <label class="layui-form-label">发表时间</label>
                 <div class="layui-input-block">
                     <input type="text" class="layui-input field-issue" name="issue" id="issue" lay-verify=""
-                           autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'doi')}">
+                           autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'issue')}">
                 </div>
             </div>
 
@@ -143,17 +143,18 @@
                 <div class="layui-form-title margin-t-20 margin-b-10">标注及说明</div>
             </div>
 
-            <!--            <div class="layui-col-md11">-->
-            <!--                <label class="layui-form-label">标签标注</label>-->
-            <!--                <div class="layui-input-block" >-->
-            <!--                    <input type="label" class="layui-input field-value" disabled="true"-->
-            <!--                           name="value" lay-verify="" autocomplete="off" placeholder="未标记">-->
-            <!--                    <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"-->
-            <!--                            class="layui-btn layui-btn-sm layui-btn-primary j-iframe-pop fl margin-0 abs-right" style="margin-left:0px;">选择标签</button>-->
-            <!--                    <input type="hidden"  class="layui-input field-tag_id" name="tag_id"-->
-            <!--                           lay-verify="" autocomplete="off" placeholder="标签选择">-->
-            <!--                </div>-->
-            <!--            </div>-->
+            <div class="layui-col-md11">
+                <label class="layui-form-label">标签标注</label>
+                <div class="layui-input-block">
+                    <input type="label" class="layui-input field-value" disabled="true"
+                           name="value" lay-verify="" autocomplete="off" placeholder="未标记">
+                    <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"
+                            class="layui-btn layui-btn-sm layui-btn-primary abs-right"
+                            style="margin-left:0px;" id="tag_select">选择标签
+                    </button>
+
+                </div>
+            </div>
             <div class="layui-col-md6">
                 <label class="layui-form-label">特别说明</label>
                 <div class="layui-input-block ">
@@ -202,6 +203,11 @@
                            artFiledValue($art_arr, 'status') == '4'}checked{/if}>
                 </div>
             </div>
+            <div class="layui-row">
+                <div class="layui-col-md10">
+                    <button type="submit" class="layui-btn layui-btn-sm" lay-submit=""  style="width: 200px;" id="formSubmit">提交</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -228,6 +234,26 @@
             form.render();
         });
     }
+
+
+    $('#tag_select').click(function (e) {
+        e.preventDefault();
+        var levelpop_url = "{:url('/cofco/labeldata/levelpop')}";
+        layui.use(['layer'], function () {
+            layer.open({
+                type: 2,
+                title: '标签标注',
+                shadeClose: true,
+                shade: 0.8,
+                offset: '10%0',
+                area: ['80%', '70%'],
+                content: levelpop_url //iframe的url
+            });
+
+        });
+
+
+    });
 
 </script>
 
