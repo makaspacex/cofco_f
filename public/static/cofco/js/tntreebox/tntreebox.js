@@ -79,13 +79,14 @@ _tnTreebox.prototype = {
 				html_list+="<li"+_class+" v="+item.id+"><em>"+box+"</em><label>"+item.value+"</label><span></span></li>";
 			}
 			var _class = 'box';
-			if(cid==='0'){
+			if(cid==='1'){
 				_class += " root";
 			}else{
 				_class += " hide";
 			}
 			if(_class){
 				_class = " class='"+_class+"'";
+
 			}
 			html_list = "<div cid="+cid+_class+"><ul>"+html_list+"</ul></div>";
 			html+=html_list;
