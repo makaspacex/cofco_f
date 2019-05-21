@@ -232,6 +232,18 @@ return [
                 'nav' => 0,
                 'sort' => 0,
               ],
+              [
+                'title' => '文章标签（根据文章ID查询标签）',
+                'icon' => '',
+                'module' => 'cofco',
+                'url' => 'cofco/Articlelabel/getLabelByArtID',
+                'param' => '',
+                'target' => '_self',
+                'debug' => 0,
+                'system' => 0,
+                'nav' => 0,
+                'sort' => 0,
+              ],
             ],
           ],
           [

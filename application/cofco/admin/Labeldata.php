@@ -105,7 +105,7 @@ class Labeldata extends AdminBase
 //            echo '<br><br>callback为必传参数！';
 //            exit;
 //        }
-        $menu_list = LevellabelModel::select();
+        $menu_list = LevellabelModel::where('status','1')->select();
 //        $this->assign('callback', $callback);
 //        return json_encode($menu_list);
         $this->view->engine->layout(false);

@@ -150,8 +150,9 @@ _tnTreebox.prototype = {
 		var html = '';
 		$("#"+this.dom_id+" input:checked").not('.hide2 input:checked').each(function(i,e){
 			var text = $(this).parent().next('label').html();
-			var id = $(this).val();
-			html += "<div>"+text+"<span v="+id+">x</span></div>";
+			var id = $(this).parent().parent().attr('v');
+			//var id = $(this).val();
+			html += "<div class='tag' value="+id+">"+text+"<span v="+id+">x</span></div>";
 		});
 		if(html){
 			html+=" <a>清空</a>";

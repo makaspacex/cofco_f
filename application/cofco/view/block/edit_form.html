@@ -8,6 +8,37 @@
     .layui-textarea {
         min-height: 420px;
     }
+
+    .header {
+        clear: both;
+        position: relative;
+        min-height: 60px;
+        max-height: 120px;
+        overflow-x: hide;
+        overflow-y: auto;
+    }
+
+    .header div, .tntreebox .header a {
+        display: block;
+        float: left;
+        padding: 3px 10px;
+        margin: 5px;
+    }
+
+    .header div span, .tntreebox .header a {
+        cursor: pointer;
+    }
+
+    .header div {
+        background-color: #ccc;
+        border-radius: 5px;
+    }
+
+    .header div span {
+        padding: 5px 0 5px 5px;
+        margin: 0 0 0 10px;
+        font-size: 20px;
+    }
 </style>
 {php} if(!isset($art_arr)){ $art_arr = ''; } {/php}
 
@@ -145,16 +176,20 @@
 
             <div class="layui-col-md11">
                 <label class="layui-form-label">标签标注</label>
-                <div class="layui-input-block">
-                    <input type="label" class="layui-input field-value" disabled="true"
-                           name="value" lay-verify="" autocomplete="off" placeholder="未标记">
-                    <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"
-                            class="layui-btn layui-btn-sm layui-btn-primary abs-right"
-                            style="margin-left:0px;" id="tag_select">选择标签
-                    </button>
+                <div class="layui-input-block" id="header">
+                    <!--                    <input type="label" class="layui-input field-value" disabled="true" id="tag"-->
+                    <!--                           name="value" lay-verify="" autocomplete="off" placeholder="未标记" value="12321">-->
+
+                    <div id="tag_div"/>
 
                 </div>
+
+                <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"
+                        class="layui-btn layui-btn-sm layui-btn-primary abs-right"
+                        style="margin-left:0px;" id="tag_select">选择标签
+                </button>
             </div>
+
             <div class="layui-col-md6">
                 <label class="layui-form-label">特别说明</label>
                 <div class="layui-input-block ">
@@ -205,7 +240,9 @@
             </div>
             <div class="layui-row">
                 <div class="layui-col-md10">
-                    <button type="submit" class="layui-btn layui-btn-sm" lay-submit=""  style="width: 200px;" id="formSubmit">提交</button>
+                    <button type="submit" class="layui-btn layui-btn-sm" lay-submit="" style="width: 200px;"
+                            id="formSubmit">提交
+                    </button>
                 </div>
             </div>
         </div>
@@ -222,7 +259,7 @@
     });
 
     //禁用一些选项的编辑功能
-    function disableField(field=[]) {
+    function disableField(field = []) {
         for (var key in field) {
             var field_name = field[key]
             $('input[name="' + field_name + '"]').attr('disabled', true).addClass('disabled');
@@ -236,24 +273,7 @@
     }
 
 
-    $('#tag_select').click(function (e) {
-        e.preventDefault();
-        var levelpop_url = "{:url('/cofco/labeldata/levelpop')}";
-        layui.use(['layer'], function () {
-            layer.open({
-                type: 2,
-                title: '标签标注',
-                shadeClose: true,
-                shade: 0.8,
-                offset: '10%0',
-                area: ['80%', '70%'],
-                content: levelpop_url //iframe的url
-            });
 
-        });
-
-
-    });
 
 </script>
 

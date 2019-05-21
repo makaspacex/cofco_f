@@ -9,8 +9,8 @@ use think\db\Where;
 use think\Exception;
 use \think\Request;
 use \think\Db;
-
 use app\cofco\model\AdminPending as PendingModel;
+use app\cofco\model\AdminArticleLabel as ArticleLabelModel;
 
 class Article extends AdminBase
 {
@@ -327,7 +327,11 @@ class Article extends AdminBase
                 $data['creater'] = getCurUser()['uid'];
                 $data['project'] = 'MAN';
                 $art_id = $data['art_id'];
+                $label_ids = $data['label_ids'];
+                $label_ids =  explode(',',$label_ids);
                 if ($data['status'] == 1) {
+                    ArticleLabelModel::addLabel($art_id,$label_ids);
+                    unset($data['label_ids']);
                     $res = PendingModel::where('art_id', $art_id)->find();
                     if ($res) {
                         return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！']);

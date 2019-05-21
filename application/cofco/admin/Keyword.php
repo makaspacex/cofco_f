@@ -69,7 +69,7 @@ class Keyword extends AdminBase
             $data = $this->request->post();
             unset($data['name']);
             $map = [];
-            $map['name'] = input('param.name/s');;
+            $map['name'] = input('param.name/s');
             $map['type'] = 1;  // 0代表pubmed关键词
             $map['value'] = json_encode($data);
             $map['uid'] = getCurUser()['uid'];
