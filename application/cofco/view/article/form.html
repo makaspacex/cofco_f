@@ -21,12 +21,11 @@
         });
         console.log(form_data);
         var article_api_url_edit = "{:url($article_api_url.'/edit')}";
+        console.log(article_api_url_edit);
         $.post(article_api_url_edit, form_data, function (res) {
-            insertTag();
+            console.log(res);
             if (res.code === 0) {
                 console.log(res.message);
-
-
                 layer.msg(
                     res.message
                     , {time: 1000}
@@ -47,39 +46,5 @@
         }
     });
 
-    $('#tag_select').click(function (e) {
-        e.preventDefault();
-        var levelpop_url = "{:url('/cofco/labeldata/levelpop')}";
-        layui.use(['layer'], function () {
-            var index_tag = layer.open({
-                type: 2,
-                title: '标签标注',
-                shadeClose: true,
-                shade: 0.8,
-                offset: '10%',
-                area: ['90%', '70%'],
-                content: levelpop_url, //iframe的url
-                btn: ['确定'],
-                yes: function (index, layero) {
-                    layer.close(index_tag)
-                    var body = layer.getChildFrame('body', index);
-                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                    //console.log(body.html()) //得到iframe页的body内容
-                    var lable = body.find('div.header');
-                    parent.$("#tag_div").html(lable);
 
-                    var iframe1 = $("#layui-layer-iframe1", parent.document);
-                    console.log(iframe1.contentWindow);
-                    // $(".header div.tag").each(function() {
-                    //     // let this = $(this);
-                    //     console.log($(this).html());
-                    // });
-
-                    // console.log(parentId.HTML);
-                    //按钮【按钮一】的回调
-
-                }
-            });
-        });
-    });
 </script>

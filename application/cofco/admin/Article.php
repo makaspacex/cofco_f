@@ -250,8 +250,11 @@ class Article extends AdminBase
             $page_size = input('param.limit/s');
             $order_by = input('param.orderby/s', 'ctime');
             $ordertype = input('param.ordertype/s', 'desc');
-            $sql_str = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->buildSql(true);
-            $res = PendingModel::with(['createUser', 'spiderKw'])->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
+            $sql_str = PendingModel::with(['createUser', 'spiderKw'])
+                ->where($where_map)->order($order_by, $ordertype)->buildSql(true);
+            $res = PendingModel::with(['createUser', 'spiderKw'])
+                ->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
+
             return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
 
         } catch (Exception $e) {
@@ -360,13 +363,14 @@ class Article extends AdminBase
     public function edit()
     {
 
+
         try {
             if ($this->request->isPost()) {
+                //return json(['code' => 25, 'message' => '操作失败']);
                 $data = $this->request->post();
                 $status = $data['status'];
                 $pre_status = $data['pre_status'];
                 $art_id = $data['art_id'];
-
 
                 if ((int)$status - 1 == $pre_status) {
                     Article::insertLog($status, $art_id);
@@ -377,7 +381,9 @@ class Article extends AdminBase
                     LogModel::where($map)->delete();
                 }
                 unset($data['pre_status']);
-                $res = PendingModel::update($data);
+
+                $where = array('art_id' => intval($art_id)); //更新条件
+                $res = PendingModel::update($data,$where);
                 if (!$res) {
                     return json(['code' => 25, 'message' => '操作失败']);
                 }
