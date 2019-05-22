@@ -3,6 +3,7 @@
 
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminUserlog as LogModel;
 use think\db\Expression;
 use think\db\Where;
@@ -358,12 +359,15 @@ class Article extends AdminBase
      */
     public function edit()
     {
+
         try {
             if ($this->request->isPost()) {
                 $data = $this->request->post();
                 $status = $data['status'];
                 $pre_status = $data['pre_status'];
                 $art_id = $data['art_id'];
+
+
                 if ((int)$status - 1 == $pre_status) {
                     Article::insertLog($status, $art_id);
                 } else if ((int)$status == $pre_status - 1) {
@@ -382,6 +386,8 @@ class Article extends AdminBase
             $art_id = input('param.art_id/s');
             $art_arr = PendingModel::where('art_id', $art_id)->find()->toArray();
             $this->assign('art_arr', $art_arr);
+            $menu_list = LevellabelModel::where('status','1')->select();
+            $this->assign('menu_list', $menu_list);
             $this->view->engine->layout(false);
             return $this->fetch('form');
         } catch (\Exception $e) {

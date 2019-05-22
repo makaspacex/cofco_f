@@ -2,6 +2,7 @@
 
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminUserlog as LogModel;
 use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminPending as PendingModel;
@@ -64,6 +65,8 @@ class upload extends AdminBase
      */
     public function manual()
     {
+        $menu_list = LevellabelModel::where('status','1')->select();
+        $this->assign('menu_list', $menu_list);
         return $this->fetch('manual');
     }
 

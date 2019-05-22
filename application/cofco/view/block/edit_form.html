@@ -9,41 +9,11 @@
         min-height: 420px;
     }
 
-    .header {
-        clear: both;
-        position: relative;
-        min-height: 60px;
-        max-height: 120px;
-        overflow-x: hide;
-        overflow-y: auto;
-    }
-
-    .header div, .tntreebox .header a {
-        display: block;
-        float: left;
-        padding: 3px 10px;
-        margin: 5px;
-    }
-
-    .header div span, .tntreebox .header a {
-        cursor: pointer;
-    }
-
-    .header div {
-        background-color: #ccc;
-        border-radius: 5px;
-    }
-
-    .header div span {
-        padding: 5px 0 5px 5px;
-        margin: 0 0 0 10px;
-        font-size: 20px;
-    }
 </style>
 {php} if(!isset($art_arr)){ $art_arr = ''; } {/php}
 
 <div class="layui-container" style="max-width: 1400px;margin-bottom: 50px;">
-    <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    <form class=" layui-form-pane" action="{:url()}" method="post" id="editForm">
         <div class="layui-row">
             <div class="layui-col-md11">
                 <div class="layui-form-title margin-t-20 margin-b-10">文章基本信息</div>
@@ -110,9 +80,9 @@
                            autocomplete="off" placeholder="" value="{:artFiledValue($art_arr,'impact_factor')}">
                 </div>
             </div>
-            <div class="layui-col-md3">
+            <div class="layui-col-md3 layui-form">
                 <label class="layui-form-label">所在分区</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block ">
                     <select name="journal_zone" class="layui-input field-journal_zone" id="journal_zone" lay-verify="">
                         <option value="">请选择</option>
                         <option value="1">1</option>
@@ -137,7 +107,7 @@
             </div>
 
 
-            <div class="layui-col-md3">
+            <div class="layui-col-md3 layui-form">
                 <label class="layui-form-label">文献类型 </label>
                 <div class="layui-input-block">
                     <select name="project" id="project" lay-verify="required" lay-search="" enable-input="true">
@@ -176,19 +146,19 @@
 
             <div class="layui-col-md11">
                 <label class="layui-form-label">标签标注</label>
-                <div class="layui-input-block" id="header">
-                    <!--                    <input type="label" class="layui-input field-value" disabled="true" id="tag"-->
-                    <!--                           name="value" lay-verify="" autocomplete="off" placeholder="未标记" value="12321">-->
+<!--                <div class="layui-form-item" id="tag_div">-->
+<!--                    &lt;!&ndash;                    <input type="label" class="layui-input field-value" disabled="true" id="tag"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                           name="value" lay-verify="" autocomplete="off" placeholder="未标记" value="12321">&ndash;&gt;-->
 
-                    <div id="tag_div"/>
+                <div id='treebox' style="margin: 50px 0px 30px  "></div>
+<!--                </div>-->
 
-                </div>
 
-                <button href="{:url('/cofco/labeldata/levelpop?callback=func')}" title="选择标签"
-                        class="layui-btn layui-btn-sm layui-btn-primary abs-right"
-                        style="margin-left:0px;" id="tag_select">选择标签
-                </button>
+<!--                <button class="layui-btn layui-btn-sm layui-btn-primary abs-right"-->
+<!--                        style="margin-left:0px;" id="tag_select">选择标签-->
+<!--                </button>-->
             </div>
+
 
             <div class="layui-col-md6">
                 <label class="layui-form-label">特别说明</label>
@@ -226,7 +196,7 @@
                               placeholder="摘要翻译">{:artFiledValue($art_arr,'tabstract')}</textarea>
                 </div>
             </div>
-            <div class="layui-col-md12">
+            <div class="layui-col-md12 layui-form">
                 <div class="layui-form-item">
                     <input type="radio" class="field-status" name="status" value="1" title="文献初审" {if
                            artFiledValue($art_arr, 'status') == '1'}checked{/if}>
@@ -271,8 +241,17 @@
             form.render();
         });
     }
+</script>
 
-
+<script src="__ADMIN_MOD_JS__/tntreebox/tntreebox.js?v=35"></script>
+<link rel="stylesheet" type="text/css" href="__ADMIN_MOD_JS__/tntreebox/tntreebox.css?v=27" />
+<script type="text/javascript">
+    $ = layui.jquery;
+    $(function(){
+        var data = {:htmlspecialchars_decode($menu_list)};
+        console.log(data);
+        tnTreeBox('treebox','checkboxname',data,[]);
+    });
 
 
 </script>

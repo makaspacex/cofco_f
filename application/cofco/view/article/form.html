@@ -68,7 +68,8 @@
                     var lable = body.find('div.header');
                     parent.$("#tag_div").html(lable);
 
-                    $("#tag_div", parent.document)
+                    var iframe1 = $("#layui-layer-iframe1", parent.document);
+                    console.log(iframe1.contentWindow);
                     // $(".header div.tag").each(function() {
                     //     // let this = $(this);
                     //     console.log($(this).html());
