@@ -37,4 +37,12 @@ class AdminArticleLabel extends AdminBase
             ->where('a.label_id = b.id and art_id='.$art_id)->select();
        return $res;
     }
+
+    public static function label(){
+        $res = Db::field('a.*,b.value')
+            ->table(['cofco_admin_article_label'=> 'a','cofco_admin_levellabel'=> 'b'])
+            ->where('a.label_id = b.id and art_id=')->select();
+        return $res;
+    }
+
 }

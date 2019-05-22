@@ -127,6 +127,9 @@ class AdminPending extends AdminBase
 
     }
 
+    public function label(){
+        return $this->hasMany('AdminArticleLabel','art_id','art_id');
+    }
 
 
 }

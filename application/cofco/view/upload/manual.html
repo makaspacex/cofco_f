@@ -71,3 +71,10 @@
     console.log("1");
 
 </script>
+<script type="text/javascript">
+    $ = layui.jquery;
+    $(function(){
+        var data = {:htmlspecialchars_decode($menu_list)};
+        tnTreeBox('treebox','checkboxname',data,[]);
+    });
+</script>

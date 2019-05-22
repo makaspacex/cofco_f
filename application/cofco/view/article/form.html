@@ -12,12 +12,36 @@
         disableField(['special_version']);
     });
 
+
+    $ = layui.jquery;
+    var label_arr = new Array();
+    $(function(){
+        var data = {:htmlspecialchars_decode($menu_list)};
+        var label = {:htmlspecialchars_decode(json_encode($label))};
+
+        for(var a in label){
+            label_arr.push(label[a]['label_id']);
+        }
+        tnTreeBox('treebox','checkboxname',data,label_arr);
+    });
+
     $('#formSubmit').click(function (e) {
+        console.log(label_arr);
         var form_s = $('#editForm');
         var form_data = form_s.serializeArray();
         form_data.push({
             name: "pre_status",
             value: status
+        });
+        var label_ids = new Array();  // 标签id
+        $(".header div.tag").each(function() {
+            // let this = $(this);
+            console.log($(this).attr('value'));
+            label_ids.push($(this).attr('value'));
+        });
+        form_data.push({
+            name: "label_ids",
+            value: label_ids
         });
         console.log(form_data);
         var article_api_url_edit = "{:url($article_api_url.'/edit')}";
@@ -45,6 +69,7 @@
             window.event.returnValue == false;
         }
     });
-
+</script>
+<script type="text/javascript">
 
 </script>

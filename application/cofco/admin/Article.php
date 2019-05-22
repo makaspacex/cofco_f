@@ -5,6 +5,7 @@ namespace app\cofco\admin;
 
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminUserlog as LogModel;
+use function PHPSTORM_META\type;
 use think\db\Expression;
 use think\db\Where;
 use think\Exception;
@@ -252,9 +253,8 @@ class Article extends AdminBase
             $ordertype = input('param.ordertype/s', 'desc');
             $sql_str = PendingModel::with(['createUser', 'spiderKw'])
                 ->where($where_map)->order($order_by, $ordertype)->buildSql(true);
-            $res = PendingModel::with(['createUser', 'spiderKw'])
+            $res = PendingModel::with(['createUser', 'spiderKw','label'])
                 ->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
-
             return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
 
         } catch (Exception $e) {
@@ -383,6 +383,13 @@ class Article extends AdminBase
                 unset($data['pre_status']);
 
                 $where = array('art_id' => intval($art_id)); //更新条件
+
+                $label_ids = $data['label_ids'];
+                $label_ids =  explode(',',$label_ids);
+                ArticleLabelModel::addLabel($art_id,$label_ids);
+                unset($data['label_ids']);
+
+
                 $res = PendingModel::update($data,$where);
                 if (!$res) {
                     return json(['code' => 25, 'message' => '操作失败']);
@@ -394,6 +401,9 @@ class Article extends AdminBase
             $this->assign('art_arr', $art_arr);
             $menu_list = LevellabelModel::where('status','1')->select();
             $this->assign('menu_list', $menu_list);
+
+            $label = ArticleLabelModel::getLabelByArtID($art_id);
+            $this->assign('label',$label);
             $this->view->engine->layout(false);
             return $this->fetch('form');
         } catch (\Exception $e) {

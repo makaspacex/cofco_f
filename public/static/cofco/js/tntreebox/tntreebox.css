@@ -1,24 +1,24 @@
 
 
 /***************[tree box]******************/
-.tntreebox{font-size: 15px;clear: both;background-color: #ffffff;border: 1px solid #EDEDDE;text-align: left;}
+.tntreebox{font-size: 14px;clear: both;background-color: #ffffff;border: 1px solid #EDEDDE;text-align: left;}
 .tntreebox .list{height: 300px;border: 1px solid #EDEDDE;clear: both;}
 .tntreebox input[type=checkbox],.tntreebox em{
-    width: 25px;height: 25px;vertical-align: middle;margin: 0 !important;display: inline-block;
+    width: 40px;height: 20px;vertical-align: middle;margin: 0 !important;
 }
 .tntreebox .box{width: 200px;height: 100%;overflow: auto;float: left;}
-.tntreebox ul{margin: 0;padding: 0;}
+.tntreebox ul{margin: 5px;padding: 0px;}
 .tntreebox li{list-style-type:none;height: 35px;padding: 0 0 0 10px;cursor: pointer;overflow: none;}
 .tntreebox li:hover,.tntreebox .cur{background-color: #d0dae4;}
-.tntreebox .selected{background-color: #2f9587;}
+.tntreebox .selected{background-color: #2f9587;color: #ffffff}
 .tntreebox .search{width: 100%;height:100%;border: none;}
 
 .tntreebox .hide,.tntreebox .hide2{display: none;}
 .tntreebox label{line-height: 30px;vertical-align: middle;margin:0!important;cursor: pointer;}
-.tntreebox .children span:before{content: ">";display: block;right: 0px;width: 30px;height: 30px;float: right;}
+.tntreebox .children span:before{content: ">";right: 0px;width: 30px;height: 30px;float: right;text-align:center}
 
 .tntreebox .header{clear: both;position: relative;min-height: 60px;max-height: 120px;overflow-x:hide;overflow-y:auto;}
 .tntreebox .header div,.tntreebox .header  a{display:block;float: left;padding:3px 10px;margin: 5px;}
 .tntreebox .header div span,.tntreebox .header  a{cursor: pointer;}
-.tntreebox .header div{background-color: #ccc;border-radius: 5px;}
+.tntreebox .header div{background-color: #e4e8f1;border-radius: 5px;}
 .tntreebox .header div span{padding: 5px 0 5px 5px;margin: 0 0 0 10px;font-size: 20px;}

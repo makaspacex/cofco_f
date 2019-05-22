@@ -99,15 +99,7 @@ class Labeldata extends AdminBase
     public function levelpop()
     {
 
-//        $callback = input('param.callback/s');
-//
-//        if (!$callback) {
-//            echo '<br><br>callback为必传参数！';
-//            exit;
-//        }
         $menu_list = LevellabelModel::where('status','1')->select();
-//        $this->assign('callback', $callback);
-//        return json_encode($menu_list);
         $this->view->engine->layout(false);
         $this->assign('menu_list', $menu_list);
         return $this->fetch();
