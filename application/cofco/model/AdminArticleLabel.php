@@ -32,7 +32,8 @@ class AdminArticleLabel extends AdminBase
     public static function delLabel($art_id,$label_ids){
         $maps = [];
         $maps['art_id'] = $art_id;
-        $maps['label_id'] = array_unshift($label_ids,'IN');
+        //$maps['label_id'] = array_unshift($label_ids,'IN');
+        $maps['label_id'] = $label_ids;
         return self::where($maps)->delete();
     }
 
