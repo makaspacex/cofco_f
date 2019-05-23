@@ -65,8 +65,8 @@ class upload extends AdminBase
      */
     public function manual()
     {
-        $menu_list = LevellabelModel::where('status','1')->select();
-        $this->assign('menu_list', $menu_list);
+        $label_list = LevellabelModel::where('status','1')->select();
+        $this->assign('label_list', $label_list);
         return $this->fetch('manual');
     }
 

@@ -3,6 +3,9 @@
 
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminArticleLabel;
+
+use app\cofco\model\AdminArticleLabel as ArticleLabelModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminUserlog as LogModel;
 use function PHPSTORM_META\type;
@@ -12,7 +15,7 @@ use think\Exception;
 use \think\Request;
 use \think\Db;
 use app\cofco\model\AdminPending as PendingModel;
-use app\cofco\model\AdminArticleLabel as ArticleLabelModel;
+
 
 class Article extends AdminBase
 {
@@ -384,11 +387,28 @@ class Article extends AdminBase
 
                 $where = array('art_id' => intval($art_id)); //更新条件
 
-                $label_ids = $data['label_ids'];
-                $label_ids =  explode(',',$label_ids);
-                ArticleLabelModel::addLabel($art_id,$label_ids);
-                unset($data['label_ids']);
+                $label_add = $data['label_add'];
+                if(!empty($label_add)){
+                    $label_add =  explode(',',$label_add);
+                    ArticleLabelModel::addLabel($art_id,$label_add);
 
+                    //ArticleLabelModel::delLabel($art_id,$label_ids);
+                }
+                $label_del = $data['label_del'];
+                //$label_del = input('param.label_del/a');
+                if(!empty($label_del)){
+                    $label_del =  explode(',',$label_del);
+//                    $label_arr = [];
+//                    foreach($label_del as $label){
+//                        array_push($label_arr,(int)$label);
+//
+//                    }
+                    ArticleLabelModel::delLabel($art_id,$label_del);
+                }
+
+
+                unset($data['label_add']);
+                unset($data['label_del']);
 
                 $res = PendingModel::update($data,$where);
                 if (!$res) {
@@ -399,8 +419,11 @@ class Article extends AdminBase
             $art_id = input('param.art_id/s');
             $art_arr = PendingModel::where('art_id', $art_id)->find()->toArray();
             $this->assign('art_arr', $art_arr);
-            $menu_list = LevellabelModel::where('status','1')->select();
-            $this->assign('menu_list', $menu_list);
+
+            // 标签列表
+            $label_list = LevellabelModel::where('status','1')->select();
+            $this->assign('label_list', $label_list);
+
 
             $label = ArticleLabelModel::getLabelByArtID($art_id);
             $this->assign('label',$label);

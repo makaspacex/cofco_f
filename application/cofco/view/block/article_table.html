@@ -26,7 +26,13 @@
     // 全局共享数据
     SEARCH_RESULT_ROWS = -1
 
+    function labelFilter(label_list,id) {
+        return label_list.filter(function(p){
+            return p.id === id;
+        })[0].value;
+    }
     function getField(except_field, width){
+        var label_list = {:htmlspecialchars_decode($label_list)};
         var all_filed = [
             {type: 'checkbox', fixed: 'left'}
             // , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
@@ -36,10 +42,11 @@
             , {field: 'kw_id', title: '爬虫关键词', width: 100, templet: function(d){return d.kw_id>0? "<a href='#'>"+d['spider_kw']['name']+"</a>":"<a></a>"}}
             , {field: 'label', title: '标签', width: 200,
                 templet: function(d){
-                var result =""
-                if(d['label'].length!==0) {
-                    for(var i in d['label']) {
-                        result+="<a class='layui-btn layui-btn-primary layui-btn-xs'>"+d['label'][i]['label_id']+"</a>"
+                    var result =""
+                    if(d['label'].length!==0) {
+                        for(var i in d['label']) {
+                            var label = labelFilter(label_list,d['label'][i]['label_id']);
+                            result+="<a class='layui-btn layui-btn-primary layui-btn-xs'>"+label+"</a>"
                     }
                 }
                 return result;

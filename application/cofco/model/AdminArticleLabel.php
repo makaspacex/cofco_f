@@ -19,7 +19,6 @@ class AdminArticleLabel extends AdminBase
     public static function addLabel($art_id,$label_ids){
         $datalist = Array();
         $data = Array();
-        $map['art_id'] = $art_id;
         $data['art_id'] = $art_id;
         if(is_array($label_ids)){
             foreach ($label_ids as $label_id){
@@ -27,9 +26,17 @@ class AdminArticleLabel extends AdminBase
                 array_push($datalist,$data);
             }
         }
-
         return self::insertAll($datalist);
     }
+
+    public static function delLabel($art_id,$label_ids){
+        $maps = [];
+        $maps['art_id'] = $art_id;
+        $maps['label_id'] = array_unshift($label_ids,'IN');
+        return self::where($maps)->delete();
+    }
+
+
 
     public static function getLabelByArtID($art_id){
         $res = Db::field('a.*,b.value')

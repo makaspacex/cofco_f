@@ -36,7 +36,6 @@ _tnTreebox.prototype = {
 			var html_list = "<li><input type='text' class='search' placeholder='输入文字搜索' /></li>";
 			for(var j in list){
 				var item = list[j];
-				console.log($.inArray(item.id,this.old_selected));
 				if(this.old_selected&&$.inArray(item.id,this.old_selected)!=-1){
 					var checked = " checked='checked'";
 				}else{

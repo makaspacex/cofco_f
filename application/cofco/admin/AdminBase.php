@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\system\admin\Admin;
 use app\system\model\SystemUser;
 use app\cofco\model\AdminKw as KwModel;
@@ -28,18 +29,21 @@ class AdminBase extends Admin
         parent::initialize();
         define('MODULENAME', 'COFCO');
         define('NULL_STR', 'NULLSTRING!@#!');
-        $this->assign('article_api_url','/cofco/article');
+        $this->assign('article_api_url', '/cofco/article');
     }
 
     /**
      *
      * 获取搜索栏所有的应该获取的信息，包括分类
      */
-    public function init_searchForm(){
+    public function init_searchForm()
+    {
         $all_users = SystemUser::all();
-        $this->assign('all_users',$all_users);
+        $this->assign('all_users', $all_users);
 
         $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
+        $label_list = LevellabelModel::where('status', '1')->select();
+        $this->assign('label_list', $label_list);
     }
 }
