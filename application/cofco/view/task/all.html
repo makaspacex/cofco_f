@@ -35,7 +35,7 @@
 </div>
 <script>
 
-    DELETE_T = -3; // 删除类型
+    DELETE_T = -1; // 删除类型
 
     $(function () {
         //-------------- 执行表格渲染动作 --------------------------------------------------
@@ -44,8 +44,9 @@
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = ['auditor','labelor','final_auditor'];
         var except_btns = ['edit','black_selected','black_query'];
-        var except_search = { status:'{$art_status}'};
-        render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search});
+        var except_search = {};
+
+        render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search:except_search});
 
         //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
         // 工具栏监听

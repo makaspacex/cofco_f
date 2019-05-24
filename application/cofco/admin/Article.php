@@ -3,17 +3,14 @@
 
 namespace app\cofco\admin;
 
-use app\cofco\model\AdminArticleLabel;
-
+use app\system\model\SystemUser;
 use app\cofco\model\AdminArticleLabel as ArticleLabelModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\cofco\model\AdminUserlog as LogModel;
-use function PHPSTORM_META\type;
 use think\db\Expression;
 use think\db\Where;
 use think\Exception;
-use \think\Request;
-use \think\Db;
+use think\Db;
 use app\cofco\model\AdminPending as PendingModel;
 
 
@@ -27,7 +24,7 @@ class Article extends AdminBase
 
     private static function _assignLikeCondition(&$map, $field_name, $value)
     {
-        if (!empty($value)) {
+        if (!empty($value)|| $value == '0') {
             if ($value == NULL_STR) {
                 $map[$field_name] = self::_getNullCondation();
 
@@ -40,7 +37,7 @@ class Article extends AdminBase
     private static function _assignEqCondition(&$map, $field_name, $value)
     {
 
-        if (!empty($value)) {
+        if (!empty($value)|| $value == '0') {
             if ($value == NULL_STR) {
                 $map[$field_name] = self::_getNullCondation();
             } else {
@@ -67,9 +64,6 @@ class Article extends AdminBase
         $status = input('param.status/s');
         $doi = input('param.doi/s');
         $creater = input('param.creater/s');
-        $auditor = input('param.auditor/s');
-        $labelor = input('param.labelor/s');
-        $final_auditor = input('param.final_auditor/s');
         $abstract = input('param.abstract/s');
         $tabstract = input('param.tabstract/s');
         $keyword = input('param.keyword/s');
@@ -81,7 +75,16 @@ class Article extends AdminBase
         $issn = input('param.issn/s');
         $urgency = input('param.urgency/s');
         $special_version = input('param.special_version/s');
+        $muid = input('param.muid/s');
+        $uid = input('param.uid/s');
 
+
+        $auditor = input('param.auditor/s');
+        $labelor = input('param.labelor/s');
+        $final_auditor = input('param.final_auditor/s');
+        $auditor_finished = input('param.auditor_finished/s');
+        $labelor_finished = input('param.labelor_finished/s');
+        $final_auditor_finished = input('param.final_auditor_finished/s');
 
         $map = array();
         $null_condition = Article::_getNullCondation();
@@ -157,8 +160,17 @@ class Article extends AdminBase
                 $map['status'] = self::_getNullCondation();
             } else if($status == '6'){ //虚拟状态位6，表示状态1，2，3，4
                 $map['status'] = ['IN', ['1','2','3','4']];
+            }else if($status == '7'){ //虚拟状态位7，表示状态1，2，3
+                $map['status'] = ['IN', ['1','2','3']];
             }else{
                 $map['status'] = ['EQ', $status];
+            }
+        }
+
+        // 处理特殊的UID
+        if (!empty($muid)|| $muid == '0') {
+            if($muid == MUID1 ){ //虚拟UID，表示如果auditor,labelor,final_auditor 要等于提交上来的$uid
+                self::_assignEqCondition($map, 'auditor|labelor|final_auditor', $uid);
             }
         }
 
@@ -179,6 +191,14 @@ class Article extends AdminBase
         // final_auditor 终审人
         self::_assignEqCondition($map, 'final_auditor', $final_auditor);
 
+        // auditor_finished 初审是否完成
+        self::_assignEqCondition($map, 'auditor_finished', $auditor_finished);
+
+        // labelor_finished 标注是否已完成
+        self::_assignEqCondition($map, 'labelor_finished', $labelor_finished);
+
+        // final_auditor_finished 终审是否已完成
+        self::_assignEqCondition($map, 'final_auditor_finished', $final_auditor_finished);
 
         // abstract 原文摘要
         self::_assignLikeCondition($map, 'abstract', $abstract);
@@ -221,6 +241,76 @@ class Article extends AdminBase
         return new Where($map);
     }
 
+    private static function _assignData(&$uData, $field_name, $value){
+        if((!empty($value)|| $value == '0') && $value!= NULL_STR && $value != THIS_AVG && $value != SUM_AVG){
+            $uData[$field_name]=$value;
+        }
+    }
+
+    /***
+     *
+     * 根据request请求，生成要更新的数组
+     */
+    public static function getUpdateData(){
+        $title = input('param.set_title/s');
+        $kw_id = input('param.set_kw_id/s');
+        $issue = input('param.set_issue/s');
+        $impact_factor = input('param.set_impact_factor/s');
+        $journal_zone = input('param.set_journal_zone/s');
+        $set_status = input('param.set_status/s');
+        $doi = input('param.doi/s');
+        $creater = input('param.set_creater/s');
+        $abstract = input('param.set_abstract/s');
+        $tabstract = input('param.set_tabstract/s');
+        $keyword = input('param.set_keyword/s');
+        $project = input('param.set_project/s');
+        $country = input('param.set_country/s');
+        $author = input('param.set_author/s');
+        $institue = input('param.set_institue/s');
+        $journal = input('param.set_journal/s');
+        $issne = input('param.set_issne/s');
+        $issnp = input('param.set_issnp/s');
+        $issnl = input('param.set_issnl/s');
+        $urgency = input('param.set_urgency/s');
+        $special_version = input('param.set_special_version/s');
+        $auditor = input('param.set_auditor/s');
+        $labelor = input('param.set_labelor/s');
+        $final_auditor = input('param.set_final_auditor/s');
+        $auditor_finished = input('param.set_auditor_finished/s');
+        $labelor_finished = input('param.set_labelor_finished/s');
+        $final_auditor_finished = input('param.set_final_auditor_finished/s');
+        $uData = array();
+        self::_assignData($uData,'title',$title);
+        self::_assignData($uData,'kw_id',$kw_id);
+        self::_assignData($uData,'issue',$issue);
+        self::_assignData($uData,'impact_factor',$impact_factor);
+        self::_assignData($uData,'journal_zone',$journal_zone);
+        self::_assignData($uData,'status',$set_status);
+        self::_assignData($uData,'doi',$doi);
+        self::_assignData($uData,'creater',$creater);
+        self::_assignData($uData,'abstract',$abstract);
+        self::_assignData($uData,'tabstract',$tabstract);
+        self::_assignData($uData,'keyword',$keyword);
+        self::_assignData($uData,'project',$project);
+        self::_assignData($uData,'country',$country);
+        self::_assignData($uData,'author',$author);
+        self::_assignData($uData,'institue',$institue);
+        self::_assignData($uData,'journal',$journal);
+        self::_assignData($uData,'issne',$issne);
+        self::_assignData($uData,'issnp',$issnp);
+        self::_assignData($uData,'issnl',$issnl);
+        self::_assignData($uData,'urgency',$urgency);
+        self::_assignData($uData,'special_version',$special_version);
+        self::_assignData($uData,'auditor',$auditor);
+        self::_assignData($uData,'labelor',$labelor);
+        self::_assignData($uData,'final_auditor',$final_auditor);
+        self::_assignData($uData,'auditor_finished',$auditor_finished);
+        self::_assignData($uData,'labelor_finished',$labelor_finished);
+        self::_assignData($uData,'final_auditor_finished',$final_auditor_finished);
+        return $uData;
+    }
+
+
     /**获取日志查询条件
      * @param $type 日志类型 *
      * 1.创建文献 2.初审文献
@@ -258,10 +348,9 @@ class Article extends AdminBase
                 ->where($where_map)->order($order_by, $ordertype)->buildSql(true);
             $res = PendingModel::with(['createUser', 'spiderKw','label'])
                 ->where($where_map)->order($order_by, $ordertype)->paginate($page_size, false);
-            return json(['code' => 0, 'message' => '操作完成', 'data' => $res]);
-
-        } catch (Exception $e) {
-            return json(['code' => 1, 'message' => '操作失败:' . $e->getMessage(), 'data' => []]);
+            return json(['code' => 1, 'msg' => '操作完成', 'data' => $res]);
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '操作失败:' . $e->getMessage(), 'data' => []]);
         }
     }
 
@@ -271,8 +360,108 @@ class Article extends AdminBase
     public function view($art_id = 0)
     {
 
+
     }
 
+    /***
+     *
+     * 本次搜索查询平均分配
+     * @param $field_name
+     * @param $uid
+     */
+    private function _this_AvgDis($field_name, $where_map, $raw_uData){
+        // 检索出本次分配的总条数
+        $count = PendingModel::where($where_map)->count('art_id');
+
+        // 检索出该任务下的所有人员及总数
+        $role_id = config("task.".$field_name."_role_id");
+        $users = SystemUser::where(new Where(['role_id'=>$role_id]))->select()->toArray();
+        $user_num = sizeof($users);
+
+        // 计算平均数目
+        $avg_num = (int)($count/$user_num);
+        if($avg_num==0){
+            $user_num = 1;
+            $avg_num = $count;
+        }
+
+        // 循环更新分配
+        for($i = 0;$i<$user_num;$i++){
+            $raw_uData[$field_name] = $users[$i]['id']; // user id
+            $raw_uData[$field_name.'_finished'] = 0; // 初始化为未完成
+            $offset = $avg_num*$i;
+            $size_rows = $avg_num;
+            if($i+1 == $user_num){
+                $size_rows = $count - $avg_num*$i;
+            }
+            $sql1 = PendingModel::where($where_map)->order('art_id','desc')->limit($offset, $size_rows)->field('art_id')->buildSql();
+            $sql2 = PendingModel::where($where_map)->fetchSql(true)->update($raw_uData);
+            $up_sql1 = explode('WHERE',$sql2,2)[0];
+
+            $sql_str = $up_sql1.' where art_id in (select t.art_id from '.$sql1.' as t ) ';
+            Db::execute($sql_str);
+        }
+    }
+
+    /***
+     * 总和平均
+     * @param $field_name
+     * @param $uid
+     */
+    private function _sum_AvgDis($field_name, $where_map, $raw_uData){
+
+    }
+
+    /***
+     *
+     * 文章统一更新接口
+     */
+    public function update(){
+        Db::startTrans();
+        try {
+            $where_map = Article::getSearchMap();
+            $raw_uData = Article::getUpdateData();
+
+            $auditor = input('param.set_auditor/s');
+            $labelor = input('param.set_labelor/s');
+            $final_auditor = input('param.set_final_auditor/s');
+
+            $sp_values = [THIS_AVG, SUM_AVG];
+
+            if(in_array($auditor,$sp_values) || in_array($labelor,$sp_values) || in_array($final_auditor,$sp_values)){
+                // 处理可能特殊的初审核者
+                if($auditor == THIS_AVG){
+                    $this->_this_AvgDis('auditor', $where_map, $raw_uData);
+                }else if($auditor == SUM_AVG){
+                    $this->_sum_AvgDis('auditor', $where_map, $raw_uData);
+                }
+
+                // 处理可能特殊的标注者
+                if($labelor == THIS_AVG){
+                    $this->_this_AvgDis('labelor', $where_map, $raw_uData);
+                }else if($labelor == SUM_AVG){
+                    $this->_sum_AvgDis('labelor', $where_map, $raw_uData);
+                }
+
+                // 处理可能特殊的终审者
+                if($final_auditor == THIS_AVG){
+                    $this->_this_AvgDis('final_auditor', $where_map, $raw_uData);
+                }else if($final_auditor == SUM_AVG){
+                    $this->_sum_AvgDis('final_auditor', $where_map, $raw_uData);
+                }
+            }else{
+                PendingModel::where($where_map)->update($raw_uData);
+            }
+            // 提交事务
+            Db::commit();
+            return json(['code' => 1, 'msg' => '操作完成']);
+        }catch (\Exception $e) {
+
+            // 回滚事务
+            Db::rollback();
+            return json(['code' => 0, 'msg' => '操作失败:' . $e->getMessage(), 'data' => []]);
+        }
+    }
 
     /**改变status状态
      * @return \think\response\Json
@@ -282,19 +471,19 @@ class Article extends AdminBase
         try {
             $where_map = Article::getSearchMap();
             $status = input('param.status/s'); // 默认状态不改变
-            $setstatus = input('param.setstatus/s', $status);
+            $set_status = input('param.set_status/s', $status);
             $art_ids = input('param.art_id/a');
-            PendingModel::where($where_map)->update(['status' => $setstatus]);
+            PendingModel::where($where_map)->update(['status' => $set_status]);
 
             // 这个地方写得不对，批量操作不会有art_id传上来
 //            foreach ($art_ids as $art_id){
-//                Article::insertLog($setstatus, $art_id);
+//                Article::insertLog($set_status, $art_id);
 //            }
 
-            return json(['code' => 0, 'message' => '操作完成']);
+            return json(['code' => 1, 'msg' => '操作完成']);
 
         } catch (\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
+            return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
         }
     }
 
@@ -314,9 +503,9 @@ class Article extends AdminBase
             }else{
                 throw new \Exception('未知的删除类型');
             }
-            return json(['code' => 0, 'message' => '操作完成']);
+            return json(['code' => 1, 'msg' => '操作完成']);
         } catch (\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
+            return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
         }
     }
 
@@ -326,38 +515,34 @@ class Article extends AdminBase
     public function add()
     {
         try {
-            if ($this->request->isPost()) {
 
-                $data = $this->request->post();
-                $data['issue'] = strtotime($data['issue']);
-                $data['issue'] = date("Y-m", $data['issue']);
-                $data['creater'] = getCurUser()['uid'];
-                $data['project'] = 'MAN';
-                $art_id = $data['art_id'];
-                $label_ids = $data['label_ids'];
-                $label_ids =  explode(',',$label_ids);
-                if ($data['status'] == 1) {
-                    ArticleLabelModel::addLabel($art_id,$label_ids);
-                    unset($data['label_ids']);
-                    $res = PendingModel::where('art_id', $art_id)->find();
-                    if ($res) {
-                        return json(['code' => 25, 'message' => '操作失败:该art_id已存在！！！']);
-                    }
-
-                    $res = PendingModel::create($data);
-                    if (!$res) {
-                        return json(['code' => 25, 'message' => '操作失败']);
-                    }
-                    // 插入日志 1代表人工输入
-                    Article::insertLog(1, $art_id);
-
-                    return json(['code' => 0, 'message' => '操作成功']);
+            $data = $this->request->post();
+            $data['issue'] = strtotime($data['issue']);
+            $data['issue'] = date("Y-m", $data['issue']);
+            $data['creater'] = getCurUser()['uid'];
+            $data['project'] = 'MAN';
+            $art_id = $data['art_id'];
+            $label_ids = $data['label_ids'];
+            $label_ids =  explode(',',$label_ids);
+            if ($data['status'] == 1) {
+                ArticleLabelModel::addLabel($art_id,$label_ids);
+                unset($data['label_ids']);
+                $res = PendingModel::where('art_id', $art_id)->find();
+                if ($res) {
+                    return json(['code' => 25, 'msg' => '操作失败:该art_id已存在！！！']);
                 }
-            }
-        } catch (\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
-        }
 
+                $res = PendingModel::create($data);
+                if (!$res) {
+                    return json(['code' => 25, 'msg' => '操作失败']);
+                }
+                // 插入日志 1代表人工输入
+                Article::insertLog(1, $art_id);
+            }
+            return json(['code' => 1, 'msg' => '操作成功']);
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -369,7 +554,7 @@ class Article extends AdminBase
 
         try {
             if ($this->request->isPost()) {
-                //return json(['code' => 25, 'message' => '操作失败']);
+                //return json(['code' => 25, 'msg' => '操作失败']);
                 $data = $this->request->post();
                 $status = $data['status'];
                 $pre_status = $data['pre_status'];
@@ -412,9 +597,9 @@ class Article extends AdminBase
 
                 $res = PendingModel::update($data,$where);
                 if (!$res) {
-                    return json(['code' => 25, 'message' => '操作失败']);
+                    return json(['code' => 0, 'msg' => '操作失败']);
                 }
-                return json(['code' => 0, 'message' => '操作成功']);
+                return json(['code' => 1, 'msg' => '操作成功']);
             }
             $art_id = input('param.art_id/s');
             $art_arr = PendingModel::where('art_id', $art_id)->find()->toArray();
@@ -430,7 +615,7 @@ class Article extends AdminBase
             $this->view->engine->layout(false);
             return $this->fetch('form');
         } catch (\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
+            return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
         }
     }
 
@@ -486,7 +671,7 @@ class Article extends AdminBase
             $objWriter->save('php://output');
             exit;
         } catch (\Exception $e) {
-            return json(['code' => 25, 'message' => '操作失败' . $e->getMessage()]);
+            return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
         }
 
     }

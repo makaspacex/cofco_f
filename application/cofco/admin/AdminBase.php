@@ -14,6 +14,7 @@ use app\cofco\model\AdminLevellabel as LevellabelModel;
 use app\system\admin\Admin;
 use app\system\model\SystemUser;
 use app\cofco\model\AdminKw as KwModel;
+use think\db\Where;
 
 /**
  * 后台公共控制器
@@ -29,7 +30,11 @@ class AdminBase extends Admin
         parent::initialize();
         define('MODULENAME', 'COFCO');
         define('NULL_STR', 'NULLSTRING!@#!');
+        define('THIS_AVG', 'THIS_AVG_FLAG');
+        define('SUM_AVG', 'SUM_AVG_FLAG');
+        define('MUID1', 'MUID_DKSIKSKS');
         $this->assign('article_api_url', '/cofco/article');
+        $this->assign('uid', getCurUser()['uid']);
     }
 
     /**
@@ -41,6 +46,12 @@ class AdminBase extends Admin
         $all_users = SystemUser::all();
         $this->assign('all_users', $all_users);
 
+        $auditor_role_id = config('task.auditor_role_id');
+        $labelor_role_id = config('task.labelor_role_id');
+        $final_auditor_role_id = config('task.final_auditor_role_id');
+        $this->assign('auditors', SystemUser::where(new Where(['role_id'=>$auditor_role_id]))->select());
+        $this->assign('labelors', SystemUser::where(new Where(['role_id'=>$labelor_role_id]))->select());
+        $this->assign('final_auditors', SystemUser::where(new Where(['role_id'=>$final_auditor_role_id]))->select());
         $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
         $label_list = LevellabelModel::where('status', '1')->select();

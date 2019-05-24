@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
 <form class="layui-form layui-form-pane" action="JavaScript:void(0);" id='article_search_form'>
     <div class="layui-container-fluid">
-        <div class="row">
+        <div class="layui-row">
             <div class="layui-col-md5">
                 <label class="layui-form-label">文章标题</label>
                 <div class="layui-input-block">
@@ -79,7 +79,8 @@
         </div>
 
         <div class="layui-row advanced_part hide">
-            <div class="layui-col-md3">
+
+            <div class="layui-col-md3 task-people">
                 <label class="layui-form-label">创建人</label>
                 <div class="layui-input-block">
                     <select name="creater" id="creater" lay-verify="required" lay-search=""  >
@@ -91,7 +92,7 @@
                     </select>
                 </div>
             </div>
-            <div class="layui-col-md3">
+            <div class="layui-col-md3 task-people">
                 <label class="layui-form-label">初审人</label>
                 <div class="layui-input-block">
                     <select name="auditor" id="auditor" lay-verify="required" lay-search="">
@@ -104,7 +105,7 @@
                 </div>
             </div>
 
-            <div class="layui-col-md3">
+            <div class="layui-col-md3 task-people">
                 <label class="layui-form-label">标注人</label>
                 <div class="layui-input-block">
                     <select name="labelor" id="labelor" lay-verify="required" lay-search="">
@@ -117,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="layui-col-md3">
+            <div class="layui-col-md3 task-people">
                 <label class="layui-form-label">终审人</label>
                 <div class="layui-input-block">
                     <select name="final_auditor" id="final_auditor" lay-verify="required" lay-search="">
@@ -129,6 +130,66 @@
                     </select>
                 </div>
             </div>
+            <div class="layui-col-md3 task-status">
+                <label class="layui-form-label">文献状态</label>
+                <div class="layui-input-block">
+                    <select name="status" id="status" lay-verify="required" lay-search="">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        <option value="6" class="tip-opt">1，2，3，4混合状态</option>
+                        <option value="7" class="tip-opt">1，2，3混合状态</option>
+                        <option value="-1" >回收站</option>
+                        <option value="-2" >黑名单</option>
+                        <option value="0">待分配</option>
+                        <option value="1">待初审</option>
+                        <option value="2">待标注</option>
+                        <option value="3">待终审</option>
+                        <option value="4">最终列表</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-col-md3 task-status">
+                <label class="layui-form-label">初审状态</label>
+                <div class="layui-input-block">
+                    <select name="auditor_finished" id="auditor_finished" lay-verify="required" lay-search="">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                        <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
+                        <option value="0">未完成</option>
+                        <option value="1">已完成</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-col-md3 task-status">
+                <label class="layui-form-label">标注状态</label>
+                <div class="layui-input-block">
+                    <select name="labelor_finished" id="labelor_finished" lay-verify="required" lay-search="">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                        <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
+                        <option value="0">未完成</option>
+                        <option value="1">已完成</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-col-md3 task-status">
+                <label class="layui-form-label">终审状态</label>
+                <div class="layui-input-block">
+                    <select name="final_auditor_finished" id="final_auditor_finished" lay-verify="required" lay-search="">
+                        <option value="">不限制</option>
+                        <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
+                        <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                        <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
+                        <option value="0">未完成</option>
+                        <option value="1">已完成</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="layui-col-md6">
                 <label class="layui-form-label">原文摘要</label>
                 <div class="layui-input-block">
@@ -175,8 +236,6 @@
                     </select>
                 </div>
             </div>
-
-
 
             <div class="layui-col-md3">
                 <label class="layui-form-label">国家</label>
@@ -260,7 +319,7 @@
             </div>
 
         </div>
-        <div class="layui-row">
+        <div class="layui-row" id="search_btns_row">
             <div class="layui-col-md4 layui-col-md-offset8">
                 <div class="layui-inline right-align">
                     <button type="submit" class="layui-btn layui-btn-sm search_submit_btn">搜索</button>
@@ -275,7 +334,6 @@
 
     </div>
     <div class="clear-both"></div>
-    <table class="layui-hide" id="demo" lay-filter="test"></table>
 </form>
 <script>
 
@@ -306,7 +364,6 @@
         });
     });
 
-
     // 高级搜索按钮动作处理
     $(function () {
 
@@ -327,6 +384,10 @@
             }
         });
 
+    });
+
+    $(function () {
+        $('.advanced_part').before($('#append_search'))
     });
 
 

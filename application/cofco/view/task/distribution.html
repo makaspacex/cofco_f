@@ -13,8 +13,10 @@
 <div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
         <div class="layui-inline" style="width: 200px">
-            <select name="auditor" id="auditor" lay-verify="required" lay-search="" enable-input="true">
+            <select name="set_auditor" id="set_auditor" lay-verify="required" lay-search="" enable-input="false">
                 <option value="">请选择初审人</option>
+                <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
                 {volist name="all_users" id="v"}
                 <option value={$v['id']}>{$v['nick']}</option>
                 {/volist}
@@ -22,41 +24,54 @@
         </div>
 
         <div class="layui-inline" style="width: 200px">
-            <select name="labelor" id="labelor" lay-verify="required" lay-search="" enable-input="true">
+            <select name="set_labelor" id="set_labelor" lay-verify="required" lay-search="" enable-input="false">
                 <option value="">请选择标注人</option>
+                <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
                 {volist name="all_users" id="v"}
                 <option value={$v['id']}>{$v['nick']}</option>
                 {/volist}
             </select>
         </div>
         <div class="layui-inline" style="width: 200px">
-            <select name="setstatus" id="setstatus" lay-verify="required" lay-search="" enable-input="true">
+            <select name="set_final_auditor" id="set_final_auditor" lay-verify="required" lay-search="" enable-input="false">
                 <option value="">请选择终审人</option>
+                <option value="{:THIS_AVG}" class="tip-opt">本次平均</option>
+                <option value="{:SUM_AVG}" class="tip-opt">总和平均</option>
                 {volist name="all_users" id="v"}
                 <option value={$v['id']}>{$v['nick']}</option>
                 {/volist}
             </select>
         </div>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="submit_status_selected_data">确认[选中行数据]</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" lay-event="submit_status_query_data" disabled>确认[搜索结果数据]</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="submit_selected_data" type="button">确认[选中行数据]</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" type="button" lay-event="submit_query_data" disabled>确认[搜索结果数据]</button>
     </div>
 </div>
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
 </div>
+
+
+<!-- =================  自定义增加的搜索输入框, ID不要变  ===================================================-->
+<div class="layui-row" id="append_search">
+
+</div>
+
 <script>
 
     DELETE_T = -3; // 删除类型
 
     $(function () {
         //-------------- 执行表格渲染动作 --------------------------------------------------
-        var init_url = "{:url($article_api_url.'/search','status='.$art_status)}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
+        var init_url = "{:url($article_api_url.'/search',['status'=>$art_status])}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        var article_api_url_setstauts = "{:url($article_api_url.'/set_status','status='.$art_status )}";
+        var article_api_url_update = "{:url($article_api_url.'/update','status='.$art_status )}";
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = ['auditor','labelor','final_auditor'];
         var except_btns = ['edit','black_selected','black_query'];
-        render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns});
+        var except_search = { status:'{$art_status}'};
+        render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search:except_search});
 
         //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
         // 工具栏监听
@@ -66,26 +81,31 @@
             table.on('toolbar(articletable)',function (obj) {
                 var layEvent = obj.event;
                 var checkStatus = table.checkStatus(obj.config.id);
-                if(layEvent === 'submit_status_selected_data' || layEvent === 'submit_status_query_data'){
-                    var setstatus = $('select[name="setstatus"]').val();
-                    if(setstatus === ""){
-                        layer.msg('请选择设置类型');
+                if(layEvent === 'submit_selected_data' || layEvent === 'submit_query_data'){
+                    var auditor_id = $('.layui-table-tool select[id="set_auditor"]').val();
+                    var labelor_id = $('.layui-table-tool select[id="set_labelor"]').val();
+                    var final_auditor_id = $('.layui-table-tool select[id="set_final_auditor"]').val();
+
+                    // 检查是否都为空
+                    if(auditor_id === '' || labelor_id === '' || final_auditor_id === ''){
+                        layer.msg('请选择任务分配类型');
                         return;
                     }
-                    var form_data = getSelectData(1);
-                    var type = 'selected';
-                    if(layEvent === 'submit_status_query_data'){
-                        form_data = getSearchFormData(1);
-                        type = 'search';
+                    var form_data = getSearchFormData(1);
+                    var task_ids = [{name:'set_auditor',value:auditor_id},{name:'set_labelor',value:labelor_id},{name:'set_final_auditor',value:final_auditor_id}]
+                    var type = 'search';
+                    if(layEvent === 'submit_selected_data'){
+                        form_data = getSelectData(1);
+                        type = 'selected';
                     }
                     if(!form_data) return;
-                    if(setstatus !== '-3'){ // 如果不是彻底删除
-                        form_data.push({name:'setstatus',value: setstatus});
-                        _exe_update_status(article_api_url_setstauts, form_data, true, type);
-                    }else{
-                        _exe_del(article_api_url_del,form_data,true,type)
-                    }
-
+                    form_data = form_data.concat(task_ids);
+                    form_data.push({name:'set_status',value: '1'});
+                    form_data.push({name:'set_auditor_finished',value: '0'});
+                    form_data.push({name:'set_labelor_finished',value: '0'});
+                    form_data.push({name:'set_final_auditor_finished',value: '0'});
+                    console.log(form_data);
+                    _exe_update(article_api_url_update, form_data, true, type);
                 }
             });
         })
