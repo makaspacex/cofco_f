@@ -7,13 +7,11 @@ var _tnTreebox_id = 0;
 _tnTreebox.prototype = {
 	data:null,
 	dom_id:null,
-	value:null,
 	old_selected:null,
 	width:0,
-	init:function(dom_id,value,data,selected){
+	init:function(dom_id,data,selected){
 		this.dom_id = dom_id;
 		this.data = data;
-		this.value = value;
 		this.old_selected = selected;
 	},
 	makeHtml:function(){
@@ -30,7 +28,6 @@ _tnTreebox.prototype = {
 			}
 		}
 		var html= "";
-		console.log(_data);
 		for(var cid in _data){
 			var list = _data[cid];
 			var html_list = "<li><input type='text' class='search' placeholder='输入文字搜索' /></li>";
@@ -68,7 +65,7 @@ _tnTreebox.prototype = {
 
 				_tnTreebox_id++;
 				var id = 'treebox_'+_tnTreebox_id; //for='"+id+"' for会导致误点 先去掉
-				var box = "<input"+checked+" type='checkbox' id='"+id+"' value='"+this.value+"' value='"+item.id+"' />";
+				var box = "<input"+checked+" type='checkbox' id='"+item.id+"' value='"+item.id+"' />";
 				try{
 					if(item.no_box){
 						box = '';
@@ -159,9 +156,13 @@ _tnTreebox.prototype = {
 		}
 		$("#"+this.dom_id+" .header").html(html);
 		$("#"+this.dom_id+" .header span").on('click',function(){
+
+			console.log("wo shi span");
 			var obj = $(this);
 			var id = obj.attr('v');
+			console.log(id);
 			if(obj.parent().parent().find('div').size()<2){
+				console.log("obj.parent.parent");
 				obj.parent().parent().find('a').remove();
 			}
 			var p = obj.parent().parent().next(".list").find(':checkbox[value='+id+']').prop('checked',false);
@@ -192,8 +193,8 @@ _tnTreebox.prototype = {
 	}
 };
 
-function tnTreeBox(id,value,data,selected){
+function tnTreeBox(id,data,selected){
 	var obj = new _tnTreebox();
-	obj.init(id,value,data,selected);
+	obj.init(id,data,selected);
 	obj.makeHtml();
 }

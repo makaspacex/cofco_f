@@ -583,12 +583,11 @@ class Article extends AdminBase
                 //$label_del = input('param.label_del/a');
                 if(!empty($label_del)){
                     $label_del =  explode(',',$label_del);
-//                    $label_arr = [];
-//                    foreach($label_del as $label){
-//                        array_push($label_arr,(int)$label);
-//
-//                    }
-                    ArticleLabelModel::delLabel($art_id,$label_del);
+                    $label_arr = ['IN'];
+                    foreach($label_del as $label){
+                        array_push($label_arr,(int)$label);
+                    }
+                    ArticleLabelModel::delLabel($art_id,$label_arr);
                 }
 
 
