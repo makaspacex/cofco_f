@@ -206,8 +206,11 @@
     }
 
     // 执行更新
-    function _exe_update(requset_url, form_data, tip=true, type='search'){
+    function _exe_update(requset_url, form_data, tip=true, type='search', reload=true){
         if(tip){
+
+            var c_flag = true;
+
             var row_len = SEARCH_RESULT_ROWS;
             if(type === 'selected' ){
                 var count = 0
@@ -217,11 +220,15 @@
                 row_len = count;
             }else if(type === 'this_row'){
                 row_len = 1;
+            }else{
+                var rp_tip_str = type;
             }
 
             // 提示语
-            var c_flag = true;
             var tip_str = '本次操作会将更新数据'+row_len+'条，是否继续？';
+            if(typeof(rp_tip_str)  !== 'undefined'){
+                tip_str = rp_tip_str;
+            }
 
             //询问框
             layer.confirm(tip_str, {
@@ -239,10 +246,12 @@
                 var table = layui.table, $ = layui.jquery;
                 $.post(requset_url,form_data,function (rsp) {
                     if(rsp['code'] === 1){
-                        table.reload('articletable',{page: {curr: 1} });
-                        $('#search_reset_btn').trigger('click')
-                        $('#search_submit_btn').trigger('click')
-                        disable_toggle_btn()
+                        if(reload){
+                            table.reload('articletable',{page: {curr: 1} });
+                            $('#search_reset_btn').trigger('click')
+                            $('#search_submit_btn').trigger('click')
+                            disable_toggle_btn()
+                        }
                         layer.closeAll()
                     }else{
                         layer.msg(rsp['msg'],{offset: 'auto'});
@@ -507,7 +516,7 @@
                         title: '编辑页面',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['80%', '100%'],
+                        area: ['80%', '95%'],
                         content: article_api_url_edit //iframe的url
                     });
                 }

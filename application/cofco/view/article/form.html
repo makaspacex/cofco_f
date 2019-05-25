@@ -1,104 +1,90 @@
 {include file="cofco@block/edit_form"/}
 <script>
-    var status = parseInt({:artFiledValue($art_arr, 'status')});
-    for (var i = 1; i < 5; i++) {
-        if (i < parseInt(status) - 1 || i > parseInt(status) + 1) {
-            input = $('.field-status[value="' + i + '"]');
-            input.prop('disabled', true);
-        }
-    }
+    layui.use(['jquery', 'table', 'tablePlug','layer', 'laydate'], function () {
+        var tablePlug = layui.tablePlug;
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+        var $ = layui.jquery;
 
-    $(function () {
         disableField(['special_version']);
-    });
 
+        var status = parseInt({:artFiledValue($art_arr, 'status')});
+        for (var i = 1; i < 5; i++) {
+            if (i < parseInt(status) - 1 || i > parseInt(status) + 1) {
+                input = $('.field-status[value="' + i + '"]');
+                input.prop('disabled', true);
+            }
+        }
 
-    $ = layui.jquery;
-    var label_arr = new Array();
-    $(function(){
         var data = {:htmlspecialchars_decode($label_list)};
         var label = {:htmlspecialchars_decode(json_encode($label))};
-
+        var label_arr = new Array();
         for(var a in label){
             label_arr.push(label[a]['label_id']);
         }
         tnTreeBox('treebox',data,label_arr);
-    });
 
-    $('#formSubmit').click(function (e) {
-        var form_s = $('#editForm');
-        var form_data = form_s.serializeArray();
-        form_data.push({
-            name: "pre_status",
-            value: status
-        });
-        var label_ids = new Array();  // 标签id
-        $(".header div.tag").each(function() {
-            label_ids.push(parseInt($(this).attr('value')));
-        });
-        console.log(label_ids);
+        $('#formSubmit').click(function (e) {
+            var form_s = $('#editForm');
+            var form_data = form_s.serializeArray();
+            form_data.push({
+                name: "pre_status",
+                value: status
+            });
+            var label_ids = new Array();  // 标签id
+            $(".header div.tag").each(function() {
+                label_ids.push(parseInt($(this).attr('value')));
+            });
+            console.log(label_ids);
 
-        // let a = new Set(label_arr);
-        // let b = new Set(label_ids);
-        //
-        // let differenceABSet = new Set([...a].filter(x => !b.has(x)));
-        // console.log(differenceABSet);
-        //
-        // let sameABSet = new Set([...a].filter(x => b.has(x)));
-        // console.log(sameABSet);
+            let a = label_ids;
+            let b =label_arr;
 
-        let a = label_ids;
-        let b =label_arr;
+            let label_add = a.filter(v => !b.includes(v)); // [1,3,4,5]
+            console.log("增加");
+            console.log(label_add);
 
+            let label_del = b.filter(v => !a.includes(v)); // [1,3,4,5]
+            console.log("删除");
+            console.log(label_del);
 
-        let label_add = a.filter(v => !b.includes(v)); // [1,3,4,5]
-        console.log("增加");
-        console.log(label_add);
+            form_data.push({
+                name: "label_add",
+                value: label_add
+            });
 
-        let label_del = b.filter(v => !a.includes(v)); // [1,3,4,5]
-        console.log("删除");
-        console.log(label_del);
+            form_data.push({
+                name: "label_del",
+                value: label_del
+            });
+            console.log(form_data);
 
-        form_data.push({
-            name: "label_add",
-            value: label_add
-        });
-
-        form_data.push({
-            name: "label_del",
-            value: label_del
-        });
-        console.log(form_data);
-
-        var article_api_url_edit = "{:url($article_api_url.'/edit')}";
-        console.log(article_api_url_edit);
-        layui.use(['layer'],function () {
+            var article_api_url_edit = "{:url($article_api_url.'/edit')}";
+            console.log(article_api_url_edit);
             $.post(article_api_url_edit, form_data, function (res) {
                 console.log(res);
-                if (res.code === 0) {
+                if (res.code === 1) {
                     console.log(res.message);
-                    layer.msg(
+                    layer.alert(
                         res.message
-                        , {time: 1000,offset: 'auto'}
-                        , function () {
+                        , {
+                            offset:'auto',
+                            icon: 1,
+                            skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        }
+                        , function (e) {
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);//关闭当前页
                             parent.layui.table.reload('articletable'); //刷新表格
                         });
-
                 } else {
                     layer.msg(res.message);
                 }
             });
 
+            return false;
         });
-        if (e.preventDefault) {
-            e.preventDefault();
-        } else {
-            window.event.returnValue == false;
-        }
-    });
-</script>
-<script type="text/javascript">
 
+    });
 </script>

@@ -242,7 +242,7 @@ class Article extends AdminBase
     }
 
     private static function _assignData(&$uData, $field_name, $value){
-        if((!empty($value)|| $value == '0') && $value!= NULL_STR && $value != THIS_AVG && $value != SUM_AVG){
+        if($value != null && $value!= NULL_STR && $value != THIS_AVG && $value != SUM_AVG){
             $uData[$field_name]=$value;
         }
     }

@@ -85,10 +85,13 @@ class Task extends AdminBase
 
         $chushen_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'auditor'=>['EQ',$uid],'auditor_finished'=>'1']))->count();
         $chushen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'auditor'=>['EQ',$uid],'auditor_finished'=>'0']))->count();
+        $chushen_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['1']],'auditor'=>['EQ',$uid],'auditor_finished'=>'0']))->count();
         $biaozhu_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'labelor'=>['EQ',$uid],'labelor_finished'=>'1']))->count();
         $biaozhu_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'labelor'=>['EQ',$uid],'labelor_finished'=>'0']))->count();
+        $biaozhu_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['2']],'labelor'=>['EQ',$uid],'labelor_finished'=>'0']))->count();
         $zhongshen_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'1']))->count();
         $zhongshen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'0']))->count();
+        $zhongshen_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'0']))->count();
 
         $chushen_num = $chushen_num_finished+$chushen_num_unfinished;
         $biaozhu_num = $biaozhu_num_finished+$biaozhu_num_unfinished;
@@ -102,23 +105,28 @@ class Task extends AdminBase
         $zongshu_rate  =$zongshu==0?'0':100*($chushen_num_finished+$biaozhu_num_finished+$zhongshen_num_finished)/$zongshu;
         $zongshu_finished = $chushen_num_finished+$biaozhu_num_finished+$zhongshen_num_finished;
         $zongshu_unfinished = $chushen_num_unfinished+$biaozhu_num_unfinished+$zhongshen_num_unfinished;
+        $zongshu_cur_unfinished = $chushen_num_cur_unfinished+$biaozhu_num_cur_unfinished+$zhongshen_num_cur_unfinished;
 
         $result['user'] = $user;
         $result['zongshu'] = $zongshu;
         $result['zongshu_finished'] = $zongshu_finished;
         $result['zongshu_unfinished'] = $zongshu_unfinished;
+        $result['zongshu_cur_unfinished'] = $zongshu_cur_unfinished;
         $result['zongshu_rate'] = sprintf("%.2f",$zongshu_rate);
         $result['chushen_num'] = $chushen_num;
         $result['chushen_num_finished'] = $chushen_num_finished;
         $result['chushen_num_unfinished'] = $chushen_num_unfinished;
+        $result['chushen_num_cur_unfinished'] = $chushen_num_cur_unfinished;
         $result['chushen_rate'] = sprintf("%.2f",$chushen_rate);
         $result['biaozhu_num'] = $biaozhu_num;
         $result['biaozhu_num_finished'] = $biaozhu_num_finished;
         $result['biaozhu_num_unfinished'] = $biaozhu_num_unfinished;
+        $result['biaozhu_num_cur_unfinished'] = $biaozhu_num_cur_unfinished;
         $result['biaozhu_rate'] = sprintf("%.2f",$biaozhu_rate);
         $result['zhongshen_num'] = $zhongshen_num;
         $result['zhongshen_num_finished'] = $zhongshen_num_finished;
         $result['zhongshen_num_unfinished'] = $zhongshen_num_unfinished;
+        $result['zhongshen_num_cur_unfinished'] = $zhongshen_num_cur_unfinished;
         $result['zhongshen_rate'] = sprintf("%.2f",$zhongshen_rate);
 
         return $result;

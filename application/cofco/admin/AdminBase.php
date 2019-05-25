@@ -49,7 +49,7 @@ class AdminBase extends Admin
         $extrausers = SystemUser::where(new Where(['id'=>['IN',$extra_users_ids]]))->select()->toArray();
 
         foreach ($extrausers as &$user){
-            $user['nick'] = $user['nick'].' [仅适用指定分配]';
+            $user['nick'] = $user['nick'].' [仅指定]';
         }
 
         $auditor_role_ids = explode(',',config('task.auditor_role_ids'));
