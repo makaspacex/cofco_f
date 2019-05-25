@@ -363,54 +363,7 @@ class Article extends AdminBase
 
     }
 
-    /***
-     *
-     * 本次搜索查询平均分配
-     * @param $field_name
-     * @param $uid
-     */
-    private function _this_AvgDis($field_name, $where_map, $raw_uData){
-        // 检索出本次分配的总条数
-        $count = PendingModel::where($where_map)->count('art_id');
 
-        // 检索出该任务下的所有人员及总数
-        $role_id = config("task.".$field_name."_role_id");
-        $users = SystemUser::where(new Where(['role_id'=>$role_id]))->select()->toArray();
-        $user_num = sizeof($users);
-
-        // 计算平均数目
-        $avg_num = (int)($count/$user_num);
-        if($avg_num==0){
-            $user_num = 1;
-            $avg_num = $count;
-        }
-
-        // 循环更新分配
-        for($i = 0;$i<$user_num;$i++){
-            $raw_uData[$field_name] = $users[$i]['id']; // user id
-            $raw_uData[$field_name.'_finished'] = 0; // 初始化为未完成
-            $offset = $avg_num*$i;
-            $size_rows = $avg_num;
-            if($i+1 == $user_num){
-                $size_rows = $count - $avg_num*$i;
-            }
-            $sql1 = PendingModel::where($where_map)->order('art_id','desc')->limit($offset, $size_rows)->field('art_id')->buildSql();
-            $sql2 = PendingModel::where($where_map)->fetchSql(true)->update($raw_uData);
-            $up_sql1 = explode('WHERE',$sql2,2)[0];
-
-            $sql_str = $up_sql1.' where art_id in (select t.art_id from '.$sql1.' as t ) ';
-            Db::execute($sql_str);
-        }
-    }
-
-    /***
-     * 总和平均
-     * @param $field_name
-     * @param $uid
-     */
-    private function _sum_AvgDis($field_name, $where_map, $raw_uData){
-
-    }
 
     /***
      *
@@ -431,23 +384,23 @@ class Article extends AdminBase
             if(in_array($auditor,$sp_values) || in_array($labelor,$sp_values) || in_array($final_auditor,$sp_values)){
                 // 处理可能特殊的初审核者
                 if($auditor == THIS_AVG){
-                    $this->_this_AvgDis('auditor', $where_map, $raw_uData);
+                    Task::_this_AvgDis('auditor', $where_map, $raw_uData);
                 }else if($auditor == SUM_AVG){
-                    $this->_sum_AvgDis('auditor', $where_map, $raw_uData);
+                    Task::_sum_AvgDis('auditor', $where_map, $raw_uData);
                 }
 
                 // 处理可能特殊的标注者
                 if($labelor == THIS_AVG){
-                    $this->_this_AvgDis('labelor', $where_map, $raw_uData);
+                    Task::_this_AvgDis('labelor', $where_map, $raw_uData);
                 }else if($labelor == SUM_AVG){
-                    $this->_sum_AvgDis('labelor', $where_map, $raw_uData);
+                    Task::_sum_AvgDis('labelor', $where_map, $raw_uData);
                 }
 
                 // 处理可能特殊的终审者
                 if($final_auditor == THIS_AVG){
-                    $this->_this_AvgDis('final_auditor', $where_map, $raw_uData);
+                    Task::_this_AvgDis('final_auditor', $where_map, $raw_uData);
                 }else if($final_auditor == SUM_AVG){
-                    $this->_sum_AvgDis('final_auditor', $where_map, $raw_uData);
+                    Task::_sum_AvgDis('final_auditor', $where_map, $raw_uData);
                 }
             }else{
                 PendingModel::where($where_map)->update($raw_uData);

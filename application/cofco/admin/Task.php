@@ -5,6 +5,7 @@ namespace app\cofco\admin;
 
 use app\cofco\model\AdminPending as PendingModel;
 use app\system\model\SystemUser;
+use think\Db;
 use think\db\Where;
 
 /**终审页面
@@ -54,7 +55,15 @@ class Task extends AdminBase
             $this->view->engine->layout(false);
             return $this->fetch('mprogress_details');
         }
-        $users = SystemUser::all();
+
+        $auditor_role_ids = explode(',',config('task.auditor_role_ids'));
+        $labelor_role_ids = explode(',',config('task.labelor_role_ids'));
+        $final_auditor_role_ids = explode(',',config('task.final_auditor_role_ids'));
+        $role_ids = array_merge($auditor_role_ids,$labelor_role_ids,$final_auditor_role_ids);
+        $task_users = SystemUser::where(new Where(['role_id'=>['IN',$role_ids]]))->select()->toArray();
+        $extrausers = SystemUser::where(new Where(['id'=>['IN',explode(',',config('task.extra_user_ids'))]]))->select()->toArray();
+        $users = array_merge($task_users, $extrausers);
+
         $proinfos = [];
         foreach( $users as $key=>$user){
             $proinfos[] = Task::getUserProcess($user['id']);
@@ -166,5 +175,54 @@ class Task extends AdminBase
         return $this->fetch();
     }
 
+
+    /***
+     *
+     * 本次搜索查询平均分配，内部方法，请勿http请求
+     * @param $field_name
+     * @param $uid
+     */
+    public static function _this_AvgDis($field_name, $where_map, $raw_uData){
+        // 检索出本次分配的总条数
+        $count = PendingModel::where($where_map)->count('art_id');
+
+        // 检索出该任务下的所有人员及总数
+        $role_ids = explode(',',config("task.".$field_name."_role_ids"));
+        $users = SystemUser::where(new Where(['role_id'=>['IN',$role_ids]]))->select()->toArray();
+        $user_num = sizeof($users);
+
+        // 计算平均数目
+        $avg_num = (int)($count/$user_num);
+        if($avg_num==0){
+            $user_num = 1;
+            $avg_num = $count;
+        }
+
+        // 循环更新分配
+        for($i = 0;$i<$user_num;$i++){
+            $raw_uData[$field_name] = $users[$i]['id']; // user id
+            $raw_uData[$field_name.'_finished'] = 0; // 初始化为未完成
+            $offset = $avg_num*$i;
+            $size_rows = $avg_num;
+            if($i+1 == $user_num){
+                $size_rows = $count - $avg_num*$i;
+            }
+            $sql1 = PendingModel::where($where_map)->order('art_id','desc')->limit($offset, $size_rows)->field('art_id')->buildSql();
+            $sql2 = PendingModel::where($where_map)->fetchSql(true)->update($raw_uData);
+            $up_sql1 = explode('WHERE',$sql2,2)[0];
+
+            $sql_str = $up_sql1.' where art_id in (select t.art_id from '.$sql1.' as t ) ';
+            Db::execute($sql_str);
+        }
+    }
+
+    /***
+     * 总和平均，内部方法，请勿http请求
+     * @param $field_name
+     * @param $uid
+     */
+    public static function  _sum_AvgDis($field_name, $where_map, $raw_uData){
+
+    }
 
 }

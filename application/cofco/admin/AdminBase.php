@@ -45,13 +45,28 @@ class AdminBase extends Admin
     {
         $all_users = SystemUser::all();
         $this->assign('all_users', $all_users);
+        $extra_users_ids =  explode(',',config('task.extra_user_ids'));
+        $extrausers = SystemUser::where(new Where(['id'=>['IN',$extra_users_ids]]))->select()->toArray();
 
-        $auditor_role_id = config('task.auditor_role_id');
-        $labelor_role_id = config('task.labelor_role_id');
-        $final_auditor_role_id = config('task.final_auditor_role_id');
-        $this->assign('auditors', SystemUser::where(new Where(['role_id'=>$auditor_role_id]))->select());
-        $this->assign('labelors', SystemUser::where(new Where(['role_id'=>$labelor_role_id]))->select());
-        $this->assign('final_auditors', SystemUser::where(new Where(['role_id'=>$final_auditor_role_id]))->select());
+        foreach ($extrausers as &$user){
+            $user['nick'] = $user['nick'].' [仅适用指定分配]';
+        }
+
+        $auditor_role_ids = explode(',',config('task.auditor_role_ids'));
+        $labelor_role_ids = explode(',',config('task.labelor_role_ids'));
+        $final_auditor_role_ids = explode(',',config('task.final_auditor_role_ids'));
+
+        $auditors = SystemUser::where(new Where(['role_id'=>['IN',$auditor_role_ids]]))->select()->toArray();
+        $labelors = SystemUser::where(new Where(['role_id'=>['IN',$labelor_role_ids]]))->select()->toArray();
+        $final_auditors = SystemUser::where(new Where(['role_id'=>['IN',$final_auditor_role_ids]]))->select()->toArray();
+
+        $auditors = array_merge($auditors,$extrausers);
+        $labelors = array_merge($labelors,$extrausers);
+        $final_auditors = array_merge($final_auditors,$extrausers);
+
+        $this->assign('auditors', $auditors);
+        $this->assign('labelors', $labelors);
+        $this->assign('final_auditors', $final_auditors);
         $keyword_list = KwModel::all();
         $this->assign('keyword_list', $keyword_list);
         $label_list = LevellabelModel::where('status', '1')->select();

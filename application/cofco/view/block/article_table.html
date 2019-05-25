@@ -513,14 +513,34 @@
                 }
             });
 
-
             //表格导出
             table.exportFile = function(id, data, type){
-                console.log('it is me!')
 
                 var long_warn_text = '耗时较长，';
                 if(SEARCH_RESULT_ROWS<200){
                     long_warn_text = '';
+                }
+                var arr_ = url.split("?");
+                var params = '';
+                if(arr_.length === 2){
+                    params = arr_[1];
+                }
+                console.log(params)
+
+                if(SEARCH_RESULT_ROWS === 0){
+                    layer.msg('没有数据需要导出');
+                    return;
+                }
+
+                if(type === 'csv'){
+                    //询问框
+                    layer.confirm('由于内容复杂将转换为导出xls文档，是否继续？', {
+                        btn: ['确认','取消'] //按钮
+                        , offset:'auto'
+                    }, function() {
+                        table.exportFile(id,data,'xls');
+                    });
+                    return;
                 }
 
                 //询问框
@@ -528,7 +548,8 @@
                     btn: ['确认','取消'] //按钮
                     , offset:'auto'
                 }, function(){
-                    var download_url = "{:url($article_api_url.'/exportExcel','status='.$art_status)}";
+
+                    var download_url = "{:url($article_api_url.'/exportExcel')}"+'?'+params;
 
                     var form_s = $('#article_search_form');
                     var form_data = form_s.serializeArray();
@@ -541,6 +562,7 @@
                             download_url += '&'+ele['name'] +'=' + ele['value'];
                         }
                     }
+                    console.log(download_url)
                     layer.closeAll();
                     var alink = document.createElement("a");
                     alink.href = download_url;

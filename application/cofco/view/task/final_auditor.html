@@ -7,18 +7,26 @@
 <!-- 加载统一的文章表格框架，注意此时并未执行渲染动作 -->
 {include file='cofco@block/article_table' /}
 
-
 <!--  ---------------- 华 ------- 丽 ------- 丽 ------- 的 ------- 分 ------- 割 ------- 线 ----------------------- -->
 
 <!-- =================  自定义表格工具按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="toolbar" class="hide">
     <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">终审通过[选中]</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" lay-event="pass_query_data" disabled>通终审通过[搜索结果]</button>
     </div>
 </div>
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
+    <a class="layui-btn layui-btn-xs" lay-event="pass_this_one">终审通过</a>
 </div>
+
+<!-- =================  自定义增加的搜索输入框, ID不要变  ===================================================-->
+<div class="layui-row" id="append_search">
+
+</div>
+
 <script>
 
     //-------------- 执行表格渲染动作 --------------------------------------------------
@@ -29,25 +37,46 @@
         var except_field = ['final_auditor'];
         var except_search = { status:'{$art_status}', final_auditor:'{$uid}', final_auditor_finished:'0' };// 表格基础url里面的参数必须被排除
         var except_btns = ['del_selected'];
-        render_article_table(init_url,{except_field:except_field,width:240,title:'文献终审表',except_btns:except_btns,except_search:except_search});
-    });
+        var article_api_url_update = "{:url($article_api_url.'/update',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'] )}";
+        render_article_table(init_url,{except_field:except_field,width:290,title:'文献终审表',except_btns:except_btns,except_search:except_search});
+        //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
+        layui.use(['jquery', 'table'],function () {
+            var table = layui.table, $ = layui.jquery;
 
-    //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
-    layui.use(['jquery', 'table'],function () {
-        var table = layui.table, $ = layui.jquery;
-        // 行工具栏监听
-        table.on('tool(articletable)',function (obj) {
-            var data = obj.data,layEvent = obj.event;
-            if(layEvent === 'detail'){
-
-            }else if(layEvent === 'source'){
-
-            }
+            // 行工具栏监听
+            table.on('tool(articletable)',function (obj) {
+                var data = obj.data,layEvent = obj.event;
+                if(layEvent === 'pass_this_one'){ // 通过审核
+                    var form_data = [];
+                    form_data.push({name: "art_id[0]", value: obj.data['art_id']});
+                    form_data.push({name: "set_status", value: "4"});
+                    form_data.push({name:'set_final_auditor_finished',value:'1'})
+                    _exe_update(article_api_url_update,form_data, true, 'this_row');
+                }
+            });
         });
         // 工具栏监听
-        table.on('toolbar(articletable)',function (obj) {
-
-        });
+        layui.use(['jquery', 'table'], function () {
+            var table = layui.table;
+            table.on('toolbar(articletable)',function (obj) {
+                var layEvent = obj.event;
+                var checkStatus = table.checkStatus(obj.config.id)
+                if(layEvent === 'pass_check_data' || layEvent === 'pass_query_data'){
+                    var  form_data = undefined;
+                    var  type = undefined;
+                    if(layEvent === 'pass_query_data'){
+                        form_data = getSearchFormData(1);
+                        type = 'search';
+                    }else if(layEvent === 'pass_check_data'){
+                        form_data = getSelectData(1);
+                        type = 'selected';
+                    }
+                    if(!form_data) return;
+                    form_data.push({name: "set_status", value: "4"});
+                    form_data.push({name:'set_final_auditor_finished',value:'1'});
+                    _exe_update(article_api_url_update,form_data,true,type);
+                }
+            });
+        })
     });
-
 </script>
