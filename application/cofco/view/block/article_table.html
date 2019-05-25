@@ -311,7 +311,7 @@
 
     // 文章列表统一渲染方法
     function render_article_table(url,config) {
-        layui.use(['jquery', 'table', 'tablePlug','layer'], function () {
+        layui.use(['jquery', 'table', 'tablePlug','layer', 'laydate'], function () {
             if(typeof(DELETE_T) === 'undefined' ){
                 DELETE_T = -1 //如果没有定义就定义为软删除
             }
@@ -340,7 +340,7 @@
                 $('#article_search_form select[name="'+key_name+'"] option[value="'+value+'"]').attr('selected',true);
             }
 
-            form.render();
+            form.render('select');
 
             // 获取工具栏
             $('#all_toolbar').append($('#general_toolbar  > div').html()).append($('#toolbar > div').html());

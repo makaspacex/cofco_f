@@ -46,7 +46,7 @@ class Task extends AdminBase
      */
     public function progress(){
         $this->init_searchForm();
-        $this->assign('art_status', '6');
+        $this->assign('art_status', '7');
         $details_uid = input('param.details_uid/s');
         if(!empty($details_uid)){
             $proinfo = Task::getUserProcess($details_uid);

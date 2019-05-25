@@ -151,7 +151,6 @@ layui.define('layer', function(exports){
             
             index = select[0].selectedIndex; //获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
-            console.log(dds.html())
             dds.removeClass(HIDE);
             nearElem = null;
 
@@ -457,14 +456,15 @@ layui.define('layer', function(exports){
 
           var filter_name = $(select).attr('lay-verify')
           var enable_date = filter_name === 'date';
-          var select_id =  $(select).attr('id')
+          var select_id =  $(select).attr('render_id')
           if(enable_input || enable_date){
             $(select).append("<option value='' class='hide submit-value'>测试</option>")
           }
-          if(select_id && enable_date){
-            $(select).removeAttr('id')
-            $(select).removeAttr('lay-verify')
-          }
+
+          // if(select_id && enable_date){
+          //   $(select).removeAttr('id')
+          //   $(select).removeAttr('lay-verify')
+          // }
 
           var othis = $(this)
               ,hasRender = othis.next('.'+CLASS)
