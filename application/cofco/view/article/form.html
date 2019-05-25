@@ -1,14 +1,10 @@
 {include file="cofco@block/edit_form"/}
 <script>
-    layui.use(['jquery', 'table', 'tablePlug','layer', 'laydate'], function () {
-        var tablePlug = layui.tablePlug;
-        var table = layui.table;
+    disableField(['special_version']);
+
+    layui.use(['jquery', 'layer', 'laydate'], function () {
         var layer = layui.layer;
-        var form = layui.form;
         var $ = layui.jquery;
-
-        disableField(['special_version']);
-
         var status = parseInt({:artFiledValue($art_arr, 'status')});
         for (var i = 1; i < 5; i++) {
             if (i < parseInt(status) - 1 || i > parseInt(status) + 1) {
@@ -65,25 +61,19 @@
             $.post(article_api_url_edit, form_data, function (res) {
                 console.log(res);
                 if (res.code === 1) {
-                    console.log(res.message);
+                    console.log(res.msg);
                     layer.alert(
-                        res.message
-                        , {
-                            offset:'auto',
-                            icon: 1,
-                            skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
-                        }
+                        res.msg
+                        , {offset:'130px'}
                         , function (e) {
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);//关闭当前页
                             parent.layui.table.reload('articletable'); //刷新表格
                         });
                 } else {
-                    layer.msg(res.message);
+                    layer.msg(res.msg, {offset:'130px'});
                 }
             });
-
-            return false;
         });
 
     });

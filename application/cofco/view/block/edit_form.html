@@ -200,7 +200,7 @@
             </div>
             <div class="layui-row">
                 <div class="layui-col-md10">
-                    <button type="submit" class="layui-btn layui-btn-sm" lay-submit="" style="width: 200px;"
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" style="width: 200px;"
                             id="formSubmit">提交
                     </button>
                 </div>
@@ -210,11 +210,14 @@
 </div>
 
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
-        //常规用法
-        laydate.render({
-            elem: '#issue'
+    $(function () {
+        layui.use(['laydate','layer'], function () {
+            var laydate = layui.laydate;
+            var layer = layui.layer;
+            //常规用法
+            laydate.render({
+                elem: '#issue'
+            });
         });
     });
 

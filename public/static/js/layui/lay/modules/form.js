@@ -489,10 +489,12 @@ layui.define('layer', function(exports){
             ,('<input type="text" placeholder="'+ placeholder +'" '
                 +('value="'+ (value ? selected.html() : '') +'"') //默认值
                 +(isSearch ? '' : ' readonly') //是否开启搜索
+                +(disabled ? ' readonly' : '') //是否被禁用输入
                 +(enable_date?"id='"+select_id+"' lay-verify=\"date\" ":' ')
                 +' class="'+input_cls
                 +(isSearch ? '' : ' layui-unselect')
-                + (disabled ? (' ' + DISABLED) : '') +'">') //禁用状态
+                + (disabled ? (' ' + DISABLED) : '')
+                +'">') //禁用状态
             ,'<i class="layui-edge"></i><div class="layui-edge2"></div></div>'
             ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'
             ,function(options){

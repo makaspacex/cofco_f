@@ -83,26 +83,28 @@ class Task extends AdminBase
         $result = [];
         $user = SystemUser::get(['id'=>$uid]);
 
-        $chushen_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'auditor'=>['EQ',$uid],'auditor_finished'=>'1']))->count();
-        $chushen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'auditor'=>['EQ',$uid],'auditor_finished'=>'0']))->count();
+        $scope = ['1','2','3','4'];
+
+        $chushen_num_finished = PendingModel::where(new Where(['status'=>['IN',$scope],'auditor'=>['EQ',$uid],'auditor_finished'=>'1']))->count();
+        $chushen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',$scope],'auditor'=>['EQ',$uid],'auditor_finished'=>'0']))->count();
         $chushen_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['1']],'auditor'=>['EQ',$uid],'auditor_finished'=>'0']))->count();
-        $biaozhu_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'labelor'=>['EQ',$uid],'labelor_finished'=>'1']))->count();
-        $biaozhu_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'labelor'=>['EQ',$uid],'labelor_finished'=>'0']))->count();
+        $biaozhu_num_finished = PendingModel::where(new Where(['status'=>['IN',$scope],'labelor'=>['EQ',$uid],'labelor_finished'=>'1']))->count();
+        $biaozhu_num_unfinished = PendingModel::where(new Where(['status'=>['IN',$scope],'labelor'=>['EQ',$uid],'labelor_finished'=>'0']))->count();
         $biaozhu_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['2']],'labelor'=>['EQ',$uid],'labelor_finished'=>'0']))->count();
-        $zhongshen_num_finished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'1']))->count();
-        $zhongshen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',['1','2','3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'0']))->count();
+        $zhongshen_num_finished = PendingModel::where(new Where(['status'=>['IN',$scope],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'1']))->count();
+        $zhongshen_num_unfinished = PendingModel::where(new Where(['status'=>['IN',$scope],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'0']))->count();
         $zhongshen_num_cur_unfinished = PendingModel::where(new Where(['status'=>['IN',['3']],'final_auditor'=>['EQ',$uid],'final_auditor_finished'=>'0']))->count();
 
         $chushen_num = $chushen_num_finished+$chushen_num_unfinished;
         $biaozhu_num = $biaozhu_num_finished+$biaozhu_num_unfinished;
         $zhongshen_num = $zhongshen_num_finished+$zhongshen_num_unfinished;
 
-        $chushen_rate  = $chushen_num==0?'0':100*$chushen_num_finished/$chushen_num;
-        $biaozhu_rate  = $biaozhu_num==0?'0':100*$biaozhu_num_finished/$biaozhu_num;
-        $zhongshen_rate  = $zhongshen_num==0?'0': 100*$zhongshen_num_finished/$zhongshen_num;
+        $chushen_rate  = $chushen_num==0?'100':100*$chushen_num_finished/$chushen_num;
+        $biaozhu_rate  = $biaozhu_num==0?'100':100*$biaozhu_num_finished/$biaozhu_num;
+        $zhongshen_rate  = $zhongshen_num==0?'100': 100*$zhongshen_num_finished/$zhongshen_num;
 
         $zongshu = $chushen_num+$biaozhu_num+$zhongshen_num;
-        $zongshu_rate  =$zongshu==0?'0':100*($chushen_num_finished+$biaozhu_num_finished+$zhongshen_num_finished)/$zongshu;
+        $zongshu_rate  =$zongshu==0?'100':100*($chushen_num_finished+$biaozhu_num_finished+$zhongshen_num_finished)/$zongshu;
         $zongshu_finished = $chushen_num_finished+$biaozhu_num_finished+$zhongshen_num_finished;
         $zongshu_unfinished = $chushen_num_unfinished+$biaozhu_num_unfinished+$zhongshen_num_unfinished;
         $zongshu_cur_unfinished = $chushen_num_cur_unfinished+$biaozhu_num_cur_unfinished+$zhongshen_num_cur_unfinished;
@@ -139,7 +141,7 @@ class Task extends AdminBase
      */
     public function mprogress(){
         $this->init_searchForm();
-        $this->assign('art_status', '7');
+        $this->assign('art_status', '6');
         $proinfo = Task::getUserProcess(getCurUser()['uid']);
         $this->assign('proinfo', $proinfo);
         return $this->fetch();

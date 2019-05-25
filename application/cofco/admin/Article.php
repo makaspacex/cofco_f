@@ -546,7 +546,7 @@ class Article extends AdminBase
 
                 unset($data['label_add']);
                 unset($data['label_del']);
-
+                $data['labelor_finished'] = '1';
                 $res = PendingModel::update($data,$where);
                 if (!$res) {
                     return json(['code' => 0, 'msg' => '操作失败']);

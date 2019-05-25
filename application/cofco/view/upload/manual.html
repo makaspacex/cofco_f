@@ -2,10 +2,11 @@
 
 
 <script>
-    layui.use(['form','jquery'],function (e) {
+    layui.use(['form','jquery','layer'],function (e) {
 
         var $ = layui.$;
         var form = layui.form;
+        var layer = layui.layer;
         // $('div.layui-form-checkbox').each(function(){
         //     console.log($(this));
         //     $(this).addClass('hide');
@@ -14,65 +15,56 @@
         $('input[name="status"][value="1"]').attr('checked',true);
         $('input[name="status"][value!="1"]').attr('disabled',true).addClass('disabled');
         form.render();
+        $('#formSubmit').click(function (e) {
+            var form_s = $('#editForm');
+            var form_data = form_s.serializeArray();
+            console.log(form_data);
+            var label_ids = new Array();  // 标签id
+            $(".header div.tag").each(function() {
+                // let this = $(this);
+                console.log($(this).attr('value'));
+                label_ids.push($(this).attr('value'));
+            });
+            form_data.push({
+                name: "label_ids",
+                value: label_ids
+            });
+            console.log(form_data);
+            var article_api_url_edit = "{:url($article_api_url.'/add')}";
+            console.log(article_api_url_edit);
+            $.post(article_api_url_edit,form_data,function (res) {
+                console.log(res);
+                if(res.code===0){
+                    layer.alert(
+                        res.message
+                        ,{
+                            offset:'auto',
+                            icon: 1,
+                            skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        }
+                        ,function (e) {
+                            layui.layer.closeAll();
+                            location.reload()
+                        });
+                }
+                else {
+                    layer.alert(
+                        res.message
+                        ,{
+                            offset:'auto',
+                            icon: 1,
+                            skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        });
+                }
+
+            });
+            if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
+
+        });
+        $('div.layui-form-checkbox').addClass('hide');
     });
-
-    $('#formSubmit').click(function (e) {
-        var form_s = $('#editForm');
-        var form_data = form_s.serializeArray();
-        console.log(form_data);
-        var label_ids = new Array();  // 标签id
-        $(".header div.tag").each(function() {
-            // let this = $(this);
-            console.log($(this).attr('value'));
-            label_ids.push($(this).attr('value'));
-        });
-        form_data.push({
-            name: "label_ids",
-            value: label_ids
-        });
-        console.log(form_data);
-        var article_api_url_edit = "{:url($article_api_url.'/add')}";
-        console.log(article_api_url_edit);
-        $.post(article_api_url_edit,form_data,function (res) {
-            console.log(res);
-            if(res.code===0){
-
-                layer.alert(
-                    res.message
-                    ,{
-                        offset:'auto',
-                        icon: 1,
-                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
-                    }
-                    ,function (e) {
-                        layui.layer.closeAll();
-                        location.reload()
-                    });
-            }
-            else {
-                layer.alert(
-                    res.message
-                    ,{
-                        offset:'auto',
-                        icon: 1,
-                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
-                    });
-
-            }
-
-        });
-        if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
-
-    });
-
-    $('div.layui-form-checkbox').addClass('hide');
-
-
-    console.log("1");
-
 </script>
 <script type="text/javascript">
-    $ = layui.jquery;
     $(function(){
         var data = {:htmlspecialchars_decode($label_list)};
         tnTreeBox('treebox',data,[]);
