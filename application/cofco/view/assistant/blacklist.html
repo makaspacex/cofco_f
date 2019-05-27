@@ -40,7 +40,7 @@
     $(function () {
         //-------------- 执行表格渲染动作 --------------------------------------------------
         var init_url = "{:url($article_api_url.'/search','status='.$art_status)}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        var article_api_url_setstauts = "{:url($article_api_url.'/set_status','status='.$art_status )}";
+        var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = ['auditor','labelor','final_auditor'];
         var except_btns = ['edit','black_selected','black_query'];

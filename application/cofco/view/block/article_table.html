@@ -111,14 +111,12 @@
         return data;
     }
 
-    // 获取选中数据, type1 用于post直接提交，
     function getSelectData(type){
-        if(type === undefined) type = 1;
-        var table = layui.table;
-        var checkStatus = table.checkStatus('articletable');
+        if(typeof(type) === 'undefined') type = 1;
+        var checkStatus = layui.table.checkStatus('articletable');
         var data = checkStatus.data;
-
         if(type!==1) return data;
+        console.log(data);
 
         var form_data = [];
         for(var key_i in data){
@@ -177,7 +175,7 @@
             }
 
             //询问框
-            layer.confirm(tip_str, {
+            layui.layer.confirm(tip_str, {
                 btn: ['确认','取消'] //按钮
                 , offset:'auto'
             }, function(){
@@ -190,15 +188,19 @@
         }else{
             layui.use(['jquery', 'table'],function () {
                 var table = layui.table, $ = layui.jquery;
+                layui.layer.closeAll();
+                layer.load(0, {
+                    shade: [0.4,'#fff'] //0.1透明度的白色背景
+                });
                 $.post(requset_url,form_data,function (rsp) {
                     if(rsp['code'] === 1){
                         table.reload('articletable',{page: {curr: 1} });
                         $('#search_reset_btn').trigger('click')
                         $('#search_submit_btn').trigger('click')
                         disable_toggle_btn()
-                        layer.closeAll()
+                        layui.layer.closeAll()
                     }else{
-                        layer.msg(rsp['msg'],{offset: 'auto'});
+                        layui.layer.msg(rsp['msg'],{offset: 'auto'});
                     }
                 });
             });
@@ -231,19 +233,19 @@
             }
 
             //询问框
-            layer.confirm(tip_str, {
+            layui.layer.confirm(tip_str, {
                 btn: ['确认','取消'] //按钮
                 , offset:'auto'
             }, function(){
-                if(c_flag){
-                    _exe_update(requset_url, form_data, false, type)
-                }else{
-                    layui.layer.closeAll();
-                }
+                _exe_update(requset_url, form_data, false, type)
             });
         }else{
             layui.use(['jquery', 'table'],function () {
                 var table = layui.table, $ = layui.jquery;
+                layui.layer.closeAll();
+                layui.layer.load(0, {
+                    shade: [0.4,'#fff'] //0.1透明度的白色背景
+                });
                 $.post(requset_url,form_data,function (rsp) {
                     if(rsp['code'] === 1){
                         if(reload){
@@ -252,9 +254,9 @@
                             $('#search_submit_btn').trigger('click')
                             disable_toggle_btn()
                         }
-                        layer.closeAll()
+                        layui.layer.closeAll()
                     }else{
-                        layer.msg(rsp['msg'],{offset: 'auto'});
+                        layui.layer.msg(rsp['msg'],{offset: 'auto'});
                     }
                 });
             });
@@ -266,7 +268,6 @@
         if(typeof(DELETE_T) === 'undefined' ){
             DELETE_T = -1 //如果没有定义就定义为软删除
         }
-
         if(tip){
             var row_len = SEARCH_RESULT_ROWS;
 
@@ -304,6 +305,10 @@
                     break;
                 }
             }
+            layui.layer.closeAll();
+            layer.load(0, {
+                shade: [0.4,'#fff'] //0.1透明度的白色背景
+            });
             if(!DELETE_T_Flag){ form_data.push({name:'delete_t',value: DELETE_T});  }
             $.post(article_api_url,form_data,function (rsp) {
                 if(rsp['code'] === 1){
@@ -449,26 +454,11 @@
                     _exe_update_status(article_api_url_setstauts, form_data, true, type);
 
                 }else if(layEvent === 'select_all_row'){
-                    $(".layui-table input[type='checkbox']").prop("checked",true);
-                    form.render('checkbox');
+                    $("div[lay-id='articletable'] input[lay-filter='layTableAllChoose']").next().trigger('click')
                 }else if(layEvent === 'de_select'){
-                    $(".layui-table input[type='checkbox']").each(function(){
-                        if($(this).attr('lay-filter') === 'layTableAllChoose'){
-                            return;
-                        }
-                        if($(this).prop("checked")){
-                            check_all = false;
-                            $(this).prop("checked",false);
-                        }else{
-                            $(this).prop("checked",true);
-                        }
+                    $("div[lay-id='articletable'] div[class*='layui-table-fixed-l'] input[lay-filter='layTableCheckbox']").each(function(){
+                        $(this).next().trigger("click");
                     });
-                    if(check_all){
-                        $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked",true)
-                    } else {
-                        $(".layui-table input[lay-filter='layTableAllChoose']").prop("checked", false);
-                    }
-                    form.render('checkbox');
                 }else if(layEvent === 'del_selected'){
                     var form_data = getSelectData(1);
                     if(!form_data) return;
