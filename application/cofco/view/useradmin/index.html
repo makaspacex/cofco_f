@@ -35,7 +35,7 @@ layui.use(['form','jquery','table'],function () {
         var table = layui.table;
         table.render({
             elem: '#table'
-            ,url:'./data'
+            ,url:'{:url()}'
             ,toolbar: true
             ,title: '用户数据表'
             ,cols: [[

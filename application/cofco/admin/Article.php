@@ -16,6 +16,47 @@ use app\cofco\model\AdminPending as PendingModel;
 
 class Article extends AdminBase
 {
+
+    /**
+     * 初始化方法,  用来记录日志
+     */
+    protected function initialize()
+    {
+        parent::initialize();
+        $action     = request()->action();
+        $art_id =  $this->request->post('art_id');
+        if($action==='edit'){
+            $pre_status = $this->request->post('pre_status');
+            $status = $this->request->post('status');
+            if ((int)$status - 1 == $pre_status) {
+                LogModel::_insertUserLog($status, $art_id);
+            } else if ((int)$status == $pre_status - 1) {
+                //这里逻辑还有问题
+                $map = [];
+                $map['tid'] = $art_id;
+                $map['type'] = $status;
+                LogModel::where()->delete();
+                //LogModel::_insertUserLog((int)$status+10, $art_id);
+            }
+        }
+        elseif ($action==='add'){
+            LogModel::_insertUserLog(1, $art_id);
+        }
+        elseif ($action==='setStatus'){
+            $where_map = Article::getSearchMap();
+            $set_status = input('param.set_status/s');
+            $art_ids = PendingModel::field('art_id')->where($where_map)->select();
+            foreach ($art_ids as $art_id){
+                LogModel::_insertUserLog($set_status, $art_id);
+            }
+        }
+
+    }
+
+
+
+
+
     public static function _getNullCondation()
     {
 
@@ -172,16 +213,6 @@ class Article extends AdminBase
             if($muid == MUID1 ){ //虚拟UID，表示如果auditor,labelor,final_auditor 要等于提交上来的$uid
                 self::_assignEqCondition($map, 'auditor|labelor|final_auditor', $uid);
             }
-        }else{
-            // auditor 初审人
-            self::_assignEqCondition($map, 'auditor', $auditor);
-
-            // labelor 标注人
-            self::_assignEqCondition($map, 'labelor', $labelor);
-
-            // final_auditor 终审人
-            self::_assignEqCondition($map, 'final_auditor', $final_auditor);
-
         }
 
         // doi doi
@@ -191,6 +222,15 @@ class Article extends AdminBase
         // creater 创建人
         self::_assignEqCondition($map, 'creater', $creater);
 
+
+        // auditor 初审人
+        self::_assignEqCondition($map, 'auditor', $auditor);
+
+        // labelor 标注人
+        self::_assignEqCondition($map, 'labelor', $labelor);
+
+        // final_auditor 终审人
+        self::_assignEqCondition($map, 'final_auditor', $final_auditor);
 
         // auditor_finished 初审是否完成
         self::_assignEqCondition($map, 'auditor_finished', $auditor_finished);
@@ -312,26 +352,7 @@ class Article extends AdminBase
     }
 
 
-    /**获取日志查询条件
-     * @param $type 日志类型 *
-     * 1.创建文献 2.初审文献
-     * 3.标注文献 4.终审文献
-     * @param $id 文章ID
-     * @return array
-     */
-    function insertLog($type, $tid)
-    {
-        $map = [];
-        $map['type'] = $type;
-        $map['uID'] = getCurUser()['uid'];  //用户ID
-        $map['tID'] = $tid;  //文章ID
-        $map['ctime'] = time();
-        $map['year'] = date('Y');
-        $map['month'] = date('m');
-        $map['day'] = date('d');
-        return LogModel::insert($map);
 
-    }
 
     /**
      * 文章筛选过滤统一接口
@@ -426,14 +447,7 @@ class Article extends AdminBase
             $where_map = Article::getSearchMap();
             $status = input('param.status/s'); // 默认状态不改变
             $set_status = input('param.set_status/s', $status);
-            $art_ids = input('param.art_id/a');
             PendingModel::where($where_map)->update(['status' => $set_status]);
-
-            // 这个地方写得不对，批量操作不会有art_id传上来
-//            foreach ($art_ids as $art_id){
-//                Article::insertLog($set_status, $art_id);
-//            }
-
             return json(['code' => 1, 'msg' => '操作完成']);
 
         } catch (\Exception $e) {
@@ -469,7 +483,6 @@ class Article extends AdminBase
     public function add()
     {
         try {
-
             $data = $this->request->post();
             $data['issue'] = strtotime($data['issue']);
             $data['issue'] = date("Y-m", $data['issue']);
@@ -490,8 +503,6 @@ class Article extends AdminBase
                 if (!$res) {
                     return json(['code' => 25, 'msg' => '操作失败']);
                 }
-                // 插入日志 1代表人工输入
-                Article::insertLog(1, $art_id);
             }
             return json(['code' => 1, 'msg' => '操作成功']);
         } catch (\Exception $e) {
@@ -505,23 +516,11 @@ class Article extends AdminBase
     public function edit()
     {
 
-
         try {
             if ($this->request->isPost()) {
-                //return json(['code' => 25, 'msg' => '操作失败']);
                 $data = $this->request->post();
-                $status = $data['status'];
-                $pre_status = $data['pre_status'];
                 $art_id = $data['art_id'];
 
-                if ((int)$status - 1 == $pre_status) {
-                    Article::insertLog($status, $art_id);
-                } else if ((int)$status == $pre_status - 1) {
-                    $map = [];
-                    $map['type'] = $pre_status;
-                    $map['tID'] = $art_id;  //文章ID
-                    LogModel::where($map)->delete();
-                }
                 unset($data['pre_status']);
 
                 $where = array('art_id' => intval($art_id)); //更新条件
@@ -543,8 +542,6 @@ class Article extends AdminBase
                     }
                     ArticleLabelModel::delLabel($art_id,$label_arr);
                 }
-
-
                 unset($data['label_add']);
                 unset($data['label_del']);
                 $data['labelor_finished'] = '1';
