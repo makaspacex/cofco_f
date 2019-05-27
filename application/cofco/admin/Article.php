@@ -213,6 +213,15 @@ class Article extends AdminBase
             if($muid == MUID1 ){ //虚拟UID，表示如果auditor,labelor,final_auditor 要等于提交上来的$uid
                 self::_assignEqCondition($map, 'auditor|labelor|final_auditor', $uid);
             }
+        }else{
+            // auditor 初审人
+            self::_assignEqCondition($map, 'auditor', $auditor);
+
+            // labelor 标注人
+            self::_assignEqCondition($map, 'labelor', $labelor);
+
+            // final_auditor 终审人
+            self::_assignEqCondition($map, 'final_auditor', $final_auditor);
         }
 
         // doi doi
@@ -223,14 +232,6 @@ class Article extends AdminBase
         self::_assignEqCondition($map, 'creater', $creater);
 
 
-        // auditor 初审人
-        self::_assignEqCondition($map, 'auditor', $auditor);
-
-        // labelor 标注人
-        self::_assignEqCondition($map, 'labelor', $labelor);
-
-        // final_auditor 终审人
-        self::_assignEqCondition($map, 'final_auditor', $final_auditor);
 
         // auditor_finished 初审是否完成
         self::_assignEqCondition($map, 'auditor_finished', $auditor_finished);
