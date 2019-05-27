@@ -28,7 +28,7 @@
         var article_api_url_del = "{:url($article_api_url.'/del',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'] )}";
         var except_field = ['labelor','final_auditor'];
         var except_search = { status:'{$art_status}', labelor:'{$uid}', labelor_finished:'0' };
-        var except_btns = ['del_selected'];
+        var except_btns = ['del_selected','status_selected_data'];
         render_article_table(init_url,{except_field:except_field,width:240,title:'文献标注表',except_btns:except_btns,except_search:except_search});
         //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
         layui.use(['jquery', 'table'],function () {

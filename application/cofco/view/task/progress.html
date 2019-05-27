@@ -23,7 +23,7 @@
                     <th>昵称</th>
                     <th>总数量</th>
                     <th>已完成</th>
-                    <th>未完成</th>
+                    <th>当前/总 未完成</th>
                     <th>操作</th>
                     <th>总进度</th>
                 </tr>
@@ -34,7 +34,7 @@
                     <td>{$proinfo.user.nick}</td>
                     <td>{$proinfo.zongshu}</td>
                     <td>{$proinfo.zongshu_finished}</td>
-                    <td>{$proinfo.zongshu_unfinished}</td>
+                    <td>{$proinfo.zongshu_cur_unfinished}/{$proinfo.zongshu_unfinished}</td>
                     <td><button type="button" class="layui-btn layui-btn-xs details_p" userid="{$proinfo.user.id}">查看详细进度</button></td>
                     <td>
                         <div class="layui-progress" lay-showPercent="yes">
@@ -100,7 +100,7 @@
         var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = ['auditor','labelor','final_auditor'];
-        var except_btns = ['edit','black_selected','black_query'];
+        var except_btns = ['edit','black_selected','black_query','status_selected_data'];
         var except_search = {status:'{$art_status}'};
         render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns, except_search:except_search});
 

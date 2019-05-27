@@ -7,6 +7,24 @@
         <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del_selected">删除选中</button>
         <button class="layui-btn layui-btn-sm layui-btn-danger cofco-blacklist" lay-event="black_selected">进入黑名单[选中]</button>
         <button class="layui-btn layui-btn-sm  cofco-blacklist toggle-enable layui-btn-disabled" lay-event="black_query" disabled>进入黑名单[搜索结果]</button>
+
+        <div class = 'layui-inline status_selected_data'>
+            <div class="layui-inline" style="width: 200px">
+                <select name="set_status" id="set_status" lay-verify="required" lay-search="" enable-input="true" style="width: 100px" lay-event="">
+                    <option value="">请选择设置类型</option>
+                    <option value="0">放入待分配</option>
+                    <option value="1">放入待初审</option>
+                    <option value="2">放入待标注</option>
+                    <option value="3">放入待终审</option>
+                    <option value="4">放入文献输出</option>
+                    <option value="-1">放入回收站</option>
+                    <option value="-2">放入黑名单</option>
+                    <option value="-3">彻底删除</option>
+                </select>
+            </div>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="submit_status_selected_data">确认[选中行数据]</button>
+            <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" lay-event="submit_status_query_data" disabled>确认[搜索结果数据]</button>
+        </div>
     </div>
 </div>
 <!--预留站位-->
@@ -344,6 +362,7 @@
             for(var kk in de_config.except_btns){
                 var btn_lay_event = de_config.except_btns[kk];
                 $('#general_toolbar  > div').children('button[lay-event*="'+btn_lay_event+'"]').remove();
+                $('#general_toolbar  > div').children('div[class*="'+btn_lay_event+'"]').remove();
                 $('#general_rowtools').children('a[lay-event*="'+btn_lay_event+'"]').remove();
                 $('#article_search_form button[class*="'+btn_lay_event+'"]').remove();
             }
@@ -464,6 +483,38 @@
                     if(!form_data) return;
                     form_data.push({name: "status", value: "{$art_status}"});
                     _exe_del(article_api_url_del,form_data, DELETE_T === -3,'selected');
+                }else if(layEvent === 'submit_status_selected_data' || layEvent === 'submit_status_query_data'){
+                    var set_status = $('select[name="set_status"]').val();
+                    if(set_status === ""){
+                        layer.msg('请选择设置类型');
+                        return;
+                    }
+                    var form_data = getSelectData(1);
+                    var type = 'selected';
+                    if(layEvent === 'submit_status_query_data'){
+                        form_data = getSearchFormData(1);
+                        type = 'search';
+                    }
+                    if(!form_data) return;
+                    if(set_status !== '-3'){ // 如果不是彻底删除
+                        form_data.push({name:'set_status',value: set_status});
+                        if(set_status === '-1' || set_status === '0' || set_status === '-2'){
+                            form_data = form_data.concat([{name:'set_auditor',value: ''},{name:'set_labelor',value: ''},{name:'set_final_auditor',value: ''}]);
+                            form_data = form_data.concat([{name:'set_auditor_finished',value: '0'},{name:'set_labelor_finished',value: '0'},{name:'set_final_auditor_finished',value: '0'}]);
+                        }else if(set_status === '1'){
+                            form_data = form_data.concat([{name:'set_auditor_finished',value: '0'},{name:'set_labelor_finished',value: '0'},{name:'set_final_auditor_finished',value: '0'}]);
+                        }else if(set_status === '2'){
+                            form_data = form_data.concat([{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '0'},{name:'set_final_auditor_finished',value: '0'}]);
+                        }else if(set_status === '3'){
+                            form_data = form_data.concat([{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '1'},{name:'set_final_auditor_finished',value: '0'}]);
+                        }else if(set_status === '4'){
+                            form_data = form_data.concat([{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '1'},{name:'set_final_auditor_finished',value: '1'}]);
+                        }
+                        console.log(form_data)
+                        _exe_update_status(article_api_url_setstauts, form_data, true, type);
+                    }else{
+                        _exe_del(article_api_url_del,form_data,true,type)
+                    }
                 }
             });
 

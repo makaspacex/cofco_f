@@ -166,3 +166,7 @@ body{
 .cofco-blacklist{
     background-color: #000;
 }
+
+.layui-table-tool-temp {
+     padding-right: 0px;
+}

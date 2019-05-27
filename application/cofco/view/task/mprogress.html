@@ -113,7 +113,7 @@
         var article_api_url_setstauts = "{:url($article_api_url.'/setstatus',['status'=>$art_status,'muid'=>MUID1,'uid'=>$uid] )}";
         var article_api_url_del = "{:url($article_api_url.'/del',['status'=>$art_status,'muid'=>MUID1,'uid'=>$uid] )}";
         var except_field = ['auditor','labelor','final_auditor'];
-        var except_btns = ['edit'];
+        var except_btns = ['edit','status_selected_data'];
         var except_search = {status:'{$art_status}',auditor:'{$uid}',labelor:'{$uid}',final_auditor:'{$uid}'};
         render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search:except_search});
 

@@ -71,7 +71,7 @@
         var article_api_url_update = "{:url($article_api_url.'/update','status='.$art_status )}";
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
         var except_field = ['auditor','labelor','final_auditor'];
-        var except_btns = ['edit','black_selected','black_query'];
+        var except_btns = ['edit','black_selected','black_query','status_selected_data'];
         var except_search = { status:'{$art_status}'};
         render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search:except_search});
 
@@ -124,23 +124,24 @@
                         form_data.push({name:'set_final_auditor_finished',value: '0'});
                         _exe_update("{:url($article_api_url.'/update','status=0')}", form_data, false, '', false);
 
-                        form_data = [{name:'set_auditor_finished',value: '1'}];
+                        form_data = [{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '0'},{name:'set_final_auditor_finished',value: '0'}];
                         _exe_update("{:url($article_api_url.'/update','status=2')}", form_data, false, '', false);
 
-                        form_data = [{name:'set_labelor_finished',value: '1'}];
+                        form_data = [{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '1'},{name:'set_final_auditor_finished',value: '0'}];
                         _exe_update("{:url($article_api_url.'/update','status=3')}", form_data, false, '', false);
 
-                        form_data = [{name:'set_final_auditor_finished',value: '1'}];
+                        form_data = [{name:'set_auditor_finished',value: '1'},{name:'set_labelor_finished',value: '1'},{name:'set_final_auditor_finished',value: '1'}];
                         _exe_update("{:url($article_api_url.'/update','status=4')}", form_data, false, '', true);
                     });
 
                 }else if(layEvent === 'clear_task_data'){
                     var task_ids = [{name:'set_auditor',value:''},{name:'set_labelor',value:''},{name:'set_final_auditor',value:''}]
                     var form_data = task_ids;
+                    form_data.push({name:'set_status',value: '0'});
                     form_data.push({name:'set_auditor_finished',value: '0'});
                     form_data.push({name:'set_labelor_finished',value: '0'});
                     form_data.push({name:'set_final_auditor_finished',value: '0'});
-                    _exe_update("{:url($article_api_url.'/update' )}", form_data, true, '将清除所有任务分配数据，是否继续？');
+                    _exe_update("{:url($article_api_url.'/update' )}", form_data, true, '将清除所有任务分配数据和所有任务进度，并且将所有数据置为未分配状态，是否继续？');
                 }
             });
         })

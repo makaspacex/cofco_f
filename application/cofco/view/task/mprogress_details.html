@@ -13,7 +13,7 @@
                     <col width="150">
                     <col width="100">
                     <col width="100">
-                    <col width="100">
+                    <col width="150">
                     <col>
                 </colgroup>
                 <thead>
@@ -21,7 +21,7 @@
                     <th>任务名称</th>
                     <th>总数量</th>
                     <th>已完成</th>
-                    <th>未完成</th>
+                    <th>当前/总 未完成</th>
                     <th>任务进度</th>
                 </tr>
                 </thead>
@@ -30,7 +30,7 @@
                     <td>总体任务</td>
                     <td>{$proinfo.zongshu}</td>
                     <td>{$proinfo.zongshu_finished}</td>
-                    <td>{$proinfo.zongshu_unfinished}</td>
+                    <td>{$proinfo.zongshu_cur_unfinished}/{$proinfo.zongshu_unfinished}</td>
                     <td>
                         <div class="layui-progress" lay-showPercent="yes">
                             <div class="layui-progress-bar layui-bg-red" lay-percent="{$proinfo.zongshu_rate}%"></div>
@@ -41,7 +41,7 @@
                     <td>初审任务</td>
                     <td>{$proinfo.chushen_num}</td>
                     <td>{$proinfo.chushen_num_finished}</td>
-                    <td>{$proinfo.chushen_num_unfinished}</td>
+                    <td>{$proinfo.chushen_num_cur_unfinished}/{$proinfo.chushen_num_unfinished}</td>
                     <td>
                         <div class="layui-progress" lay-showPercent="yes">
                             <div class="layui-progress-bar layui-bg-blue" lay-percent="{$proinfo.chushen_rate}%"></div>
@@ -52,7 +52,7 @@
                     <td>标注任务</td>
                     <td>{$proinfo.biaozhu_num}</td>
                     <td>{$proinfo.biaozhu_num_finished}</td>
-                    <td>{$proinfo.biaozhu_num_unfinished}</td>
+                    <td>{$proinfo.biaozhu_num_cur_unfinished}/{$proinfo.biaozhu_num_unfinished}</td>
                     <td>
                         <div class="layui-progress" lay-showPercent="yes">
                             <div class="layui-progress-bar layui-bg-green" lay-percent="{$proinfo.biaozhu_rate}%"></div>
@@ -63,7 +63,7 @@
                     <td>终审任务</td>
                     <td>{$proinfo.zhongshen_num}</td>
                     <td>{$proinfo.zhongshen_num_finished}</td>
-                    <td>{$proinfo.zhongshen_num_unfinished}</td>
+                    <td>{$proinfo.zhongshen_num_cur_unfinished}/{$proinfo.zhongshen_num_unfinished}</td>
                     <td>
                         <div class="layui-progress" lay-showPercent="yes">
                             <div class="layui-progress-bar layui-bg-black" lay-percent="{$proinfo.zhongshen_rate}%"></div>

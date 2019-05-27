@@ -11,23 +11,6 @@
 
 <!-- =================  自定义表格工具按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="toolbar" class="hide">
-    <div class="layui-btn-container">
-        <div class="layui-inline" style="width: 200px">
-            <select name="set_status" id="set_status" lay-verify="required" lay-search="" enable-input="true" style="width: 100px">
-                <option value="">请选择设置类型</option>
-                <option value="0">放入待分配</option>
-                <option value="1">放入待初审</option>
-                <option value="2">放入待标注</option>
-                <option value="3">放入待终审</option>
-                <option value="4">放入文献输出</option>
-                <option value="-1">放入回收站</option>
-                <option value="-2">放入黑名单</option>
-                <option value="-3">彻底删除</option>
-            </select>
-        </div>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="submit_status_selected_data">确认[选中行数据]</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" lay-event="submit_status_query_data" disabled>确认[搜索结果数据]</button>
-    </div>
 </div>
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
@@ -47,37 +30,6 @@
         var except_search = { status:'{$art_status}'};
         render_article_table(init_url,{except_field:except_field,width:170,title:'文献初审表',except_btns:except_btns,except_search});
 
-        //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
-        // 工具栏监听
-        layui.use(['jquery', 'table','layer'], function () {
-            var table = layui.table;
-            var layer = layui.layer;
-            table.on('toolbar(articletable)',function (obj) {
-                var layEvent = obj.event;
-                var checkStatus = table.checkStatus(obj.config.id);
-                if(layEvent === 'submit_status_selected_data' || layEvent === 'submit_status_query_data'){
-                    var set_status = $('select[name="set_status"]').val();
-                    if(set_status === ""){
-                        layer.msg('请选择设置类型');
-                        return;
-                    }
-                    var form_data = getSelectData(1);
-                    var type = 'selected';
-                    if(layEvent === 'submit_status_query_data'){
-                        form_data = getSearchFormData(1);
-                        type = 'search';
-                    }
-                    if(!form_data) return;
-                    if(set_status !== '-3'){ // 如果不是彻底删除
-                        form_data.push({name:'set_status',value: set_status});
-                        _exe_update_status(article_api_url_setstauts, form_data, true, type);
-                    }else{
-                        _exe_del(article_api_url_del,form_data,true,type)
-                    }
-
-                }
-            });
-        })
     });
 
 </script>
