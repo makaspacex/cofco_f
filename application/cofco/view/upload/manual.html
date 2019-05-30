@@ -34,9 +34,9 @@
             console.log(article_api_url_edit);
             $.post(article_api_url_edit,form_data,function (res) {
                 console.log(res);
-                if(res.code===0){
+                if(res.code===1){
                     layer.alert(
-                        res.message
+                        res.msg
                         ,{
                             offset:'auto',
                             icon: 1,
@@ -49,7 +49,7 @@
                 }
                 else {
                     layer.alert(
-                        res.message
+                        res.msg
                         ,{
                             offset:'auto',
                             icon: 1,
