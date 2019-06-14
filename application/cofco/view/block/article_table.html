@@ -45,9 +45,10 @@
     SEARCH_RESULT_ROWS = -1
 
     function labelFilter(label_list,id) {
-        return label_list.filter(function(p){
+        var label =  label_list.filter(function(p){
             return p.id === id;
-        })[0].value;
+        })
+        return label.length===0?null:label[0].value
     }
     function getField(except_field, width){
         var label_list = {:htmlspecialchars_decode($label_list)};
@@ -64,7 +65,10 @@
                     if(d['label'].length!==0) {
                         for(var i in d['label']) {
                             var label = labelFilter(label_list,d['label'][i]['label_id']);
-                            result+="<a class='layui-btn layui-btn-primary layui-btn-xs'>"+label+"</a>"
+                            if(label!=null){
+                                result+="<a class='layui-btn layui-btn-primary layui-btn-xs'>"+label+"</a>"
+                            }
+
                     }
                 }
                 return result;
