@@ -492,7 +492,7 @@ class Article extends AdminBase
             $art_id = $data['art_id'];
             $label_ids = $data['label_ids'];
             $label_ids =  explode(',',$label_ids);
-            if ($data['status'] == 1) {
+            if ($data['status'] == 0) {
                 ArticleLabelModel::addLabel($art_id,$label_ids);
                 unset($data['label_ids']);
                 $res = PendingModel::where('art_id', $art_id)->find();
