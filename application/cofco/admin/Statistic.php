@@ -35,11 +35,11 @@ class Statistic extends AdminBase
         $jibing_idstr = $this->request->post('jibingtype');
         if (empty($jibing_idstr)) {
             # 疾病所有的ID
-            $jibing_all_ids = Db::table('hisi_admin_levellabel')->where('cid', 'IN', function ($query) {
-                $query->table('hisi_admin_levellabel')->where('id', 3)->field('id');
+            $jibing_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
             })->whereOr('cid', 'IN', function ($query) {
-                $query->table('hisi_admin_levellabel')->where('id', 3)->whereOr('cid', 'IN', function ($query) {
-                    $query->table('hisi_admin_levellabel')->where('id', 3)->field('id');
+                $query->table('cofco_admin_levellabel')->where('id', 3)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
                 })->field('id');
             })->column('id');
             $jibingtype_arr = $jibing_all_ids;
@@ -47,22 +47,22 @@ class Statistic extends AdminBase
 
         $yuanliao_idstr = $this->request->post('yuanliaotype');
         if (empty($yuanliao_idstr)) {
-            $yuanliao_all_ids = Db::table('hisi_admin_levellabel')->where('cid', 'IN', function ($query) {
-                $query->table('hisi_admin_levellabel')->where('id', 4)->field('id');
+            $yuanliao_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
             })->whereOr('cid', 'IN', function ($query) {
-                $query->table('hisi_admin_levellabel')->where('id', 4)->whereOr('cid', 'IN', function ($query) {
-                    $query->table('hisi_admin_levellabel')->where('id', 4)->field('id');
+                $query->table('cofco_admin_levellabel')->where('id', 4)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
                 })->field('id');
             })->column('id');
             $yuanliaotype_arr = $yuanliao_all_ids;
         }
 
         # 实验类型标签的下方的所有ID
-        $shiyan_all_ids = Db::table('hisi_admin_levellabel')->where('cid', 'IN', function ($query) {
-            $query->table('hisi_admin_levellabel')->where('id', 2)->field('id');
+        $shiyan_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+            $query->table('cofco_admin_levellabel')->where('id', 2)->field('id');
         })->whereOr('cid', 'IN', function ($query) {
-            $query->table('hisi_admin_levellabel')->where('id', 2)->whereOr('cid', 'IN', function ($query) {
-                $query->table('hisi_admin_levellabel')->where('id', 2)->field('id');
+            $query->table('cofco_admin_levellabel')->where('id', 2)->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 2)->field('id');
             })->field('id');
         })->column('id');
 
@@ -94,21 +94,20 @@ class Statistic extends AdminBase
             $item = $vvv['id'];
             $yuanliao_name = $vvv['value'];
             #统计所有实验类型数目
-            $result = Db::table('hisi_admin_id')
-                ->alias('ai')
-                ->join('hisi_admin_levellabel ll', 'ai.tid = ll.id')
-                ->where('ai.pid', "IN",
+            $result = Db::table('cofco_admin_article_label ai')
+                ->join(['cofco_admin_levellabel'=>'ll'], 'ai.label_id = ll.id')
+                ->where('ai.art_id', "IN",
                     function ($query) use ($item, $jibingtype_arr) {
-                        $query->table('hisi_admin_id')
-                            ->where('pid', 'IN', function ($query) use ($item) {
-                                $query->table('hisi_admin_id')->where('tid', $item)->field('pid');
+                        $query->table('cofco_admin_article_label')
+                            ->where('art_id', 'IN', function ($query) use ($item) {
+                                $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id');
                             })
-                            ->where('tid', 'IN', $jibingtype_arr)
-                            ->field('pid');
+                            ->where('label_id', 'IN', $jibingtype_arr)
+                            ->field('art_id');
                     })
-                ->where('ai.tid', 'IN', $shiyan_all_ids)
-                ->group('tid')
-                ->field('ai.tid, ll.value, count(ai.pid) count')
+                ->where('ai.label_id', 'IN', $shiyan_all_ids)
+                ->group('art_id')
+                ->field('ai.label_id, ll.value, count(ai.art_id) count')
                 ->select();
 
             $yuanliao_p_number = 0;
@@ -228,74 +227,6 @@ class Statistic extends AdminBase
         $this->assign('menu_list', $menu_list);
 
         $this->assign('dispaly_statistic', '1');
-        return $this->fetch();
-    }
-
-    /**
-     * 新建爬虫页面
-     * @return string
-     */
-    public function spider_add()
-    {
-        return $this->fetch('spider_form');
-    }
-
-    /**
-     * 编辑爬虫页面
-     * @return string
-     */
-    public function spider_edit()
-    {
-        return $this->fetch('spider_form');
-    }
-
-    /**
-     * 爬虫状态查看页面，建议使用web_socket技术
-     * @return string
-     */
-    public function spider_status()
-    {
-
-        return $this->fetch();
-    }
-
-    /**
-     * 爬虫关键词列表页面
-     * @return string
-     */
-    public function keywords_list()
-    {
-
-        return $this->fetch();
-    }
-
-    /**
-     * 新建关键词词组
-     * @return string
-     */
-    public function keywords_add()
-    {
-
-        return $this->fetch('keywords_form');
-    }
-
-    /**
-     * 编辑关键词词组
-     * @return string
-     */
-    public function keywords_edit()
-    {
-
-        return $this->fetch('keywords_form');
-    }
-
-    /**
-     * 删除关键词词组
-     * @return string
-     */
-    public function keywords_del()
-    {
-
         return $this->fetch();
     }
 }

@@ -8,7 +8,7 @@
             <input type="label" class="layui-input field-value"
                    name="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
         </div>
-        <a href="{:url('levelpop1?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择原料类型</a>
+        <a href="{:url('levelpop1?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择原料类型</a>
 
     </div>
 
@@ -21,15 +21,15 @@
             <input type="label" class="layui-input field-value" name="jibingname" lay-verify="" autocomplete="off" value="{$user_input?$user_input['jibingname']:''}"
                    placeholder="空表示不限制">
         </div>
-        <a href="{:url('levelpop2?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl">选择疾病类型</a>
+        <a href="{:url('levelpop2?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择疾病类型</a>
 
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="63">
-            <button type="submit" class="layui-btn" lay-filter="formSubmit">统计</button>
-            <button type="reset" class="layui-btn layui-btn-primary ml10">清空</button>
+            <button type="submit" class="layui-btn layui-btn-sm" lay-filter="formSubmit">统计</button>
+            <button type="reset" class="layui-btn layui-btn-primary  layui-btn-sm">清空</button>
         </div>
     </div>
 </form>
@@ -71,10 +71,17 @@
         $('input[name="jibingname"]').val(text2);
     }
 
+    $(function () {
+        $('button[type="reset"]').click(function (e) {
+            $('input[name="jibingtype"]').val('');
+            $('input[name="jibingname"]').val('');
+            $('input[name="yuanliaotype"]').val('');
+            $('input[name="yuanliaoname"]').val('');
+
+        });
+    });
 
 </script>
-
-
 
 
 {if condition="$dispaly_statistic==1"}
@@ -142,7 +149,8 @@
 
     </div>
 </div>
-
+{include file="system@block/layui" /}
+<script src="__ADMIN_MOD_JS__/echarts.min.js"></script>
 
 <script type="text/javascript">
 
@@ -228,7 +236,7 @@
             verticalAlign: app.config.verticalAlign,
             rotate: app.config.rotate,
             formatter: '{c}  {name|{a}}',
-            fontSize: 18,
+            fontSize: 10,
             rich: {
                 name: {
                     color:'#ffffff',
@@ -239,16 +247,16 @@
     };
 
     option = {
-        color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+        color: ['#003366', '#006699', '#4cabce', '#e5323e',"#8FCC77",'#E54F0C','#9E598C','#5B2918'],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
                 type: 'shadow'
             }
         },
-        legend: {
-            data: [<?php foreach ($shiyan_names as $v){ echo "'$v',";} ?>]
-        },
+        // legend: {
+        //     data: [<?php foreach ($shiyan_names as $v){ echo "'$v',";} ?>]
+        // },
         toolbox: {
             show: false,
             orient: 'vertical',
@@ -301,6 +309,5 @@
     }
 </script>
 {/if}
-{include file="system@block/layui" /}
+
 <script>  var formData = null</script>
-<script src="__ADMIN_JS__/footer.js"></script>
