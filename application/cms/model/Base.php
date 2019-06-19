@@ -116,7 +116,10 @@ class Base extends Model
         return $this->hasOne('CmsDiyDownload', 'eid', 'extend_id');
     }
 
-    //{content_extend}
+    public function hasDiyDsdsdsd()
+    {
+        return $this->hasOne('CmsDiyDsdsdsd', 'eid', 'extend_id');
+    }    //{content_extend}
 
 
 

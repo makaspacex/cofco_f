@@ -40,9 +40,9 @@ class AdminArticleLabel extends AdminBase
 
 
     public static function getLabelByArtID($art_id){
-        $res = Db::field('a.*,b.value')
-            ->table(['cofco_admin_article_label'=> 'a','cofco_admin_levellabel'=> 'b'])
-            ->where('a.label_id = b.id and art_id='.$art_id)->select();
+        $res = Db::table(['cofco_admin_article_label'=> 'a','cofco_admin_levellabel'=> 'b'])
+            ->field('a.*,b.value')
+            ->where('a.label_id = b.id and art_id=\''.$art_id.'\'')->select();
        return $res;
     }
 
