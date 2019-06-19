@@ -17,6 +17,7 @@ class AdminArticleLabel extends AdminBase
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
     public static function addLabel($art_id,$label_ids){
+        if($label_ids[0]==0) return;
         $datalist = Array();
         $data = Array();
         $data['art_id'] = $art_id;

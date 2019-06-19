@@ -12,8 +12,8 @@
         //     $(this).addClass('hide');
         // });
         $('select[name="project"]').attr('disabled',true).addClass('disabled').find('option[value="MAN"]').attr('selected',true);
-        $('input[name="status"][value="1"]').attr('checked',true);
-        $('input[name="status"][value!="1"]').attr('disabled',true).addClass('disabled');
+        $('input[name="status"][value="0"]').attr('checked',true);
+        $('input[name="status"][value!="0"]').attr('disabled',true).addClass('disabled');
         form.render();
         $('#formSubmit').click(function (e) {
             var form_s = $('#editForm');
@@ -34,9 +34,9 @@
             console.log(article_api_url_edit);
             $.post(article_api_url_edit,form_data,function (res) {
                 console.log(res);
-                if(res.code===0){
+                if(res.code===1){
                     layer.alert(
-                        res.message
+                        res.msg
                         ,{
                             offset:'auto',
                             icon: 1,
@@ -49,7 +49,7 @@
                 }
                 else {
                     layer.alert(
-                        res.message
+                        res.msg
                         ,{
                             offset:'auto',
                             icon: 1,
