@@ -12,6 +12,7 @@
         <a class="layui-btn  layui-btn-xs" lay-event="resume">恢复</a>
         <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="terminate">终止</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-info layui-btn-xs" lay-event="retry">重试失败的文章</a>
 </script>
 
 <blockquote class="layui-elem-quote layui-text">
@@ -72,7 +73,7 @@
                 , {field: 's_time', title: '最后启动时间', width: 165}
                 , {field: 'status', fixed: 'right',title: '状态',templet: function (d) {return STATUS_NAME[d.status]},width:80}
                 // , {field: 'operation', title: '操作'}
-                , {title: '操作', fixed: 'right', width: 260, align: 'center', toolbar: '#barDemo'}
+                , {title: '操作', fixed: 'right', width: 320, align: 'center', toolbar: '#barDemo'}
 
             ]]
             , page: false
@@ -172,6 +173,18 @@
                     $.ajax({
                         url:url,
                         data:{kw_id:data.kw_id,action:"del",idsP:1,contentP:1},
+                        type:"post",
+                        dataType:"json",
+                        success:function (res) {
+                            console.log(res);
+                        }
+                    });
+                    break;
+                case 'retry':
+                    console.log(url);
+                    $.ajax({
+                        url:url,
+                        data:{kw_id:data.kw_id,action:"retry",idsP:1,contentP:1},
                         type:"post",
                         dataType:"json",
                         success:function (res) {

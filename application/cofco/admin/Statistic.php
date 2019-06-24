@@ -229,4 +229,15 @@ class Statistic extends AdminBase
         $this->assign('dispaly_statistic', '1');
         return $this->fetch();
     }
+
+
+    public function grade(){
+
+        return $this->fetch();
+    }
+
+    public function meta(){
+
+        return $this->fetch();
+    }
 }

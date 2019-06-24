@@ -4,15 +4,15 @@
     .layui-form-title {
         color: #2E9588 !important;
     }
-
     .layui-textarea {
         min-height: 420px;
     }
-
 </style>
-{php} if(!isset($art_arr)){ $art_arr = ''; } {/php}
-
-<div class="layui-container" style="max-width: 1400px;margin-bottom: 50px;">
+{php}
+if(!isset($art_arr)){ $art_arr = ''; }
+if(!isset($show_edit_div)){ $show_edit_div = true; }
+{/php}
+<div class="layui-container-fluid {if condition="$show_edit_div!==true"}hide{/if}" style="max-width: 1400px;margin-bottom: 50px;" id="edit-div">
     <form class=" layui-form-pane" action="{:url()}" method="post" id="editForm">
         <div class="layui-row">
             <div class="layui-col-md11">
@@ -106,19 +106,16 @@
                 </div>
             </div>
 
-
             <div class="layui-col-md3 layui-form">
                 <label class="layui-form-label">文献类型 </label>
                 <div class="layui-input-block">
                     <select name="project" id="project" lay-verify="required" lay-search="" enable-input="true">
                         <option value="">不限制</option>
                         <option value="{:NULL_STR}" class="tip-opt">空字符串</option>
-                        <option value="MAN" {if artFiledValue($art_arr,
-                        'project') == 'MAN'}selected{/if}>人工输入</option>
-                        <option value="PUBMED_SPIDER" {if artFiledValue($art_arr,
-                        'project') == 'PUBMED_SPIDER'}selected{/if}>Pubmed爬虫</option>
-                        <option value="SCIENCE_SPIDER" {if artFiledValue($art_arr,
-                        'project') == 'SCIENCE_SPIDER'}selected{/if}>Science爬虫</option>
+                        <option value="MAN" {if artFiledValue($art_arr,  'project') == 'MAN'}selected{/if}>人工输入</option>
+                        <option value="ASSIST" {if artFiledValue($art_arr,  'project') == 'ASSIST'}selected{/if}>辅助输入</option>
+                        <option value="PUBMED_SPIDER" {if artFiledValue($art_arr, 'project') == 'PUBMED_SPIDER'}selected{/if}>Pubmed爬虫</option>
+                        <option value="SCIENCE_SPIDER" {if artFiledValue($art_arr, 'project') == 'SCIENCE_SPIDER'}selected{/if}>Science爬虫</option>
                     </select>
                 </div>
             </div>
@@ -188,14 +185,11 @@
             </div>
             <div class="layui-col-md12 layui-form">
                 <div class="layui-form-item">
-                    <input type="radio" class="field-status" name="status" value="0" title="待分配" {if
-                           artFiledValue($art_arr, 'status') == '0'}checked{/if}>
-                    <input type="radio" class="field-status" name="status" value="2" title="文献标注" {if
-                           artFiledValue($art_arr, 'status') == '2'}checked{/if}>
-                    <input type="radio" class="field-status" name="status" value="3" title="文献终审" {if
-                           artFiledValue($art_arr, 'status') == '3'}checked{/if}>
-                    <input type="radio" class="field-status" name="status" value="4" title="文献输出" {if
-                           artFiledValue($art_arr, 'status') == '4'}checked{/if}>
+                    <input type="radio" class="field-status" name="status" value="0" title="待分配" {if artFiledValue($art_arr, 'status') == '0'}checked{/if}>
+                    <input type="radio" class="field-status" name="status" value="1" title="文献初审" {if artFiledValue($art_arr, 'status') == '1'}checked{/if}>
+                    <input type="radio" class="field-status" name="status" value="2" title="文献标注" {if artFiledValue($art_arr, 'status') == '2'}checked{/if}>
+                    <input type="radio" class="field-status" name="status" value="3" title="文献终审" {if artFiledValue($art_arr, 'status') == '3'}checked{/if}>
+                    <input type="radio" class="field-status" name="status" value="4" title="文献输出" {if  artFiledValue($art_arr, 'status') == '4'}checked{/if}>
                 </div>
             </div>
             <div class="layui-row">
@@ -236,9 +230,69 @@
     }
 </script>
 
-<script src="__ADMIN_MOD_JS__/tntreebox/tntreebox.js?v=35"></script>
 <link rel="stylesheet" type="text/css" href="__ADMIN_MOD_JS__/tntreebox/tntreebox.css?v=27" />
+<script src="__ADMIN_MOD_JS__/tntreebox/tntreebox.js?v=35"></script>
+<script>
+    layui.use(['form','jquery','layer'],function (e) {
 
+        var $ = layui.$;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        $('#formSubmit').click(function (e) {
+            var form_s = $('#editForm');
+            var form_data = form_s.serializeArray();
+            console.log(form_data);
+            var label_ids = new Array();  // 标签id
+            $(".header div.tag").each(function() {
+                // let this = $(this);
+                console.log($(this).attr('value'));
+                label_ids.push($(this).attr('value'));
+            });
+            form_data.push({
+                name: "label_ids",
+                value: label_ids
+            });
+            console.log(form_data);
+            var article_api_url_edit = "{:url($article_api_url.'/add')}";
+            console.log(article_api_url_edit);
+            $.post(article_api_url_edit,form_data,function (res) {
+                console.log(res);
+                if(res.code===1){
+                    layer.alert(
+                        res.msg
+                        ,{
+                            offset:'auto',
+                            icon: 1,
+                            skin: 'layer-ext-moon'
+                        }
+                        ,function (e) {
+                            layui.layer.closeAll();
+                            location.reload()
+                        });
+                }
+                else {
+                    layer.alert(
+                        res.msg
+                        ,{
+                            offset:'auto',
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        });
+                }
+            });
+            if(e.preventDefault){ e.preventDefault(); }else{ window.event.returnValue == false;}
+
+        });
+        $('div.layui-form-checkbox').addClass('hide');
+    });
+</script>
+<script type="text/javascript">
+    $(function(){
+        var data = {:htmlspecialchars_decode($label_list)};
+        tnTreeBox('treebox',data,[]);
+    });
+</script>
 
 
 

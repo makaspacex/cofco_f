@@ -38,7 +38,7 @@ class upload extends AdminBase
         $this->assign('hisiTabData', $this->tab_data);
     }
 
-    /** 辅助输入
+    /** 文献上传
      * @return string|void
      */
     public function index()
@@ -57,7 +57,10 @@ class upload extends AdminBase
      */
     public function assist()
     {
-        return $this->fetch('pending_fform');
+        $label_list = LevellabelModel::where('status','1')->select();
+        $this->assign('label_list', $label_list);
+        $this->assign('show_edit_div', false);
+        return $this->fetch('assist');
     }
 
     /** 人工输入

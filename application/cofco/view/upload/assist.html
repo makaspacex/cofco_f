@@ -1,0 +1,176 @@
+{include file="cofco@block/edit_form"/}
+<link rel="stylesheet" type="text/css" href="__COFCO_CSS__/style.css">
+<style>
+    .layui-form-title {
+        color: #2E9588 !important;
+    }
+
+    .assit-text-area {
+        min-height: 220px;
+    }
+
+    button {
+        display: block;
+        min-width: 200px;
+    }
+</style>
+
+<div class="layui-container-fluid" style="max-width: 1400px;margin-bottom: 50px;" id="assist-div">
+    <blockquote class="layui-elem-quote layui-text">
+        <div class="row">
+            <div class="layui-col-md-10">
+                文献网址支持如下形式
+                <ul>
+                    <li>https://www.sciencedirect.com/science/article/pii/S0020025514000358</li>
+                    <li>https://www.ncbi.nlm.nih.gov/pubmed/31038666</li>
+                </ul>
+                其中<b>S0020025514000358</b>为该文献在ScienceDirect网站上的唯一标识，是<span
+                    style="font-weight: bold;color: red">变量</span>；<b>31038666</b>为该文献在Pubmed网站上的唯一标识，是<span
+                    style="font-weight: bold;color: red">变量</span>。<br/>
+                <span style="font-weight: bold;color: red">任何不符合以上格式的数据均为无效数据</span>
+            </div>
+
+        </div>
+    </blockquote>
+    <div class="layui-row">
+
+        <div class="layui-col-md12">
+            <div class="layui-form-title margin-t-20 margin-b-10">方式1：单篇文献(支持编辑后进入待分配列表)</div>
+        </div>
+        <div class="layui-col-md10">
+            <div class="layui-form-item textarea-container">
+                <input type="text" class="layui-input field-url" name="single-input" lay-verify="" autocomplete="off"
+                       placeholder="文献详情页网址">
+            </div>
+            <button type="button" class="layui-btn layui-btn-success layui-btn-sm right-align" id="single-line-submit">
+                提交单个地址
+            </button>
+
+        </div>
+    </div>
+
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-form-title margin-t-20 margin-b-10">方式2：多篇文献(不支持编辑，直接进入待分配列表)</div>
+        </div>
+
+        <div class="layui-col-md10">
+            <div class="layui-form-item textarea-container">
+                    <textarea rows="5" class="layui-textarea field-tabstract auto-textarea-content assit-text-area" name="multi-input"
+                              lay-verify="" autocomplete="off"
+                              placeholder="支持Pubmed和ScienceDirect混合网址，每行一个，支持自动去重，系统自动启动爬虫爬取所有数据并存入待分配列表"></textarea>
+            </div>
+            <button type="button" class="layui-btn layui-btn-warm layui-btn-sm right-align" id="multi-line-submit">
+                提交多个地址
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        layui.use(['jquery', 'table', 'layer'], function () {
+
+            var table = layui.table;
+            var tablePlug = layui.tablePlug;
+            var layer = layui.layer;
+            var form = layui.form;
+            var $ = layui.$;
+
+            $('#single-line-submit').click(function (e) {
+                var single_line = $("input[name='single-input']").val();
+
+                var url = '{:config("spider.assit_api")}';
+                var check_urls_api = '{:config("spider.check_url_api")}';
+                single_line = single_line.replace(/\s/g,'');
+                if(single_line.length === 0){
+                    layer.alert('内容为空！',{icon: 2,skin: 'layer-ext-moon' });
+                    return;
+                }
+
+                var data = [{name: 'urls', value: single_line},,{name: 'utype', value: 'single'}]
+                data.push({name:'uid',value:"{:getCurUser()['uid']}"})
+                data.push({name:'uname',value:"{:getCurUser()['nick']}"})
+                layer.load(1)
+                $.post(check_urls_api, data, function (resp) {
+                    layer.closeAll();
+                    if(resp.status === 0){
+                        layer.alert(resp.info,{icon: 2,skin: 'layer-ext-moon' });
+                    }else{
+                        layer.confirm(resp.info, {title:'检查结果', area: ['800px', '80%'], btn: ['继续','取消']},function(){
+                            layer.closeAll();
+                            layer.load(1)
+                            $.post(url, data, function (resp) {
+                                layer.closeAll();
+                                if(resp.status === 0){
+                                    layer.alert(resp.info,{icon: 2,skin: 'layer-ext-moon' });
+                                    return;
+                                }
+                                // 给form赋值
+                                var art_data = resp.data;
+                                for(var key in art_data){
+                                    if(key === 'status'){
+                                        continue;
+                                    }
+                                    $('input[name="'+key+'"]').val(art_data[key]);
+                                    $('textarea[name="'+key+'"]').val(art_data[key]);
+                                }
+
+                                $('input[name="art_id"]').attr('readonly', true).addClass('disabled');
+                                $('select[name="journal_zone"]').val(art_data['journal_zone']);
+                                $('select[name="project"]').val('MAN').attr('disabled', true).addClass('disabled');
+                                $('input[name="status"][value="0"]').attr('checked',true).addClass('disabled');
+                                $('input[name="status"][value!="0"]').attr('disabled', true).addClass('disabled');
+
+                                form.render();
+                                // 隐藏辅助页面并显示
+                                $('#assist-div').hide();
+                                $('#edit-div').show();
+                            });
+
+                        });
+                    }
+                });
+
+                return false;
+            });
+
+            $("#multi-line-submit").click(function (e) {
+                var multi_line = $("textarea[name='multi-input']").val();
+                var url = '{:config("spider.assit_api")}';
+                var check_urls_api = '{:config("spider.check_url_api")}';
+                if(multi_line.replace(/\s/g,'').length === 0){
+                    layer.alert('内容为空！',{icon: 2,skin: 'layer-ext-moon' });
+                    return;
+                }
+                var data = [{name: 'urls', value: multi_line},{name: 'utype', value: 'multi'}]
+                data.push({name:'uid',value:"{:getCurUser()['uid']}"})
+                data.push({name:'uname',value:"{:getCurUser()['nick']}"})
+                layer.load(1)
+                $.post(check_urls_api, data, function (resp) {
+                    layer.closeAll()
+                    if(resp.status === 0){
+                        layer.alert(resp.info,{icon: 2,skin: 'layer-ext-moon' });
+                    }else{
+                        layui.layer.confirm(resp.info, {title:'检查结果', area: ['800px', '80%'], btn: ['继续','取消']},function(){
+                            layer.closeAll()
+                            layui.layer.load(1)
+                            $.post(url, data, function (resp) {
+                                layer.closeAll()
+                                layer.msg(resp.info)
+                            });
+
+                        });
+                    }
+                });
+                return false;
+            });
+
+
+        });
+
+    });
+
+</script>
