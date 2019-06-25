@@ -1,4 +1,9 @@
 {include file="cofco@block/edit_form"/}
+<style>
+    #edit-div{
+        padding: 10px 20px;
+    }
+</style>
 <script>
     disableField(['special_version']);
 
@@ -12,7 +17,6 @@
                 input.prop('disabled', true);
             }
         }
-
 
         var data = {:htmlspecialchars_decode($label_list)};
         var label = {:htmlspecialchars_decode(json_encode($label))};
