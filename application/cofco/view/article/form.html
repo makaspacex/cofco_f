@@ -11,7 +11,7 @@
         var layer = layui.layer;
         var $ = layui.jquery;
         var status = parseInt({:artFiledValue($art_arr, 'status')});
-        for (var i = 1; i < 5; i++) {
+        for (var i = 0; i < 5; i++) {
             if (i < parseInt(status) - 1 || i > parseInt(status) + 1) {
                 input = $('.field-status[value="' + i + '"]');
                 input.prop('disabled', true);

@@ -205,13 +205,17 @@ if(!isset($show_edit_div)){ $show_edit_div = true; }
 
 <script>
     $(function () {
-        layui.use(['laydate','layer'], function () {
+        layui.use(['laydate','layer','jquery'], function () {
             var laydate = layui.laydate;
             var layer = layui.layer;
             //常规用法
             laydate.render({
                 elem: '#issue'
             });
+
+            var $ = layui.jquery;
+            var journal_zone = parseInt({:artFiledValue($art_arr, 'journal_zone')});
+            $('option[value="'+journal_zone+'"]').attr("selected",true)
         });
     });
 
