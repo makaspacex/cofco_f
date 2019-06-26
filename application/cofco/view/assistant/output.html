@@ -18,6 +18,7 @@
 
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="reject_this_one">驳回</a>
 </div>
 <script>
 
@@ -26,9 +27,28 @@
         var init_url = "{:url($article_api_url.'/search','status='.$art_status)}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
         var article_api_url_setstauts = "{:url($article_api_url.'/setstatus','status='.$art_status )}";
         var article_api_url_del = "{:url($article_api_url.'/del','status='.$art_status )}";
+        var article_api_url_update = "{:url($article_api_url.'/update',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'] )}";
         var except_field = [];
         var except_btns = ['edit','status_selected_data'];
         var except_search = { status:'{$art_status}'};
-        render_article_table(init_url,{except_field:except_field,width:180,title:'文献输出表',except_btns:except_btns,except_search:except_search});
+        render_article_table(init_url,{except_field:except_field,width:220,title:'文献输出表',except_btns:except_btns,except_search:except_search});
+
+        //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
+        layui.use(['jquery', 'table'],function () {
+            var table = layui.table, $ = layui.jquery;
+
+            // 行工具栏监听
+            table.on('tool(articletable)',function (obj) {
+                var data = obj.data,layEvent = obj.event;
+                var form_data = [];
+                form_data.push({name: "art_id[0]", value: data['art_id']});
+                if(layEvent == 'reject_this_one'){
+                    form_data.push({name: "set_status", value: "3"});
+                    form_data.push({name:'set_final_auditor_finished',value:'0'});
+                    _exe_update(article_api_url_update,form_data, true, 'this_row');
+                }
+
+            });
+        });
     });
 </script>

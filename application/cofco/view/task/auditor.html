@@ -40,7 +40,7 @@
         var except_search = { status:'{$art_status}', auditor:'{$uid}', auditor_finished:'0' };// 表格基础url里面的参数必须被排除
         var article_api_url_update = "{:url($article_api_url.'/update',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'] )}";
         var article_api_url_del = "{:url($article_api_url.'/del',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'])}";
-        render_article_table(init_url,{except_field:except_field,width:290,title:'文献初审表',except_btns:except_btns,except_search:except_search});
+        render_article_table(init_url,{except_field:except_field,width:330,title:'文献初审表',except_btns:except_btns,except_search:except_search});
         //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
         layui.use(['jquery', 'table'],function () {
             var table = layui.table, $ = layui.jquery;

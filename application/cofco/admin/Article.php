@@ -516,9 +516,7 @@ class Article extends AdminBase
      */
     public function edit()
     {
-
         try {
-
             if ($this->request->isPost()) {
                 $data = $this->request->post();
                 $art_id = $data['art_id'];

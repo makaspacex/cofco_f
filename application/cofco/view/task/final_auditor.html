@@ -20,6 +20,7 @@
 <!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="rowtools" class="hide">
     <a class="layui-btn layui-btn-xs" lay-event="pass_this_one">终审通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="reject_this_one">驳回</a>
 </div>
 
 <!-- =================  自定义增加的搜索输入框, ID不要变  ===================================================-->
@@ -38,7 +39,7 @@
         var except_search = { status:'{$art_status}', final_auditor:'{$uid}', final_auditor_finished:'0' };// 表格基础url里面的参数必须被排除
         var except_btns = ['del_selected','status_selected_data'];
         var article_api_url_update = "{:url($article_api_url.'/update',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'] )}";
-        render_article_table(init_url,{except_field:except_field,width:290,title:'文献终审表',except_btns:except_btns,except_search:except_search});
+        render_article_table(init_url,{except_field:except_field,width:330,title:'文献终审表',except_btns:except_btns,except_search:except_search});
         //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
         layui.use(['jquery', 'table'],function () {
             var table = layui.table, $ = layui.jquery;
@@ -46,11 +47,17 @@
             // 行工具栏监听
             table.on('tool(articletable)',function (obj) {
                 var data = obj.data,layEvent = obj.event;
+                var form_data = [];
+                form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                 if(layEvent === 'pass_this_one'){ // 通过审核
-                    var form_data = [];
-                    form_data.push({name: "art_id[0]", value: obj.data['art_id']});
                     form_data.push({name: "set_status", value: "4"});
                     form_data.push({name:'set_final_auditor_finished',value:'1'})
+                    _exe_update(article_api_url_update,form_data, true, 'this_row');
+                }
+                else if(layEvent == 'reject_this_one'){
+                    form_data.push({name: "set_status", value: "2"});
+                    form_data.push({name:'set_labelor_finished',value:'0'});
+                    form_data.push({name:'set_final_auditor_finished',value:'0'});
                     _exe_update(article_api_url_update,form_data, true, 'this_row');
                 }
             });
