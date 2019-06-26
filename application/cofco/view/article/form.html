@@ -62,7 +62,7 @@
             console.log(form_data);
 
             var article_api_url_edit = "{:url($article_api_url.'/edit')}";
-            console.log(article_api_url_edit);
+            // console.log(article_api_url_edit);
             $.post(article_api_url_edit, form_data, function (res) {
                 console.log(res);
                 if (res.code === 1) {

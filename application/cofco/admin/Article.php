@@ -518,10 +518,18 @@ class Article extends AdminBase
     {
 
         try {
+
             if ($this->request->isPost()) {
                 $data = $this->request->post();
                 $art_id = $data['art_id'];
-
+                if($data['pre_status']<$data['status']){
+                    if($data['status'] == 2)
+                        $data['auditor_finished'] = 1;
+                    if($data['status'] == 3)
+                        $data['labelor_finished'] = 1;
+                    if($data['status'] == 4)
+                        $data['final_auditor_finished'] = 1;
+                }
                 unset($data['pre_status']);
 
                 $where = array('art_id' => intval($art_id)); //更新条件
@@ -545,12 +553,12 @@ class Article extends AdminBase
                 }
                 unset($data['label_add']);
                 unset($data['label_del']);
-                $data['labelor_finished'] = '1';
+
                 $res = PendingModel::update($data,$where);
                 if (!$res) {
                     return json(['code' => 0, 'msg' => '操作失败']);
                 }
-                return json(['code' => 1, 'msg' => '操作成功']);
+                return json(['code' => 1, 'msg' => '操作成功','data' => $data]);
             }
             $art_id = input('param.art_id/s');
             $art_arr = PendingModel::where('art_id', $art_id)->find()->toArray();
