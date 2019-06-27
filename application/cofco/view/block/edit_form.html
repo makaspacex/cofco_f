@@ -14,7 +14,7 @@ if(!isset($art_arr)){ $art_arr = ''; }
 if(!isset($show_edit_div)){ $show_edit_div = true; }
 {/php}
 <div class="layui-container-fluid {if condition=" $show_edit_div!==true"}hide{/if}"
-     style="max-width: 1400px;margin-bottom: 50px;" id="edit-div">
+     style="max-width: 1400px;" id="edit-div">
     <form class=" layui-form-pane" action="{:url()}" method="post" id="editForm">
         <div class="layui-row">
             <div class="layui-col-md11">
@@ -213,7 +213,14 @@ if(!isset($show_edit_div)){ $show_edit_div = true; }
         </div>
     </form>
 </div>
-
+<style>
+    #edit-div {
+        padding: 10px 20px;
+    }
+    #edit-button{
+        padding:20px 20px;
+    }
+</style>
 <script>
     $(function () {
         layui.use(['laydate', 'layer', 'jquery'], function () {
@@ -255,15 +262,15 @@ if(!isset($show_edit_div)){ $show_edit_div = true; }
     });
 </script>
 <script type="text/javascript">
-    function formSubmit(status, label_arr) {
-        $('#formSubmit').click(function (e) {
+    function formSubmit(id,pre_status,set_status, label_arr) {
+        $(id).click(function (e) {
             var form_s = $('#editForm');
             var form_data = form_s.serializeArray();
             form_data.push({
                 name: "pre_status",
-                value: status
+                value: pre_status
             });
-            form_data[15]['value'] = status + 1;
+            form_data[15]['value'] = set_status;
             var label_ids = new Array();  // 标签id
             $(".header div.tag").each(function () {
                 label_ids.push(parseInt($(this).attr('value')));

@@ -528,6 +528,14 @@ class Article extends AdminBase
                     if($data['status'] == 4)
                         $data['final_auditor_finished'] = 1;
                 }
+                else{
+                    if($data['status'] == 0)
+                        $data['auditor_finished'] = 0;
+                    if($data['status'] == 1)
+                        $data['labelor_finished'] = 0;
+                    if($data['status'] == 2)
+                        $data['final_auditor_finished'] = 0;
+                }
                 unset($data['pre_status']);
 
                 $where = array('art_id' => intval($art_id)); //更新条件

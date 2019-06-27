@@ -36,7 +36,7 @@
     //-------------- 执行表格渲染动作 --------------------------------------------------
     $(function () {
         var init_url = "{:url($article_api_url.'/search',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'])}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
-        var except_field = ['auditor','labelor','final_auditor'];
+        var except_field = ['auditor','labelor','final_auditor','label'];
         var article_api_url_setstauts = "{:url($article_api_url.'/setstatus',['status'=>$art_status,'auditor'=>$uid,'auditor_finished'=>'0'] )}";
         var except_btns = ['del_selected','status_selected_data'];
         var except_search = { status:'{$art_status}', auditor:'{$uid}', auditor_finished:'0' };// 表格基础url里面的参数必须被排除
