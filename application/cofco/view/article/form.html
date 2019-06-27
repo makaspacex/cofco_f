@@ -13,17 +13,8 @@
     layui.use(['jquery', 'layer', 'laydate'], function () {
         var layer = layui.layer;
         var $ = layui.jquery;
-        var status = parseInt({:artFiledValue($art_arr, 'status')});
 
-        var data = {:htmlspecialchars_decode($label_list)};
-        var label = {:htmlspecialchars_decode(json_encode($label))};
-        var label_arr = new Array();
-        for(var a in label){
-            label_arr.push(label[a]['label_id']);
-        }
-        tnTreeBox('treebox',data,label_arr);
-
-        formSubmit('#formSubmit',0,0,label_arr);
+        formSubmit('#formSubmit',0,0,[]);
 
 
     });
