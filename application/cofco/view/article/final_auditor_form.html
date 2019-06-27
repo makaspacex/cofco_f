@@ -18,6 +18,7 @@
         var layer = layui.layer;
         var $ = layui.jquery;
         var status = parseInt({:artFiledValue($art_arr, 'status')});
+        $('input[name="status"][value!="3"]').attr('disabled', true);
 
         var data = {:htmlspecialchars_decode($label_list)};
         var label = {:htmlspecialchars_decode(json_encode($label))};

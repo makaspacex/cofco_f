@@ -33,7 +33,7 @@
 <!-- =================  通用每行的按钮, script标签的ID不要变  ===================================================-->
 <div type="text/html" id="general_rowtools" class="hide">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="source">来源</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del_this_row">删除</a>
 </div>
@@ -89,7 +89,7 @@
             , {field: 'country', title: '国家', width: 100}
             , {field: 'author', title: '作者', width: 100}
             , {field: 'journal', title: '所属期刊', width: 100}
-            , {field: 'journal_zone', title: '期刊分区', width: 100, sort: true}
+            , {field: 'journal_zone', title: '期刊分区', width: 100, sort: true, templet: function(d){return d['journal_zone']==0?'':d['journal_zone']}}
             , {field: 'institue', title: '发表机构', width: 100}
             , {title: '操作',fixed: 'right', width: width, align: 'center', toolbar: '#all_rowtools'}
         ];
@@ -557,7 +557,7 @@
                         ,content: content
                     });
                 }else if(layEvent === 'edit'){
-                    var article_api_url_edit = "{:url($article_api_url.'/edit')}"+'?art_id='+data.art_id;
+                    var article_api_url_edit = "{:url($article_api_url.'/edit')}"+'?art_id='+data.art_id+'&status='+data.status;
                     layer.open({
                         type: 2,
                         title: '编辑页面',

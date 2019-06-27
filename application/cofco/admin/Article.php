@@ -35,7 +35,7 @@ class Article extends AdminBase
                 $map = [];
                 $map['tid'] = $art_id;
                 $map['type'] = $status;
-                LogModel::where()->delete();
+//                LogModel::where()->delete();
                 //LogModel::_insertUserLog((int)$status+10, $art_id);
             }
         }
@@ -570,7 +570,22 @@ class Article extends AdminBase
             $label = ArticleLabelModel::getLabelByArtID($art_id);
             $this->assign('label',$label);
             $this->view->engine->layout(false);
-            return $this->fetch('form');
+
+            $data = input('param.status/s');
+            switch ($data)
+            {
+                case '1':  //文献初审
+                    return $this->fetch('auditor_form');
+                case '2':  //文献标注
+                    return $this->fetch('labelor_form');
+                case '3':  //文献终审
+                    return $this->fetch('final_auditor_form');
+                case '4':  //文献输出
+                    return $this->fetch('form');
+                default :
+                    return $this->fetch('form');
+            }
+
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '操作失败' . $e->getMessage()]);
         }
