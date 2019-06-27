@@ -23,6 +23,10 @@
                         var layer = layui.layer;
                         var $ = layui.jquery;
                         $('#label-treebox').hide();
+
+                        //禁用下拉框
+                        $('select').attr('disabled', 'disabled');
+                        form.render('select');
                         var status = parseInt({:artFiledValue($art_arr, 'status')});
                         $('input[name="status"][value!="1"]').attr('disabled', true).addClass('disabled');
 

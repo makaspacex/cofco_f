@@ -18,7 +18,9 @@
 
 <script>
     $(function () {
-        disableField(['special_version']);
+        disableField(['art_id','special_version','title','author','doi',
+            'issue','journal','impact_factor','journal_zone','institue',
+            'project','country','keyword','special_version','urgency','abstract','tabstract']);
 
         layui.use(['jquery', 'layer', 'laydate'], function () {
             var layer = layui.layer;
