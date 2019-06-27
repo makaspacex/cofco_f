@@ -18,15 +18,15 @@
 
 <script>
     $(function () {
-        disableField(['art_id','special_version','title','author','doi',
-            'issue','journal','impact_factor','journal_zone','institue',
-            'project','country','keyword','special_version','urgency','abstract','tabstract']);
-
+        // disableField(['special_version','title','author','doi',
+        //     'issue','journal','impact_factor','journal_zone','institue',
+        //     'project','country','keyword','special_version','urgency','abstract']);
+        disableField(['special_version'])
         layui.use(['jquery', 'layer', 'laydate'], function () {
             var layer = layui.layer;
             var $ = layui.jquery;
             var status = parseInt({:artFiledValue($art_arr, 'status')});
-            $('input[name="status"][value!="3"]').attr('disabled', true);
+            $('input[name="status"][value!="3"]').attr('disabled', true).addClass('disabled');
 
             var data = {:htmlspecialchars_decode($label_list)};
             var label = {:htmlspecialchars_decode(json_encode($label))};
@@ -40,7 +40,6 @@
             formSubmit('#reject-formSubmit', status, status - 1, label_arr);
             formSubmit('#blacklist-formSubmit', status, -2, label_arr);
             formSubmit('#recycle-formSubmit', status, -1, label_arr);
-
         });
     })
 </script>

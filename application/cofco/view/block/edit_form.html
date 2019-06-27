@@ -262,11 +262,20 @@ if(!isset($show_edit_div)){ $show_edit_div = true; }
         $(id).click(function (e) {
             var form_s = $('#editForm');
             var form_data = form_s.serializeArray();
+            console.log(form_data);
             form_data.push({
                 name: "pre_status",
                 value: pre_status
             });
-            form_data[15]['value'] = set_status;
+
+            for(var i in form_data){
+                console.log(form_data[i]['name']);
+                if(form_data[i]['name']=='status') {
+                    form_data[i]['value'] = set_status;
+                    break;
+                }
+
+            }
             var label_ids = new Array();  // 标签id
             $(".header div.tag").each(function () {
                 label_ids.push(parseInt($(this).attr('value')));
