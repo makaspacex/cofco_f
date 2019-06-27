@@ -528,7 +528,7 @@ class Article extends AdminBase
                     if($data['status'] == 4)
                         $data['final_auditor_finished'] = 1;
                 }
-                else{
+                if($data['pre_status']>$data['status']){
                     if($data['status'] == 1)
                         $data['auditor_finished'] = 0;
                     if($data['status'] == 2)
