@@ -14,28 +14,33 @@
         </button>
 </div>
 <script>
-    disableField(['special_version']);
+        $(function () {
+                disableField(['art_id','special_version','title','author','doi',
+                        'issue','journal','impact_factor','journal_zone','institue',
+                        'project','country','keyword','special_version','urgency','abstract','tabstract']);
 
-    layui.use(['jquery', 'layer', 'laydate'], function () {
-        var layer = layui.layer;
-        var $ = layui.jquery;
-        $('#label-treebox').hide();
-        var status = parseInt({:artFiledValue($art_arr, 'status')});
-        $('input[name="status"][value!="1"]').attr('disabled', true).addClass('disabled');
+                layui.use(['jquery', 'layer', 'laydate'], function () {
+                        var layer = layui.layer;
+                        var $ = layui.jquery;
+                        $('#label-treebox').hide();
+                        var status = parseInt({:artFiledValue($art_arr, 'status')});
+                        $('input[name="status"][value!="1"]').attr('disabled', true).addClass('disabled');
 
-        var data = {:htmlspecialchars_decode($label_list)};
-        var label = {:htmlspecialchars_decode(json_encode($label))};
-        var label_arr = new Array();
-        for(var a in label){
-            label_arr.push(label[a]['label_id']);
-        }
-        tnTreeBox('treebox',data,label_arr);
+                        var data = {:htmlspecialchars_decode($label_list)};
+                        var label = {:htmlspecialchars_decode(json_encode($label))};
+                        var label_arr = new Array();
+                        for(var a in label){
+                                label_arr.push(label[a]['label_id']);
+                        }
+                        tnTreeBox('treebox',data,label_arr);
 
 
-        formSubmit('#formSubmit',status,status+1,label_arr);
-        formSubmit('#reject-formSubmit',status,status-1,label_arr);
-        formSubmit('#blacklist-formSubmit',status,-2,label_arr);
-        formSubmit('#recycle-formSubmit',status,-1,label_arr);
+                        formSubmit('#formSubmit',status,status+1,label_arr);
+                        formSubmit('#reject-formSubmit',status,status-1,label_arr);
+                        formSubmit('#blacklist-formSubmit',status,-2,label_arr);
+                        formSubmit('#recycle-formSubmit',status,-1,label_arr);
 
-    });
+                });
+        })
+
 </script>
