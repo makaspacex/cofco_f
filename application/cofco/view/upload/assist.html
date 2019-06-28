@@ -78,7 +78,7 @@
             var layer = layui.layer;
             var form = layui.form;
             var $ = layui.$;
-
+            $('#formSubmit').hide();
             $('#single-line-submit').click(function (e) {
                 var single_line = $("input[name='single-input']").val();
 
@@ -127,6 +127,8 @@
                                 form.render();
                                 // 隐藏辅助页面并显示
                                 $('#assist-div').hide();
+                                $('#formSubmit').show();
+
                                 $('#edit-div').show();
                             });
 
