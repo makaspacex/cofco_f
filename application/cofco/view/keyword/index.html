@@ -115,7 +115,7 @@
             $.ajax({
                 url: 'setstatus',
                 type: 'post',
-                data: {'status': status, 'ids': id},
+                data: {'status': status, 'id': id},
                 success: function (res) {
                     if (res.code == 1) {
                         layer.msg('修改成功');

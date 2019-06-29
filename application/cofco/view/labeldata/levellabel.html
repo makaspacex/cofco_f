@@ -26,13 +26,22 @@
         <dt>
             <input type="checkbox" disabled="disabled"  name="ids[{$kk}]" value="{$vv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
             <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
-            <input type="checkbox" name="status" value="{$vv['status']}" {if condition="$vv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
+            <input type="checkbox" name="status" value="{$vv['status']}"
+                   {if condition="$vv['status'] eq 1"}checked=""{/if}
+            lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"
+            data-href="{:url('status?table=admin_levellabel&ids='.$vv['id'])}">
+            <div class="layui-unselect layui-form-switch layui-form-onswitch"
+                 lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭
+                {/if}</em><i></i></div>
 
             <div class="menu-btns">
-                <a href="{:url('levellabel_edit?id='.$vv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
-                <a href="{:url('levellabel_add?cid='.$vv['id'])}" title="添加子菜单""><i class="layui-icon">&#xe654;</i></a>
+                <a href="{:url('levellabel_edit?id='.$vv['id'])}" title="编辑">
+                    <i class="layui-icon">&#xe642;</i></a>
+                <a href="{:url('levellabel_add?cid='.$vv['id'])}" title="添加子菜单">
+                    <i class="layui-icon">&#xe654;</i></a>
                 {if condition="$v['id'] > 4"}
-                <a href="{:url('levellabel_del?ids='.$vv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
+                <a href="{:url('levellabel_del?ids='.$vv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax">
+                    <i class="layui-icon">&#xe640;</i></a>
                 {/if}
             </div>
         </dt>

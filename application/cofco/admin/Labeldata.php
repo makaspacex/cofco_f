@@ -310,4 +310,26 @@ class Labeldata extends AdminBase
         $this->view->engine->layout(false);
         return $this->fetch();
     }
+
+
+    public function status()
+    {
+
+        $id = input('param.id/s');
+        $status = input('param.status/s');
+        $map = [];
+        $map['id'] = $id;
+        if($status){
+            $map['status'] = 0;
+        }
+        else{
+            $map['status'] = 1;
+        }
+        return json(['map'=>$map]);
+        $res = KwModel::update($map);
+        if($res){
+            return $this->success("修改成功");
+        }
+        return $this->error("修改失败");
+    }
 }
