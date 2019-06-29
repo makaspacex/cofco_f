@@ -83,6 +83,7 @@ class Labeldata extends AdminBase
         $row = LevellabelModel::where('id', $id)->find()->toArray();
         $this->assign('levellabel_option', LevellabelModel::getOption());
         $this->assign('data_info', $row);
+
         return $this->fetch('levellabel_form1');
     }
 

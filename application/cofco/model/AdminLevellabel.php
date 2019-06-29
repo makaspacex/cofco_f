@@ -26,7 +26,7 @@ class AdminLevellabel extends AdminBase
                 $str .= '<option value="'.$k.'">'.$v.'</option>';
             }
         }
-        return $str;
+        return $rows;
     }
 
     public static function getAllChild($cid = 0, $status = 1, $field = 'id,cid,value,score,status', $level = 0, $data = [])

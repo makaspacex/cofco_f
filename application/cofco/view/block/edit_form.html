@@ -231,7 +231,7 @@ if(!isset($show_edit_div)){ $show_edit_div = true; }
             });
             var $ = layui.jquery;
             var journal_zone = parseInt({:artFiledValue($art_arr, 'journal_zone')});
-            $('option[value="' + journal_zone + '"]').attr("selected", true)
+            $('option[value="' + journal_zone + '"]').attr("selected", true);
         });
     });
     //禁用一些选项的编辑功能
