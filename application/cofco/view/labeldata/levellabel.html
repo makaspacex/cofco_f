@@ -24,12 +24,20 @@
     {/php}
     <dl class="menu-dl1">
         <dt>
-            <input type="checkbox" disabled="disabled"  name="ids[{$kk}]" value="{$vv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
-            <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
+            <input type="checkbox" disabled="disabled"  name="ids[{$kk}]"
+                   value="{$vv['id']}" class="checkbox-ids" lay-skin="primary"
+                   title="{$vv['value']}">
+            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                <span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
+            <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]"
+                   onkeyup="value=value.replace(/[^\d]/g,'')"
+                   value="{$vv['score']}"
+                   data-value="value"
+                   data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
             <input type="checkbox" name="status" value="{$vv['status']}"
                    {if condition="$vv['status'] eq 1"}checked=""{/if}
             lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"
-            data-href="{:url('status?table=admin_levellabel&ids='.$vv['id'])}">
+            data-href="{:url('status?ids='.$vv['id'])}">
             <div class="layui-unselect layui-form-switch layui-form-onswitch"
                  lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else /}关闭
                 {/if}</em><i></i></div>
@@ -57,7 +65,7 @@
             <dl class="menu-dl2">
                 <dt>
                     <input type="checkbox" name="ids[{$kk}]"  value="{$vvv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vvv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvv['value']}</span><i class="layui-icon">&#xe626;</i></div>
-                    <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvv['score']}" data-value="{$vvv['score']}" data-href="{:url('sort?table=admin_levellabel&ids='.$vvv['id'])}">
+                    <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvv['score']}" data-value="{$vvv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vvv['id'])}">
                     <input type="checkbox" name="status" value="{$vvv['status']}" {if condition="$vvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
                     <div class="menu-btns">
                         <a href="{:url('levellabel_edit?id='.$vvv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
@@ -79,11 +87,25 @@
                 <dd>
                     <input type="checkbox" name="ids[{$kk}]" value="{$vvvv['id']}" class="checkbox-ids" lay-skin="primary" title="{$vvvv['value']}"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvvv['value']}</span><i class="layui-icon">&#xe626;</i></div>
                     <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvvv['score']}" data-value="{$vvvv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vvvv['id'])}">
-                    <input type="checkbox" name="status" value="{$vvvv['status']}" {if condition="$vvvv['status'] eq 1"}checked=""{/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=admin_levellabel&ids='.$vvvv['id'])}"><div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if condition="$vvvv['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
+                    <input type="checkbox" name="status" value="{$vvvv['status']}"
+                           {if condition="$vvvv['status'] eq 1"}checked=""{/if}
+                    lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭"
+                    data-href="{:url('status?table=admin_levellabel&ids='.$vvvv['id'])}">
+                    <div class="layui-unselect layui-form-switch layui-form-onswitch"
+                         lay-skin="_switch"><em>{if condition="$vvvv['status'] eq 1"}正常{else /}
+                        关闭{/if}</em><i></i>
+                    </div>
                     <div class="menu-btns">
-                        <a href="{:url('levellabel_edit?id='.$vvvv['id'])}" title="编辑""><i class="layui-icon">&#xe642;</i></a>
-                        <a href="{:url('levellabel_add?cid='.$vvvv['id'])}" title="添加子菜单""><i class="layui-icon">&#xe654;</i></a>
-                        <a href="{:url('levellabel_del?ids='.$vvvv['id'])}" title="删除之后无法恢复，您确定要删除吗？" class="j-ajax"><i class="layui-icon">&#xe640;</i></a>
+                        <a href="{:url('levellabel_edit?id='.$vvvv['id'])}" title="编辑">
+                        <i class="layui-icon">&#xe642;</i>
+                        </a>
+                        <a href="{:url('levellabel_add?cid='.$vvvv['id'])}" title="添加子菜单">
+                            <i class="layui-icon">&#xe654;</i>
+                        </a>
+                        <a href="{:url('levellabel_del?ids='.$vvvv['id'])}" title="删除之后无法恢复，您确定要删除吗？"
+                           class="j-ajax">
+                            <i class="layui-icon">&#xe640;</i>
+                        </a>
                     </div>
                 </dd>
                 {php}
@@ -104,5 +126,6 @@
 {/volist}
 {include file="system@block/layui" /}
 <script>
-
+    var menulist = {:json_encode($menu_list)}
+    console.log(menulist);
 </script>

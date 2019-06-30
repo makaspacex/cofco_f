@@ -2,20 +2,28 @@
     <div class="layui-form-item">
         <label class="layui-form-label">上级标签</label>
         <div class="layui-input-inline">
-            <select name="cid"  class="field-cid" type="select" lay-search multiple="multiple">
-                {$levellabel_option}
+            <select name="cid"   type="select" >
+                {php}
+                foreach ($levellabel_option as $k => $v) {
+                if (artFiledValue($data_info,'cid') == $k) {
+                echo '<option value="'.$k.'" selected>'.$v.'</option>';
+                } else {
+                echo '<option value="'.$k.'">'.$v.'</option>';
+                }
+                }
+                {/php}
             </select>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">标签值</label>
+        <label class="layui-form-label">标签名称</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-value" name="value" lay-verify="required" autocomplete="off" placeholder="请只添加一个值">
         </div>
 
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分值</label>
+        <label class="layui-form-label">标签分值</label>
         <div class="layui-input-inline w300">
             <input type="text" class="layui-input field-score" name="score" lay-verify="" autocomplete="off" placeholder="">
         </div>
@@ -41,9 +49,10 @@
     var formData = {:json_encode($data_info)};
     layui.use(['jquery', 'laydate'], function() {
         var $ = layui.jquery;
+        $('input[name="status"][value="1"]').attr('checked',true);
+
         $('#reset_expire').on('click', function(){
             $('input[name="score"]').val(-1);
         });
     });
 </script>
-<script src="__ADMIN_JS__/footer.js"></script>
