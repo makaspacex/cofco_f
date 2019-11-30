@@ -1,0 +1,47 @@
+<!-- 加载统一layui资源 -->
+{include file="system@block/layui" /}
+
+<!-- 加载统一搜索表单 -->
+{include file='cofco@block/search'/}
+
+<!-- 加载统一的文章表格框架，注意此时并未执行渲染动作 -->
+{include file='cofco@block/article_table' /}
+
+<!--  ---------------- 华 ------- 丽 ------- 丽 ------- 的 ------- 分 ------- 割 ------- 线 ----------------------- -->
+
+<!-- =================  自定义表格工具按钮, script标签的ID不要变  ===================================================-->
+<div type="text/html" id="toolbar" class="hide">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass_check_data">终审通过[选中]</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm layui-btn-disabled toggle-enable" lay-event="pass_query_data" disabled>通终审通过[搜索结果]</button>
+    </div>
+</div>
+
+<!-- =================  自定义每行的按钮, script标签的ID不要变  ===================================================-->
+<div type="text/html" id="rowtools" class="hide">
+    <a class="layui-btn layui-btn-xs" lay-event="pass_this_one">终审通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="reject_this_one">驳回</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+</div>
+
+<!-- =================  自定义增加的搜索输入框, ID不要变  ===================================================-->
+<div class="layui-row" id="append_search">
+
+</div>
+
+<script>
+
+    //-------------- 执行表格渲染动作 --------------------------------------------------
+    $(function () {
+        var init_url = "{:url($article_api_url.'/search',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'])}"; //记得加入status控制，实现方法在app/cofco/admin/Article.php
+        var article_api_url_setstauts = "{:url($article_api_url.'/setstatus',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'])}";
+        var article_api_url_del = "{:url($article_api_url.'/del',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'] )}";
+        var except_field = ['final_auditor'];
+        var except_search = { status:'{$art_status}', final_auditor:'{$uid}', final_auditor_finished:'0' };// 表格基础url里面的参数必须被排除
+        var except_btns = ['del_selected','status_selected_data'];
+        var article_api_url_update = "{:url($article_api_url.'/update',['status'=>$art_status,'final_auditor'=>$uid,'final_auditor_finished'=>'0'] )}";
+        render_article_table(init_url,{except_field:except_field,width:330,title:'文献终审表',except_btns:except_btns,except_search:except_search});
+        //-------------- 为自定义的按钮添加监听事件 ----------------------------------------
+
+    });
+</script>

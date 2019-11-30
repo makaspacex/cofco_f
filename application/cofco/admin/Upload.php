@@ -17,26 +17,26 @@ class upload extends AdminBase
 {
 
     public $tab_data = [];
-    protected function initialize()
-    {
-        parent::initialize();
-        $this->tab_data['menu'] = [
-            [
-                'title' => '辅助输入',
-                'url' => 'cofco/upload/assist',
-            ],
-            [
-                'title' => '人工输入',
-                'url' => 'cofco/upload/manual',
-            ],
-            [
-                'title' => '爬虫输入',
-                'url' => 'cofco/upload/spider',
-            ],
-        ];
-        $this->assign('hisiTabType', 3);
-        $this->assign('hisiTabData', $this->tab_data);
-    }
+//    protected function initialize()
+//    {
+//        parent::initialize();
+//        $this->tab_data['menu'] = [
+//            [
+//                'title' => '辅助输入',
+//                'url' => 'cofco/upload/assist',
+//            ],
+//            [
+//                'title' => '人工输入',
+//                'url' => 'cofco/upload/manual',
+//            ],
+//            [
+//                'title' => '爬虫输入',
+//                'url' => 'cofco/upload/spider',
+//            ],
+//        ];
+//        $this->assign('hisiTabType', 3);
+//        $this->assign('hisiTabData', $this->tab_data);
+//    }
 
     /** 文献上传
      * @return string|void

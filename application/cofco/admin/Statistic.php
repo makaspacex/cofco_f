@@ -182,6 +182,16 @@ class Statistic extends AdminBase
         return $this->fetch();
     }
 
+
+    /***
+     * 文献终审页面
+     */
+    public function final_auditor(){
+        $this->init_searchForm();
+        $this->assign('art_status', '3');
+        return $this->fetch();
+    }
+
     public function levelpop1($q = '')
     {
         $q = input('param.q/s');
