@@ -192,6 +192,24 @@ class Statistic extends AdminBase
         return $this->fetch();
     }
 
+    /***
+     * 标签统计
+     */
+    public function label_statistic(){
+        return $this->fetch();
+    }
+
+
+    /**
+     * 关键词统计
+     * @return string
+     */
+
+    public function keyword_statistic(){
+        return $this->fetch();
+    }
+
+
     public function levelpop1($q = '')
     {
         $q = input('param.q/s');
