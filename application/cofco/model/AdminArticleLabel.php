@@ -24,6 +24,7 @@ class AdminArticleLabel extends AdminBase
         if(is_array($label_ids)){
             foreach ($label_ids as $label_id){
                 $data['label_id'] = $label_id;
+                $data['ctime'] = time();
                 array_push($datalist,$data);
             }
         }
@@ -53,5 +54,8 @@ class AdminArticleLabel extends AdminBase
             ->where('a.label_id = b.id and art_id=')->select();
         return $res;
     }
+
+//    public static function
+
 
 }
