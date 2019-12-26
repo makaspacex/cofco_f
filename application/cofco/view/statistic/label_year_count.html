@@ -1,0 +1,249 @@
+{include file="system@block/layui" /}
+<script src="__ADMIN_MOD_JS__/echarts.min.js"></script>
+
+<form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签列表</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="yuanliaotype" id="yuanliaotype"
+                   lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value"
+                   name="yuanliaoname" id="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
+        </div>
+        <a href="{:url('year_count_levelpop1?callback=biaoqian')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择标签</a>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">年份范围</label>
+        <div class="layui-input-inline" style="width: 300px">
+            <input type="text" class="layui-input" autocomplete="off"
+                   name="start_year" id="start_year" placeholder="开始年份 空表示不限制">
+        </div>
+        <label class="layui-form-label">——</label>
+        <div class="layui-input-inline" style="width: 300px">
+            <input type="text" class="layui-input" autocomplete="off"
+                   name="end_year" id="end_year" placeholder="结束年份 空表示不限制">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" class="field-id" name="id" value="63">
+            <button type="submit" class="layui-btn layui-btn-sm" lay-filter="formSubmit">统计</button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">清空</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    function biaoqian(data) {
+        var text1 = '';
+        var text2 = '';
+        var $ = layui.jquery;
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
+            }
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
+            }
+        }
+        $('input[name="yuanliaotype"]').val(text1);
+        $('input[name="yuanliaoname"]').val(text2);
+    }
+
+    $(function () {
+        $('button[type="reset"]').click(function (e) {
+            $('input[name="start_year"]').val('');
+            $('input[name="end_year"]').val('');
+            $('input[name="yuanliaotype"]').val('');
+            $('input[name="yuanliaoname"]').val('');
+        });
+    });
+
+</script>
+
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //年范围
+        laydate.render({
+            elem: '#start_year'
+            ,type: 'year'
+            ,range: false
+        });
+
+        laydate.render({
+            elem: '#end_year'
+            ,type: 'year'
+            ,range: false
+        });
+
+    });
+</script>
+
+{if condition="$display_statistic==1"}
+<div class="container" id="data_result">
+    <div id="main" style="width:100%;height:500px;"></div>
+</div>
+<div class="layui-tab-content page-tab-content">
+    <div class="layui-tab-item layui-show">
+        <div class="fl" style="width:99%">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var posList = [
+        'left', 'right', 'top', 'bottom',
+        'inside',
+        'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+        'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+        rotate: {
+            min: -90,
+            max: 90
+        },
+        align: {
+            options: {
+                left: 'left',
+                center: 'center',
+                right: 'right'
+            }
+        },
+        verticalAlign: {
+            options: {
+                top: 'top',
+                middle: 'middle',
+                bottom: 'bottom'
+            }
+        },
+        position: {
+            options: echarts.util.reduce(posList, function (map, pos) {
+                map[pos] = pos;
+                return map;
+            }, {})
+        },
+        distance: {
+            min: 0,
+            max: 100
+        }
+    };
+
+    app.config = {
+        rotate: 90,
+        align: 'left',
+        verticalAlign: 'middle',
+        position: 'insideBottom',
+        distance: 15,
+        onChange: function () {
+            var labelOption = {
+                normal: {
+                    rotate: app.config.rotate,
+                    align: app.config.align,
+                    verticalAlign: app.config.verticalAlign,
+                    position: app.config.position,
+                    distance: app.config.distance
+                }
+            };
+            myChart.setOption({
+                series: [{
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }]
+            });
+        }
+    };
+
+    var labelOption = {
+        normal: {
+            show: true,
+            position: app.config.position,
+            distance: app.config.distance,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            rotate: app.config.rotate,
+            formatter: '{c}  {name|{a}}',
+            fontSize: 16,
+            rich: {
+                name: {
+                    textBorderColor: '#fff'
+                }
+            }
+        }
+    };
+
+    option = {
+        color: ['#003366', '#006699', '#4cabce', '#e5323e','#034dc2','#549955','#990077','#998000','#009299'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: [<?php for ($i=$startyear;$i<=$endyear;$i++){ echo $i.',';} ?>]
+        },
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            left: 'right',
+            top: 'center',
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                axisTick: {show: false},
+                data: [<?php for ($i=$startyear;$i<=$endyear;$i++){ echo $i.',';} ?>]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {volist name='result' id='v'}
+            {
+                name: '{$key}',
+                type: 'bar',
+                barGap: 0,
+                label: labelOption,
+                data: [{:join(',', $v['data'])}]
+            },
+            {/volist}
+        ]
+    };;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+{/if}
+
+<script>  var formData = null</script>

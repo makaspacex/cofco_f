@@ -66,7 +66,6 @@ class Statistic extends AdminBase
             })->field('id');
         })->column('id');
 
-
         # 从实验类型总和与原料下的每个实验类型的角度进行统计
         $inner_statistic_info = []; # 柱状图统计信息
         $shiyan_names = LevellabelModel::where('id', 'IN', $shiyan_all_ids)->column('value');
@@ -229,7 +228,6 @@ class Statistic extends AdminBase
         $this->assign('callback', $callback);
         $this->view->engine->layout(false);
         $this->assign('menu_list', $menu_list);
-
         $this->assign('dispaly_statistic', '1');
         return $this->fetch();
     }
@@ -253,7 +251,6 @@ class Statistic extends AdminBase
         $this->assign('callback', $callback);
         $this->view->engine->layout(false);
         $this->assign('menu_list', $menu_list);
-
         $this->assign('dispaly_statistic', '1');
         return $this->fetch();
     }
@@ -266,6 +263,185 @@ class Statistic extends AdminBase
 
     public function meta(){
 
+        return $this->fetch();
+    }
+
+    /**
+     * 标签年份统计图
+     * @return string
+     */
+    public function label_year_count()
+    {
+        if (!$this->request->isPost()) {
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+
+        //原料列表里所有的 id 是 yuanliaotype，所有的 名字 是 yuanliaoname
+        $yuanliaotype_arr = explode("#", $this->request->post('yuanliaotype'));
+        $yuanliao_idstr = $this->request->post('yuanliaotype');
+        $start_year=$this->request->post('start_year');
+        $end_year=$this->request->post('end_year');
+        if (empty($start_year)) $start_year="2010";
+        if (empty($end_year)) $end_year="2019";
+        if ($start_year>$end_year) {
+            echo <<<EOF
+<script>
+layui.use('layer', function(){
+    var layer = layui.layer;
+    layer.msg('hello');
+});
+</script>
+EOF;
+            sleep(3);
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+//        var_dump($start_year>$end_year);
+
+        if (empty($yuanliao_idstr)) {
+            $yuanliao_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 1)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 1)->field('id');
+                })->field('id');
+            })->column('id');
+            $yuanliaotype_arr = $yuanliao_all_ids;
+        }
+
+        $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        foreach ($query_yuanliao as $keykk => $vvv) {
+            $item = $vvv['id'];  #levellabel.id
+            $result = Db::table('cofco_admin_content')
+                ->where('art_id', 'IN',
+                    function ($query) use ($item) {  #根据art_id查询所有 label_id=jibing.label_id(jibingtype_arr),返回art_id
+                        $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id'); #查询label_id($item)的所有字段的art_id
+                    })
+                ->where('LEFT(issue,4) >= '.$start_year.' and LEFT(issue,4) <= '.$end_year)
+                ->group('LEFT(issue,4)')
+                ->field('LEFT(issue,4) year,count(art_id) count')
+                ->select();
+            $a=array();
+            for($i=$start_year;$i<=$end_year;$i++) {
+                $flag=0;
+                foreach ($result as $k => $v) {
+                    if ($v['year'] == $i) {
+                        array_push($a, $v['count']);
+                        $flag=1;
+                        break;
+                    }
+                }
+                if($flag==0) array_push($a,0);
+            }
+            $yuanliao_year_info[$vvv['value']]['data']=$a;
+        }
+        $this->assign('user_input', $this->request->post());
+        $this->assign('result', $yuanliao_year_info);
+        $this->assign('startyear',$start_year);
+        $this->assign('endyear',$end_year);
+        $this->assign('display_statistic', '1');
+        return $this->fetch();
+    }
+
+    /*
+     * 标签年份统计图的标签选择界面的弹出窗口
+     *
+     */
+    public function year_count_levelpop1($q = '')
+    {
+        $q = input('param.q/s');
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
+        $map = [];
+        if ($q) {
+            $map['value'] = ['like', '%' . $q . '%'];
+        } else
+            $map['status'] = 1;
+
+        $menu_list = LevellabelModel::getAllChild(0, 0);
+//        var_dump($menu_list[0]['childs']['1']);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        $this->assign('menu_list', $menu_list);
+        $this->assign('display_statistic', '1');
+        return $this->fetch();
+    }
+
+    public function spider_count()
+    {
+        if (!$this->request->isPost()) {
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+
+        //原料列表里所有的 id 是 yuanliaotype，所有的 名字 是 yuanliaoname
+        $yuanliaotype_arr = explode("#", $this->request->post('yuanliaotype'));
+        $yuanliao_idstr = $this->request->post('yuanliaotype');
+        $start_year=$this->request->post('start_year');
+        $end_year=$this->request->post('end_year');
+        if (empty($start_year)) $start_year="2010";
+        if (empty($end_year)) $end_year="2019";
+        if ($start_year>$end_year) {
+            echo <<<EOF
+<script>
+layui.use('layer', function(){
+    var layer = layui.layer;
+    layer.msg('hello');
+});
+</script>
+EOF;
+            sleep(3);
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+//        var_dump($start_year>$end_year);
+
+        if (empty($yuanliao_idstr)) {
+            $yuanliao_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 1)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 1)->field('id');
+                })->field('id');
+            })->column('id');
+            $yuanliaotype_arr = $yuanliao_all_ids;
+        }
+
+        $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        foreach ($query_yuanliao as $keykk => $vvv) {
+            $item = $vvv['id'];  #levellabel.id
+            $result = Db::table('cofco_admin_content')
+                ->where('art_id', 'IN',
+                    function ($query) use ($item) {  #根据art_id查询所有 label_id=jibing.label_id(jibingtype_arr),返回art_id
+                        $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id'); #查询label_id($item)的所有字段的art_id
+                    })
+                ->where('LEFT(issue,4) >= '.$start_year.' and LEFT(issue,4) <= '.$end_year)
+                ->group('LEFT(issue,4)')
+                ->field('LEFT(issue,4) year,count(art_id) count')
+                ->select();
+            $a=array();
+            for($i=$start_year;$i<=$end_year;$i++) {
+                $flag=0;
+                foreach ($result as $k => $v) {
+                    if ($v['year'] == $i) {
+                        array_push($a, $v['count']);
+                        $flag=1;
+                        break;
+                    }
+                }
+                if($flag==0) array_push($a,0);
+            }
+            $yuanliao_year_info[$vvv['value']]['data']=$a;
+        }
+        $this->assign('user_input', $this->request->post());
+        $this->assign('result', $yuanliao_year_info);
+        $this->assign('startyear',$start_year);
+        $this->assign('endyear',$end_year);
+        $this->assign('display_statistic', '1');
         return $this->fetch();
     }
 }

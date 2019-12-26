@@ -6,11 +6,11 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
 
-    # 禁止直接访问模板文件
+    # ???????????????
     RewriteCond %{QUERY_STRING} ^(.*)$
     RewriteRule ^theme/(.*)(.html)$ index.php
 
-    # 上传保护文件
+    # ??????????
     RewriteCond %{QUERY_STRING} ^(.*)$
     RewriteRule ^upload/protect/(.*)$ index.php
 </IfModule>
