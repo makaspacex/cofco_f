@@ -12,7 +12,7 @@
             <input type="label" class="layui-input field-value"
                    name="yuanliaoname" id="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
         </div>
-        <a href="{:url('year_count_levelpop1?callback=biaoqian')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择标签</a>
+        <a href="{:url('year_count_levelpop?callback=biaoqian')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择标签</a>
 
     </div>
 
@@ -239,7 +239,7 @@
             },
             {/volist}
         ]
-    };;
+    };
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }

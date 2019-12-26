@@ -17,6 +17,7 @@
 <!--        </div>-->
 <!--    </form>-->
 <!--</div>-->
+
 <form class="page-list-form">
 {volist name="menu_list" id="v" key="k"}
 <div class="layui-tab-item layui-form menu-dl layui-show">
@@ -31,7 +32,7 @@
         {volist name="v['childs']" id="vv" key="kk"}
         <dl class="menu-dl1">
             <dt>
-                <input type="checkbox"   name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"data-json='{:json_encode($v, 1)}'>
+                <input type="checkbox" name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"data-json='{:json_encode($v, 1)}'>
                 <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
                 <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
 
@@ -84,8 +85,6 @@
 </div>
 {include file="system@block/layui" /}
 <script>
-
-
     layui.use(['jquery'], function(){
         var $ = layui.jquery;
         $('#popConfirm').click(function() {

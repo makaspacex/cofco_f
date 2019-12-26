@@ -6,17 +6,6 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:time()}">
 </head>
 <body class="pb50">
-<!--<div class="page-filter fr">-->
-<!--    <form class="layui-form layui-form-pane" action="{:url()}" method="get">-->
-<!--        <div class="layui-form-item">-->
-<!--            <label class="layui-form-label">搜索</label>-->
-<!--            <div class="layui-input-inline">-->
-<!--                <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="标签值" autocomplete="off" class="layui-input">-->
-<!--                <input type="hidden" name="callback" value="{$callback}">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
 
 <form class="page-list-form">
 {volist name="menu_list" id="v" key="k"}
@@ -32,8 +21,7 @@
         {volist name="v['childs']" id="vv" key="kk"}
         <dl class="menu-dl1">
             <dt>
-                <input type="checkbox"   name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"data-json='{:json_encode($v, 1)}'>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
+                <label class="layui-input-inline"><span>{$vv['value']}</span></label>
                 <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
 
             </dt>

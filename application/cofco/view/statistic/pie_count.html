@@ -1,0 +1,174 @@
+{include file="system@block/layui" /}
+<script src="__ADMIN_MOD_JS__/echarts.min.js"></script>
+
+<form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签列表</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="yuanliaotype" id="yuanliaotype"
+                   lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value"
+                   name="yuanliaoname" id="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
+        </div>
+        <a href="{:url('pie_levelpop?callback=biaoqian')}" title="选择标签" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择标签</a>
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" class="field-id" name="id" value="63">
+            <button type="submit" class="layui-btn layui-btn-sm" lay-filter="formSubmit">统计</button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">清空</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    function biaoqian(data) {
+        var text1 = '';
+        var text2 = '';
+        var $ = layui.jquery;
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
+            }
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
+            }
+        }
+        $('input[name="yuanliaotype"]').val(text1);
+        $('input[name="yuanliaoname"]').val(text2);
+    }
+
+    $(function () {
+        $('button[type="reset"]').click(function (e) {
+            $('input[name="yuanliaotype"]').val('');
+            $('input[name="yuanliaoname"]').val('');
+        });
+    });
+
+</script>
+
+{if condition="$display_statistic==1"}
+<div class="container" id="data_result">
+    <div id="main" style="width:100%;height:500px;"></div>
+</div>
+<div class="layui-tab-content page-tab-content">
+    <div class="layui-tab-item layui-show">
+        <div class="fl" style="width:99%">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    app.title = '嵌套环形图';
+
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data:['直达','营销广告','搜索引擎','邮件营销','联盟广告','视频广告','百度','谷歌','必应','其他']
+        },
+        series: [
+            {
+                name:'访问来源',
+                type:'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+
+                label: {
+                    normal: {
+                        position: 'inner'
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:335, name:'直达'},
+                    {value:679, name:'营销广告'},
+                    {value:1548, name:'搜索引擎'}
+                ]
+            },
+            {
+                name:'访问来源',
+                type:'pie',
+                radius: ['40%', '55%'],
+                label: {
+                    normal: {
+                        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                        backgroundColor: '#eee',
+                        borderColor: '#aaa',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        // shadowBlur:3,
+                        // shadowOffsetX: 2,
+                        // shadowOffsetY: 2,
+                        // shadowColor: '#999',
+                        // padding: [0, 7],
+                        rich: {
+                            a: {
+                                color: '#999',
+                                lineHeight: 22,
+                                align: 'center'
+                            },
+                            // abg: {
+                            //     backgroundColor: '#333',
+                            //     width: '100%',
+                            //     align: 'right',
+                            //     height: 22,
+                            //     borderRadius: [4, 4, 0, 0]
+                            // },
+                            hr: {
+                                borderColor: '#aaa',
+                                width: '100%',
+                                borderWidth: 0.5,
+                                height: 0
+                            },
+                            b: {
+                                fontSize: 16,
+                                lineHeight: 33
+                            },
+                            per: {
+                                color: '#eee',
+                                backgroundColor: '#334455',
+                                padding: [2, 4],
+                                borderRadius: 2
+                            }
+                        }
+                    }
+                },
+                data:[
+                    {value:335, name:'直达'},
+                    {value:310, name:'邮件营销'},
+                    {value:234, name:'联盟广告'},
+                    {value:135, name:'视频广告'},
+                    {value:1048, name:'百度'},
+                    {value:251, name:'谷歌'},
+                    {value:147, name:'必应'},
+                    {value:102, name:'其他'}
+                ]
+            }
+        ]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+{/if}
+
+<script>  var formData = null</script>
