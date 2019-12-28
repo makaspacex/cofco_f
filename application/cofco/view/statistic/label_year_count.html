@@ -32,7 +32,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <input type="hidden" class="field-id" name="id" value="63">
-            <button type="submit" class="layui-btn layui-btn-sm" lay-filter="formSubmit">统计</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-filter="formSubmit" onclick="judge_year()">统计</button>
             <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">清空</button>
         </div>
     </div>
@@ -49,12 +49,22 @@
                 text2 = data[i]['title'];
             }
             else {
-                text1 = text1 + '#' + data[i]['name']
-                text2 = text2 + '#' + data[i]['title']
+                text1 = text1 + '#' + data[i]['name'];
+                text2 = text2 + '#' + data[i]['title'];
             }
         }
         $('input[name="yuanliaotype"]').val(text1);
         $('input[name="yuanliaoname"]').val(text2);
+    }
+
+    function judge_year() {
+        var year1=document.getElementById("start_year").value;
+        var year2=document.getElementById("end_year").value;
+        if (year1>year2) {
+            layui.layer.msg("起始年份不能大于结束年份！");
+            return false;
+        }
+        else document.getElementById("editForm").submit();
     }
 
     $(function () {

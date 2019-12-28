@@ -283,15 +283,6 @@ class Statistic extends AdminBase
         if (empty($start_year)) $start_year="2010";
         if (empty($end_year)) $end_year="2019";
         if ($start_year>$end_year) {
-            echo <<<EOF
-<script>
-layui.use('layer', function(){
-    var layer = layui.layer;
-    layer.msg('hello');
-});
-</script>
-EOF;
-            sleep(3);
             $this->assign('display_statistic', '0');
             return $this->fetch();
         }
@@ -399,13 +390,82 @@ EOF;
             $yuanliaotype_arr = $yuanliao_all_ids;
         }
 
+        $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        $label_name=array();
+        $label_name_info=[];
+        $label_id=array();
+        $label_cid=array();
+
+        $label_info=[];
+        foreach ($query_yuanliao as $keykk => $vvv) {
+            $item = $vvv['id'];  #levellabel.id
+            $result = Db::table('cofco_admin_content')
+                ->where('art_id', 'IN',
+                    function ($query) use ($item) {
+                        $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id'); #查询label_id($item)的所有字段的art_id
+                    })
+                ->field('count(art_id) count')
+                ->select();
+            array_push($label_name, $vvv['value']);
+            array_push($label_id, $vvv['id']);
+            array_push($label_cid, $vvv['cid']);
+            foreach ($result as $k=>$v) $label_info[$vvv['value']]['count'] = $v['count'];
+            $label_info[$vvv['value']]['id']=$item;
+            $label_info[$vvv['value']]['cid']=$vvv['cid'];
+            $label_info[$vvv['value']]['label']=$vvv['value'];
+        }
+
+        $label_name_info['label']=$label_name;
+        $label_firstlevel_arr=array();
+        $label_secondlevel_arr=array();
+        #分出一级标签id和二级标签id（通过cid）
+        for($i=0;$i<count($label_cid);$i++){
+            if(in_array($label_cid[$i],$label_id)) array_push($label_secondlevel_arr, $label_id[$i]);
+        }
+        for($i=0;$i<count($label_id);$i++){
+            if(in_array($label_id[$i],$label_secondlevel_arr)){}
+            else
+                array_push($label_firstlevel_arr,$label_id[$i]);
+        }
+        $label_firstlevel=[];
+        $label_secondlevel=[];
+        #分别获取内环和外环需要的数据
+        #内环：显示所有一级标签
+        #外环（两种情况）：1、一级标签下存在二级标签，外环只需要显示二级标签。2、一级标签下不存在二级标签，外环需显示该一级标签
+        foreach($label_info as $key=> $vv){
+            for($i=0;$i<count($label_firstlevel_arr);$i++){
+                if($vv['id']==$label_firstlevel_arr[$i]) {
+                    $label_firstlevel[$vv['label']]['name'] = $vv['label'];
+                    $label_firstlevel[$vv['label']]['count']= $vv['count'];
+                    $flag=0;
+                    foreach($label_info as $keyk=> $v){
+                        if($v['cid']==$vv['id']){
+                            $flag=1;
+                            $label_secondlevel[$v['label']]['name']=$v['label'];
+                            $label_secondlevel[$v['label']]['count']=$v['count'];
+                        }
+                    }
+                    if($flag==0){
+                        $label_secondlevel[$vv['label']]['name']=$vv['label'];
+                        $label_secondlevel[$vv['label']]['count']=$vv['count'];
+                    }
+                }
+            }
+        }
+
         $this->assign('user_input', $this->request->post());
+        $this->assign('result', $label_info);
         $this->assign('display_statistic', '1');
+        $this->assign('label_name', $label_name);
+        $this->assign('label_first', $label_firstlevel);
+        $this->assign('label_second', $label_secondlevel);
         return $this->fetch();
+
     }
 
     /*
      * 嵌套环形图——标签选择弹出窗口
+     * 去掉了最上级标签前面的选择框
      */
     public function pie_levelpop($q = '')
     {
