@@ -421,6 +421,18 @@ return [
             'sort' => 0,
           ],
           [
+            'title' => '爬虫统计',
+            'icon' => 'fa fa-bug',
+            'module' => 'cofco',
+            'url' => 'cofco/statistic/spider_count',
+            'param' => '',
+            'target' => '_self',
+            'debug' => 0,
+            'system' => 0,
+            'nav' => 1,
+            'sort' => 0,
+          ],
+          [
             'title' => 'NHRI权重法',
             'icon' => 'typcn typcn-calculator',
             'module' => 'cofco',

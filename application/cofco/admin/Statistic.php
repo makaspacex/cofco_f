@@ -395,7 +395,6 @@ class Statistic extends AdminBase
         $label_name_info=[];
         $label_id=array();
         $label_cid=array();
-
         $label_info=[];
         foreach ($query_yuanliao as $keykk => $vvv) {
             $item = $vvv['id'];  #levellabel.id
@@ -438,13 +437,16 @@ class Statistic extends AdminBase
                     $label_firstlevel[$vv['label']]['name'] = $vv['label'];
                     $label_firstlevel[$vv['label']]['count']= $vv['count'];
                     $flag=0;
+                    $number=0;
                     foreach($label_info as $keyk=> $v){
                         if($v['cid']==$vv['id']){
                             $flag=1;
                             $label_secondlevel[$v['label']]['name']=$v['label'];
                             $label_secondlevel[$v['label']]['count']=$v['count'];
+                            $number+=$v['count'];
                         }
                     }
+                    if($number!=0) $label_firstlevel[$vv['label']]['count']= $number;
                     if($flag==0){
                         $label_secondlevel[$vv['label']]['name']=$vv['label'];
                         $label_secondlevel[$vv['label']]['count']=$vv['count'];
@@ -489,4 +491,51 @@ class Statistic extends AdminBase
         $this->assign('display_statistic', '1');
         return $this->fetch();
     }
+
+    /*
+     * 爬虫关键词年份统计图
+     */
+    public function spider_count()
+    {
+        if (!$this->request->isPost()) {
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+
+        $start_year=$this->request->post('start_year');
+        $end_year=$this->request->post('end_year');
+        if (empty($start_year)) $start_year="2010";
+        if (empty($end_year)) $end_year="2019";
+        if ($start_year>$end_year) {
+            $this->assign('display_statistic', '0');
+            return $this->fetch();
+        }
+        $this->assign('display_statistic', '1');
+        return $this->fetch();
+    }
+
+    /*
+    * 爬虫统计图——标签选择弹出窗口
+    */
+    public function spider_levelpop($q = '')
+    {
+        $q = input('param.q/s');
+        $callback = input('param.callback/s');
+        if (!$callback) {
+            echo '<br><br>callback为必传参数！';
+            exit;
+        }
+        $map = [];
+        if ($q) $map['value'] = ['like', '%' . $q . '%'];
+        else $map['status'] = 1;
+
+        $menu_list = LevellabelModel::getAllChild(0, 0);
+//        var_dump($menu_list[0]['childs']['1']);
+        $this->assign('callback', $callback);
+        $this->view->engine->layout(false);
+        $this->assign('menu_list', $menu_list);
+        $this->assign('display_statistic', '1');
+        return $this->fetch();
+    }
+
 }

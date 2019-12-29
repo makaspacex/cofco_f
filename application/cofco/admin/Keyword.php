@@ -26,8 +26,6 @@ class Keyword extends AdminBase
         $this->tab_data = $tab_data;
     }
 
-
-
     /**爬虫关键词列表
      * @return mixed
      * @throws \think\exception\DbException
@@ -36,7 +34,7 @@ class Keyword extends AdminBase
     {
         //$data_list = KwModel::paginate();
 
-        $sql = 'SELECT a.username ,b.*  FROM `hisi_system_user` a,cofco_admin_kw b WHERE a.id = b.uid';
+        $sql = 'SELECT a.username ,b.*  FROM hisi_system_user a,cofco_admin_kw b WHERE a.id = b.uid';
         $data_list = KwModel::query($sql);
 
         // 分页
@@ -51,11 +49,11 @@ class Keyword extends AdminBase
      * 关键词list数据
      */
     public function data(){
-        $sql = 'SELECT a.username ,b.*  FROM `hisi_system_user` a,cofco_admin_kw b WHERE a.id = b.uid';
+        $sql = 'SELECT a.username ,b.*  FROM hisi_system_user a,cofco_admin_kw b WHERE a.id = b.uid';
         $data_list = KwModel::query($sql);
         foreach($data_list as &$data){  //时间戳转换
             $data['ctime'] = date("Y-m-d H:i", $data['ctime']);
-        };
+        }
         return json(['data'=>$data_list,'status'=>0,'message'=>'操作完成']);
     }
 
@@ -163,8 +161,5 @@ class Keyword extends AdminBase
             }
             return $this->error("修改失败");
         }
-
-
-
 
 }
