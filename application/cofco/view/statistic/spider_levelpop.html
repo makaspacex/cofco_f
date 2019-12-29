@@ -5,111 +5,70 @@
     <link rel="stylesheet" href="__ADMIN_JS__/layui/css/layui.css">
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:time()}">
 </head>
-<body class="pb50">
-<!--<div class="page-filter fr">-->
-<!--    <form class="layui-form layui-form-pane" action="{:url()}" method="get">-->
-<!--        <div class="layui-form-item">-->
-<!--            <label class="layui-form-label">搜索</label>-->
-<!--            <div class="layui-input-inline">-->
-<!--                <input type="text" name="q" value="{:input('get.q')}" lay-verify="required" placeholder="标签值" autocomplete="off" class="layui-input">-->
-<!--                <input type="hidden" name="callback" value="{$callback}">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
+<body>
 
-<form class="page-list-form">
-{volist name="menu_list" id="v" key="k"}
-<div class="layui-tab-item layui-form menu-dl layui-show">
-
-    <form class="page-list-form">
-        <dl class="menu-dl1 menu-hd mt10">
-            <dt>爬虫名称</dt>
-            <dd>
-                <span class="hd">爬虫分值</span>
-            </dd>
-        </dl>
-        {volist name="v['childs']" id="vv" key="kk"}
-        <dl class="menu-dl1">
-            <dt>
-                <input type="checkbox" name="{$vv['id']}" value="{$vv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vv['value']}"data-json='{:json_encode($v, 1)}'>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vv['value']}</span><i class="layui-icon">&#xe626;</i></div>
-                <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vv['score']}" data-value="{$vv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vv['id'])}">
-
-            </dt>
-            <dd>
-                {php}
-                $kk++;
-                {/php}
-                {volist name="vv['childs']" id="vvv" key="kkk"}
-
-                <dl class="menu-dl2">
-                    <dt>
-                        <input type="checkbox" name="{$vvv['id']}"  value="{$vvv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vvv['value']}"data-json='{:json_encode($v, 1)}'>
-                        <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvv['value']}</span><i class="layui-icon">&#xe626;</i></div>
-                        <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvv['score']}" data-value="{$vvv['score']}" data-href="{:url('sort?table=admin_levellabel&ids='.$vvv['id'])}">
-
-                    </dt>
-                    {php}
-                    $kk++;
-                    {/php}
-                    {volist name="vvv['childs']" id="vvvv" key="kkkk"}
-                    {php}
-                    $kk++;
-                    {/php}
-                    <dd>
-                        <input type="checkbox" name="{$vvvv['id']}"   value="{$vvvv['cid']}" class="checkbox-ids" lay-skin="primary" title="{$vvvv['value']}"data-json='{:json_encode($v, 1)}'>
-                        <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>{$vvvv['value']}</span><i class="layui-icon">&#xe626;</i></div>
-                        <input type="text" class="menu-sort j-ajax-input" name="score[{$kk}]" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vvvv['score']}" data-value="{$vvvv['score']}" data-href="{:url('score?table=admin_levellabel&ids='.$vvvv['id'])}">
-
-                    </dd>
-                    {/volist}
-                </dl>
-                {/volist}
-            </dd>
-        </dl>
-        {php}
-        $kk++;
-        {/php}
-        {/volist}
-
-    </form>
-</div>
-{/volist}
-    </form>
-<div class="pop-bottom-bar">
-    <div class="fr btns">
-        <a class="layui-btn mr10" id="popConfirm">确定</a>
-        <a class="layui-btn layui-btn-primary" onclick="parent.layer.closeAll();">关闭</a>
-    </div>
-</div>
 {include file="system@block/layui" /}
-<script>
-    layui.use(['jquery'], function(){
-        var $ = layui.jquery;
-        $('#popConfirm').click(function() {
-            var data = new Array(), json = '';
-            if ($('input[class="checkbox-ids"]:checked').length <= 0) {
-                layui.layer.msg('请选择数据！');
-                return false;
-            }
 
-            // $('input[class="checkbox-ids"]:checked').each(function(i) {
-            //     json = eval('(' + $(this).attr('data-json') + ')');
-            //     data[i] = json;
-            // });
-            obj = document.getElementsByClassName("checkbox-ids");
-            data = [];
-            for(k in obj){
-                if(obj[k].checked)
-                    data.push(obj[k]);
-            }
-            // 触发父级页面函数
-            parent.{$callback}(data);
-            //alert(JSON.stringify(data));
-            parent.layer.closeAll();
-        });
-    });
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="choose">选择</button>
+        <button class="layui-btn layui-btn-sm" lay-event="cancel">取消</button>
+    </div>
 </script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#demo'
+            , url: 'get_spiders'
+            , title: '关键词列表'
+            , toolbar: '#toolbar'
+            , cols: [[ //表头
+                {type: 'radio', fixed: 'left', width: '5%'}
+                , {field: 'id', title: 'ID', width: '10%', sort: true}
+                , {field: 'name', title: '关键词名称', width: '35%', sort: true}
+                , {field: 'type', title: '类型', width: '15%', templet: typeTpl}
+                , {field: 'username', title: '创建人', width: '15%', sort: true}
+                , {field: 'ctime', title: '创建时间', width: '20%', sort: true}
+            ]]
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": res.data //解析数据列表
+                };
+            }
+        });
+
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'choose':
+                    var data=checkStatus.data;
+                    if (data.length==0) layer.msg("请选择数据！");
+                    else {
+                        id_name=new Array(data[0].id,data[0].name);
+                        parent.{$callback}(id_name);
+                        parent.layer.closeAll();
+                    }
+                    break;
+                case 'cancel':
+                    parent.layer.closeAll();
+                    break;
+            }
+        });
+
+    });
+
+
+    var typeTpl = function (d) {
+        return (d.type == '1' ? '<a>Pubmed</a>' : '<a>Science</a>');
+    }
+
+</script>
+
 </body>
 </html>

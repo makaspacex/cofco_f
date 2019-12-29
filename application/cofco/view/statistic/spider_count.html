@@ -3,29 +3,29 @@
 
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">关键词列表</label>
+        <label class="layui-form-label">爬虫选择</label>
         <div class="layui-input-inline">
-            <input type="hidden" name="yuanliaotype" id="yuanliaotype"
-                   lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
+            <input type="hidden" name="pachongid" id="pachongid"
+                   lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['pachongid']:''}">
         </div>
         <div class="layui-input-inline" style="width: 650px">
             <input type="label" class="layui-input field-value"
-                   name="yuanliaoname" id="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
+                   name="pachongname" id="pachongname" lay-verify="" autocomplete="off" placeholder="不能为空" value="{$user_input?$user_input['pachongname']:''}">
         </div>
-        <a href="{:url('spider_levelpop?callback=biaoqian')}" title="选择爬虫" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择爬虫</a>
+        <a href="{:url('spider_levelpop?callback=spider_choose')}" title="选择爬虫" class="layui-btn layui-btn-primary j-iframe-pop fl layui-btn-sm">选择爬虫</a>
 
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">年份范围</label>
-        <div class="layui-input-inline" style="width: 300px">
+        <div class="layui-input-inline" style="width: 305px">
             <input type="text" class="layui-input" autocomplete="off"
-                   name="start_year" id="start_year" placeholder="开始年份 空表示不限制">
+                   name="start_year" id="start_year" placeholder="开始年份 默认2010">
         </div>
-        <label class="layui-form-label">——</label>
-        <div class="layui-input-inline" style="width: 300px">
+        <label class="layui-form-label">至</label>
+        <div class="layui-input-inline" style="width: 305px">
             <input type="text" class="layui-input" autocomplete="off"
-                   name="end_year" id="end_year" placeholder="结束年份 空表示不限制">
+                   name="end_year" id="end_year" placeholder="结束年份 默认2019">
         </div>
     </div>
 
@@ -39,29 +39,23 @@
 </form>
 <script>
 
-    function biaoqian(data) {
-        var text1 = '';
-        var text2 = '';
-        var $ = layui.jquery;
-        for (var i = 0; i < data.length; i++) {
-            if (i == 0) {
-                text1 = data[i]['name'];
-                text2 = data[i]['title'];
-            }
-            else {
-                text1 = text1 + '#' + data[i]['name'];
-                text2 = text2 + '#' + data[i]['title'];
-            }
-        }
-        $('input[name="yuanliaotype"]').val(text1);
-        $('input[name="yuanliaoname"]').val(text2);
+    function spider_choose(id_name) {
+        var spider_id=id_name[0];
+        var spider_name=id_name[1];
+        $('input[name="pachongid"]').val(spider_id);
+        $('input[name="pachongname"]').val(spider_name);
     }
 
     function judge_year() {
         var year1=document.getElementById("start_year").value;
         var year2=document.getElementById("end_year").value;
+        var spider_name=document.getElementById("pachongname").value;
         if (year1>year2) {
             layui.layer.msg("起始年份不能大于结束年份！");
+            return false;
+        }
+        else if (spider_name=="") {
+            layui.layer.msg("请选择爬虫关键词！");
             return false;
         }
         else document.getElementById("editForm").submit();
@@ -71,8 +65,8 @@
         $('button[type="reset"]').click(function (e) {
             $('input[name="start_year"]').val('');
             $('input[name="end_year"]').val('');
-            $('input[name="yuanliaotype"]').val('');
-            $('input[name="yuanliaoname"]').val('');
+            $('input[name="pachongid"]').val('');
+            $('input[name="pachongname"]').val('');
         });
     });
 
@@ -202,7 +196,7 @@
     };
 
     option = {
-        color: ['#003366', '#006699', '#4cabce', '#e5323e','#034dc2','#549955','#990077','#998000','#009299'],
+        color: ['#003366', '#006699'],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -239,15 +233,13 @@
             }
         ],
         series: [
-            {volist name='result' id='v'}
             {
-                name: '{$key}',
+                name: '{$spidername}',
                 type: 'bar',
                 barGap: 0,
                 label: labelOption,
-                data: [{:join(',', $v['data'])}]
+                data: [{:join(',', $result)}]
             },
-            {/volist}
         ]
     };
     if (option && typeof option === "object") {

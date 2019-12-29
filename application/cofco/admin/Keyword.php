@@ -34,12 +34,12 @@ class Keyword extends AdminBase
     {
         //$data_list = KwModel::paginate();
 
-        $sql = 'SELECT a.username ,b.*  FROM hisi_system_user a,cofco_admin_kw b WHERE a.id = b.uid';
-        $data_list = KwModel::query($sql);
+//        $sql = 'SELECT a.username ,b.*  FROM hisi_system_user a,cofco_admin_kw b WHERE a.id = b.uid';
+//        $data_list = KwModel::query($sql);
 
         // 分页
         //$pages = $data_list->render();
-        $this->assign('data_list', $data_list);
+//        $this->assign('data_list', $data_list);
         //$this->assign('pages', $pages);
 //        var_dump($data_list);
         return $this->fetch();

@@ -2,6 +2,7 @@
 
 namespace app\cofco\admin;
 
+use app\cofco\model\AdminKw as KwModel;
 use app\cofco\model\AdminLevellabel as LevellabelModel;
 use think\Db;
 
@@ -300,6 +301,7 @@ class Statistic extends AdminBase
         }
 
         $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        $yuanliao_year_info=[];
         foreach ($query_yuanliao as $keykk => $vvv) {
             $item = $vvv['id'];  #levellabel.id
             $result = Db::table('cofco_admin_content')
@@ -502,6 +504,8 @@ class Statistic extends AdminBase
             return $this->fetch();
         }
 
+        $pachong_id=$this->request->post('pachongid');
+        $pachong_name=$this->request->post('pachongname');
         $start_year=$this->request->post('start_year');
         $end_year=$this->request->post('end_year');
         if (empty($start_year)) $start_year="2010";
@@ -510,6 +514,30 @@ class Statistic extends AdminBase
             $this->assign('display_statistic', '0');
             return $this->fetch();
         }
+        $result = Db::table('cofco_admin_content')
+            ->where('kw_id',$pachong_id)
+            ->where('LEFT(issue,4) >= '.$start_year.' and LEFT(issue,4) <= '.$end_year)
+            ->group('LEFT(issue,4)')
+            ->field('LEFT(issue,4) year,count(art_id) count')
+            ->select();
+        $a=array();
+        for($i=$start_year;$i<=$end_year;$i++) {
+            $flag=0;
+            foreach ($result as $k => $v) {
+                if ($v['year'] == $i) {
+                    array_push($a, $v['count']);
+                    $flag=1;
+                    break;
+                }
+            }
+            if($flag==0) array_push($a,0);
+        }
+
+        $this->assign('user_input', $this->request->post());
+        $this->assign('spidername',$pachong_name);
+        $this->assign('startyear',$start_year);
+        $this->assign('endyear',$end_year);
+        $this->assign('result',$a);
         $this->assign('display_statistic', '1');
         return $this->fetch();
     }
@@ -525,17 +553,22 @@ class Statistic extends AdminBase
             echo '<br><br>callback为必传参数！';
             exit;
         }
-        $map = [];
-        if ($q) $map['value'] = ['like', '%' . $q . '%'];
-        else $map['status'] = 1;
 
-        $menu_list = LevellabelModel::getAllChild(0, 0);
-//        var_dump($menu_list[0]['childs']['1']);
         $this->assign('callback', $callback);
-        $this->view->engine->layout(false);
-        $this->assign('menu_list', $menu_list);
         $this->assign('display_statistic', '1');
         return $this->fetch();
     }
 
+    /*
+     * 爬虫统计图——获取爬虫列表的函数
+     */
+    public function get_spiders(){
+        $sql = 'SELECT a.username ,b.*  FROM hisi_system_user a,cofco_admin_kw b WHERE a.id = b.uid';
+        $data_list = KwModel::query($sql);
+
+        foreach($data_list as &$data){  //时间戳转换
+            $data['ctime'] = date("Y-m-d H:i", $data['ctime']);
+        }
+        return json(['data'=>$data_list,'status'=>0,'message'=>'操作完成']);
+    }
 }
