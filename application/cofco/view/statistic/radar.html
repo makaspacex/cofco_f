@@ -3,7 +3,7 @@
 
 <form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
     <div class="layui-form-item">
-        <label class="layui-form-label">纵轴标签</label>
+        <label class="layui-form-label">原料类型</label>
         <div class="layui-input-inline">
             <input type="hidden" name="yuanliaotype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
         </div>
@@ -11,12 +11,12 @@
             <input type="label" class="layui-input field-value"
                    name="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
         </div>
-        <a href="{:url('pie_levelpop?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择纵轴标签</a>
+        <a href="{:url('levelpop1?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择原料类型</a>
 
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">横轴标签</label>
+        <label class="layui-form-label">疾病类型</label>
         <div class="layui-input-inline" >
             <input type="hidden" name="jibingtype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['jibingtype']:''}">
         </div>
@@ -24,7 +24,7 @@
             <input type="label" class="layui-input field-value" name="jibingname" lay-verify="" autocomplete="off" value="{$user_input?$user_input['jibingname']:''}"
                    placeholder="空表示不限制">
         </div>
-        <a href="{:url('pie_levelpop?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择横轴标签</a>
+        <a href="{:url('levelpop2?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择疾病类型</a>
 
     </div>
 
@@ -101,68 +101,44 @@
     var dom = document.getElementById("main");
     var myChart = echarts.init(dom);
     var app = {};
-
-    app.title = '笛卡尔坐标系上的热力图';
-
-    var hours = [<?php foreach ($label_x as $v) echo "'$v',"; ?>];
-    var days = [<?php foreach ($label_y as $vv) echo "'$vv',"; ?>];
-    var data = [<?php
-        foreach ($data as $vvv) {
-            echo "[";
-            foreach ($vvv as $ddd) echo $ddd.',';
-            echo "],";
-        }
-        ?>];
-    data = data.map(function (item) {
-        return [item[1], item[0], item[2] || '-'];
-    });
+    app.title = '基础雷达图';
 
     option = {
-        tooltip: {
-            position: 'top'
+
+        tooltip: {},
+        legend: {
+            data: [<?php foreach ($label as $v) echo "'$v'," ?>]
         },
-        animation: false,
-        grid: {
-            height: '50%',
-            y: '10%'
-        },
-        xAxis: {
-            type: 'category',
-            data: hours,
-            splitArea: {
-                show: true
-            }
-        },
-        yAxis: {
-            type: 'category',
-            data: days,
-            splitArea: {
-                show: true
-            }
-        },
-        visualMap: {
-            min: 0,
-            max: 10,
-            calculable: true,
-            orient: 'horizontal',
-            left: 'center',
-            bottom: '25%'
-        },
-        series: [{
-            name: 'Label：',
-            type: 'heatmap',
-            data: data,
-            label: {
-                normal: {
-                    show: true
+        radar: {
+            // shape: 'circle',
+            name: {
+                textStyle: {
+                    color: '#fff',
+                    backgroundColor: '#999',
+                    borderRadius: 3,
+                    padding: [3, 5]
                 }
             },
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
+            indicator: [
+                {volist name='jibing' id='v'}
+                {
+                    name: '{$v}',
+                    max: 1,
+                },
+                {/volist}
+            ]
+        },
+        series: [{
+            type: 'radar',
+            // areaStyle: {normal: {}},
+            data : [
+                {volist name='data' id='v'}
+                {
+                    value: [{:join(',', $v['data'])}],
+                    name: '{$key}'
+                },
+                {/volist}
+            ]
         }]
     };
     if (option && typeof option === "object") {

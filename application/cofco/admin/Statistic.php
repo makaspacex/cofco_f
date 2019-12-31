@@ -675,12 +675,111 @@ class Statistic extends AdminBase
             }
         }
 
-
-
         $this->assign('user_input', $this->request->post());
         $this->assign('label_y', $label_first);
         $this->assign('label_x', $label_second);
         $this->assign('data', $data);
+        $this->assign('dispaly_statistic', '1');
+        return $this->fetch();
+    }
+
+    /*
+     * 雷达图
+     */
+
+    public function radar()
+    {
+        if (!$this->request->isPost()) {
+
+            $this->assign('dispaly_statistic', '0');
+            return $this->fetch();
+        }
+
+        $jibingtype_arr = explode("#", $this->request->post('jibingtype'));
+        $yuanliaotype_arr = explode("#", $this->request->post('yuanliaotype'));
+
+        $jibing_idstr = $this->request->post('jibingtype');
+
+
+        if (empty($jibing_idstr)) {
+            # 疾病所有的ID
+            $jibing_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 3)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
+                })->field('id');
+            })->column('id');
+            $jibingtype_arr = $jibing_all_ids;
+
+        }
+
+        $yuanliao_idstr = $this->request->post('yuanliaotype');
+        if (empty($yuanliao_idstr)) {
+            # 原料所有的ID
+            $yuanliao_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 4)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
+                })->field('id');
+            })->column('id');
+            $yuanliaotype_arr = $yuanliao_all_ids;
+
+        }
+
+        $query_jibing = LevellabelModel::where('id', 'IN', $jibingtype_arr)->select();
+        $jibing_name=array();
+        foreach ($query_jibing as $key => $v){
+            array_push($jibing_name,$v['value']);
+        }
+
+        #计算含有两个标签文章的数量，数组表示
+        $label_number=array();
+        $yuanliao_name=array();
+        $all_info=[];
+        $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        foreach ($query_yuanliao as $keykk => $vvv) {
+            $item = $vvv['id'];
+            array_push($yuanliao_name,$vvv['value']);
+            #统计所有实验类型数目
+            $b=array();
+            foreach($query_jibing as $key => $vv) {
+                $a=$vv['id'];
+                $result = Db::table('cofco_admin_article_label ai')
+                    ->where('ai.art_id', "IN",
+                        function ($query) use ($item, $a) {
+                            $query->table('cofco_admin_article_label')
+                                ->where('art_id', 'IN', function ($query) use ($item) {
+                                    $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id');
+                                })
+                                ->where('label_id', 'IN', $a)
+                                ->field('art_id');
+                        })
+                    ->field(' count(ai.art_id) count')
+                    ->select();
+                foreach($result as $k=>$v) {
+                    array_push($b,$v['count']);
+                }
+            }
+            $score=array();
+            $sum=array_sum($b);
+            for($i=0;$i<count($b);$i++){
+                if($sum==0){
+                    $c=0;
+                }
+                else {
+                    $c = round($b[$i] / $sum,2);
+                }
+                array_push($score,$c);
+            }
+            $all_info[$vvv['value']]['data']=$score;
+        }
+
+        $this->assign('user_input', $this->request->post());
+        $this->assign('label', $yuanliao_name);
+        $this->assign('jibing', $jibing_name);
+        $this->assign('data', $all_info);
         $this->assign('dispaly_statistic', '1');
         return $this->fetch();
     }
