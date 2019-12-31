@@ -1,5 +1,4 @@
 runtime/*
 .idea/
 .DS_Store
-config/database.php
 
