@@ -571,4 +571,117 @@ class Statistic extends AdminBase
         }
         return json(['data'=>$data_list,'status'=>0,'message'=>'操作完成']);
     }
+
+    /*
+     * 证据评分热力图
+     */
+    public function heatmap()
+    {
+        if (!$this->request->isPost()) {
+            $this->assign('dispaly_statistic', '0');
+            return $this->fetch();
+        }
+
+        $jibingtype_arr = explode("#", $this->request->post('jibingtype'));
+        $yuanliaotype_arr = explode("#", $this->request->post('yuanliaotype'));
+        $jibing_idstr = $this->request->post('jibingtype');
+
+        if (empty($jibing_idstr)) {
+            # 疾病所有的ID
+            $jibing_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 3)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 3)->field('id');
+                })->field('id');
+            })->column('id');
+            $jibingtype_arr = $jibing_all_ids;
+        }
+
+        $yuanliao_idstr = $this->request->post('yuanliaotype');
+        if (empty($yuanliao_idstr)) {
+            # 原料所有的ID
+            $yuanliao_all_ids = Db::table('cofco_admin_levellabel')->where('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
+            })->whereOr('cid', 'IN', function ($query) {
+                $query->table('cofco_admin_levellabel')->where('id', 4)->whereOr('cid', 'IN', function ($query) {
+                    $query->table('cofco_admin_levellabel')->where('id', 4)->field('id');
+                })->field('id');
+            })->column('id');
+            $yuanliaotype_arr = $yuanliao_all_ids;
+
+        }
+
+        $query_jibing = LevellabelModel::where('id', 'IN', $jibingtype_arr)->select();
+        $label_second=array();
+        $label_second_score=array();
+        foreach ($query_jibing as $key => $v){
+            array_push($label_second,$v['value']);
+            array_push($label_second_score,$v['score']);
+        }
+
+        #计算含有两个标签文章的数量，数组表示
+        $label_number=array();
+        $label_first=array();
+        $label_first_score=array();
+        $query_yuanliao = LevellabelModel::where('id', 'IN', $yuanliaotype_arr)->select();
+        foreach ($query_yuanliao as $keykk => $vvv) {
+            $item = $vvv['id'];
+            $yuanliao_name = $vvv['value'];
+            array_push($label_first,$vvv['value']);
+            array_push($label_first_score,$vvv['score']);
+            #统计所有实验类型数目
+            for($i=0;$i<count($jibingtype_arr);$i++) {
+                $a=$jibingtype_arr[$i];
+                $result = Db::table('cofco_admin_article_label ai')
+                    ->where('ai.art_id', "IN",
+                        function ($query) use ($item, $a) {
+                            $query->table('cofco_admin_article_label')
+                                ->where('art_id', 'IN', function ($query) use ($item) {
+                                    $query->table('cofco_admin_article_label')->where('label_id', $item)->field('art_id');
+                                })
+                                ->where('label_id', 'IN', $a)
+                                ->field('art_id');
+                        })
+                    ->field(' count(ai.art_id) count')
+                    ->select();
+                foreach($result as $k=>$v) {
+                    array_push($label_number, $v['count']);
+                }
+            }
+        }
+        #指定的计算评分方法
+        $score_rule=array();
+        for($i=0;$i<count($label_first_score);$i++){
+            for($k=0;$k<count($label_second_score);$k++){
+                $a=abs($label_second_score[$k])+abs($label_first_score[$i]);
+                array_push($score_rule,$a);
+            }
+        }
+        #计算评分
+        $number_socre=array();
+        for($i=0;$i<count($label_number);$i++){
+            $a=$score_rule[$i]*$label_number[$i];
+            array_push($number_socre,$a);
+        }
+
+        $data=array();
+        $flag=0;
+        for($i=0;$i<count($label_first);$i++){
+            for($k=0;$k<count($label_second);$k++){
+                $a=[$i,$k,$label_number[$flag]];
+                $flag+=1;
+                array_push($data,$a);
+            }
+        }
+
+
+
+        $this->assign('user_input', $this->request->post());
+        $this->assign('label_y', $label_first);
+        $this->assign('label_x', $label_second);
+        $this->assign('data', $data);
+        $this->assign('dispaly_statistic', '1');
+        return $this->fetch();
+    }
 }

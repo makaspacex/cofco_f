@@ -1,0 +1,174 @@
+{include file="system@block/layui" /}
+<script src="__ADMIN_MOD_JS__/echarts.min.js"></script>
+
+<form class="layui-form layui-form-pane" action="{:url()}" method="post" id="editForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">横轴标签</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="yuanliaotype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['yuanliaotype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value"
+                   name="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
+        </div>
+        <a href="{:url('levelpop1?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择横轴标签</a>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">纵轴标签</label>
+        <div class="layui-input-inline" >
+            <input type="hidden" name="jibingtype" lay-verify="required" autocomplete="off" class="layui-input" value="{$user_input?$user_input['jibingtype']:''}">
+        </div>
+        <div class="layui-input-inline" style="width: 650px">
+            <input type="label" class="layui-input field-value" name="jibingname" lay-verify="" autocomplete="off" value="{$user_input?$user_input['jibingname']:''}"
+                   placeholder="空表示不限制">
+        </div>
+        <a href="{:url('levelpop2?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择纵轴标签</a>
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" class="field-id" name="id" value="63">
+            <button type="submit" class="layui-btn layui-btn-sm" lay-filter="formSubmit">统计</button>
+            <button type="reset" class="layui-btn layui-btn-primary  layui-btn-sm">清空</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    function yuanliao(data) {
+        var text1 = '';
+        var text2 = '';
+        var $ = layui.jquery;
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
+            }
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
+            }
+        }
+        $('input[name="yuanliaotype"]').val(text1);
+        $('input[name="yuanliaoname"]').val(text2);
+    }
+
+    function jibing(data) {
+        var text1 = '';
+        var text2 = '';
+        var $ = layui.jquery;
+        for (var i = 0; i < data.length; i++) {
+            if (i == 0) {
+                text1 = data[i]['name'];
+                text2 = data[i]['title'];
+            }
+            else {
+                text1 = text1 + '#' + data[i]['name']
+                text2 = text2 + '#' + data[i]['title']
+            }
+        }
+        $('input[name="jibingtype"]').val(text1);
+        $('input[name="jibingname"]').val(text2);
+    }
+
+    $(function () {
+        $('button[type="reset"]').click(function (e) {
+            $('input[name="jibingtype"]').val('');
+            $('input[name="jibingname"]').val('');
+            $('input[name="yuanliaotype"]').val('');
+            $('input[name="yuanliaoname"]').val('');
+
+        });
+    });
+
+</script>
+{if condition="$dispaly_statistic==1"}
+<div class="container" id="data_result">
+    <div id="main" style="width: 100%;height:500px;"></div>
+</div>
+<div class="layui-tab-content page-tab-content">
+    <div class="layui-tab-item layui-show">
+        <div class="fl" style="width:99%">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+
+    app.title = '笛卡尔坐标系上的热力图';
+
+    var hours = [<?php foreach ($label_x as $v) echo "'$v',"; ?>];
+    var days = [<?php foreach ($label_y as $vv) echo "'$vv',"; ?>];
+    var data = [<?php
+        foreach ($data as $vvv) {
+            echo "[";
+            foreach ($vvv as $ddd) echo $ddd.',';
+            echo "],";
+        }
+        ?>];
+    data = data.map(function (item) {
+        return [item[1], item[0], item[2] || '-'];
+    });
+
+    option = {
+        tooltip: {
+            position: 'top'
+        },
+        animation: false,
+        grid: {
+            height: '50%',
+            y: '10%'
+        },
+        xAxis: {
+            type: 'category',
+            data: hours,
+            splitArea: {
+                show: true
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: days,
+            splitArea: {
+                show: true
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: 10,
+            calculable: true,
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '25%'
+        },
+        series: [{
+            name: 'Label：',
+            type: 'heatmap',
+            data: data,
+            label: {
+                normal: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+{/if}
+
+<script>  var formData = null</script>
