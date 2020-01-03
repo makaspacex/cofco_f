@@ -12,7 +12,6 @@
                    name="yuanliaoname" lay-verify="" autocomplete="off" placeholder="空表示不限制" value="{$user_input?$user_input['yuanliaoname']:''}">
         </div>
         <a href="{:url('pie_levelpop?callback=yuanliao')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择纵轴标签</a>
-
     </div>
 
     <div class="layui-form-item">
@@ -25,7 +24,6 @@
                    placeholder="空表示不限制">
         </div>
         <a href="{:url('pie_levelpop?callback=jibing')}" title="选择标签" class="layui-btn   layui-btn-primary j-iframe-pop fl layui-btn-sm">选择横轴标签</a>
-
     </div>
 
     <div class="layui-form-item">
@@ -142,7 +140,7 @@
         },
         visualMap: {
             min: 0,
-            max: 10,
+            max: 100,
             calculable: true,
             orient: 'horizontal',
             left: 'center',
